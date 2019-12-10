@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ehcache>
+<ehcache>
+	 <cacheManagerPeerProviderFactory 
+	class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory" 
+	properties="peerDiscovery=automatic, multicastGroupAddress=230.10.10.1, multicastGroupPort=4446, timeToLive=32"/>
+	<cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+            properties="hostName=localhost, port=40001,socketTimeoutMillis=2000"/>
+	<defaultCache maxElementsInMemory="1000000"
+            eternal="false"
+            timeToIdleSeconds="86400"
+            timeToLiveSeconds="86400"
+            maxElementsOnDisk="1000000"
+            diskExpiryThreadIntervalSeconds="86400"
+            memoryStoreEvictionPolicy="LRU" />
+            
+    <cache name="graphCache"
+    	   maxElementsInMemory="1000"
+           eternal="false"
+           maxElementsOnDisk="1000"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
+    
+    <cache name="userLoginBean"
+    	   maxElementsInMemory="1000"
+           eternal="false"
+           maxElementsOnDisk="1000"
+           memoryStoreEvictionPolicy="LRU" timeToIdleSeconds="10840" timeToLiveSeconds="10840">
+    </cache>
+    
+	<cache name="StGenPropertyMasterCache" maxElementsInMemory="500" eternal="true">
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StGenLanguageMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StPortalPriviledgeRepCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StGenCountryMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StGenWordSentenceMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StGenStateMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StRmVendorMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	
+	<cache name="org.hibernate.cache.StandardQueryCache" maxElementsInMemory="1000000" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+	<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+		properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true " />
+	</cache>
+	
+	<cache name="org.hibernate.cache.UpdateTimestampsCache" maxEntriesLocalHeap="1000000" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400">
+	<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+		properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true " />
+	</cache>
+	
+	<cache name="StDmDomainMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>
+    <cache name="StDmDomainAliasNameMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>
+            
+	<cache name="StPortalDeviceDomainMappingCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StPortalContentMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StCmsPlaceholderMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StCmsPlaceholderContentMappingCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StPortalMenuMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StDmDomainCountryMappingCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StDmDomainStateMappingCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>        
+	<cache name="StPmFieldDomainMappingCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache>   
+    <cache name="MenuMasterViewCache" maxElementsInMemory="1000" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+    </cache> 
+    <cache name="StDmBlockedIpCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StRmBoAllowedIpCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StDmDomainCurrencyMappingCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StDmDomainLanguageMappingCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StDmDomainWinApproveLimitMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StGenCurrencyMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StPmAvtaarMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StRmActionFunctionMappingMgmtCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StRmBoRoleMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StRmMenuMasterMgmtCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StRmPrivilegeRepMgmtCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StRmServiceDeliveryMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StRmServiceMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StRmServiceVendorPropertiesCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+	<cache name="StRpBoGraphMasterCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400" >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+	</cache>
+</ehcache>

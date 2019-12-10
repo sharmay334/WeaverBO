@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="rg" namespace="/com/stpl/pms/action/bo/rg"
+		extends="struts-base">
+		<action name="st_pms_rg_bo_OperatorLimit" class="com.stpl.pms.action.bo.rg.RespGamingAction" >
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor">
+				<param name="requireProperties">vipList</param>
+			</interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/rg/st_pms_rg_bo_OperatorLimit.jsp</result>
+		</action>
+		<action name="st_pms_rg_bo_fetchRgData" class="com.stpl.pms.action.bo.rg.RespGamingAction" method="fetchRgData">
+		</action>
+		<action name="st_pms_rg_fetchOperatorLimit" class="com.stpl.pms.action.bo.rg.RespGamingAction" method="fetchOperatorLimit">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/rg/nodecorate/st_pms_rg_fetchOperatorLimit.jsp</result>
+		</action>
+	 	<action name="st_pms_rg_bo_SetLimit" class="com.stpl.pms.action.bo.rg.RespGamingAction" method="setLimitAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/rg/st_pms_rg_bo_SetLimit.jsp</result>
+			<result name="input">/com/stpl/pms/action/bo/rg/st_pms_rg_bo_OperatorLimit.jsp</result>
+		</action>
+	</package>
+</struts>

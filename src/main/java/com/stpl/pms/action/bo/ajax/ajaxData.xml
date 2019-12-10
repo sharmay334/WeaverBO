@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="ajax" namespace="/com/stpl/pms/action/bo/ajax"
+		extends="struts-base,json-default">
+		<action name="bo_ajax_call_fetch_commonData" class="com.stpl.pms.action.bo.ajax.AjaxDataAction"
+			method="fetchCommonAjaxData">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="dataTablesAction" class="com.stpl.pms.action.bo.ajax.AjaxDataAction"
+			method="dataTableResult">
+			<result name="success" type="json">
+			</result>
+		</action>
+		<action name="bo_ajax_call_fetch_fetchAlaisMap" class="com.stpl.pms.action.bo.ajax.AjaxDataAction"
+			method="fetchAlaisMap">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_ajax_call_check_domainVendorAvailable" class="com.stpl.pms.action.bo.ajax.AjaxDataAction"
+			method="checkDomainVendorAvailable">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_ajax_call_fetch_fetchGameMap" class="com.stpl.pms.action.bo.ajax.AjaxDataAction"
+			method="fetchGameMap">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="fetchEventList" class="com.stpl.pms.action.bo.ajax.AjaxDataAction"
+			method="fetchEventList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+	</package>
+</struts>

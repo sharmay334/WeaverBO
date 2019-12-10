@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- put this xml in jboss machine deploy folder -->
+<!-- $Id: mysql-ds.xml 63175 2007-05-21 16:26:06Z rrajesh $ -->
+<!--  Datasource config for MySQL using 3.0.9 available from:
+http://www.mysql.com/downloads/api-jdbc-stable.html
+-->
+
+<datasources>
+    <local-tx-datasource>
+        <jndi-name>WeaverDS</jndi-name>
+<!--  <connection-url>jdbc:mysql:replication://192.168.132.24:3306,192.168.132.32:3306/weaver06072016?autoReconnect=true&amp;roundRobinLoadBalance=true</connection-url> -->
+        <connection-url>jdbc:mysql://192.168.132.88:3306/itgs_new</connection-url>
+        <driver-class>com.mysql.jdbc.Driver</driver-class>
+        <user-name>root</user-name>
+        <password>root</password>
+        <min-pool-size>5</min-pool-size>
+        <max-pool-size>20</max-pool-size>
+        <prefill>true</prefill>
+        <use-strict-min>true</use-strict-min>
+        <idle-timeout-minutes>0</idle-timeout-minutes>
+        <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.MySQLValidConnectionChecker</valid-connection-checker-class-name>
+        <check-valid-connection-sql>select 1</check-valid-connection-sql>
+        <background-validation>true</background-validation>
+        <background-validation-minutes>460</background-validation-minutes>
+    </local-tx-datasource>
+</datasources>
+
+

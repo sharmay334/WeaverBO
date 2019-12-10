@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="bonus" namespace="/com/stpl/pms/action/bo/bonus"
+		extends="struts-base">
+		<action name="bo_promo_search_bonus_menu" class="com.stpl.pms.action.bo.bonus.BonusAction"
+			method="searchBonusMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor">
+				<param name="requireProperties">countryList,vipList</param>
+			</interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/bonus/bo_promo_search_bonus_menu.jsp
+			</result>
+		</action>
+		<action name="bo_promo_bonus_search_result" class="com.stpl.pms.action.bo.bonus.BonusAction"
+			method="searchBonusSearch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/bonus/nodecorate/bo_promo_bonus_search_result.jsp
+			</result>
+		</action>
+		<action name="bo_promo_create_bonus_menu" class="com.stpl.pms.action.bo.bonus.BonusAction"
+			method="createBonusMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/bonus/bo_promo_create_bonus_menu.jsp
+			</result>
+		</action>
+		<action name="bo_promo_create_bonus_checkDuplicate" class="com.stpl.pms.action.bo.bonus.BonusAction"
+			method="checkDuplicateBonus">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/bonus/bo_promo_create_bonus_checkDuplicate.jsp
+			</result>
+			<result name="BONUS_CREATED">
+				/com/stpl/pms/action/bo/bonus/bo_promo_create_bonus_save.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/bonus/bo_promo_create_bonus_menu.jsp
+			</result>
+		</action>
+		<action name="bo_promo_create_bonus_updateOrder" class="com.stpl.pms.action.bo.bonus.BonusAction"
+			method="updateBonusOrder">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/bonus/bo_promo_create_bonus_save.jsp
+			</result>
+		</action>
+<!--		<action name="bo_promo_create_bonus_save" class="com.stpl.pms.action.bo.bonus.BonusAction"
+			method="createBonusSave">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/bonus/bo_promo_create_bonus_save.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/bonus/bo_promo_create_bonus_menu.jsp
+			</result>
+		</action>-->
+		<action name="bo_promo_freeCashBonus" class="com.stpl.pms.action.bo.bonus.BonusAction"
+			method="freeCashBonus">
+		<interceptor-ref name="customStack"></interceptor-ref>	
+			<result name="success">
+				/com/stpl/pms/action/bo/bonus/nodecorate/bo_promo_freeCashBonus.jsp
+			</result>
+		</action>
+		<action name="bo_promo_giveFreeCash" class="com.stpl.pms.action.bo.bonus.BonusAction"
+			method="giveFreeCash">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/bonus/bo_promo_giveFreeCashSuccess.jsp
+			</result>
+			<result name="error">
+				/com/stpl/pms/action/bo/bonus/bo_promo_giveFreeCashError.jsp
+			</result>
+		</action>
+		<action name="bo_promo_bonus_inactivate_result" class="com.stpl.pms.action.bo.bonus.BonusAction"
+			method="inactivateBonus">
+			<result name="success">	
+			/com/stpl/pms/action/bo/bonus/nodecorate/bo_promo_inactivate_bonus.jsp
+			</result>
+		</action>
+		
+		<action name="bo_promo_bonus_hide_result" class="com.stpl.pms.action.bo.bonus.BonusAction"
+			method="hideBonus">
+			<result name="success">	
+			/com/stpl/pms/action/bo/bonus/nodecorate/bo_promo_hide_bonus.jsp
+			</result>
+		</action>
+		
+	</package>
+</struts>

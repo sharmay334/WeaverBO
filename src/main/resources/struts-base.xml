@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<package name="struts-base" extends="struts-default" abstract="true">
+		<interceptors>
+			<interceptor name="actions" class="com.stpl.pms.struts.intercepter.ActionInterceptor"></interceptor>
+			<interceptor name="tokenSession" class="org.apache.struts2.interceptor.TokenInterceptor" ></interceptor>
+			<interceptor name="appendParam" class="com.stpl.pms.struts.intercepter.AppendParamInteceptor"></interceptor>
+			<interceptor name="defValueInterceptor" class="com.stpl.pms.struts.intercepter.DefaultValueInterceptor"></interceptor>
+			<interceptor-stack name="customStack">
+				<interceptor-ref name="timer" ></interceptor-ref>
+				<interceptor-ref name="actions"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+			<interceptor-stack name="customTokenStack">
+				<interceptor-ref name="customStack"></interceptor-ref>
+				<interceptor-ref name="tokenSession"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="customStack"></default-interceptor-ref>
+		<global-results> 
+			<result name="IP_BLOCKED">
+				/com/stpl/pms/common/execption/unauthorize.jsp
+			</result>
+			<result name="ALREADY_LOGGED_IN">
+				/com/stpl/pms/common/execption/alreadyloggedIn.jsp
+			</result>
+			<result name="SESSION_TIME_OUT">
+				/com/stpl/pms/common/execption/nodecorate/sessionTimeOutRedirect.jsp
+			</result>
+			<result name="applicationError">
+				/com/stpl/pms/common/execption/applicationError.jsp
+			</result>
+			<result name="applicationException">
+				/com/stpl/pms/common/execption/applicationError.jsp
+			</result>
+			<result name="unauthorize">
+				/com/stpl/pms/common/execption/unauthorize.jsp
+			</result>
+			<result name="exception">
+				/com/stpl/pms/common/execption/exception.jsp
+			</result>
+			<result name="exception_nodecorate">
+				/com/stpl/pms/common/execption/nodecorate/exception.jsp
+			</result>
+			<result name="invalid.token">
+				/com/stpl/pms/common/execption/invalidToken.jsp
+			</result>
+			<result name="limitReportData">
+				/com/stpl/pms/common/execption/nodecorate/limitReportData.jsp
+			</result>
+			<result name="dataTableAction" type="chain">
+				<param name="actionName">dataTablesAction</param>
+				<param name="namespace">/com/stpl/pms/action/bo/ajax</param>
+			</result>
+		</global-results>
+	</package>
+	<package name="struts-json-base"  extends="json-default" abstract="true">
+		<interceptors>
+			<interceptor name="timer"
+				class="com.opensymphony.xwork2.interceptor.TimerInterceptor" />
+			<interceptor-stack name="customStack">
+				<interceptor-ref name="timer" />
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+	</package>
+</struts>

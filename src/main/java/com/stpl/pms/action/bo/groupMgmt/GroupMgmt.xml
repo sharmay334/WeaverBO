@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<package name="gameGroup" namespace="/com/stpl/pms/action/bo/groupMgmt"
+		extends="struts-base">
+		
+		<action name="st_pms_bo_addToPlrGrp" class="com.stpl.pms.action.bo.groupMgmt.GroupMgmtAction" method="addPlrToPlrGroup">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/st_pms_bo_addToPlrGrp.jsp</result>
+		</action>
+		
+		<action name="st_pms_bo_rmvFromPlrGrp" class="com.stpl.pms.action.bo.groupMgmt.GroupMgmtAction" method="rmvPlrFromPlrGroup">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/st_pms_bo_rmvToPlrGrp.jsp</result>
+		</action>
+
+	</package>
+</struts>

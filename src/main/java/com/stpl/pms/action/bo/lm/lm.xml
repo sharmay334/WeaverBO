@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<package name="lm" namespace="/com/stpl/pms/action/bo/lm"
+		extends="struts-base">
+		<action name="bo_user_sessionTimeOut">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>
+				/com/stpl/pms/common/execption/nodecorate/sessionTimeOut.jsp
+			</result>
+		</action>
+		<action name="bo_lm_newLogin" class="com.stpl.pms.action.bo.lm.AuthenticationAction" method="welcomeUser">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/lm/bo_lm_newLogin.jsp
+			</result>
+			<result name="alreadyLogin" type="redirectAction">
+				<param name="actionName">bo_home_page</param>
+				<param name="serviceName">MGMT</param>
+			</result>
+		</action>
+
+		<action name="bo_lm_changePassword" class="com.stpl.pms.action.bo.lm.ChangePasswordAction"
+			method="changePasswordPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/lm/bo_lm_changePassword.jsp
+			</result>
+		</action>
+
+		<action name="bo_lm_login" class="com.stpl.pms.action.bo.lm.AuthenticationAction"
+			method="authentication">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="error">
+				/com/stpl/pms/action/bo/lm/bo_lm_newLogin.jsp
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">bo_home_page</param>
+				<param name="serviceName">MGMT</param>
+			</result>
+			<result name="invalid.token">
+				/com/stpl/pms/common/execption/nodecorate/invalidToken.jsp
+			</result>
+			<result name="SuccessFirstTime" type="redirectAction">
+				<param name="actionName">bo_lm_changePassword</param>
+			</result>
+		</action>
+
+		<action name="bo_lm_logout" class="com.stpl.pms.action.bo.lm.Logout"
+			method="logOut">
+			<result name="success" type="redirectAction">
+				<param name="actionName">bo_lm_newLogin</param>
+			</result>
+		</action>
+		<action name="bo_home_page" class="com.stpl.pms.action.bo.lm.AuthenticationAction"
+			method="redirectService">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="mgmt">/com/stpl/pms/action/bo/lm/bo_lm_loginSuccess.jsp
+			</result>
+			<result name="rummy">/com/stpl/pms/action/bo/lm/bo_lm_rummyloginSuccess.jsp
+			</result>
+			<result name="rummy_2x">/com/stpl/pms/action/bo/lm/bo_lm_rummyloginSuccess.jsp
+			</result>
+			<result name="ige">/com/stpl/pms/action/bo/lm/bo_lm_igeloginSuccess.jsp
+			</result>
+			<result name="sge">/com/stpl/pms/action/bo/lm/bo_lm_sgeloginSuccess.jsp
+			</result>
+			<result name="casino">/com/stpl/pms/action/bo/lm/bo_lm_casinologinSuccess.jsp
+			</result>
+		</action>
+		<action name="bo_lm_loadForgotPassword">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/lm/nodecorate/bo_lm_loadForgotPassword.jsp
+			</result>
+		</action>
+		<action name="bo_lm_forgotPassword" class="com.stpl.pms.action.bo.lm.ChangePasswordAction"
+			method="forgotPassword">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="input">
+				/com/stpl/pms/action/bo/lm/nodecorate/bo_lm_loadForgotPassword.jsp
+			</result>
+			<result name="success">
+				/com/stpl/pms/action/bo/lm/nodecorate/bo_lm_forgotPassword.jsp
+			</result>
+		</action>
+		<action name="locale" class="com.stpl.pms.action.bo.lm.LoginAction"> 
+		<result name="success" type="chain">bo_lm_newLogin</result>
+		
+		</action>
+		<action name="bo_lm_pass" class="com.stpl.pms.action.bo.lm.ChangePasswordAction">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="input">
+				/com/stpl/pms/action/bo/lm/bo_lm_changePassword.jsp
+			</result>
+			<result name="error">
+				/com/stpl/pms/action/bo/lm/bo_lm_changePassword.jsp
+			</result>
+			<result name="wrongpass">
+				/com/stpl/pms/action/bo/lm/bo_lm_changePassword.jsp
+			</result>
+			<result name="UserFirstSuccess">
+				/com/stpl/pms/action/bo/lm/bo_lm_loginSuccess.jsp
+			</result>
+			<result name="NOTLOGIN">
+				/com/stpl/pms/action/bo/lm/bo_lm_showLogin.jsp
+			</result>
+			<result name="UserSuccess">
+				/com/stpl/pms/action/bo/lm/bo_lm_pass.jsp
+			</result>
+		</action>
+		<action name="st_check_system_storage" class="com.stpl.pms.action.bo.lm.DiskStorageMgmt" method="returnDiskSpace">
+		<interceptor-ref name="customStack"></interceptor-ref>
+		
+		</action>
+	</package>
+</struts>
+

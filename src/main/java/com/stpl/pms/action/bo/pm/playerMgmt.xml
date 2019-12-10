@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<constant name="struts.multipart.maxSize" value="102400000" />
+	<package name="pm" namespace="/com/stpl/pms/action/bo/pm"
+		extends="struts-base">
+		<!-- Tech Support Page -->
+	    <action name="bo_pm_plr_txn_query" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="searchByMobile">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/managePaging/bo_pm_plr_txn_query.jsp
+			</result>
+		</action>
+		<action name="bo_pm_plr_tickets" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="fetchPlayerTickets">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_pm_plr_txn_query_search" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="fetchPlayerByMobile">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/managePaging/nodecorate/bo_pm_plr_txn_query_result.jsp
+			</result>
+		</action>
+		<action name="st_bo_pm_changePlrPassword" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/pm/nodecorate/st_bo_pm_changePlrPassword.jsp
+			</result>
+		</action>
+		<action name="bo_pm_plr_change_pass" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="savepassword">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/common/response/nodecorate/common_success_response.jsp
+			</result>
+		</action>
+		 <action name="st_bo_pm_reSendTicketSms" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="reSendTicketSms">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			
+		</action>
+			<action name="st_bo_pm_trackTicket" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="trackTicket">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/pm/nodecorate/st_bo_pm_trackTicket.jsp
+			</result>
+		</action>
+		
+		<!-- Manage Registration Page -->
+		<action name="bo_pm_load_managepage" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="managePage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/managePaging/bo_pm_load_managepagemodule.jsp
+			</result>
+		</action>
+
+		<action name="bo_pm_load_fieldlist" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="fetchFieldList">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/managePaging/nodecorate/bo_pm_load_modulefieldlist.jsp
+			</result>
+			<result name="input">/com/stpl/pms/action/bo/pm/managePaging/bo_pm_load_managepagemodule.jsp
+			</result>
+		</action>
+		<action name="bo_pm_save_fieldlist" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="saveFieldList">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_pms_dm_bo_success.jsp
+			</result>
+			<result name="input">/com/stpl/pms/action/bo/pm/managePaging/bo_pm_load_managepagemodule.jsp
+			</result>
+		</action>
+
+		<action name="bo_pm_upload_doc_menu" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/pm/managePaging/bo_pm_upload_document_menu.jsp
+			</result>
+		</action>
+		<action name="bo_pm_upload_red_doc_menu" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/pm/managePaging/bo_pm_upload_red_document_menu.jsp
+			</result>
+		</action>
+		<action name="bo_pm_search_plr" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="plrSearchForUploadDoc">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_pm_search_red_plr" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="redPlrSearchForUploadDoc">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_pm_plr_document_detail" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="uploadOrEditPlrDocument">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/pm/managePaging/nodecorate/bo_pm_editOrUpload_plr_document.jsp
+			</result>
+		</action>
+		<action name="bo_pm_plr_bank_document_detail" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="uploadOrEditPlrBankDocument">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result >/com/stpl/pms/action/bo/pm/managePaging/nodecorate/bo_pm_editOrUploadBank_plr_document.jsp
+			</result>
+		</action>
+		<action name="bo_pm_updateAndSave_plr_doc" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="saveOrUpdatePlrDoc">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/pm/managePaging/bo_pm_plrDoc_upload_success.jsp
+			</result>
+		</action>
+		<action name="bo_pm_updateAndSave_plr_bank_doc" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="saveOrUpdatePlrBankDoc">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/pm/managePaging/bo_pm_plrDoc_upload_success.jsp
+			</result>
+		</action>
+		<action name="bo_pm_check_unique_plr_doc" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="checkDocUnqNoAvailability">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_pm_check_unique_plr_bank_doc" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="checkBankDocUnqNoAvailability">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
+		<action name="bo_pm_auto_age_veri_menu" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="autoAgeVeriMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/pm/bo_pm_auto_age_veri_menu.jsp
+			</result>
+		</action>
+		<action name="bo_pm_auto_age_veri_search_plr" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="plrSearchForAutoVerification">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/nodecorate/bo_pm_auto_age_veri_search_result.jsp
+			</result>
+		</action>
+		<action name="bo_pm_auto_age_veri_terminate_plr" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="plrRefundProcessTerminate">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/bo_pm_auto_age_veri_terminate_plr_success.jsp
+			</result>
+		</action>
+		<action name="bo_pm_auto_age_veri_verify_cancel_plr" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="plrMannualVerifyCancelPlr">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/bo_pm_auto_age_veri_terminate_plr_success.jsp
+			</result>
+		</action>
+
+
+		<action name="st_pm_plr_emailDispatch" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="plrEmailDispatch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/managePaging/nodecorate/st_pm_plr_emailDispatch.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_fetchTemplateList" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="getTemplateList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_fetchTemplateListOnAliasChange" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="getTemplateListOnAliasChange">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pm_plr_notificationDispatch" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="plrnotificationDispatch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/managePaging/nodecorate/st_pm_plr_notificationDispatch.jsp
+			</result>
+		</action>
+
+		<action name="st_pm_plr_appUpdatePanel" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="prepareAppPushPanel">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/managePaging/nodecorate/st_pm_plr_bo_appUpdatePanel.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_sendNotification" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="sendNotification">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/managePaging/st_pms_dm_bo_inboxSuccess.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/pm/managePaging/st_pms_dm_bo_inboxError.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_pushAppUpdate" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="pushAppToSelectUsers">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/pm/managePaging/st_pms_plr_app_push_result.jsp
+			</result>
+		</action>
+		<action name="st_pms_inbox_saveTemplateContent" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="saveTemplateContent">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/managePaging/st_pms_dm_bo_inboxSuccess.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/pm/managePaging/st_pms_dm_bo_inboxError.jsp
+			</result>
+		</action>
+		<action name="st_pms_inbox_saveTemplateContentJoomla" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="saveTemplateContentforJoomla">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/pm/managePaging/st_pms_dm_bo_inboxSuccess.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/pm/managePaging/st_pms_dm_bo_inboxError.jsp
+			</result>
+		</action>
+		<action name="st_bo_pm_changePlrEmailOrMobile" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/pm/nodecorate/st_bo_pm_changePlrEmailOrMobile.jsp
+			</result>
+		</action>
+		<action name="st_bo_pm_changePlrEmailOrMobile_submit"
+		class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="changePlrEmailOrMobileSubmit">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="input">
+				/com/stpl/pms/action/bo/pm/nodecorate/st_bo_pm_changePlrEmailOrMobile.jsp
+			</result>
+			<result name="success">
+				/com/stpl/pms/action/bo/pm/nodecorate/st_bo_pm_changePlrEmailOrMobile_submit.jsp
+			</result>
+		</action>
+		<action name="st_bo_pm_changePlrEmailOrMobile_confirm" 
+		class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="changePlrEmailOrMobileConfirm">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/common/response/nodecorate/common_success_response.jsp
+			</result>
+		</action>
+		<action name="st_bo_pm_plr_registration_menu" 
+		class="com.stpl.pms.action.bo.pm.PlayerMgmtAction">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/pm/st_bo_pm_plr_registration_menu.jsp
+			</result>
+		</action>
+		<action name="st_bo_plr_registration_fields_load" 
+		class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="loadPlrRegistrationFields">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/pm/nodecorate/st_bo_plr_registration_fields_load.jsp
+			</result>
+		</action>
+		<action name="st_bo_pm_check_plr_regisfields_unique" 
+		class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="fieldIsUnique">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_bo_pm_save_plr_registration_fields" 
+		class="com.stpl.pms.action.bo.pm.PlayerMgmtAction" method="savePlrRegistration">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/pm/st_bo_pm_plr_registration_success.jsp
+			</result>
+		</action>
+		<action name="st_bo_pm_inactivePlayer" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="updateInactivePlayer">
+			<result name="success">/com/stpl/pms/action/bo/pm/st_bo_pm_plr_inactive_success.jsp </result>
+		</action>
+		<action name="st_bo_pm_checkPlayerEligibility" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="checkPlayerEligibility">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_save_nickName" class="com.stpl.pms.action.bo.pm.PlayerMgmtAction"
+			method="saveNickName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+	</package>
+</struts>

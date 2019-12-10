@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="graphics" namespace="/com/stpl/pms/action/bo/graphics"
+		extends="struts-base">
+		
+	<action name="st_pms_gm_showGraphicsPage">
+		 <result>/com/stpl/pms/action/bo/graphics/st_pms_gm_showGraphicsPage.jsp</result>
+	</action>
+	<action name="st_pms_gm_addNewGraphics">
+		 <result>/com/stpl/pms/action/bo/graphics/nodecorate/st_pms_gm_addNewGraphics.jsp</result>
+	</action>
+	<action name="st_pms_gm_uploadGraphics" class="com.stpl.pms.action.bo.graphics.GraphicsAction" method="uploadGraphics">
+		<result>/com/stpl/pms/action/bo/graphics/st_pms_gm_addGraphicsSuccess.jsp</result>
+		<result name="error">/com/stpl/pms/action/bo/graphics/st_pms_gm.addGraphics_error.jsp</result>
+	</action>
+		
+	
+	</package>
+</struts>

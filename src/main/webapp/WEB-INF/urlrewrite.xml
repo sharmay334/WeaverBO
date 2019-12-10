@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite>
+
+<urlrewrite>
+	<!-- BO Risk Urls Start -->
+	<rule>
+		<from>^/$</from>
+		<to>com/stpl/pms/action/bo/lm/bo_lm_newLogin.action</to>
+	</rule>
+	<rule>
+		<from>backoffice/riskMgmt/showFieldWeightage</from>
+		<to>
+			com/stpl/pms/action/bo/riskMgmt/st_pms_bo_riskMgmt_showDLDomainList.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>backoffice/riskMgmt/showFieldWeightage</to>
+		<from>
+			com/stpl/pms/action/bo/riskMgmt/st_pms_bo_riskMgmt_showDLDomainList.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>backoffice/riskMgmt/editFieldWeightage</from>
+		<to>
+			com/stpl/pms/action/bo/riskMgmt/st_pms_bo_riskMgmt_editDLFieldWeightage.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>backoffice/riskMgmt/editFieldWeightage</to>
+		<from>
+			com/stpl/pms/action/bo/riskMgmt/st_pms_bo_riskMgmt_editDLFieldWeightage.action
+		</from>
+	</outbound-rule>
+	<outbound-rule>
+		<to>backoffice/riskMgmt/invalidate-cache</to>
+		<from>
+			com/stpl/pms/action/bo/riskMgmt/st_pms_bo_riskMgmt_invalidateCache_menu.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>backoffice/riskMgmt/invalidate-cache</from>
+		<to>
+			com/stpl/pms/action/bo/riskMgmt/st_pms_bo_riskMgmt_invalidateCache_menu.action
+		</to>
+	</rule>
+	<rule>
+		<from>backoffice/riskMgmt/db-config</from>
+		<to>
+			com/stpl/pms/action/bo/riskMgmt/st_pms_bo_riskMgmt_dbConfing_menu.action
+		</to>
+	</rule>
+
+	<!-- BO Risk Urls End -->
+
+	<!-- BO Cashier Urls Start -->
+	<rule>
+		<from>backoffice/cashier/showCashier</from>
+		<to>
+			com/stpl/pms/action/bo/cashier/st_pms_cashier_bo_showCashier.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>backoffice/cashier/showCashier</to>
+		<from>
+			com/stpl/pms/action/bo/cashier/st_pms_cashier_bo_showCashier.action
+		</from>
+	</outbound-rule>
+	<!-- BO Cashier Urls End -->
+
+	<!-- BO Login Urls Start -->
+	<rule>
+		<from>backoffice/login/NewLogin/(.*)$</from>
+		<to>
+			com/stpl/pms/action/bo/lm/bo_lm_newLogin.action?oldHttp=$1
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>backoffice/login/NewLogin/$1</to>
+		<from>
+			com/stpl/pms/action/bo/lm/bo_lm_newLogin.action?oldHttp=(.*)$
+		</from>
+	</outbound-rule>
+
+	<rule>
+		<from>backoffice/login/AfterLogin</from>
+		<to>
+			com/stpl/pms/action/bo/lm/bo_lm_afterLogin.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>backoffice/login/AfterLogin</to>
+		<from>
+			com/stpl/pms/action/bo/lm/bo_lm_afterLogin.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>backoffice/login/ForgotPassword</from>
+		<to>
+			com/stpl/pms/action/bo/lm/bo_lm_loadForgotPassword.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>backoffice/login/ForgotPassword</to>
+		<from>
+			com/stpl/pms/action/bo/lm/bo_lm_loadForgotPassword.action
+		</from>
+	</outbound-rule>
+
+
+	<!-- BO Login Urls End -->
+
+	<!-- Portal Cashier Urls Start -->
+	<rule>
+		<from>portal/cashier/showCashier</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_showCashier.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/showCashier</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_showCashier.action
+		</from>
+	</outbound-rule>
+
+	<rule>
+		<from>portal/cashier/showDepositCashier</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_showDepositCashier.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/showDepositCashier</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_showDepositCashier.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/depositRequest</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositRequest.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositRequest</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositRequest.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/depositResponseCitrus</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseCitrus.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponseCitrus</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseCitrus.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/depositResponsePayTm</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponsePayTm.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponsePayTm</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponsePayTm.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/depositResponseTSPL</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseTSPL.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponseTSPL</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseTSPL.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/depositResponseTechprocess</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseTechprocess.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponseTechprocess?(.*)$</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseTechprocess.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/depositResponseAtom</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseAtom.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponseAtom</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseAtom.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/depositResponsePaycash</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponsePaycash.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponsePaycash</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponsePaycash.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/depositResponseEBS?(.*)$</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseEBS.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponseEBS</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseEBS.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/depositResponseMPower?(.*)$</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseMPower.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponseMPower</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseMPower.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/depositResponsePaga?(.*)$</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponsePaga.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponsePaga</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponsePaga.action
+		</from>
+	</outbound-rule>
+	
+	<rule>
+		<from>portal/cashier/depositResponseInterswitch?(.*)$</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseInterswitch.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponseInterswitch</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseInterswitch.action
+		</from>
+	</outbound-rule>
+	
+	<!-- <rule>
+		<from>portal/cashier/depositResponsePAYU?(.*)$</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponsePAYU.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponsePAYU</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponsePAYU.action
+		</from>
+	</outbound-rule> -->
+	<rule>
+		<from>portal/cashier/depositResponsePAYUMoney?(.*)$</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponsePAYUMoney.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponsePAYUMoney</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponsePAYUMoney.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/depositResponseSafeCharge?(.*)$</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseSafecharge.action
+		</to>
+	</rule>
+	<rule>
+		<from>portal/cashier/filCollnAddr</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_fillCashCollectionAddress.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/filCollnAddr</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_fillCashCollectionAddress.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/cshCollnRequest</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_cashCollnRequest.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/cshCollnRequest</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_cashCollnRequest.action
+		</from>
+	</outbound-rule>
+
+	<outbound-rule>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseGharPay.action?(.*)$
+		</from>
+		<to>portal/cashier/depositResponseGharPay?$1</to>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/depositResponseGharPay?(.*)$</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponseGharPay.action
+		</to>
+	</rule>
+
+	<outbound-rule>
+		<to>portal/cashier/help</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/nodecorate/st_pms_cashier_portal_cashierHelp.jsp
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/help</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/nodecorate/st_pms_cashier_portal_cashierHelp.jsp
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/plrCancelWdrDeposit</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_plrDepositAgstCancelWdr.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/plrCancelWdrDeposit</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_plrDepositAgstCancelWdr.action
+		</to>
+	</rule>
+
+	<rule>
+		<from>portal/cashier/showWithdrawalCashier</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_showWithdrawalCashier.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/showWithdrawalCashier</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_showWithdrawalCashier.action
+		</from>
+	</outbound-rule>
+	<rule>
+		<from>portal/cashier/bankWdrRequest</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_bankWdrRequest.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/bankWdrRequest</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_bankWdrRequest.action
+		</from>
+	</outbound-rule>
+	 <rule>
+    	<from>portal/third-party-login</from>
+    	<set name="url">portal/third-party-login</set>
+    	<to>com/stpl/pms/api/action/rummy/st_portal_thirdPartyLogin.action</to>
+    </rule>
+	 <outbound-rule>
+    	<from>com/stpl/pms/api/action/rummy/st_portal_thirdPartyLogin.action</from>
+    	<to>>portal/third-party-login</to>
+    </outbound-rule>
+    
+     <rule>
+    	<from>portal/third-party-logout?(.*)$</from>
+    	<set name="url">portal/third-party-logout</set>
+    	<to>com/stpl/pms/api/action/rummy/st_portal_thirdPartyLogout.action</to>
+    </rule>
+	 <outbound-rule>
+    	<from>com/stpl/pms/api/action/rummy/st_portal_thirdPartyLogout.action</from>
+    	<to>>portal/third-party-logout?$1</to>
+    </outbound-rule>
+    
+    
+	<rule>
+		<from>portal/cashier/chequeWdrRequest</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_chequeWdrRequest.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/chequeWdrRequest</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_chequeWdrRequest.action
+		</from>
+	</outbound-rule>
+	<!-- Portal Cashier Urls End -->
+
+	<!-- Portal GameEngine Txn Urls Start -->
+
+	<rule>
+		<from>portal/txn/plrEligibilityCheck?(.*)$</from>
+		<to>
+			com/stpl/pms/action/thirdParty/transaction/st_bo_pm_checkPlayerEligibility.action?$1
+		</to>
+	</rule>
+	<rule>
+		<from>portal/txn/plrTxn?(.*)$</from>
+		<to>
+			com/stpl/pms/action/thirdParty/transaction/st_pms_txn_portal_plrTxnRequest.action?$1
+		</to>
+	</rule>
+	<rule>
+		<from>portal/txn/plrBulkTxn?(.*)$</from>
+		<to>
+			com/stpl/pms/action/thirdParty/transaction/st_pms_txn_portal_plrBulkTxnRequest.action?$1
+		</to>
+	</rule>
+	<rule>
+		<from>portal/txn/plrConfirmWgrTxn?(.*)$</from>
+		<to>
+			com/stpl/pms/action/thirdParty/transaction/st_pms_txn_portal_plrConfirmWagerTxnRequest.action?$1
+		</to>
+	</rule>
+		<rule>
+		<from>portal/txn/plrPaymentCorrection?(.*)$</from>
+		<to>
+			com/stpl/pms/action/thirdParty/transaction/st_pms_txn_plrPaymentCorrection.action?$1
+		</to>
+	</rule>
+	<rule>
+		<from>portal/txn/getTxnStatus?(.*)$</from>
+		<to>
+			com/stpl/pms/action/thirdParty/transaction/st_pms_txn_portal_plrTxnDetail.action?$1
+		</to>
+	</rule>
+
+	<rule>
+		<from>service/rest/weaverServiceRequest?(.*)$</from>
+		<to>
+			com/stpl/pms/api/action/rest/st_pms_api_rest_weaverServiceRequest.action?$1
+		</to>
+	</rule>
+	<rule>
+		<from>service/rest/weaverTxnReport?(.*)$</from>
+		<to>
+			com/stpl/pms/api/action/rest/st_pms_api_rest_weaverTxnReport.action?$1
+		</to>
+	</rule>
+	<!-- Portal Cashier Urls End -->
+
+
+	<!-- Portal Login Urls Start -->
+	<rule>
+		<from>portal/loginMgmt/autoLoginPlayer</from>
+		<to>
+			com/stpl/pms/action/portal/loginMgmt/st_pms_loginMgmt_portal_autoLoginPlayer.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/loginMgmt/autoLoginPlayer</to>
+		<from>
+			com/stpl/pms/action/portal/loginMgmt/st_pms_loginMgmt_portal_autoLoginPlayer.action
+		</from>
+	</outbound-rule>
+		
+	<rule>
+		<from>portal/saveNickName</from>
+		<to>
+			com/stpl/pms/action/bo/pm/st_pms_save_nickName.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/saveNickName</to>
+		<from>
+			com/stpl/pms/action/bo/pm/st_pms_save_nickName.action
+		</from>
+	</outbound-rule>
+	<!-- Portal Login Urls End -->
+
+	<!-- Portal GameEngine Txn Urls Start -->
+
+	<rule>
+		<from>portal/sports/betInAction(.*)$</from>
+		<to>
+			com/stpl/pms/api/action/sports/bet/st_pms_portal_tp_betInActionRequest.action?$1
+		</to>
+	</rule>
+	<rule>
+		<from>portal/txn/betGamesRequest?(.*)$</from>
+		<to>
+			com/stpl/pms/api/action/betgames/tv/st_pms_portal_tp_betGamesTvRequest.action
+		</to>
+	</rule>
+
+	<rule>
+		<from>
+			ola/deposit
+		</from>
+		<to>
+			com/stpl/pms/action/bo/misc/tempOLA.jsp
+		</to>
+	</rule>
+	<!-- Portal Cashier Urls End -->
+
+	<!-- player transaction reports -->
+
+	<rule>
+		<from>
+			reports/playerTnx
+		</from>
+		<to>
+			com/stpl/pms/action/bo/reports/st_pms_bo_rep_playerTxnReportsMenu.action?reportType=AllTnx
+		</to>
+	</rule>
+
+	<!-- MicroGaming API Url -->
+	<rule>
+		<from>
+			microGaming/reqData
+		</from>
+		<to>
+			com/stpl/pms/api/action/micro/gaming/com_stpl_pms_bo_microGame.action
+		</to>
+	</rule>
+	<rule>
+		<from>portal/cashier/depositResponsePAYU</from>
+		<to>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponsePAYU.action
+		</to>
+	</rule>
+	<outbound-rule>
+		<to>portal/cashier/depositResponsePAYU</to>
+		<from>
+			com/stpl/pms/action/portal/cashier/st_pms_cashier_portal_depositResponsePAYU.action
+		</from>
+	</outbound-rule>
+
+
+	<!-- Sheriff Gaming API Url -->
+	<rule>
+		<from> sheriffgaming/json/balance </from>
+		<to>
+			com/stpl/pms/action/thirdParty/sheriffgamingapi/st_pms_thirdParty_sheriffGames_balanceAction.action
+		</to>
+	</rule>
+
+	<rule>
+		<from> sheriffgaming/json/endsession </from>
+		<to>
+			com/stpl/pms/action/thirdParty/sheriffgamingapi/st_pms_thirdParty_sheriffGames_endSessionAction.action
+		</to>
+	</rule>
+
+	<rule>
+		<from> sheriffgaming/json/validate </from>
+		<to>
+			com/stpl/pms/action/thirdParty/sheriffgamingapi/st_pms_thirdParty_sheriffGames_validationAction.action
+		</to>
+	</rule>
+
+	<rule>
+		<from> sheriffgaming/json/transaction </from>
+		<to>
+			com/stpl/pms/action/thirdParty/sheriffgamingapi/st_pms_thirdParty_sheriffGames_transactionAction.action
+		</to>
+	</rule>
+
+	<rule>
+		<from> sheriffgaming/json/ping </from>
+		<to>
+			com/stpl/pms/action/thirdParty/sheriffgamingapi/st_pms_thirdParty_sheriffGames_pingAction.action
+		</to>
+	</rule>
+
+	<!-- rummy API Url -->
+	<rule>
+		<from>
+			rummy/reqData?(.*)$
+		</from>
+		<to>
+			com/stpl/pms/api/action/rummy/com_stpl_pms_bo_rummy.action
+		</to>
+	</rule>
+	<!-- poker API Url -->
+	<rule>
+		<from>
+			poker/reqData?(.*)$
+		</from>
+		<to>
+			com/stpl/pms/api/action/poker/com_stpl_pms_bo_poker.action
+		</to>
+	</rule>
+	<!-- DGE API Url -->
+	<rule>
+		<from>
+			dge/dgePlrDetails?(.*)$
+		</from>
+		<to>
+			com/stpl/pms/api/action/dge/st_pms_api_service_dgePlayerDetails.action
+		</to>
+	</rule>
+	
+	<rule>
+			<from>
+				role/addPriv
+			</from>
+			<to>
+				com/stpl/pms/action/bo/um/bo_um_addPrivilege.action
+			</to>
+		</rule>
+	<rule>
+	
+		<from>
+			role/assignPriv
+		</from>
+		<to>
+			com/stpl/pms/action/bo/um/assignPriv.action
+		</to>
+	</rule>
+	<rule>
+		<from>
+			misc/domainReset
+		</from>
+		<to>
+			com/stpl/pms/action/bo/misc/resetDomain.action
+		</to>
+	</rule>
+
+	<!-- Instant Draw Urls -->
+	<rule>
+		<from>
+			third-party/player-auto-login
+		</from>
+		<to>
+			com/stpl/pms/api/action/instantdraw/com_stpl_pms_player_auto_login.action
+		</to>
+	</rule>
+</urlrewrite>
+

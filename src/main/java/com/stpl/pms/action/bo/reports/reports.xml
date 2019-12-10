@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="reports" namespace="/com/stpl/pms/action/bo/reports"
+		extends="struts-base,json-default">
+
+		<action name="st_pms_bo_rep_playerSearchMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="playerSearchMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor">
+				<param name="requireProperties">countryList,vipList</param>
+			</interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_playerSearchMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_referSourceList" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getRSOnDomainChnage">
+		</action>
+		<action name="st_pms_bo_rep_login_detail" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getLoginDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
+		<action name="st_pms_bo_rep_wallet_detail" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getWalletDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_rake_amt" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getRakeAmount">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_deposit_detail" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getdepositDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_thirdPartyTxn_detail" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getThirdPartyTxnDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_weaverEconetTxn_detail" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getWeaverEcoNetSaleRecord">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_thirdPartyTxnFull" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getThirdPartyTxnDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_with_detail" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getwithDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_inbox_detail" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getInboxDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_vip_detail" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getVipDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_campaign_detail" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getCampaignDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_lastTxn_detail" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getTxnDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_bonus_detail" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getBonusDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
+		<action name="st_pms_bo_rep_playerSearchRep" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="playerSearchRep">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_playerSearchRep.jsp
+			</result>
+			<result name="Excel">
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_playerDetailsRep" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="playerDetailsRep">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/mix/st_pms_bo_rep_playerDetailsRep.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_playerDetailsEdit" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="playerDetailsEdit">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_playerDetailsEdit.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_playerFullTxn" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="playerFullTxn">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_playerFullTxn.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_playerPasswordChange" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="playerPasswordChange">
+			<interceptor-ref name="customStack"></interceptor-ref>
+
+		</action>
+		<action name="st_pms_bo_rep_playerPersonalDetailsEdit">
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_playerPersonalDetailsEdit.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_playerPersonalCancelEdit">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_playerPersonalCancelEdit.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_bo_rep_playerTxnReportsMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<param name="procName">getPlayerTransactionReports</param>
+			<param name="headerName">Player Transaction Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_playerTxnReportshMenu.jsp
+			</result>
+		</action>
+		
+		<action name="st_pms_bo_rep_locationWiseTxnReportsMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+		   	method="fetchSysProperty">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<param name="procName">LocationWiseWagerAndWinning</param>
+			<param name="headerName">Location Wise Transaction Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_locationWiseTxnReportMenu.jsp
+			</result>
+		</action>
+		
+		<action name="st_pms_bo_rep_playerTxnReportsExportExcel" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="exportExcelPlrTxnRep">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_searchReport" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSearchReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="getPlayerTransactionReports">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchReportResult.jsp
+			</result>
+			<result name="getDepositDetailPG">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchDepositReportResult.jsp
+			</result>
+			<result name="getWithdrawalDetailPG">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchDepositReportResult.jsp
+			</result>
+			<result name="getPlayerDepositReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchPlayerDepositReport.jsp
+			</result>
+			<result name="SaleAndCommissionDueReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchEconetWeaverSaleReport.jsp
+			</result>
+			<result name="getPlrDepReportWithStatus">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_serachPlrDepReportWithStatus.jsp
+			</result>
+			<result name="getWithDrawalTxnReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchPlayerDepositReport.jsp
+			</result>
+			<result name="getPlrWithDrawalReportWithStatus">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_serachPlrWithReportWithStatus.jsp
+			</result>
+			<result name="getWithDrawalProcessedTxnReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_wDProcessedTxnReport.jsp
+			</result>
+			<result name="getBonusDetailReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_bonusUsageReport.jsp
+			</result>
+			<result name="getBonusAnalysisReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_bonusAnalysisReport.jsp
+			</result>
+			<result name="getBonusPlrDetailReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_bonusPlrReport.jsp
+			</result>
+			<result name="StCmsCampTracking">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchCampDetail.jsp
+			</result>
+			<result name="StCmsReferFriendTracking">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchReferFriendDetail.jsp
+			</result>
+			<result name="stCmsCampPlayerRegReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_campPlrRegDetail.jsp
+			</result>
+			<result name="stCmsCampPlayerDepReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_campPlrDepDetail.jsp
+			</result>
+			<result name="stCmsReferFriendPlrRegReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_referFriendPlrRegDetail.jsp
+			</result>
+			<result name="stCmsReferFriendPlrDepReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_referFriendPlrDepDetail.jsp
+			</result>
+			<result name="StCmsReferFriendInvitedTracking">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_referFriendPlrInvDetail.jsp
+			</result>
+			<result name="StCmsReferFriendVisitedTracking">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_referFriendPlrVisDetail.jsp
+			</result>
+			<result name="playerPayCorrectionReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_playerPayCorrectionReport.jsp
+			</result>
+			<result name="zapakPlayerReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_zapakPlayerReportData.jsp
+			</result>
+			<result name="zapakPlayerDepositReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_zapakPlayerDepReportData.jsp
+			</result>
+			<result name="indiaBetPlayerReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_ppcPlayerReport.jsp
+			</result>
+			<result name="indiaBetPlayerWagerReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_ppcPlayerDepReportData.jsp
+			</result>
+			<result name="CampRevenueReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_campRevenueReportData.jsp
+			</result>
+			<result name="CampWiseRevenuReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_cmsCampWiseRevenuData.jsp
+			</result>
+			<result name="mobileAppDownloadDetail">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_mobileAppDetailReport.jsp
+			</result>
+			<result name="stCmsCampAppDownReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_campMobileAppDetailReport.jsp
+			</result>
+			<result name="getAppsFlyerAndroidReportData">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_appsFlyerAndroidReport.jsp
+			</result>
+			<result name="getAppsFlyerIosReportData">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_appsFlyerIosReport.jsp
+			</result>
+			<result name="stCmsCampPlayerWiseDepReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_playerWiseDepReport.jsp
+			</result>
+			<result name="campRevReferFrndReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_campRevReferFrndReport.jsp
+			</result>
+			<result name="campRevReferFrndPlrReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_cmsCampWiseRevenuDataReferFrnd.jsp
+			</result>
+			<result name="LocationWiseWagerAndWinning"> 
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_locationWiseTxnReportData.jsp
+			</result>
+			<result name="deviceWiseWagerAndWinning">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_deviceWiseTxnReportData.jsp
+			</result>
+			<result name="plrWiseWagerWinningFromTablet">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_playerWiseTxnReportData.jsp
+			</result>
+			<result name="StateWiseFirstDep">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_stateWiseReport.jsp
+			</result>
+			<result name="StateWiseTotalWager">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_stateWiseTotalWager.jsp
+			</result>
+			<result name="StateWiseRegistration">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_stateWiseRegistration.jsp
+			</result>
+			<result name="StateWiseTotalDeposit">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_stateWiseTotalDeposit.jsp
+			</result>
+			<result name="dateWiseDisplay">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_gameWiseWagerWinning.jsp
+			</result>
+			<result name="playerWiseDisplay">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_gameWiseWagerWinningPlayerWiseDisplay.jsp
+			</result>
+			<result name="allWagerAndWinning">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_allGameWiseDateWiseWagerWinningDisplay.jsp
+			</result>
+			<result name="allPlayerWagerAndWinning">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_allGameWisePlayerWiseWagerWinningDisplay.jsp
+			</result>
+			<result name="MgmtReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_mgmtReport.jsp
+			</result>
+			<result name="StateWiseRakeForAlias">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_stateWiseRakeForAlias.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_bo_rep_searchReportAjax" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSearchReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="getDepositDetailPG">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchReportResultAjax.jsp
+			</result>
+			<result name="getWithdrawalDetailPG">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchReportResultAjax.jsp
+			</result>
+			<result name="getDepositDetailPT">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchReportResultAjax.jsp
+			</result>
+			<result name="getWithdrawalDetailPT">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchReportResultAjax.jsp
+			</result>
+			<result name="getDepositDetailMix">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchReportResultAjax.jsp
+			</result>
+			<result name="getWithdrawalDetailMix">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchReportResultAjax.jsp
+			</result>
+
+		</action>
+		<action name="st_pms_bo_rep_playerDepositReportMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<param name="procName">getPlayerDepositReport</param>
+			<param name="headerName">Deposit Status Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_DepStatusReportMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_weaverEconetsaleReportMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<param name="procName">SaleAndCommissionDueReport</param>
+			<param name="headerName">Sale and Commission Due Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_weaverEconetsaleReportMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_plrDepReportWithStatusMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<param name="procName">getPlrDepReportWithStatus</param>
+			<param name="headerName">Player Deposit Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_playerDepReportMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_pgSettlementReportMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="pgSettlementReportMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_pgSettlementReportMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_report_pokerSettReport" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="reportPokerSettMenu">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_pokerSettlementReportMenu.jsp
+			</result>
+		</action>
+
+
+		<action name="st_pms_bo_rep_paytmSettlementReport" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="reportPokerSettMenu">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_paytmSettlementReportMenu.jsp
+			</result>
+		</action>
+
+
+
+		<action name="st_pms_bo_report_plrPaymentCorrectionPoker_save"
+			class="com.stpl.pms.action.bo.reports.ReportsAction" method="plrPayCorrectionPokerSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/st_pms_bo_rep_plrPaymentCorrection_confirm.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_bo_rep_withDrawalTrnxReportMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<param name="procName">getWithDrawalTxnReport</param>
+			<param name="headerName">Withdrawal Status Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_withDrawalStatusReportMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_WDProcessedTrnxReportMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<param name="procName">getWithDrawalProcessedTxnReport</param>
+			<param name="headerName">Withdrawal Processed Transaction Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_withDrawalReportMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_bonusDetailReportMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<param name="procName">getBonusDetailReport</param>
+			<param name="headerName">Bonus Detail Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_bonusDetailReportMenu.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_bo_rep_pgSettlementReport" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="pgSettlementReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_pgSettlementReport.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_pokerSettReportSearch" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="pokerSettReportSearch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_pokerSettReportData.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_paytmSettReportSearch" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="paytmSettReportSearch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_paytmSettReportData.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_campSearchMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<param name="procName">StCmsCampTracking</param>
+			<param name="headerName">Campaign Tracking Report</param>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_campTrackingSerach.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_playerBonusDetail" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="playerBonusDetail">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_playerBonusDetail.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_playerBonusDetailFull" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getBonusDetailFull">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_playerBonusDetail.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_playerTxnDetailFull" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getTxnDetailFull">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_playerBonusDetail.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_plrWithDrawalReportWithStatusMenu"
+			class="com.stpl.pms.action.bo.reports.ReportsAction" method="fetchSysProperty">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<param name="procName">getPlrWithDrawalReportWithStatus</param>
+			<param name="headerName">Player WithDrawal Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_playerWithReportMenu.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_bo_rep_misReportMenu" class="com.stpl.pms.action.bo.reports.ReportsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<param name="procName">getBonusDetailReport</param>
+			<param name="headerName">MIS Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_misReportMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_AccountReportMenu" class="com.stpl.pms.action.bo.reports.ReportsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<param name="procName">getBonusDetailReport</param>
+			<param name="headerName">Account Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_AccountReportMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_dailyRakeWithRoyaltyPage" class="com.stpl.pms.action.bo.reports.ReportsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<param name="headerName">Daily Rake And Royalty</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_dailyRakeWithRoyalty.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_dailyRakeWithRoyalty" class="com.stpl.pms.action.bo.reports.ReportsAction" method="fetchMisReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<param name="headerName">Royalty Report</param>
+			<result name="dailyRakeAndRoyaltyForAlias">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_rep_dailyRakeWithRoyaltyData.jsp
+			</result>
+		</action>
+		
+
+		<action name="st_pms_bo_rep_misReportType" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getMisReportTypeOnChnage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+		</action>
+
+<action name="st_pms_bo_rep_accountReportType" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getAccountReportTypeChange">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+		</action>
+
+<action name="st_pms_bo_rep_taxReportState" class="com.stpl.pms.action.bo.reports.IncomeTaxReportAction"
+			method="getStateTaxReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+		</action>
+
+		<action name="st_pms_bo_rep_payCorrectionMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+
+			<param name="procName">playerPayCorrectionReport</param>
+			<param name="headerName">Payment Correction Report</param>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_playerPaymentCorrection.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_zapakPlrReport" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+
+			<param name="procName">zapakPlayerReport</param>
+			<param name="headerName">Zapak Player Report</param>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_zapakPlayerReport.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_zapakPlrDepReport" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<param name="procName">zapakPlayerDepositReport</param>
+			<param name="headerName">Zapak Player Deposit Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_zapakPlayerDepositReport.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_bo_rep_stCmsCampRevenueReport" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<param name="procName">CampRevenueReport</param>
+			<param name="headerName">Campaign Revenue Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_campRevenueReport.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_searchTaxPlayerWiseReport" class="com.stpl.pms.action.bo.reports.IncomeTaxReportAction"
+				method="fetchPlayerWiseReport"
+		>
+			<result name="itPlayerWise">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_incometaxReport.jsp
+			</result>
+			<result name="Excel">
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_searchMISReport" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchMisReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="MisRegsitrationReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisRegsitrationReport.jsp
+			</result>
+			<result name="MisDepositAndWithdrawal">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisDepositAndWithdrawal.jsp
+			</result>
+			<result name="MisPlayerReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisPlayerReport.jsp
+			</result>
+			<result name="MisPlayerBalance">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisPlayerBalance.jsp
+			</result>
+			<result name="MisWagerAndWinning">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisWagerAndWinning.jsp
+			</result>
+			<result name="MisPlayerBonus">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisPlayerBonus.jsp
+			</result>
+			<result name="MisMixReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisMixReport.jsp
+			</result>
+			<result name="MisBusinessSummary">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisBusinessSummary.jsp
+			</result>
+			<result name="MisAcquiPlrData">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisAcquiPlrData.jsp
+			</result>
+			<result name="MisPlayerBalanceDayWise">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisPlayerBalanceDayWise.jsp
+			</result>
+			<result name="MisDailyPlayReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisDailyPlayReport.jsp
+			</result>
+			<result name="MisPlrLoginReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisPlrLoginReport.jsp
+			</result>
+			<result name="MisPlrLoginData">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisPlrLoginData.jsp
+			</result>
+			<result name="MisPartialPlayerReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_MisPartialPlayerReport.jsp
+			</result>
+			<result name="PlayerRegIpCountReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/misReport/st_pms_bo_misRep_misPlayerRegIpCountReport.jsp
+			</result>
+			<result name="misPlayerSummaryReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_playerSummaryReport.jsp
+			</result>
+			<result name="TDSReport">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_tdsReport.jsp
+			</result>
+			<result name="Excel">
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_searchMISReportOnClick" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchMisReportOnClick">
+		</action>
+		<action name="st_pms_bo_rep_searchIncomeTaxReportOnClick" class="com.stpl.pms.action.bo.reports.IncomeTaxReportAction"
+			method="fetchReportOnClick">
+		</action>
+		<action name="st_pms_bo_rep_fetchSearchReportOnClick" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSearchReportOnClick">
+		</action>
+		<action name="st_pms_bo_rep_misTxnReportsExportExcel" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="exportMISExcelPlrTxnRep">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_ppcPlayerReportMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<param name="procName">indiaBetPlayerReport</param>
+			<param name="headerName">India Bet Player Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_playerTxnReportshMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_ppcPlrDepReportMenu" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<param name="procName">indiaBetPlayerWagerReport</param>
+			<param name="headerName">India Bet Player Wager Report</param>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_zapakPlayerDepositReport.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_appDownloadReportMenu" class="com.stpl.pms.action.bo.reports.ReportsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/st_pms_bo_rep_mobileAppDownloadMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_appsFlyerDataReportMenu" class="com.stpl.pms.action.bo.reports.ReportsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/st_pms_bo_rep_appsFlyerDataReport.jsp
+			</result>
+		</action>
+		
+		
+		
+		<action name="st_pms_bo_rep_stateWiseReport" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<param name="procName">StateWiseReport</param>
+			<param name="headerName">State Wise Report</param>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_StateWiseReportMenu.jsp
+			</result>
+		</action>
+			<action name="st_pms_bo_rep_AliasWiseWagerAndWinning" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<param name="procName">AliasWiseWagerAndWinning</param>
+			<param name="headerName">Game Wise Wager And Winning</param>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_AliasWiseWagerWinningMenu.jsp
+			</result>
+		</action>
+		
+		<action name="st_pms_bo_rep_MgmtReport" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="fetchSysProperty">
+			<param name="procName">MgmtReport</param>
+			<param name="headerName">Management Report</param>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_MgmtReportMenu.jsp
+			</result>
+		</action>
+		
+		<action name="dataTablesAction" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="dataTableResult">
+			<result type="json"></result>
+		</action>
+		<action name="dataTablesActionMis" class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="dataTableResultMis">
+			<result type="json"></result>
+		</action><action name="dataTablesActionIncomeTax" class="com.stpl.pms.action.bo.reports.IncomeTaxReportAction"
+			method="dataTableResult">
+			<result type="json"></result>
+		</action>
+		<action name="report_Affilate_AdCompany_Menu" class="com.stpl.pms.action.bo.reports.AdCompanyReport"
+					method="checkAdCompany">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/st_pms_bo_rep_adCompanyReportMenu.jsp
+			</result>
+		</action>	
+			
+		<action name="getOfferIdForAffilateName" class="com.stpl.pms.action.bo.reports.AdCompanyReport"
+			method="getOfferIdForAffilateName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_AffilateSearchReport" class="com.stpl.pms.action.bo.reports.AdCompanyReport"
+			method="adCompanyReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_affilateReportResult.jsp
+			</result>
+		</action>
+		<action name="st_rp_insert_summary_data" class="com.stpl.pms.action.bo.reports.ReportsAction" method="getLastDaysSummaryData" >
+			<result name="success">
+			/com/stpl/pms/action/bo/reportChart/bo_pm_auto_age_veri_menu.jsp
+			</result>
+		</action>
+	</package>
+</struts>

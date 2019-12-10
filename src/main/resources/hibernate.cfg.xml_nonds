@@ -1,0 +1,845 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.dialect">
+			org.hibernate.dialect.MySQLDialect
+		</property>
+		
+		<!-- datasource -->
+		<!-- <property name="connection.datasource">java:/WeaverDS</property> -->
+		<!-- datasource -->
+		
+		<!-- Non datasource -->
+		<property name="hibernate.connection.url">
+			jdbc:mysql://localhost:3306/weaver_test_rep
+			<!-- jdbc:mysql://localhost:3306/test_weaver_20160408 -->
+			<!-- jdbc:mysql://localhost:3306/weaver_20150720  -->
+			<!--  jdbc:mysql:replication://localhost:3306,192.168.132.17:3306/weaver_20150521?autoReconnect=true&amp;roundRobinLoadBalance=true -->
+			<!--  jdbc:mysql:replication://192.168.5.9:3306,192.168.5.6:3306,192.168.5.5:3306/weaver?autoReconnect=true&amp;roundRobinLoadBalance=true -->
+		</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">root</property>
+		<property name="hibernate.connection.driver_class">
+			com.mysql.jdbc.Driver
+		</property>
+		<property name="hibernate.c3p0.idle_test_period">
+			28000
+		</property>
+		<property name="connectionTesterClassName">
+			com.stpl.pms.utility.ReplicationConnectionTester
+		</property>
+		<property name="hibernate.c3p0.testConnectionOnCheckout">
+			false
+		</property>
+		<property name="hibernate.c3p0.timeout">200</property>
+		<!-- Non datasource -->
+		
+		<property name="hibernate.connection.autocommit">true</property>
+		<!-- <property name="hibernate.connection.pool_size">100</property>
+		<property name="hibernate.c3p0.acquire_increment">5</property>
+		 --><property name="hibernate.bytecode.provider">cglib</property>
+		<property name="format_sql">false</property>
+		<property name="show_sql">true</property>
+		<property name="default_batch_fetch_size">5</property>
+		<property name="myeclipse.connection.profile">Mysql</property>
+		<property name="hibernate.jdbc.use_streams_for_binary">
+			true
+		</property>
+		<!-- <property name="hibernate.connection.provider_class">
+			org.hibernate.connection.C3P0ConnectionProvider
+		</property>
+		<property name="hibernate.c3p0.max_statements">0</property>
+		<property name="hibernate.c3p0.max_statements_per_connection">
+			100
+		</property> -->
+		<property name="hibernate.cache.use_second_level_cache">
+			true
+			</property>
+			<property name="hibernate.cache.provider_class">
+			org.hibernate.cache.EhCacheProvider
+		</property>
+		
+		<property name="hibernate.cache.use_query_cache">true</property>
+		<property name="hibernate.cache.region.factory_class">
+			net.sf.ehcache.hibernate.EhCacheRegionFactory
+		</property>
+		<property name="hibernate.generate_statistics">true</property>
+
+		<!-- Generic Module Start  -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenSmsEmailProviderMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenLanguageMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenCurrencyMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenPropertyMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenStateMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenCityMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenCurrencyCountryMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenCountryServiceMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenPlrGeoip.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenCountryMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenCurrencyConversionRateHistory.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenCurrencyConversionRate.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsGraphicsMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsSubGraphicsMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenVariableMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenSchedulerRunStatus.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalPathMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StOfflineAffiliateMaster.hbm.xml" />
+		<!-- Generic Module End  -->
+
+		<!-- Player Module Start  -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlrVerificationMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmSocialFbMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmDomainTCMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmSocialTwitterMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmDomainPPMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerInfo.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlrPartialRegistration.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmSocialLinkedinMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmSecurityQuesMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlrReferenceMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmReferenceMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmReferenceLabelOptionMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmFieldDomainMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlrDocumentMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmSocialGoogleMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmPlrRoleMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerLoginDetails.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmSocialZapakMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerInfoChangeRequest.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlrMailResponseHistory.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlrFalconideMailResponseHistory.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlrLoginStatus.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmMobileAppDownload.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmMobileAppDownloadDetail.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerSocialPostMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerSocialReferralMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerDeviceMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerSocialPostMasterHistory.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerReferralMasterHistory.hbm.xml" />
+
+		<!-- Player Module End  -->
+
+		<!-- Role Mgmt Module Start  -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmBoUserInfo.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmBoUserMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmBoUserPrivMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmBoRoleMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmBoRolePrivMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmServiceVendorProperties.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmPlrRolePrivMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmServiceDeliveryMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmServiceMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmActionFunctionMappingMgmt.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmActionFunctionMappingCasino.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmMenuMasterMgmt.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmMenuMasterCasino.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmPrivilegeRepMgmt.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmPrivilegeRepCasino.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmVendorMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRummyPrivilegeRepMgmt.hbm.xml" />
+
+		<!-- Role Mgmt Module End  -->
+
+		<!-- Cashier Module Start  -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshProviderMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPaymentOptionsMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPaymentOptionsDomainMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshProviderProcessingChargeMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshDomainProviderMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPaymentTypeMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositRequest.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPaySubMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponseCitrus.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponseTspl.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponseGharpay.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrCashCollnAddress.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrRedeemAccMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshRedeemAccOptionMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshDomainPaymentTypeContentMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositRequestWireTrans.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositRequestChequeTrans.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponseOla.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponseAtom.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponseSafecharge.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrOfflineDepositBonusMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponsePaycash.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponseEbs.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponsePayUMoney.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponsePayU.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponseTechprocess.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponsePayTm.hbm.xml" />
+		 <mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponseCashFree.hbm.xml" /> 
+		<!-- Cashier Module End  -->
+
+		<!-- Transaction Module Start  -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrDepositMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterCasino6.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrBonusTransferHistory.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterCasino6.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWalletMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrBonusDetails.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrBonusWgrReqMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterRummy2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterRummy2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrBonusExpired.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrBonusToCash.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrBonusReceived.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterCasino3.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterCasino3.hbm.xml" />
+
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWithdrawalMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrDepositAgstWdrlCancel.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterCasino4.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterCasino4.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterSports5.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterSports5.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrTransferToSubwalletRummy2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrSubwalletMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrTransferFromSubwalletRummy2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnSettlementCitrus.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnSettlementTechprocess.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnSettlementPayUMoney.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnSettlementPayu.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnSettlementPaytm.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnSettlementCashfree.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/TxnSettlementReportBean.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnSettlementResponseBo.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerRefundMasterRummy2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrPaymentCorrectionMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterGames1.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterGames1.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerRefundMasterGames1.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerRefundMasterCasino6.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerRefundMasterCasino4.hbm.xml" />
+
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnSettlementAtom.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterLiveCasino7.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerRefundMasterLiveCasino7.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterLiveCasino7.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterCasino10.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterCasino10.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerRefundMasterCasino10.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterCasino8.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerRefundMasterCasino8.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterCasino8.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrTxnCancellation.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrTransferFromSubwalletPoker12.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterPoker12.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerRefundMasterPoker12.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrTransferToSubwalletPoker12.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterPoker12.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterBingo11.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterBingo11.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerRefundMasterBingo11.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterInstantDraw13.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterInstantDraw13.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterDrawGames14.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerRefundMasterDrawGames14.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterDrawGames14.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWinningMasterCasino16.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerRefundMasterCasino16.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrWagerMasterCasino16.hbm.xml" />
+
+		<!-- Transaction Module End  -->
+
+		<!-- Practice Transaction Module Start	-->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnPlrWinningMasterRummy2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnPlrWagerMasterRummy2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnPlrSubwalletMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnPlrTransferToSubwalletRummy2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnPlrTransferFromSubwalletRummy2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnPlrWagerRefundMasterRummy2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnPlrWinningMasterPoker12.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnPlrWagerRefundMasterPoker12.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnPlrTransferFromSubwalletPoker12.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnPlrWagerMasterPoker12.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnPlrTransferToSubwalletPoker12.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPracticeTxnCancellation.hbm.xml" />
+		<!-- Practice Transaction Module End	-->
+
+		<!-- Ticket Transaction Module End	-->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTicketManager.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrTicketDetails.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrTicketWagerRefundRummy2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrTicketWagerRummy2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrTicketWagerMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrTicketWinningRummy2.hbm.xml" />
+
+		<!-- Ticket Transaction Module End	-->
+
+		<!--	Report Module Start	-->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StReportPlrTxnLedger.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRpBoMisReportMaster.hbm.xml" />
+
+		<!-- Report Module End -->
+
+		<!-- Domain Module Start  -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmBlockedPhoneNo.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmBlockedEmailId.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmBlockedIp.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmDomainLanguageMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenPasswordPolicy.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmDomainInfo.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmDomainMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmDomainCurrencyMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmDomainWinApproveLimitMaster.hbm.xml" />
+
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmAliasAnalyticalToolMapping.hbm.xml" />
+
+		<!-- Domain Module End  -->
+
+		<!-- portal Module Start  -->
+
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalLayoutMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalPriviledgeRep.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalDeviceDomainMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalMenuMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalContentMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalContentSubMaster.hbm.xml" />
+
+		<!-- portal Module End  -->
+
+		<!-- Risk Mgmt Module Start  -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDuplicateActionNotification.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDuplicateMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDuplicatePlayerScore.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDuplicateWeightage.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskPlrProfileMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskPlrTxnControl.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo10.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionActivityDoerMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo1.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo4.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo5.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo2.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo3.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo8.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo9.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo6.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo7.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionActivityMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionDoerMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo11.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo12.hbm.xml" />
+
+		<!-- Risk Mgmt Module End  -->
+
+		<!--Responsible Gaming Start-->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRgDailyTxnHistory.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRgWeeklyTxnHistory.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRgPlayerLimit.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRgPlayerLimitPending.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRgOperatorLimit.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRgDailyTxn.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRgWeeklyTxn.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRgOperatorCriteriaMaster.hbm.xml" />
+
+		<!--Responsible Gaming End-->
+
+
+		<!-- GAme Lobby  -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalGameDomainRoleMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalGameLobbyMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalGameGroupMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalLobbyDetails.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalLobbyMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalGameThemeMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalCasinoMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalCasinoMisc1.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPortalGamesMaster.hbm.xml" />
+		<!-- Lang Mgmt -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenWordSentenceMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmDomainCountryMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmDomainStateMapping.hbm.xml" />
+
+		<!-- Allowed IP -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmBoAllowedIp.hbm.xml" />
+		<!-- Allowed IP -->
+		<!--	VIP Level Mgmt	-->
+
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipCriteriaList.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipLevelMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipCriteriaCurrentStatusWagerRummy.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipCriteriaCurrentStatusWagerBingo.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipCriteriaCurrentStatusWagerLiveCasino.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipCriteriaCurrentStatusWagerCasino.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipCriteriaCurrentStatusDeposit.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipCriteriaCurrentStatusWagerPoker.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipCriteriaCurrentStatusWithdrawal.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipCriteriaCurrentStatusWagerSports.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipCriteriaCurrentStatusLogin.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipCriteriaCurrentStatusWagerGames.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipCriteriaCurrentStatusWagerDrawGames.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StVipPlayerLevelHistory.hbm.xml" />
+		<!-- VIP Level Mgmt  -->
+		<!-- Affiliate Mgmt  -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StAffiliateInfo.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StAffiliateMaster.hbm.xml" />
+		<!-- Affiliate Mgmt  -->
+		<!-- Banner Mgmt Start -->
+		<!--<mapping
+			resource="com/stpl/pms/hibernate/mapping/StBannerCampaignMaster.hbm.xml" />
+		-->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StBannerDetailMaster.hbm.xml" />
+		<!-- CMS  -->
+
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsPlaceholderMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsContentMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsWidgetMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsPlaceholderContentMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsTemplateMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsTemplateSubMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsVariableContentMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerLastActivityRecords.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsUploadContentMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsCampaignMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsCampaignSubMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsCampaignTracking.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsDomainSpecificCss.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsPlaceholderCriteria.hbm.xml" />
+		<!-- Banner Mgmt End -->
+
+		<!-- Bonus Mgmt Start -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPromoBonusActivity.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPromoBonusMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPromoBonusCriteria.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmAvtaarMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerReferralContactList.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerReferralMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPromoBonusPlayerMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmBoUserPasswordHistory.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerPasswordHistory.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerInboxMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlrAgeVerificationLog.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenVerificationSourceMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmBoUserLoginStatus.hbm.xml" />
+		<!-- Bonus Mgmt End -->
+
+		<!-- View Start -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/MenuMasterView.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/FetchPlayerVip.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnSettlementEbs.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRpBoGraphMaster.hbm.xml" />
+		<!-- View End -->
+
+
+		<!-- Apps Flyer Start -->
+		<mapping
+			resource="com/stpl/pms/service/mobile/rest/javabeans/StAppsFlyerAndroidActivityBean.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/service/mobile/rest/javabeans/StAppsFlyerIosActivityBean.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmDomainAliasNameMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCmsPlrCriteriaMapping.hbm.xml" />
+		<!-- Apps Flyer End -->
+		<!--Poker Jeeves Hand Feed Hbm Start  -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPokerJeevesHandMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPokerGameActionHandMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPokerHandSeatidMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPokerPlrHandMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnRequestMasterPoker12.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPokerPromoFeed.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPokerTourPlrFeedMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPokerTournamentFeedMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmAliasPropertyMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlrLoyaltyMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StRmDomainAliasVendorMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlrLoyaltyHistory.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlrPokerTicketHistory.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPlrSubwalletMasterPoker.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnSettlementMg.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerNickNameMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmOnlinePlayerData.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPokerPracJeevesHandMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StTxnPracPokerPlrHandMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositReqRespMpower.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponseMpower.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmDomainWalletMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrWithdrawalResponseMpower.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmDomainLocationDeviceMapping.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmDomainLocationMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmDomainDeviceMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StGenAppVersionDetails.hbm.xml" />
+		<!-- <mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositRequestHandcashTrans.hbm.xml" /> -->
+		<!--Poker Jeeves Hand Feed Hbm Start  -->
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StPmPlayerGetSetOfferDetail.hbm.xml" />
+			
+		<!-- loyalty program -->
+
+
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpPlayerLock.hbm.xml" />
+
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpRuleMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpRuleVersion.hbm.xml" />
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpRuleParameter.hbm.xml" />
+
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpTransactionReport.hbm.xml" />
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpTransactionFeed.hbm.xml" />
+
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpLoyalplayerMaster.hbm.xml" />
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpLoyaltyWallet.hbm.xml" />
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpLoyaltyTier.hbm.xml" />
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpLoyaltyWalletPacket.hbm.xml" />
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpLoyaltyLedger.hbm.xml" />
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpPacketEarningComponents.hbm.xml" />	
+		<!-- end start loaylty -->	
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpMerchandiseProduct.hbm.xml" />
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpMerchandiseOrder.hbm.xml" />	
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponsePaga.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponseInterswitch.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrWdrRespInterswitch.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrWdrRespPaga.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshPlrDepositResponsePagaAgent.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StDmAliasDeeplinkRep.hbm.xml" />
+		<mapping
+			resource="com/stpl/pms/hibernate/mapping/StCshDomainProviderMappingProperties.hbm.xml" />
+		<mapping
+			resource="com/stpl/loyalty/database/entity/StLpConfigurationsContainer.hbm.xml" />	
+			<mapping
+			resource="com/stpl/loyalty/database/entity/StLpPlayerHistory.hbm.xml" />
+
+
+	</session-factory>
+</hibernate-configuration>

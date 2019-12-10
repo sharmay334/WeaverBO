@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="userMgmt" namespace="/com/stpl/pms/action/bo/um"
+		extends="struts-base">
+
+		<action name="bo_um_boUserReg_Menu"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_boUserReg_Menu.jsp
+			</result>
+		</action>
+
+
+		<action name="st_test">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/gameLobby/bo_um_Game_search.jsp
+			</result>
+		</action>
+
+
+		<action name="bo_um_boUserReg_GameSearch"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction">
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_Game_search.jsp
+			</result>
+		</action>
+		<action name="bo_um_boUserReg_Save"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction" method="createUser">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_boUserReg_Success.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/um/bo_um_boUserReg_Menu.jsp
+			</result>
+			<result name="error">
+				/com/stpl/pms/action/bo/um/bo_um_boUserReg_Menu.jsp
+			</result>
+		</action>
+		<action name="bo_um_addBoSubUser_Menu"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="subUserRegistration">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_addBoSubUser_Menu.jsp
+			</result>
+		</action>
+		<action name="bo_um_addBoSubUser_Save"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="newSubUserReg">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_addBoSubUser_AssignPriv.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/um/bo_um_addBoSubUser_Menu.jsp
+			</result>
+		</action>
+		<action name="bo_um_addBoSubUser_AssignPriv"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="assignSubUserPriviledges">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_addBoSubUser_Success.jsp
+			</result>
+		</action>
+		<action name="bo_um_editBoSubUserPriv_Menu"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="fetchSubUserName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/um/bo_um_editBoSubUserPriv_Menu.jsp
+			</result>
+		</action>
+		<action name="bo_um_editBoSubUserPriv_FetchPriv"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="getSubUserPriviledges">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_editBoSubUserPriv_FetchPriv.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_editBoSubUserPriv_Save"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="editSubUserPriviledges">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/um/bo_um_editBoSubUserPriv_Success.jsp
+			</result>
+			<result name="input" type="dispatcher">
+				/com/stpl/pms/action/bo/um/bo_um_editBoSubUserPriv_Menu.jsp
+			</result>
+		</action>
+		<action name="bo_um_searchBoUser_Menu"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="dispSearchBoUser">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_searchBoUser_Menu.jsp
+			</result>
+		</action>
+		<action name="bo_um_searchBoUser_Search"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="searchBoUsers">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_searchBoUser_SearchResult.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/um/nodecorate/field_error.jsp
+			</result>
+		</action>
+		<action name="bo_um_searchBoUser_Detail"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="showBOUserDetails">
+
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_searchBoUser_EditDet.jsp
+			</result>
+		</action>
+		<action name="bo_um_searchBoUser_ResetPassBO"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction" method="resetPassBO">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+		</action>
+		<action name="bo_um_searchBoUser_Save"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="editBOUserDetails">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_searchBoUser_Success.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/um/bo_um_searchBoUser_EditDet.jsp
+			</result>
+		</action>
+		<action name="bo_um_searchBoUser_Navigate"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction" method="searchAjax">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_searchBoUser_SearchResult.jsp
+			</result>
+		</action>
+		<action name="bo_um_validateusername"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="validateBOUsername">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
+		<action name="bo_um_validateemail"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="checkUserEmailIdAvailability">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_um_validateemaildomain"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="checkUserEmailIdAvailabilityForDomain">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
+
+		<!-- Role Management Start -->
+
+		<action name="bo_rm_create_role_menu"
+			class="com.stpl.pms.action.bo.um.RoleMgmtAction"
+			method="createRoleMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/rm/bo_rm_create_role_menu.jsp
+			</result>
+		</action>
+
+		<action name="bo_rm_create_role_save"
+			class="com.stpl.pms.action.bo.um.RoleMgmtAction"
+			method="createRoleSave">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="input">
+				/com/stpl/pms/action/bo/rm/bo_rm_create_role_menu.jsp
+			</result>
+			<result name="success">
+				/com/stpl/pms/action/bo/rm/bo_rm_createRole_Success.jsp
+			</result>
+			<result name="error">
+				/com/stpl/pms/action/bo/rm/bo_rm_create_role_menu.jsp
+			</result>
+		</action>
+
+		<action name="bo_rm_edit_role_menu"
+			class="com.stpl.pms.action.bo.um.RoleMgmtAction"
+			method="editRoleMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/rm/bo_rm_editRole_Menu.jsp
+			</result>
+		</action>
+		<action name="bo_rm_edit_role_FetchPriv"
+			class="com.stpl.pms.action.bo.um.RoleMgmtAction"
+			method="fetchRolePriv">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/rm/nodecorate/bo_rm_editRole_FetchPriv.jsp
+			</result>
+		</action>
+		<action name="bo_rm_edit_role_save"
+			class="com.stpl.pms.action.bo.um.RoleMgmtAction"
+			method="editRolePriv">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+
+			<result name="input">
+				/com/stpl/pms/action/bo/rm/bo_rm_editRole_Menu.jsp
+			</result>
+			<result>
+				/com/stpl/pms/action/bo/rm/bo_rm_editRole_Success.jsp
+			</result>
+		</action>
+		<action name="bo_um_validateRole"
+			class="com.stpl.pms.action.bo.um.RoleMgmtAction"
+			method="checkRoleAvailability">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="assignPriv"
+			class="com.stpl.pms.action.bo.um.RoleMgmtAction" method="assignPriv">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_rm_edit_domain_user_priv"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="fetchDomainUserName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/um/bo_um_editDomainUserPriv_Menu.jsp
+			</result>
+		</action>
+		<action name="bo_um_fetchDomainUserPriv"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="getDomainUserPriviledges">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_fetchDomainUserPriv.jsp
+			</result>
+		</action>
+		<action name="bo_um_editDomainUserPriv"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="editDomainUserPriviledges">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/um/bo_um_editDomainUserPriv_Success.jsp
+			</result>
+			<result name="input" type="dispatcher">
+				/com/stpl/pms/action/bo/um/bo_um_editDomainUserPriv_Menu.jsp
+			</result>
+		</action>
+		<!-- Role Management End -->
+
+		<!-- BO Impersonation -->
+		<action name="dispatch_bo_subusers"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="getBoUserList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/nodecorate/boUserList.jsp
+			</result>
+		</action>
+		<action name="trigger_bo_impersonation"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="triggerImpersonation">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="quit_bo_impersonation"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="quitImpersonation">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
+		<action name="st_pms_bo_um_addPrivilege"
+			class="com.stpl.pms.action.bo.um.RoleMgmtAction"
+			method="addPrivilege">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_addPrivilege_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/bo_um_addPrivilege_error.jsp
+			</result>
+			<result name="input">/com/stpl/pms/action/bo/um/bo_um_addPrivilege_error.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_addPrivilege"
+			class="com.stpl.pms.action.bo.um.RoleMgmtAction" method="call">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_addPrivilege.jsp
+			</result>
+		</action>
+		<!-- BO Impersonation End -->
+		<action name="bo_um_network_access"
+			class="com.stpl.pms.action.bo.um.UserMgmtAction"
+			method="fetchAllSubUsers">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/um/bo_um_editNetworkAccess.jsp
+			</result>
+		</action>
+		<action name="bo_um_editNetwork_Access"
+			class="com.stpl.pms.action.bo.um.NetworkAccessAction"
+			method="getSubUserNetworkAccess">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_networkAccessSubUserResult.jsp
+			</result>
+		</action>
+		<action name="bo_dm_blockIp_SearchResult"
+			class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="blockIpSearchResult">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/nodecorate/st_dm_boBlockedIpEdit_Fetch.jsp
+			</result>
+		</action>
+		<action name="bo_dm_blockIpEdit_Save"
+			class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="blockIpEditSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/st_dm_boBlockedIpEdit_Save.jsp
+			</result>
+			<result name="error">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/st_dm_boBlockedIpEdit_Error.jsp
+			</result>
+				
+		</action>
+		<action name="st_um_bo_assignSubUserNetworkAccess"
+			class="com.stpl.pms.action.bo.um.NetworkAccessAction"
+			method="assignSubUserNetworkAccess">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_addPrivilege_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/bo_um_addPrivilege_error.jsp
+			</result>
+		</action>
+	</package>
+</struts>

@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="cms" namespace="/com/stpl/pms/action/bo/cms"
+		extends="struts-base">
+		<action name="st_comm_bo_promotionDetail" class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_comm_bo_savePromotionDetail.jsp
+			</result>
+		</action>
+		<action name="st_comm_bo_savePromotionDetail" class="com.stpl.pms.action.bo.cms.CmsAction"
+		method="savePromotionInfo">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_dm_bo_success.jsp
+			</result>
+		</action>
+		<action name="st_comm_bo_playerInfo" class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_comm_bo_savePlayerInfo.jsp
+			</result>
+		</action>
+		<action name="st_comm_bo_savePlayerInfo" class="com.stpl.pms.action.bo.cms.CmsAction"
+		method="saveCommPlayerInfo">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_dm_bo_success.jsp
+			</result>
+		</action>
+		
+		<action name="st_comm_bo_mapNewEventExistPlr" class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_comm_bo_mapNewEventExistPlr.jsp
+			</result>
+		</action>
+		<action name="st_comm_bo_mapNewEvent" class="com.stpl.pms.action.bo.cms.CmsAction" method="mapNewEventExitingPlr">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_dm_bo_success.jsp
+			</result>
+		</action>
+		<action name="st_pms_cms_bo_addNewEvent" class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_bo_addNewEvent.jsp
+			</result>
+		</action>
+		<action name="st_pms_cms_bo_saveNewEvent" class="com.stpl.pms.action.bo.cms.CmsAction" method="saveNewEventComm">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_dm_bo_success.jsp
+			</result>
+		</action>
+		<action name="st_pms_cms_editFixedContent" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="getFixedPages">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor">
+				<param name="requireProperties">languageList</param>	
+			</interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_bo_editFixedContent.jsp
+			</result>
+		</action>
+		<action name="st_pms_cms_fetchPageName" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="getFixedContentPageName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_cms_fetchFixedContent" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="fetchFixedContent">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/nodecorate/st_pms_cms_bo_fetchFixedContent.jsp
+			</result>
+		</action>
+		<action name="st_pms_cms_saveFixedContent" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="saveFixedContent">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_dm_bo_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/cms/st_pms_cms_error.jsp</result>
+		</action>
+		<action name="st_pms_cms_fetchFixedTempletes" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="fetchFixedTempletes">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<!-- Create Static Page-->
+		<action name="st_pms_page_createStaticPage" class="com.stpl.pms.action.bo.cms.CmsAction"
+		   method="createStaticPage"> 
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor">
+				<param name="requireProperties">languageList</param>	
+			</interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cms/st_pms_page_createStaticPage.jsp
+			</result>
+		</action>
+		<action name="st_pms_page_insertGraphics" method="pageLoadGraphics"
+			class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/nodecorate/st_pms_page_insertGraphics.jsp
+			</result>
+		</action>
+		<action name="st_pms_page_insertVariables" method="pageLoadVariables"
+			class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/nodecorate/st_pms_page_insertVariables.jsp
+			</result>
+		</action>
+		<action name="st_pms_page_insertLinks" method="pageLoadLinks"
+			class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cms/nodecorate/st_pms_page_insertLinks.jsp
+			</result>
+		</action>
+		<action name="st_pms_page_insertPlaceHolder">
+		<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cms/nodecorate/st_pms_page_insertPlaceHolder.jsp
+			</result>
+		</action>
+		<action name="st_pms_page_insertWidget" method="pageLoadWidgets"
+			class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cms/nodecorate/st_pms_page_insertWidget.jsp
+			</result>
+		</action>
+		<action name="st_pms_page_checkAvailability" method="checkPageAvailability"
+			class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_page_checkURLAvailability" method="checkURLAvailability"
+			class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_page_addPage" method="addPage"
+			class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cms/st_pms_dm_bo_success.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/cms/st_pms_page_createStaticPage.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/cms/st_pms_cms_error.jsp</result>
+		</action>
+		<action name="st_pms_getSpecificCss" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="getDomainSpecificCss">
+		</action>
+		<action name="st_pms_page_showPreview" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="showPreview">
+		</action>
+		<action name="st_pms_page_closePreview" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="closePreview">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_cms_bo_uploadBanner" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="getBannerCampaign">
+			<!-- <interceptor-ref name="customStack"></interceptor-ref>  -->
+			<result>/com/stpl/pms/action/bo/cms/st_pms_cms_bo_uploadBanner.jsp
+			</result>
+		</action>
+		<action name="st_pms_cms_bo_saveBanner" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="uploadBanner">
+			<!-- <interceptor-ref name="customStack"></interceptor-ref> -->
+			<result>/com/stpl/pms/action/bo/cms/st_pms_dm_bo_success.jsp</result>
+		</action>
+
+		<action name="st_pms_gm_showGraphicsPage" class="com.stpl.pms.action.bo.cms.CmsAction" >
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/graphics/st_pms_gm_showGraphicsPage.jsp
+			</result>
+		</action>
+		<action name="st_pms_gm_addNewGraphics">
+		<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/graphics/nodecorate/st_pms_gm_addNewGraphics.jsp
+			</result>
+		</action>
+		<action name="st_pms_gm_uploadGraphics" class="com.stpl.pms.action.bo.graphics.GraphicsAction"
+			method="uploadGraphics">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/graphics/st_pms_gm_addGraphicsSuccess.jsp
+			</result>
+		</action>
+
+		<!-- Edit Static Page-->
+		<action name="st_pms_page_editPageLoad" class="com.stpl.pms.action.bo.cms.CmsAction" >
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor">
+				<param name="requireProperties">languageList</param>
+			</interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/cms/st_pms_page_editPageLoad.jsp
+			</result>
+		</action>
+		<action name="st_pms_page_getLinks" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="getPages">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			</action>
+		<action name="st_pms_page_editPageDetailsLoad" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="getPageDetails">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/cms/nodecorate/st_pms_page_editPageDetailsLoad.jsp
+			</result>
+		</action>
+		<action name="st_pms_page_editPageSave" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="editPageSave">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
+		<!-- pixel and google analytics-->
+		<action name="st_pms_addPixelGoogleAnalytics" class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_addPixelGoogleAnalytics.jsp
+			</result>
+		</action>
+		<action name="st_pms_getPageNames" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="getPageNames">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_getPixelGaContent" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="getPixelGaContent">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_savePixelGoogleAnalytics" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="saveScript">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_dm_bo_success.jsp
+			</result>
+		</action>
+
+		<!-- placeholder-content mapping-->
+		<action name="st_pms_placeHolderContentMapping" class="com.stpl.pms.action.bo.cms.CmsAction" >
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor">
+				<param name="requireProperties">languageList</param>	
+			</interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_bo_placeHolderContentMapping.jsp
+			</result>
+		</action>
+		<action name="st_pms_cms_fetchPlaceHolderPagesList" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="fetchPlaceHolderPagesList">
+		</action>
+		<action name="st_pms_getPlaceHolderDetails" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="fetchPlaceHolderDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/nodecorate/st_pms_cms_bo_placeHolderContentDetails.jsp
+			</result>
+		</action>
+		<action name="st_pms_getPlaceHolderPreview" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="fetchPlaceHolderPreview">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_submitPlaceHolder" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="submitPlaceHolder">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_dm_bo_success.jsp
+			</result>
+		</action>
+		<!-- Campaign-->
+		<action name="st_pms_addCampaign" class="com.stpl.pms.action.bo.cms.CmsAction" method="getLandingPageDetails" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_addCampaign.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_cms_submitCampaignDetail" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="submitCampDetail">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_mapLandingPageSuccess.jsp
+			</result>
+			<result name="LANDING_PAGE">/com/stpl/pms/action/bo/cms/st_pms_cms_addCampaignSuccess.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_cms_fetchLandingPageDetail" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="fetchLandingPageDetail">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_editCampaign" class="com.stpl.pms.action.bo.cms.CmsAction" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/cms/st_pms_cms_editCampaign.jsp
+			</result>
+		</action>
+		<action name="st_pms_cms_fetchCampNames" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="fetchCampNames">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_fetchCampDetail" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="fetchCampDetail">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/nodecorate/st_pms_fetchCampDetail.jsp
+			</result>
+		</action>
+		<action name="st_pms_cms_submitEditCampaignDetail" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="submitEditCampDetail">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_addCampaignSuccess.jsp
+			</result>
+		</action>
+		<action name="st_pms_cms_editCustomCSS" class="com.stpl.pms.action.bo.cms.CmsAction">
+		 <interceptor-ref name="customStack"></interceptor-ref>
+		 <interceptor-ref name="defValueInterceptor"></interceptor-ref>
+	  	 <result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_editCustomCSS.jsp</result>
+		</action>
+		<action name="st_pms_cms_fetchcustomCSSDetail" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="fetchCustomCSSDetail">
+		<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_cms_submitCustomCSS" class="com.stpl.pms.action.bo.cms.CmsAction"
+			 method="submitCustomCSSDetail">
+	  	 <interceptor-ref name="customStack"></interceptor-ref>
+	  	 <result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_submirCustomCSSSuccess.jsp</result>
+		</action>
+	<action name="st_pms_page_createWidget" class="com.stpl.pms.action.bo.cms.CmsAction"> 
+		<interceptor-ref name="customStack"></interceptor-ref>
+		<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+		<result name="success">
+			/com/stpl/pms/action/bo/cms/st_pms_page_createWidget.jsp
+		</result>
+	</action>
+	<action name="st_pms_page_getWidgetDetails" method="getWidgetDetails"
+			class="com.stpl.pms.action.bo.cms.CmsAction"> 
+			<result name="success">
+				/com/stpl/pms/action/bo/cms/nodecorate/st_pms_page_getWidgetDetails.jsp
+			</result>
+	</action>
+	<action name="st_pms_page_loadWidgetFields" class="com.stpl.pms.action.bo.cms.CmsAction" method="pageLoadField">
+			<interceptor-ref name="customStack"></interceptor-ref>
+	</action>
+	<action name="st_pms_page_checkWidgetNameAval" method="checkWidgetNameAval"
+			class="com.stpl.pms.action.bo.cms.CmsAction"> 
+	</action>
+	<action name="st_pms_page_insertFields">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/nodecorate/st_pms_page_insertFields.jsp
+			</result>
+	</action>
+	<action name="st_pms_page_saveWidget" class="com.stpl.pms.action.bo.cms.CmsAction"
+		   method="saveWidget"> 
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cms/st_pms_cms_addWidgetSuccess.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/cms/st_pms_cms_error.jsp</result>
+	</action>
+	<action name="st_pms_page_insertWidgetLinks" method="pageLoadLinks"
+			class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cms/nodecorate/st_pms_page_insertWidgetLinks.jsp
+			</result>
+	</action>
+	<action name="st_pms_page_editWidget" class="com.stpl.pms.action.bo.cms.CmsAction" method="createStaticPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cms/st_pms_page_editWidget.jsp
+			</result>
+	</action>
+	<action name="st_pms_page_getWidgets" class="com.stpl.pms.action.bo.cms.CmsAction"
+		   method="getWidgetNames"> 
+			<interceptor-ref name="customStack"></interceptor-ref>
+	</action>
+	<action name="st_pms_page_getWidgetContent" class="com.stpl.pms.action.bo.cms.CmsAction"
+		   method="loadWidgetContent"> 
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cms/nodecorate/st_pms_page_getWidgetContent.jsp
+			</result>
+	</action>
+		<action name="st_pms_cms_uploadCssZipMenu" class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_uploadCssZipMenu.jsp</result>
+		</action>
+		<action name="st_pms_cms_uploadCssZipSave" class="com.stpl.pms.action.bo.cms.CmsAction" 
+			method="uploadCssZip">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_uploadCssZipSave.jsp</result>	
+			<result name="error">/com/stpl/pms/action/bo/cms/st_pms_cms_error.jsp</result>
+		</action>
+		<action name="st_pms_cms_availabalCssZipName" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="availabalCssZipName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_cms_editCssZipMenu" class="com.stpl.pms.action.bo.cms.CmsAction"
+		method="fetchEditCssZipName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_editCssZipMenu.jsp</result>
+		</action>
+		<action name="st_pms_cms_EditCssZipSave" class="com.stpl.pms.action.bo.cms.CmsAction"
+		method="editCssZip">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_editCssZipSave.jsp</result>	
+			<result name="error">/com/stpl/pms/action/bo/cms/st_pms_cms_error.jsp</result>
+		</action>
+		<action name="st_pms_cms_placeHolderCriteriaMenu" class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/cms/st_pms_cms_bo_playerWiseCriteriaBanner.jsp</result>	
+		</action>
+		<action name="st_pms_cms_placeHolderCriteria" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="savePlaceHolderCriteria">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_bo_playerWiseCriteriaBannerSave.jsp</result>	
+		</action>
+		<action name="st_pms_cms_availabalCriteria" class="com.stpl.pms.action.bo.cms.CmsAction" 
+			method="availabalCriteria">
+		<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_cms_updateSEOTagMenu" class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/cms/st_pms_cms_updateSEOTagMenu.jsp</result>	
+		</action>
+		<action name="st_pms_cms_fetchDynamicPages" class="com.stpl.pms.action.bo.cms.CmsAction" method="fetchDynamicPages">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_cms_fetchMetaData" class="com.stpl.pms.action.bo.cms.CmsAction" method="fetchMetaData">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/cms/nodecorate/st_pms_cms_fetchMetaData.jsp </result>
+		</action>
+		<action name="st_pms_cms_saveMetaData" class="com.stpl.pms.action.bo.cms.CmsAction" method="saveMetaData">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/cms/st_pms_cms_saveMetaDataSuccess.jsp </result>
+		</action>
+		<action name="st_pms_cms_editPlaceHolderCriteriaMenu" class="com.stpl.pms.action.bo.cms.CmsAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/cms/st_pms_cms_editPlaceHolderCriteria.jsp</result>
+		</action>
+		<action name="st_pms_cms_fetchPHCriName" class="com.stpl.pms.action.bo.cms.CmsAction" method="fetchPHCriName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_cms_fetchPHCriteria" class="com.stpl.pms.action.bo.cms.CmsAction" method="fetchCriteriaDetail">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/cms/nodecorate/st_pms_cms_fetchPHCriteria.jsp </result>
+		</action>
+		<action name="st_pms_cms_editPlaceHolderCriteria" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="editSavePlaceHolderCriteria">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_phCriteriaEditSuccess.jsp</result>	
+		</action>
+		<action name="st_pms_cms_getAliasTypeData" class="com.stpl.pms.action.bo.cms.CmsAction" method="getAliasTypeData">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_cms_getContentDeatil" class="com.stpl.pms.action.bo.cms.CmsAction" method="getContentDetail">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_getPlrContentMapping" class="com.stpl.pms.action.bo.cms.CmsAction" method="fetchContentMapping">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/nodecorate/st_pms_cms_bo_plrContentMapping.jsp
+			</result>
+		</action>
+		<action name="st_pms_submitPhMapping" class="com.stpl.pms.action.bo.cms.CmsAction" method="submitPhMapping">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_dm_bo_success.jsp
+			</result>
+		</action>
+		<action name="st_pms_cms_fetchContentType" class="com.stpl.pms.action.bo.cms.CmsAction" method="fetchContentType">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>	
+	</package>
+</struts>

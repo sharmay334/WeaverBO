@@ -1,0 +1,1 @@
+Copyright © 2017 livebet.tl. All Rights Reserved.

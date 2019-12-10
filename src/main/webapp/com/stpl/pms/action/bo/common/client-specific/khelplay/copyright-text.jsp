@@ -1,0 +1,1 @@
+Copyright © 2013 khelplayrummy.com. All Rights Reserved.

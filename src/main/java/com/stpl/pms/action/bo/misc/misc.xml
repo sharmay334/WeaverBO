@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<package name="misc" namespace="/com/stpl/pms/action/bo/misc"
+		extends="struts-base">
+
+		<action name="st_misc_showCurrencyExchange" class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="showCurrencyExchange">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/st_misc_showCurrencyExchange.jsp
+			</result>
+		</action>
+
+		<action name="st_misc_currencyExchange_save" class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="saveCurrency">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/st_misc_saveCurrencyExchange.jsp
+			</result>
+		</action>
+
+		<action name="bo_misc_allowIp_Search" class="com.stpl.pms.action.bo.misc.MiscAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/allowed_pages/st_dm_boAllowedIPEdit_Menu.jsp
+
+			</result>
+		</action>
+		<action name="bo_misc_allowIp_SearchResult" class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="allowIpSearchResult">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/allowed_pages/nodecorate/st_dm_boAllowedIpEdit_Fetch.jsp
+
+			</result>
+		</action>
+		<action name="bo_misc_allowIpEdit_Save" class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="allowIpEditSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/allowed_pages/st_dm_boAllowedIPEdit_Save.jsp
+
+			</result>
+		</action>
+
+		<action name="st_pms_cms_bo_uploadBanner" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="getBannerCampaign">
+			<!-- <interceptor-ref name="customStack"></interceptor-ref> -->
+			<result>/com/stpl/pms/action/bo/cms/st_pms_cms_bo_uploadBanner.jsp
+			</result>
+		</action>
+		<action name="st_pms_cms_bo_saveBanner" class="com.stpl.pms.action.bo.cms.CmsAction"
+			method="uploadBanner">
+			<!-- <interceptor-ref name="customStack"></interceptor-ref> -->
+			<result>/com/stpl/pms/action/bo/cms/st_pms_dm_bo_success.jsp</result>
+		</action>
+
+		<action name="resetDomain" class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="resetDomain">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_mis_mobile_app_version_menu" class="com.stpl.pms.action.bo.misc.MiscAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/st_misc_showMobileAppVersionDetail.jsp
+			</result>
+		</action>
+		<action name="bo_mis_mobile_app_version_submit" class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="saveAppVersionDetails">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/st_misc_app_details_save.jsp
+			</result>
+		</action>
+		<action name="bo_mis_mobile_appVersionCheck" class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="appVersionCheck">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_mis_mobile_ReleaseVersionCheck" class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="releaseVersionCheck">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_mis_mobile_fetchAppList" class="com.stpl.pms.action.bo.misc.MiscAction" method="fetchAppList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/vipLevel/nodecorate/st_pms_misc_appVerHistory.jsp
+			</result>
+		</action>
+		<action name="bo_mis_mobile_fetchAltVersion" class="com.stpl.pms.action.bo.misc.MiscAction" method="fetchAltVersion">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/vipLevel/nodecorate/fetchAltVer.jsp
+			</result>
+		</action>
+		<action name="bo_mis_mobile_pushToAll" class="com.stpl.pms.action.bo.misc.MiscAction" method="pushToAll">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action> 
+		<action name="bo_mis_mobile_makeAppObsolete" class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="makeAppObsolete">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action><action name="bo_mis_mobile_updateversionRelease" class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="updateVersionRelease">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		<result name="success">
+			/com/stpl/pms/action/bo/misc/st_misc_release_version_update.jsp
+		</result>
+		</action>
+		<action name="bo_mis_showPokerNickNameSearch" class="com.stpl.pms.action.bo.misc.MiscAction"> 
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/st_misc_updateNickName.jsp
+			</result>
+		</action>
+		<action name="bo_mis_ajax_showPokerNickNameSearchResult" class="com.stpl.pms.action.bo.misc.MiscAction" method="getPokerNickName"> 
+			<!-- <interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref> -->
+			<!-- <result name="success">
+				/com/stpl/pms/action/bo/misc/st_misc_updateNickName.jsp
+			</result> -->
+		</action>
+		<action name="bo_mis_ajax_isPokerNickNameAvailable" class="com.stpl.pms.action.bo.misc.MiscAction" method="isPokerNickNameAvailable"> 
+			<!-- <interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref> -->
+			<!-- <result name="success">
+				/com/stpl/pms/action/bo/misc/st_misc_updateNickName.jsp
+			</result> -->
+		</action>
+		<action name="bo_mis_pokerNickNameUpdate" class="com.stpl.pms.action.bo.misc.MiscAction" method="updatePokerNickName"> 
+		</action>
+		<action name="add_Affilate_AdCompany_Menu" class="com.stpl.pms.action.bo.misc.MiscAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/affiliate/st_misc_addAffiliateAdCompany_Menu.jsp
+			</result>
+		</action>
+		
+		<action name="add_Affilate_AdCompany_Save" class="com.stpl.pms.action.bo.misc.AffilateAdCompanyAction"
+			method="saveAffilateAdCompany">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/affiliate/st_misc_affilate_reponse.jsp
+			</result>
+		</action>
+		
+		<action name="edit_Affilate_AdCompany_Menu" class="com.stpl.pms.action.bo.misc.AffilateAdCompanyAction">
+		   <interceptor-ref name="customStack"></interceptor-ref>
+		   <interceptor-ref name="defValueInterceptor"></interceptor-ref>
+		   <interceptor-ref name="actions"></interceptor-ref>
+		   <result name="success">
+		      /com/stpl/pms/action/bo/misc/affiliate/edit_Affilate_AdCompany_Menu.jsp		
+		   </result>
+		</action>
+		
+		<action name="getAffilateName" class="com.stpl.pms.action.bo.misc.AffilateAdCompanyAction"
+			method="getAffilateName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="getOfferIdForAffilateName" class="com.stpl.pms.action.bo.misc.AffilateAdCompanyAction"
+			method="getOfferIdForAffilateName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="getAffilateInfo" class="com.stpl.pms.action.bo.misc.AffilateAdCompanyAction"
+			method="getAffilateInfo">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="editAffilate_AdCompany" class="com.stpl.pms.action.bo.misc.AffilateAdCompanyAction"
+			method="editAffilateAdCompany">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/affiliate/st_misc_affilate_reponse.jsp
+			</result>
+		</action>
+			
+	</package>
+</struts>
+

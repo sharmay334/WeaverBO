@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.custom.i18n.resources" value="global" />
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+	<constant name="struts.mapper.action.prefix.enabled" value="true"/> 	
+	<include file="struts-base.xml"></include>
+	<include file="com/stpl/pms/action/bo/cashier/cashier.xml" />
+	<include file="com/stpl/pms/action/bo/bonus/bonus.xml" />
+	<include file="com/stpl/pms/action/bo/um/um.xml" />
+	<include file="com/stpl/pms/action/bo/lm/lm.xml" />
+	<include file="com/stpl/pms/action/bo/riskMgmt/riskMgmt.xml" />
+	<include file="com/stpl/pms/action/bo/dm/dm.xml" />
+	<include file="com/stpl/pms/action/bo/pm/playerMgmt.xml" />
+	<include file="com/stpl/pms/action/bo/misc/misc.xml" />
+	<include file="com/stpl/pms/action/bo/misc/vipMgmt.xml" />
+	<include file="com/stpl/pms/action/bo/gl/GameLobbyMgmt.xml" />
+	<include file="com/stpl/pms/action/bo/graphics/graphics.xml" />
+	<include file="com/stpl/pms/action/bo/cms/cms.xml" />
+	<include file="com/stpl/pms/action/bo/reports/reports.xml" />
+	<include file="com/stpl/pms/action/bo/reports/reportChart.xml" />
+	<include file="com/stpl/pms/action/bo/rg/rg.xml"></include>
+	<include file="com/stpl/pms/action/bo/ajax/ajaxData.xml" />
+	<include file="com/stpl/pms/action/bo/loyalty/loyaltybo.xml" />
+</struts>  

@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="cashier" namespace="/com/stpl/pms/action/bo/cashier"
+		extends="struts-base">
+		
+		<action name="bo_csh_podmSetup_Menu" class="com.stpl.pms.action.bo.cashier.CashierAction" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor">
+				<param name="requireProperties">countryList,currencyList,vipList</param>
+			</interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/bo_csh_podmSetup_Menu.jsp
+			</result>
+		</action>
+		<action name="bo_csh_podmSetup_Search" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="podmSetupSearch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/nodecorate/bo_csh_podmSetup_Search.jsp
+			</result>
+		</action>
+		<action name="bo_csh_podmSetup_Save" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="podmSetupSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/bo_csh_podmSetup_Save.jsp
+			</result>
+		</action>
+		
+		<action name="st_pms_bo_csh_initWithdrawal_Menu" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="initWithdrawalMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor">
+				<param name="requireProperties">countryList,currencyList,vipList</param>
+			</interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_initiatePlrWdr_Menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_getWdrPaymentType" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="getWithdrawalPayType">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_csh_withdrawal_Search" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="withdrawalSearch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="initiate">/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_initWithdrawal_Search.jsp
+			</result>
+			<result name="process">/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_processWithdrawal_Search.jsp
+			</result>
+			<result name="settlement">/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_withdrawalSettlement_Search.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_initWithdrawal_Save" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="initWithdrawalSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_withdrawal_Confirm.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_cancelWithdrawal_Submit" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="cancelWithdrawalSubmit">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_withdrawal_Confirm.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_cancelWithdrawal_Ajax" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="cancelWithdrawalAjax">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_csh_processWithdrawal_Menu" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="processWithdrawalMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor">
+				<param name="requireProperties">countryList,currencyList,vipList</param>
+			</interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_initiatePlrWdr_Menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_processWithdrawal_Save" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="processWithdrawalSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_withdrawal_Confirm.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_initiatedWithdrawal_exportExcel"
+			class="com.stpl.pms.action.bo.cashier.CashierAction" method="initiatedWithdrawalExportExcel">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_csh_processdWithdrawal_exportExcel"
+			class="com.stpl.pms.action.bo.cashier.CashierAction" method="processedWithdrawalExportExcel">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="st_pms_bo_csh_getFraudReport"
+			class="com.stpl.pms.action.bo.cashier.CashierAction" method="getPlrFraudReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_getFraudReport.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_processDeposit_Menu" class="com.stpl.pms.action.bo.cashier.CashierAction" >
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_processDeposit_Menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_getDepositOptions" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="processDepositMenu"></action>
+		<action name="st_pms_bo_csh_deposit_Search" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="depositSearch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_deposit_Search.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_processDeposit_Save" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="processDepositSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_deposit_Confirm.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_cancelDeposit_Submit" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="cancelDepositSubmit">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_deposit_Confirm.jsp
+			</result>
+		</action>
+		
+		<action name="st_pms_bo_csh_uploadPayTypeContent_Menu" class="com.stpl.pms.action.bo.cashier.CashierAction">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_uploadPayTypeContent_Menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_fetchPayTypeContent" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="fetchPayTypeContent">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_fetchPayTypeContent.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_uploadPayTypeContent" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="uploadPayTypeContent">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_uploadPayTypeContent_Confirm.jsp
+			</result>
+		</action>
+		
+		<action name="bo_csh_pod_process_charge_menu" class="com.stpl.pms.action.bo.cashier.CashierAction" >
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor">
+				<param name="requireProperties">countryList,vipList,currencyList</param>
+			</interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cashier/bo_csh_pod_process_charge_menu.jsp
+			</result>
+		</action>
+		<action name="bo_csh_pod_process_charge_search" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="podProcessChargeSearch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cashier/nodecorate/bo_csh_pod_process_charge_search.jsp
+			</result>
+		</action>
+		<action name="bo_csh_pod_process_charge_save" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="podProcessChargeSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cashier/bo_csh_pod_process_charge_save.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_bo_csh_uploadPGSettlementReport_Menu"
+			class="com.stpl.pms.action.bo.cashier.CashierAction" method="uploadPGSettlementReportMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_uploadPGSettlementReport_Menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_uploadPGSettlementReport_Save"
+			class="com.stpl.pms.action.bo.cashier.CashierAction" method="uploadPGSettlementReport">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_uploadPGSettlementReport_Save.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_depositRequestSettlement" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="depositRequestSettlement">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_csh_depositRequestSettlement_Confirm.jsp
+			</result>
+		</action>
+		
+		
+		<action name="st_pms_bo_csh_plrPaymentCorrection_Menu" class="com.stpl.pms.action.bo.cashier.CashierAction" >
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_plrPaymentCorrection_Menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_settlePayment_menu" class="com.stpl.pms.action.bo.cashier.CashierAction" >
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_settlePayment_menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_payCorrec_plr_search" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="plrSearchForPayCorrection">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_payCorrec_plr_search.jsp </result>
+		</action>
+		<action name="st_pms_bo_csh_payCorrec_decission" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="getPaymentCorrectionData">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_payCorrec_plr_search.jsp </result>
+		</action>
+		<action name="st_pms_bo_csh_plrPaymentCorrection" class="com.stpl.pms.action.bo.cashier.CashierAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_plrPaymentCorrection.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_plrPaymentCorrection_save" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="plrPaymentCorrection">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_plrPaymentCorrection_confirm.jsp
+			</result>
+		</action>
+		
+		<action name="st_pms_bo_csh_bulkPlrPaymentCorrection_save" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="bulkPlrPaymentCorrection">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="st_pms_bo_csh_withdrawalSettlement_Menu" class="com.stpl.pms.action.bo.cashier.CashierAction"  
+			method="withdrawalSettlementMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor">
+				<param name="requireProperties">countryList,vipList,currencyList</param>
+			</interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_initiatePlrWdr_Menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_withdrawalSettlement_Save" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="withdrawalSettlement">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_withdrawal_Confirm.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_RedeemAccApproval_Menu" class="com.stpl.pms.action.bo.cashier.CashierAction" >
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_RedeemAccApproval_Menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_RedeemAccApproval_Search" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="redeemAccApprovalSearch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_RedeemAccApproval_Search.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_RedeemAcc_Edit" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="fetchBankListBankTrans">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_RedeemAccEdit.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_RedeemAcc_Update" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="updatePlrRedeemAcc">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_redeem_ac_Confirm.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_RedeemAccEditError.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_RedeemAccApproval_Save" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="redeemAccApprovalSave">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+					/com/stpl/pms/common/response/nodecorate/common_success_response.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_subwalletReconcilation" class="com.stpl.pms.action.bo.cashier.CashierAction" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+					/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_subwalletReconcilation_Menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_getSubWalletBatch" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="getActiveSubWalletBatch"></action>
+			
+		<action name="st_pms_bo_csh_subwalletRec_search"
+			class="com.stpl.pms.action.bo.cashier.CashierAction" method="getReconsileList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+					/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_subwalletReconcilation_Search.jsp
+			</result>
+		</action>
+		
+		<action name="st_pms_bo_csh_subwalletRec_save"
+			class="com.stpl.pms.action.bo.cashier.CashierAction" method="subwalletRecSave">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_csh_uploadPokerSettlement" class="com.stpl.pms.action.bo.cashier.CashierAction" method="uploadPokerSettlementMenu">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_uploadPokerSettlement_menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_uploadPaytmSettlement" class="com.stpl.pms.action.bo.cashier.CashierAction" method="uploadPaytmSettlementMenu">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_uploadPaytmSettlement_menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_uploadPaytmSettlement_Save" class="com.stpl.pms.action.bo.cashier.CashierAction" method="uploadPaytmSetSave">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_uploadPaytmSettlement_Save.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_uploadPokerSettlement_Save" class="com.stpl.pms.action.bo.cashier.CashierAction" method="uploadPokerSetSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_uploadPokerSettlement_Save.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_reQueryEBS" class="com.stpl.pms.action.bo.cashier.CashierAction" method="reQueryEBS">
+			<!-- <result name="success">
+				/com/stpl/pms/common/response/nodecorate/common_success_response.jsp
+			</result> -->
+		</action>
+		<action name="st_pms_bo_csh_reQueryATOM" class="com.stpl.pms.action.bo.cashier.CashierAction" method="reQueryAtom">
+			<!-- <result name="success">
+				/com/stpl/pms/common/response/nodecorate/common_success_response.jsp
+			</result> -->
+		</action>
+		<action name="st_pms_bo_csh_reQueryCASHFREE" class="com.stpl.pms.action.bo.cashier.CashierAction" method="reQueryCashFree">
+		</action>
+		<action name="st_pms_bo_csh_wagerRecon" class="com.stpl.pms.action.bo.cashier.CashierAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cashier/st_pms_cashier_wagerRecon.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_getWagerList" class="com.stpl.pms.action.bo.cashier.CashierAction" method="getServiceWagerList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_csh_getServiceWagerList.jsp			
+			</result>
+		</action>
+		<action name="st_pms_csh_getGameVendors" class="com.stpl.pms.action.bo.cashier.CashierAction" method="getGameVendors"></action>
+		
+		<action name="st_pms_csh_createPaySubTypeMenu" class="com.stpl.pms.action.bo.cashier.CashierAction" method="createPaySubTypeMenu">
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_createNewSubType.jsp</result>
+		</action>
+		
+		<action name="st_pms_csh_getPaySubTypes" class="com.stpl.pms.action.bo.cashier.CashierAction" method="getPaySubTypes">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/nodecorate/st_csh_getPaySubTypes.jsp</result>
+		</action>
+		
+		<action name="st_pms_csh_payTypeChngStatus" class="com.stpl.pms.action.bo.cashier.CashierAction" method="payTypeChngStatus">
+			<result name="success" type="redirectAction">
+				<param name="actionName">st_pms_csh_createPaySubTypeMenu</param>
+				<param name="lastView">${paymentTypeCode}</param>
+			</result>
+		</action>
+		<action name="st_pms_csh_createNewSubType" class="com.stpl.pms.action.bo.cashier.CashierAction" method="createNewSubType">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_csh_createNewSubType.jsp</result>
+		</action>
+		
+		<action name="st_pms_csh_podmMapSubType" class="com.stpl.pms.action.bo.cashier.CashierAction" method="createpodmMapSubTypeMenu">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_csh_bo_podmMapSubType.jsp</result>
+		</action>
+		<action name="st_pms_csh_getPaySubTypeSelector" class="com.stpl.pms.action.bo.cashier.CashierAction" method="getPaySubTypeSelector">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_csh_savePODMSetup" class="com.stpl.pms.action.bo.cashier.CashierAction" method="savePODMSetup">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_csh_newPODMsetup.jsp</result>
+		</action>
+		<action name="st_pms_bo_csh_resolveWagerStatus" class="com.stpl.pms.action.bo.cashier.CashierAction" method="resolveWagerStatus">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_resolveWagerStatus.jsp</result>
+		</action>
+		<action name="st_csh_bo_update_players_ledger_menu" class="com.stpl.pms.action.bo.cashier.CashierAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"> </interceptor-ref>
+			<result name="success" >/com/stpl/pms/action/bo/cashier/st_csh_bo_update_players_ledger_menu.jsp</result>
+		</action>
+		<action name="st_csh_bo_update_players_ledger" class="com.stpl.pms.action.bo.cashier.CashierAction" method="updatePlayerLedger">
+			<result name="success">/com/stpl/pms/action/bo/cashier/nodecorate/st_csh_bo_update_players_ledger_resp.jsp</result>
+		</action>		
+		<action name="st_pms_bo_csh_deposit_menu" class="com.stpl.pms.action.bo.cashier.CashierAction">			
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"> </interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_csh_bo_deposit_menu.jsp</result>
+		</action>
+		<action name="st_pms_bo_csh_deposit_submit" class="com.stpl.pms.action.bo.cashier.CashierAction" method="backOfficeDeposit">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>			
+			<interceptor-ref name="defValueInterceptor"> </interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/st_pms_bo_csh_deposit_success.jsp</result>
+		</action>
+				
+		<action name="bo_csh_unclaimed_recordsMenu" class="com.stpl.pms.action.bo.cashier.CashierAction">			
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"> </interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cashier/bo_csh_unclaimed_recordsMenu.jsp</result>
+		</action>
+		<action name="st_pms_bo_csh_unclaimed_records_Search" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="unclaimedRecordsSearch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="UNCLAIMED">/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_unclaimedRecords_Search.jsp
+			</result>
+			<result name="CLAIMED">/com/stpl/pms/action/bo/cashier/nodecorate/st_pms_bo_csh_claimedRecords_Search.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_csh_claim_Amount" class="com.stpl.pms.action.bo.cashier.CashierAction"
+			method="claimAmount">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+	</package>
+</struts>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="loyalty" namespace="/com/stpl/pms/action/bo/loyalty"
+		extends="struts-base,json-default">
+		 <action name="bo_lp_complete_overview" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction"
+			method="completeOverview">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/loyalty/bo_lp_complete_overview.jsp
+			</result>
+		</action>
+		 <action name="bo_lp_loyalty_ledger" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction"
+			method="loyaltyLedger">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/loyalty/bo_lp_loyalty_ledger.jsp
+			</result>
+		</action>
+		<action name="bo_lp_loyalty_ledger_search" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction"
+			method="loyaltyLedgerSearch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/loyalty/nodecorate/bo_lp_loyalty_ledger_search_result.jsp
+			</result>
+			<result name="error">
+				/com/stpl/pms/action/bo/loyalty/nodecorate/bo_lp_loyalty_ledger_search_result.jsp
+			</result>
+		</action>
+		<action name="bo_lp_loyalty_ledger_search_ajax" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction"
+			method="loyaltyLedgerSearchAjax">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_lp_loyalty_ledger_ajax_result_page" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction"
+			method="loyaltyLedgerAjaxResultPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/loyalty/nodecorate/bo_lp_loyalty_ledger_search_result_ajax_page.jsp
+			</result>
+		</action>
+		<action name="bo_lp_loyalty_player_mgr" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction"
+			method="loyaltyPlayerDetail">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/loyalty/bo_lp_loyalty_player_mgr.jsp
+			</result>
+		</action>
+		<action name="bo_lp_loyalty_player_mgr_search" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction"
+			method="playerSearch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/loyalty/nodecorate/bo_lp_loyalty_player_detail.jsp
+			</result>
+			<result name="error">
+				/com/stpl/pms/action/bo/loyalty/nodecorate/bo_lp_loyalty_player_detail.jsp
+			</result>
+		</action>
+		<action name="bo_ajax_call_add_points" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction"
+			method="addPoints">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_ajax_call_grace_add" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction"
+			method="giveGrace">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_ajax_call_tier_stats" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction"
+			method="tierStats">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_ajax_call_exposure" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction"
+			method="exposure">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_migrationMatrixQueryForm" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/loyalty/bo_loyalty_migrationMatrixQueryForm.jsp</result>
+		</action>
+		<action name="bo_ajax_migrationMatrix" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction" method="migrationSummary">
+			<result name="success">/com/stpl/pms/action/bo/loyalty/nodecorate/bo_loyaltyMigrationMatrix.jsp</result>
+		</action>
+		<action name="bo_migrationExcel" class="com.stpl.pms.action.bo.loyalty.LoyaltyBOAction" method="exportExcelMigrationRep">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+	</package>
+</struts>

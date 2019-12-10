@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="reportschart" namespace="/com/stpl/pms/action/bo/reports"
+		extends="struts-base">
+		<action name="st_pms_bo_rep_chat" class="com.stpl.pms.action.bo.reports.ReportChart" method="generatePieChart">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_chat_ajax" class="com.stpl.pms.action.bo.reports.ReportChart" method="getImagePath">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+			/com/stpl/pms/action/bo/reportChart/nodecorate/st_pms_bo_rep_chart.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_dynChart" class="com.stpl.pms.action.bo.reports.ReportChart" method="getActiveGraphList" >
+			<result name="success">
+			/com/stpl/pms/action/bo/reportChart/nodecorate/st_pms_bo_rep_dynamicChart.jsp
+			</result>
+		</action>
+		<action name="newChartabc" class="com.stpl.pms.action.bo.reports.ReportChart" method="generateNewChartabc" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_bo_rep_gameChart" class="com.stpl.pms.action.bo.reports.ReportChart" method="getActiveGameWiseGraphList" >
+			<result name="success">
+			/com/stpl/pms/action/bo/reportChart/nodecorate/st_pms_bo_rep_gameChart.jsp
+			</result>
+		</action>
+		
+	</package>
+</struts>

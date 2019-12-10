@@ -1,0 +1,98 @@
+body{
+	font: 12px/1.6 'Helvetica Neue',Arial,'Liberation Sans',FreeSans,sans-serif;
+}
+
+#nav{
+	margin-bottom: 0PX;
+}
+
+.sf-menu{
+	width: 980px;
+}
+
+#decoBody{
+   margin-top: 15px;
+}
+
+#decoBody .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+div#exposure_expiry .grid-stack-item-content {
+    left: 0px;
+}
+
+div#tier_stats .grid-stack-item-content {
+    right: 0px !important;
+}
+
+.welcomebox p{
+	margin-bottom: 0px;
+}
+
+.welcomebox label {
+    margin-bottom: 0px;
+}
+
+.custem-table-data table tr td{
+    word-break: break-word;
+	border-bottom: 1px solid #d2d2d2;
+}
+
+.grid-stack-item-content{
+	color: #444444;
+    background-color: #f2f2f2;
+	-webkit-box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.3);
+	box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.3);
+}
+
+.col-tiers span {
+    color: #e84f2a;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 3px;
+}
+
+.grid-stack-item-content>.header>div {
+    border-left: 1px solid #bbb;
+}
+
+.grid-stack-item-content>.header{
+	border-bottom: 1px solid #BBBBBB;
+    background-color: #e5e5e5;
+}
+
+.custem-table-data table tr td:last-child {
+    font-weight: 600;
+    color: #000;
+}
+
+.bronze-color {
+	background-color: #f28155;
+}
+
+.silver-color {
+	background-color: #e9e4e2;
+	color: #494444;
+}
+
+.gold-color {
+	background-color: #f2bf42;
+}
+
+.diamond-color {
+	background-color: #6e9c00;
+}
+
+.platinum-color {
+	background-color: #e0e0e0;
+	color: #494444;
+}
+
+.grid-stack-item-content>.header>div.iconMenu.dragPoint:after,
+.grid-stack-item-content>.header>div.iconMenu.refreshBTN:after{
+	COLOR: #92887b;
+}

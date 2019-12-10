@@ -1,0 +1,30 @@
+.swal-modal {box-shadow: 0 3px 10px rgba(0,0,0,0.8);}
+.swal-title {font-weight: 400;margin-bottom: 20px !important;font-size: 24px;}
+.swal-text {font-size: 14px;text-align: center;line-height: 22px;}
+.swal-footer{text-align:center;border-top:1px solid #ccc;margin-top: 20px;}
+.swal-icon{margin: 16px auto 2px;}
+button.swal-button{
+	background:none;border-radius:3px;
+	font-size: 14px !important;
+	padding: 8px 18px !important;
+	margin: 0 3px !important;
+	border:none;outline:none;
+	background: #fcfcfc;
+	background: -moz-linear-gradient(top, #fcfcfc 0%, #d5d5d7 50%, #bdc0c2 100%);
+	background: -webkit-linear-gradient(top, #fcfcfc 0%,#d5d5d7 50%,#bdc0c2 100%);
+	background: linear-gradient(to bottom, #fcfcfc 0%,#d5d5d7 50%,#bdc0c2 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#bdc0c2',GradientType=0 );
+	color: #000000 !important;text-shadow: 0 1px 2px rgba(255,255,255,1);
+	border: 1px solid #afafaf !important;
+	box-shadow: inset 0 1px 2px rgba(255,255,255,1);
+	}
+	button.swal-button.swal-button--danger,
+	button.swal-button.swal-button--primary{
+	background: #b0b0b0;
+	background: -moz-linear-gradient(top, #b0b0b0 0%, #7d7d7d 50%, #5d5d5d 100%);
+	background: -webkit-linear-gradient(top, #b0b0b0 0%,#7d7d7d 50%,#5d5d5d 100%);
+	background: linear-gradient(to bottom, #b0b0b0 0%,#7d7d7d 50%,#5d5d5d 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b0b0b0', endColorstr='#5d5d5d',GradientType=0 );
+	border: 1px solid #5b5b5b !important;box-shadow: inset 0 1px 2px rgba(255,255,255,0.4);
+	color: #ffffff !important;text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+	}

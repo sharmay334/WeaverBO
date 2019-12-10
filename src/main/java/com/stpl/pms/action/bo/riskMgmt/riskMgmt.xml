@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="riskMgmt" namespace="/com/stpl/pms/action/bo/riskMgmt"
+		extends="struts-base">
+		
+		<action name="st_pms_bo_riskMgmt_showDLDomainList" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="showDomainList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/riskMgmt/st_pms_riskMgmt_dl_selectDomain.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_bo_riskMgmt_showDLFieldWeightage" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="showDLFieldWeightage">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/riskMgmt/nodecorate/st_pms_riskMgmt_dl_showFieldWeightage.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_bo_riskMgmt_editDLFieldWeightage" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="editDLFieldWeightage">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/riskMgmt/st_pms_riskMgmt_dl_successFieldWeightage.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_bo_riskMgmt_searchDLPlayerScore" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="searchDLPlayerScore">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/riskMgmt/st_pms_riskMgmt_dl_searchPlayerScore.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_bo_riskMgmt_decisionMatrixMenu" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="decisionMatrixMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/riskMgmt/st_pms_bo_riskMgmt_decisionMatrixMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_riskMgmt_decisionMatrixSave" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="decisionMatrixSave">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/riskMgmt/nodecorate/st_pms_bo_riskMgmt_decisionMatrixSave.jsp
+			</result>
+		</action>
+		<!-- Blocked IP	-->
+	<!-- 	<action name="bo_dm_blockIp">
+		<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/nodecorate/st_dm_boBlockedIP.jsp
+			</result>
+		</action>  -->
+		<action name="bo_dm_blockIp_Search" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/st_dm_boBlockedIpEdit_Menu.jsp
+			</result>
+		</action>
+		<action name="bo_dm_blockIp_SearchResult" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="blockIpSearchResult">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/nodecorate/st_dm_boBlockedIpEdit_Fetch.jsp
+			</result>
+		</action>
+
+		<action name="bo_dm_blockIpEdit_Save" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="blockIpEditSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/st_dm_boBlockedIpEdit_Save.jsp
+			</result>
+
+		</action>
+	
+
+		<!-- Blocked E-mail	-->
+
+	<!-- 	<action name="bo_dm_blockEmail">
+		<interceptor-ref name="customStack"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/nodecorate/st_dm_boBlockedEmail_Id.jsp
+			</result>
+		</action>  -->
+
+		<action name="bo_dm_blockEmail_Search" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/st_dm_boBlockedEmail_Edit_Menu.jsp
+			</result>
+		</action>
+		<action name="bo_dm_blockEmail_SearchResult" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="blockEmailSearchResult">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/nodecorate/st_dm_boBlockedEmail_Edit_Fetch.jsp
+
+			</result>
+		</action>
+		<action name="bo_dm_blockEmail_Edit_Save" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="blockEmailEditSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/st_dm_boBlockedEmail_Id_Save.jsp
+
+			</result>
+		</action>
+		
+		<!-- Blocked Phone	-->
+	<!-- 	<action name="bo_dm_blockPhone">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/nodecorate/st_dm_boBlockedphone_no.jsp
+			</result>
+		</action>  -->
+
+		<action name="bo_dm_blockPhone_Search" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/st_dm_boBlockedPhone_Edit_Menu.jsp
+			</result>
+		</action>
+
+		<action name="bo_dm_blockPhone_SearchResult" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="blockPhoneSearchResult">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/nodecorate/st_dm_boBlockedPhone_Edit_Fetch.jsp
+			</result>
+		</action>
+
+		<action name="bo_dm_blockPhone_Edit_Save" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="blockPhoneEditSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/st_dm_boBlockedphone_no_Save.jsp
+			</result>
+		</action>
+
+		
+
+		<action name="bo_risk_duplicationLogicMenu" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction" >
+		<interceptor-ref name="actions"></interceptor-ref>
+		<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+		<interceptor-ref name="customStack"></interceptor-ref>
+			<result>
+				/com/stpl/pms/action/bo/riskMgmt/st_pms_riskMgmt_duplicationLogic_search.jsp
+			</result>
+		</action>
+        <action name="bo_risk_duplicationPlayerScore" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="getDuplicationPlayerScore">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+			  /com/stpl/pms/action/bo/riskMgmt/nodecorate/st_pms_riskMgmt_plrDuplicationLogicScore.jsp
+			</result>
+		</action>
+		<action name="bo_risk_duplicationLogicSearch" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="duplicationSearchResult">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/nodecorate/st_pms_riskMgmt_duplicationLogic_search_result.jsp
+			</result>
+		</action>
+		<action name="bo_risk_submitDuplicationReport" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="submitDuplicationReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+               /com/stpl/pms/action/bo/riskMgmt/st_pms_riskMgmt_dl_successFieldWeightage.jsp			</result>
+		</action>	
+		<action name="st_pms_bo_riskMgmt_invalidateCache_menu" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="fetchCacheEnableTables">
+			<result name="success">
+				/com/stpl/pms/action/bo/riskMgmt/st_pms_bo_riskMgmt_invalidateCache_menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_riskMgmt_invalidateCache" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="invalidateCache">
+			<result name="success" type="redirectAction">
+				<param name="actionName">st_pms_bo_riskMgmt_invalidateCache_menu</param>
+				</result>
+		</action>
+		<action name="st_pms_bo_riskMgmt_dbConfing_menu" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction" 
+			method="fetchDBConfiguration">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/riskMgmt/st_pms_bo_riskMgmt_dbConfig_menu.jsp</result>
+		</action>
+		<action name="st_pms_bo_riskMgmt_dbConfing" class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
+			method="dbConfiguration">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success" type="redirectAction">
+				<param name="actionName">st_pms_bo_riskMgmt_dbConfing_menu</param>
+				</result>
+		</action>
+	</package>
+</struts>

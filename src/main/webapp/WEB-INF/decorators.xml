@@ -1,0 +1,25 @@
+<decorators defaultdir="/com/stpl/pms/decorator"> 
+
+    <excludes> 
+        <pattern>/styles/*</pattern> 
+        <pattern>/scripts/*</pattern> 
+        <pattern>/images/*</pattern> 
+        <pattern>*newLogin*</pattern> 
+        <pattern>*/nodecorate*</pattern>
+        <pattern>/WeaverSoapWsdl*</pattern>
+        <pattern>/service/mobile/*</pattern>
+        <pattern>/com/stpl/pms/action/thirdParty/*</pattern>
+    </excludes>
+    <decorator name="blankDeco" page="noDecorator.jsp">
+    </decorator>
+	<decorator name="mainpage" page="mainpage.jsp"> 
+    	<pattern>*/action/bo/*</pattern> 
+    	<pattern>*/pms/common/*</pattern>
+    </decorator> 
+    <decorator name="portalCashier" page="portalCashierDecorator.jsp"> 
+    	<pattern>/com/stpl/pms/action/portal/cashier/*</pattern> 
+    	<pattern>/com/stpl/pms/action/portal/common/*</pattern>
+    </decorator> 
+	
+    
+</decorators> 

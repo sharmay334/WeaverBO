@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="gameBOLobby"
+		namespace="/com/stpl/pms/action/bo/gl" extends="struts-base">
+
+
+
+		<!-- <action name="st_test" class="com.stpl.pms.action.bo.gl.GameLobbyMgmtAction" 
+			method="successcall"> <interceptor-ref name="actions"></interceptor-ref> 
+			<interceptor-ref name="customStack"></interceptor-ref> <interceptor-ref name="defValueInterceptor"></interceptor-ref> 
+			<result name="success">/com/stpl/pms/action/bo/gameLobby/bo_um_Game_search.jsp 
+			</result> </action> <action name="st_test_submit_btn" class="com.stpl.pms.action.bo.gl.GameLobbyMgmtAction" 
+			method="test"> <interceptor-ref name="actions"></interceptor-ref> <interceptor-ref 
+			name="customStack"></interceptor-ref> <interceptor-ref name="defValueInterceptor"></interceptor-ref> 
+			<result name="success"> /com/stpl/pms/action/bo/gameLobby/nodecorate/bo_um_Game_search_result.jsp 
+			</result> <result name="error"> /com/stpl/pms/action/bo/gameLobby/nodecorate/bo_um_Game_search_result.jsp 
+			</result> </action> <action name="st_game_upload_test" class="com.stpl.pms.action.bo.gl.GameLobbyMgmtAction" 
+			method="successcall"> <interceptor-ref name="actions"></interceptor-ref> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result name="success">/com/stpl/pms/action/bo/gameLobby/st_pms_gl_bo_uploadGame.jsp 
+			</result> </action> <action name="st_game_upload_test_button_click" class="com.stpl.pms.action.bo.gl.UploadNewGamesBean" 
+			method="uploadNewGames"> <interceptor-ref name="actions"></interceptor-ref> 
+			<interceptor-ref name="customStack"></interceptor-ref> </action> <action 
+			name="st_delete_game" class="com.stpl.pms.action.bo.gl.DeleteExistingGames" 
+			method="ReturnSuccess"> <interceptor-ref name="customStack"></interceptor-ref> 
+			<result name="success" type="chain">st_delete_game_action </result> </action> 
+			<action name="st_delete_game_action" class="com.stpl.pms.action.bo.gl.DeleteExistingGames" 
+			method="deleteGame"> <interceptor-ref name="customStack"></interceptor-ref> 
+			<result name="input">/com/stpl/pms/action/bo/gameLobby/nodecorate/bo_um_delete_game_message.jsp 
+			</result> <result name="error">/com/stpl/pms/action/bo/gameLobby/nodecorate/bo_um_delete_game_message.jsp 
+			</result> <result></result> </action> <action name="com_stpl_pms_bo_newLobby"> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result>/com/stpl/pms/action/bo/gameLobby/st_pms_gl_bo_createNewLobby.jsp 
+			</result> </action> <action name="st_pms_bo_fetchGameListMenu" class="com.stpl.pms.action.bo.gl.GameLobbyMgmtAction"> 
+			<interceptor-ref name="actions"></interceptor-ref> <interceptor-ref name="customStack"></interceptor-ref> 
+			<result name="success">/com/stpl/pms/action/bo/gameLobby/st_pms_gl_bo_fetchGameListMenu.jsp 
+			</result> </action> <action name="st_pms_bo_getGameListForVendor" class="com.stpl.pms.action.bo.gl.GameLobbyMgmtAction"> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result name="success">/com/stpl/pms/action/bo/gameLobby/nodecorate/st_pms_gl_bo_uploadGameListSuccess.jsp 
+			</result> </action> <action name="st_pms_bo_domainGameAssignMenu" class="com.stpl.pms.action.bo.gl.GameLobbyMgmtAction"> 
+			<interceptor-ref name="actions"></interceptor-ref> <interceptor-ref name="customStack"></interceptor-ref> 
+			<param name="headerName">Game Assign to Domain</param> <param name="headingName">Domain 
+			Info</param> <param name="actionName">st_pms_bo_getVendorGameList</param> 
+			<result name="success">/com/stpl/pms/action/bo/gameLobby/st_pms_gl_bo_domianGameAssignMenu.jsp 
+			</result> </action> <action name="st_pms_bo_getVendorGameList" class="com.stpl.pms.action.bo.gl.GameLobbyMgmtAction"> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result name="success">/com/stpl/pms/action/bo/gameLobby/nodecorate/st_pms_gl_bo_vendorGameList.jsp 
+			</result> </action> <action name="st_pms_bo_saveDomainGame" class="com.stpl.pms.action.bo.gl.GameLobbyMgmtAction"> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result name="success">/com/stpl/pms/action/bo/gameLobby/st_pms_gl_bo_dmGameAssignSuccess.jsp 
+			</result> </action> <action name="st_pms_bo_domainGameLobbyMenu" class="com.stpl.pms.action.bo.gl.GameLobbyMgmtAction"> 
+			<interceptor-ref name="actions"></interceptor-ref> <interceptor-ref name="customStack"></interceptor-ref> 
+			<param name="headerName">Create Game Lobby</param> <param name="headingName">Domain 
+			Info</param> <param name="actionName">com_pms_bo_createNewGameLobby</param> 
+			<result name="success">/com/stpl/pms/action/bo/gameLobby/st_pms_gl_bo_domianGameAssignMenu.jsp 
+			</result> </action> <action name="com_pms_bo_createNewGameLobby" class="com.stpl.pms.action.bo.gl.GameLobbyMgmtAction"> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result name="success">/com/stpl/pms/action/bo/gameLobby/nodecorate/bo_pms_gl_bo_gameThemeList.jsp 
+			</result> </action> <action name="st_pms_bo_saveGameTheme" class="com.stpl.pms.action.bo.gl.GameLobbyMgmtAction"> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result name="success">/com/stpl/pms/action/bo/gameLobby/st_pms_gl_bo_dmGameAssignSuccess.jsp 
+			</result> </action> <action name="st_lm_status_draft" class="com.stpl.pms.action.bo.gl.DraftStatusMgmtAction" 
+			method="showDraftData"> <interceptor-ref name="actions"></interceptor-ref> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result name="success">/com/stpl/pms/action/bo/gameLobby/st_pms_gl_bo_draftStatus.jsp 
+			</result> </action> <action name="st_lm_get_draft_data" class="com.stpl.pms.action.bo.gl.DraftStatusMgmtAction" 
+			method="getDraftData"> <interceptor-ref name="actions"></interceptor-ref> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result name="success">/com/stpl/pms/action/bo/gameLobby/nodecorate/st_pms_gl_bo_draftStatusResult.jsp</result> 
+			</action> <action name="ticket_generate" class="com.stpl.pms.action.bo.gl.GenerateTicketMgmtAction" 
+			method="successCall"> <interceptor-ref name="actions"></interceptor-ref> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result name="success">/com/stpl/pms/action/bo/gameLobby/st_pms_gl_bo_generateTicket.jsp</result> 
+			</action> <action name="ticket_generate_start_click" class="com.stpl.pms.action.bo.gl.GenerateTicketMgmtAction" 
+			method="checkGameAvailability"> <interceptor-ref name="actions"></interceptor-ref> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result name="success" 
+			type="chain">ticket_generation_start</result> </action> <action name="ticket_generation_start" 
+			class="com.stpl.pms.action.bo.gl.GenerateTicketMgmtAction" method="generateTicket"> 
+			<interceptor-ref name="actions"></interceptor-ref> <interceptor-ref name="customStack"></interceptor-ref> 
+			</action> <action name="st_download_game" class="com.stpl.pms.action.bo.gl.DownloadGames" 
+			method="ReturnSuccess"> <interceptor-ref name="customStack"></interceptor-ref> 
+			<result name="success" type="chain">st_download_game_action </result> </action> 
+			<action name="st_download_game_action" class="com.stpl.pms.action.bo.gl.DownloadGames" 
+			method="downlaod"> <interceptor-ref name="actions"></interceptor-ref> <interceptor-ref 
+			name="customStack"></interceptor-ref> <result name="success">/com/stpl/pms/action/bo/gameLobby/nodecorate/st_pms_gl_bo_download_result.jsp</result> 
+			<result name="error">/com/stpl/pms/action/bo/gameLobby/nodecorate/st_pms_gl_bo_download_result.jsp</result> 
+			</action> <action name="st_testfile_download_result" class="com.stpl.pms.action.bo.gl.DownloadGames" 
+			method="ReturnSuccessTestFiles"> <interceptor-ref name="actions"></interceptor-ref> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result name="success">/com/stpl/pms/action/bo/gameLobby/nodecorate/st_pms_gl_bo_TestFileDownload_result.jsp</result> 
+			<result name="error">/com/stpl/pms/action/bo/gameLobby/nodecorate/st_pms_gl_bo_TestFileDownload_result.jsp</result> 
+			</action> <action name="st_download_game_downloadFile" class="com.stpl.pms.action.bo.gl.DownloadGames" 
+			method="downlaodfiles"> <result name="success" type="stream"> <param name="contentType">application/octet-stream</param> 
+			<param name="inputName">fileInputStream</param> <param name="contentDisposition">attachment;filename="${fileName}"</param> 
+			<param name="bufferSize">1024</param> </result> </action> <action name="st_batch_status_gameUpload" 
+			class="com.stpl.pms.action.bo.gl.GameCheckingForBatchNo" method="checkGame"> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result></result> 
+			</action> <action name="st_batch_status_gameGenerateTime" class="com.stpl.pms.action.bo.gl.GameCheckingForBatchNo" 
+			method="getGameStatus"> <interceptor-ref name="customStack"></interceptor-ref> 
+			<result></result> </action> <action name="st_batch_status_gameUploadGeneration" 
+			class="com.stpl.pms.action.bo.gl.GameCheckingForBatchNo" method="TicketGenerationBatch"> 
+			<interceptor-ref name="customStack"></interceptor-ref> <result name="success">/com/stpl/pms/action/bo/gameLobby/nodecorate/bo_um_ticket_generate_batch_no.jsp</result> 
+			<result name="error">/com/stpl/pms/action/bo/gameLobby/nodecorate/bo_um_ticket_generate_batch_no.jsp</result> 
+			</action> <action name="st_game_status_gameUploadGeneration" class="com.stpl.pms.action.bo.gl.GameCheckingForBatchNo" 
+			method="TicketGenerationGame"> <interceptor-ref name="customStack"></interceptor-ref> 
+			<result name="success">/com/stpl/pms/action/bo/gameLobby/nodecorate/bo_um_ticket_generate_game_no.jsp</result> 
+			<result name="error">/com/stpl/pms/action/bo/gameLobby/nodecorate/bo_um_ticket_generate_game_no.jsp</result> 
+			</action> <action name="st_batch_status_gameGeneration" class="com.stpl.pms.action.bo.gl.GenerateTicketMgmtAction" 
+			method="returnGenerationStatus"> <interceptor-ref name="customStack"></interceptor-ref> 
+			</action> <action name="st_send_mail_download" class="com.stpl.pms.action.bo.gl.SendMailService" 
+			method="returnMailServiceResult"> <interceptor-ref name="customStack"></interceptor-ref> 
+			</action> <action name="st_rm_game_print_ticket_data" class="com.stpl.pms.action.bo.gl.PrintTicketMgmtAction" 
+			method="successCall"> <interceptor-ref name="customStack"></interceptor-ref> 
+			<result name="success">/com/stpl/pms/action/bo/gameLobby/bo_um_print_ticket_data.jsp</result> 
+			</action> <action name="st_batch_no_list_print_ticket" class="com.stpl.pms.action.bo.gl.PrintTicketMgmtAction" 
+			method="getBatchNoListResult"> <interceptor-ref name="customStack"></interceptor-ref> 
+			<result name="success">/com/stpl/pms/action/bo/gameLobby/nodecorate/bo_um_print_ticket_data_batchList.jsp</result> 
+			</action> <action name="st_print_ticket_result" class="com.stpl.pms.action.bo.gl.PrintTicketMgmtAction" 
+			method="printTicketResult"> <interceptor-ref name="customStack"></interceptor-ref> 
+			<result name="success">/com/stpl/pms/action/bo/gameLobby/nodecorate/bo_um_print_ticket_result.jsp</result> 
+			<result name="error">/com/stpl/pms/action/bo/gameLobby/nodecorate/errormsg.jsp</result> 
+			</action> <action name="st_global_bo_mail_send_activity" class="com.stpl.pms.action.bo.gl.BoSendMailActivity" 
+			method="sendActivityMail"> <interceptor-ref name="customStack"></interceptor-ref> 
+			</action> <action name="st_global_bo_sms_send_activity" class="com.stpl.pms.action.bo.gl.SendSmsService" 
+			method="sendSms"> <interceptor-ref name="customStack"></interceptor-ref> 
+			</action> <action name="st_global_bo_sms_send_activity_to_bo" class="com.stpl.pms.action.bo.gl.SendSmsService" 
+			method="sendSmsToBo"> <interceptor-ref name="customStack"></interceptor-ref> 
+			</action> <action name="game_search_show_tkt_img" class="com.stpl.pms.action.bo.gl.DisplayImageMgmtAction" 
+			method="fetchImageData"> <interceptor-ref name="customStack"></interceptor-ref> 
+			</action> -->
+	</package>
+</struts>

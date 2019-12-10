@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="dm" namespace="/com/stpl/pms/action/bo/dm"
+		extends="struts-base">
+		
+		<action name="bo_dm_boDomainReg_Menu" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="domainRegMenu">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/dm/st_dm_Registration_Menu.jsp
+			</result>
+		</action>
+		<action name="bo_dm_validateDomain" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="checkDomainNameAvailability">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_dm_validateDomainUserName" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="validateDomainUsername">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_dm_validateDomainUserEmail" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="validateDomainUserEmail">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_dm_boDomainReg_Save" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="domainRegSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="input"> /com/stpl/pms/action/bo/dm/st_dm_Registration_Menu.jsp </result>
+			<result name="success"> /com/stpl/pms/action/bo/dm/st_dm_Registration_Save.jsp </result>
+		</action>
+		
+		<action name="bo_dm_boDomainEdit_Menu" class="com.stpl.pms.action.bo.dm.DomainAction" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_dm_Edit_Menu.jsp
+			</result>
+		</action>
+
+		<action name="bo_dm_boDomainEdit_Fetch" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="domainEditFetch">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/nodecorate/st_dm_Edit_Fetch.jsp
+			</result>
+		</action>
+		<action name="bo_dm_boDomainEdit_Save" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="domainEditSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_dm_Edit_Save.jsp
+			</result>
+			<result name="input">/com/stpl/pms/action/bo/dm/st_dm_Edit_Error.jsp</result>
+		</action>
+		<action name="bo_home_page">
+		<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/lm/bo_lm_loginSuccess.jsp
+			</result>
+		</action>
+		
+		<!--Security Question -->
+
+		<action name="st_pms_dm_bo_secQuesMgmt" class="com.stpl.pms.action.bo.dm.DomainAction" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/dm/st_pms_dm_bo_secQuesMgmt.jsp
+			</result>
+		</action>
+		<action name="st_pms_dm_bo_loadSecQuesPage" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="loadSecQueList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/nodecorate/st_pms_dm_bo_loadSecQuesPage.jsp
+			</result>
+		</action>
+		<action name="st_pms_dm_bo_secQuesPageSubmit" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="saveSecQues">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_pms_dm_bo_success.jsp
+			</result>
+			<result name="input">/com/stpl/pms/action/bo/dm/nodecorate/st_pms_dm_fieldError.jsp
+			</result>
+		</action>
+
+		<!--referral -->
+		<action name="st_pms_dm_bo_referralMgmt" class="com.stpl.pms.action.bo.dm.DomainAction" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/dm/st_pms_dm_bo_referralMgmt.jsp
+			</result>
+		</action>
+		<action name="st_pms_dm_bo_loadRefferalList" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="fetchReferenceFieldList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/nodecorate/st_pms_dm_bo_loadReferralList.jsp
+			</result>
+		</action>
+		<action name="st_pms_dm_bo_addRefferalField">
+		<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/dm/nodecorate/st_pms_dm_bo_addReferralField.jsp
+			</result>
+		</action>
+		<action name="st_pms_dm_bo_editReferenceLabels" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="editReference">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/dm/nodecorate/st_pms_dm_bo_editReferenceLabels.jsp
+			</result>
+		</action>
+		<action name="checkReferenceName" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="checkReferenceName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_dm_bo_addToReferralsList" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="addToReferralsList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			</action>
+		<action name="st_pms_dm_bo_editToReferralsList" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="editToReferralsList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			</action>
+		<action name="st_pms_dm_bo_saveReferralsList" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="saveReferralsList">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_pms_dm_bo_success.jsp
+			</result>
+		</action>
+		<action name="st_pms_dm_bo_removeFromReferralsList" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="removeFromReferralsList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			</action>
+
+		<!--block country state -->
+		<action name="st_pms_dm_blockCountryState" class="com.stpl.pms.action.bo.dm.DomainAction" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_pms_dm_allowedCountryState.jsp
+			</result>
+		</action>
+		<action name="st_pms_dm_getCountryStates" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="getCountries">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/nodecorate/st_pms_dm_getCountryStates.jsp
+			</result>
+		</action>
+		<action name="st_pms_dm_blockCountryStateSave" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="blockCountryStateSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_pms_dm_bo_success.jsp
+			</result>
+		</action>
+
+		<!--menu management -->
+		<action name="st_pms_dm_addMenu" class="com.stpl.pms.action.bo.dm.DomainAction" >
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+		<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/dm/st_pms_dm_addMenu.jsp</result>
+		</action>
+
+		<action name="st_pms_dm_loadAddMenu" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="getContentNameMap">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/dm/nodecorate/st_pms_dm_addMenuLevel.jsp
+			</result>
+		</action>
+		<action name="st_pms_dm_submitMenuDetail" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="submitMenuDetail">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_pms_dm_addMenuSuccess.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_dm_editMenu" class="com.stpl.pms.action.bo.dm.DomainAction" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_pms_dm_editMenu.jsp
+			</result>
+		</action>
+		<action name="st_pms_dm_loadEditMenu" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="fetchMenuList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_pms_dm_showEditMenu" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="fetchMenuListByMenuId">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/nodecorate/st_pms_dm_editMenuLevel.jsp
+			</result>
+		</action>
+		<action name="st_pms_dm_saveEditMenuDetail" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="saveEditMenuDetail">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_pms_dm_addMenuSuccess.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/dm/st_pms_dm_addMenuError.jsp
+			</result>
+		</action>
+		<action name="st_dm_domainCheckList_Menu" class="com.stpl.pms.action.bo.dm.DomainAction" >
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_dm_domainCheckList_Menu.jsp
+			</result>
+		</action>
+		<action name="st_dm_domainCheckList" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="domainCheckList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/nodecorate/st_dm_domainCheckList.jsp
+			</result>
+		</action>
+		<action name="st_dm_activeReportsList_menu" class="com.stpl.pms.action.bo.dm.DomainAction">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_dm_activeReportList_menu.jsp</result>
+		</action>
+		<action name="st_dm_activeReportsList" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="activeReportsList">
+			<result name="success">/com/stpl/pms/action/bo/dm/nodecorate/st_dm_activeReportList.jsp</result>
+		</action>
+		<action name="st_dm_activeReportList_save" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="activeReportListsave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_dm_activeReportsList_success.jsp</result>
+		</action>
+		<action name="st_dm_uploadCss_Menu" class="com.stpl.pms.action.bo.dm.DomainAction" 
+			>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_dm_uploadCssMenu.jsp</result>
+		</action>
+		<action name="st_dm_uploadCss_Save" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="uploadCssSave">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_dm_uploadCssSave.jsp</result>	
+			<result name="input">/com/stpl/pms/action/bo/dm/st_dm_uploadCssMenu.jsp</result>
+		</action>		
+		<action name="bo_dm_alias_create" class="com.stpl.pms.action.bo.dm.DomainAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_dm_create_alias.jsp
+			</result>
+		</action>		
+		<action name="bo_dm_validateAlias" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="checkAliasNameAvailability">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="bo_dm_boAliasSave" class="com.stpl.pms.action.bo.dm.DomainAction"
+			method="saveAlias">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="input"> /com/stpl/pms/action/bo/dm/st_dm_create_alias.jsp </result>
+			<result name="success"> /com/stpl/pms/action/bo/dm/st_dm_Alias_Save.jsp</result>
+		</action>
+		
+		<action name="bo_dm_fetch_email_provider_menu" class="com.stpl.pms.action.bo.dm.DomainAction">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/st_dm_emailProviderList_menu.jsp</result>
+		</action>
+		
+		<action name="st_dm_email_provider_Search" class="com.stpl.pms.action.bo.dm.DomainAction" method="searchSmsEmailProvider">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/nodecorate/bo_dm_email_provider_setup_search.jsp</result>
+		</action>
+		
+		<action name="bo_dm_update_email_order" class="com.stpl.pms.action.bo.dm.DomainAction" method="updateEmailProviderOrder">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/bo_dm_update_provider_save.jsp</result>
+		</action>
+		<action name="st_dm_fetch_location_menu" class="com.stpl.pms.action.bo.dm.DomainAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success" >/com/stpl/pms/action/bo/dm/st_dm_addEditLocations_menu.jsp</result>
+		</action>
+		<action name="st_dm_fetch_locations" class="com.stpl.pms.action.bo.dm.DomainAction" method="fetchLocations" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/nodecorate/st_pms_dm_fetch_location_menu.jsp
+			</result>
+		</action>
+		<action name="st_dm_update_location_status" class="com.stpl.pms.action.bo.dm.DomainAction" method="updLocStatus">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success" type="redirectAction" >
+				<param name="actionName">st_dm_fetch_location_menu</param>
+				<param name="lastView">${domainId}</param>
+			</result>
+		</action>
+		<action name="st_dm_update_location" class="com.stpl.pms.action.bo.dm.DomainAction" method="updateLocation" >
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success"> /com/stpl/pms/action/bo/dm/st_dm_location_save_update_success.jsp</result>
+		</action>
+		<action name="st_dm_fetch_device_menu" class="com.stpl.pms.action.bo.dm.DomainAction"  >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success" >/com/stpl/pms/action/bo/dm/st_dm_searchDeviceList.jsp</result>
+		</action>
+		<action name="st_dm_update_device_status" class="com.stpl.pms.action.bo.dm.DomainAction" method="updDeviceStatus">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success" type="redirectAction" >
+				<param name="actionName">st_dm_fetch_device_menu</param>
+				<param name="lastView">${domainId+"#"+aliasId}</param>
+			</result>
+		</action>
+		<action name="st_dm_update_devices" class="com.stpl.pms.action.bo.dm.DomainAction" method="updateDevices" >
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success"> /com/stpl/pms/action/bo/dm/st_dm_device_save_update_success.jsp</result>
+		</action>
+		<action name="st_dm_location_device_mapping" class="com.stpl.pms.action.bo.dm.DomainAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result>/com/stpl/pms/action/bo/dm/st_pms_dm_location_device_mapping_menu.jsp</result>
+		</action>
+		<action name="st_dm_fetch_location_device_mapping" class="com.stpl.pms.action.bo.dm.DomainAction" method="fetchLocDevMapping" >
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success" >/com/stpl/pms/action/bo/dm/nodecorate/st_dm_fetch_location_device_mapping.jsp</result>
+		</action>
+		<action name="st_dm_update_device_mapping_status" class="com.stpl.pms.action.bo.dm.DomainAction" method="updDevMapStatus">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success" type="redirectAction" >
+				<param name="actionName">st_dm_location_device_mapping</param>
+				<param name="lastView">${domainId+"#"+aliasId}</param>
+			</result>
+		</action>
+		<action name="st_dm_save_update_device_mapping" class="com.stpl.pms.action.bo.dm.DomainAction" method="updSaveDevMapping" >
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success"> /com/stpl/pms/action/bo/dm/st_dm_mapping_save_update_success.jsp</result>
+		</action>
+		<action name="st_dm_checkUniqueMAC" class="com.stpl.pms.action.bo.dm.DomainAction" method="checkUniqueMAC">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_dm_checkUniqueDevName" class="com.stpl.pms.action.bo.dm.DomainAction" method="checkUniqueDevName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_dm_checkUniqueLocName" class="com.stpl.pms.action.bo.dm.DomainAction" method="checkUniqueLocName">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_dm_fetchDeviceList" class="com.stpl.pms.action.bo.dm.DomainAction" method="fetchDevices">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/dm/nodecorate/st_dm_fetch_device_master.jsp</result>
+		</action>
+		<action name="st_dm_deleteMapping" class="com.stpl.pms.action.bo.dm.DomainAction" method="deleteMapping">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="st_dm_fetchActiveDeviceLocation" class="com.stpl.pms.action.bo.dm.DomainAction" method="fetchActiveDeviceLocation">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+	</package>
+</struts>

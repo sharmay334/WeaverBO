@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="vipMgmt" namespace="/com/stpl/pms/action/bo/misc"
+	extends="struts-base">
+		
+		<action name="st_pms_misc_vipLevelSetUp_Menu" class="com.stpl.pms.action.bo.misc.VipMgmtAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="defValueInterceptor"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/vipLevel/st_pms_misc_vipLevelSetUp_Menu.jsp
+			</result>
+		</action>
+		<action name="st_pms_misc_searchVipLevel" class="com.stpl.pms.action.bo.misc.VipMgmtAction" method="searchVipLevel">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/vipLevel/nodecorate/st_pms_misc_searchVipLevel.jsp
+			</result>
+		</action>
+		<action name="st_pms_misc_addVipLevel" class="com.stpl.pms.action.bo.misc.VipMgmtAction" method="fetchVipLevelCriList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/vipLevel/nodecorate/st_pms_misc_addVipLevel.jsp
+			</result>
+		</action>
+		<action name="st_pms_misc_vipLevelSetUp_Save" class="com.stpl.pms.action.bo.misc.VipMgmtAction" method="saveVipLevel">
+		<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<!-- Priv Interceptor -->
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/vipLevel/st_pms_misc_vipLevelSetUp_Save.jsp
+			</result>
+		</action>
+		
+		<action name="st_pms_misc_editVipLevel" class="com.stpl.pms.action.bo.misc.VipMgmtAction" method="editVipLevel">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/vipLevel/nodecorate/st_pms_misc_editVipLevel.jsp
+			</result>
+		</action>
+		<action name="st_pms_misc_editVipLevel_save" class="com.stpl.pms.action.bo.misc.VipMgmtAction" method="updateVipLevel">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<!-- Priv Interceptor -->
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/vipLevel/st_pms_misc_vipLevelSetUp_Save.jsp
+			</result>
+		</action>
+		
+		<action name="st_pms_misc_changePlayerVip" class="com.stpl.pms.action.bo.misc.VipMgmtAction" method="changePlayerVip">
+		<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/vipLevel/nodecorate/st_pms_misc_changePlayerVip.jsp
+			</result>
+		</action>
+		<action name="st_pms_misc_changePlayerVip_save" class="com.stpl.pms.action.bo.misc.VipMgmtAction" method="changePlayerVipSave">
+			<interceptor-ref name="customTokenStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/misc/vipLevel/st_pms_misc_changePlayerVip_Save.jsp
+			</result>
+		</action>
+		<action name="st_pms_misc_checkVipAvailability" class="com.stpl.pms.action.bo.misc.VipMgmtAction" method="checkVipAvailability">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+	</package>
+</struts>

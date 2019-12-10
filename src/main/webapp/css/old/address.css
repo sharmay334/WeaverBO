@@ -1,0 +1,222 @@
+body {
+	font-family: Verdana, Geneva, sans-serif;
+	margin: 0px;
+	padding: 0px;
+}
+
+img {
+	border: none;
+}
+
+h4 {
+	margin: 0px;
+	padding: 0px;
+}
+
+#YelloBoxCash {
+	width: 935px;
+	min-height: 565px;
+	height: auto;
+	background: #f5af27;
+	margin: 5px; auto;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+#Addressbox {
+	width: 920px;
+	min-height: 540px;
+	height: auto;
+	background: #f5eabd;
+	border: 1px #d20000 solid;
+	margin: 0 auto;
+	font-size: 12px;
+	padding-bottom: 25px;
+}
+
+#Addressbox h2 {
+	background: #a70002;
+	color: #FFF;
+	font-size: 15px;
+	line-height: 32px;
+	margin: 0px;
+	padding-left: 6px;
+	border-radius: 4px 4px 0px 0px;
+	background-image: -moz-linear-gradient(top, #d20000 0%, #8b0002 100%);
+	background-image: -webkit-linear-gradient(top, #d20000 0%, #8b0002 100%)
+		;
+	background-image: -o-linear-gradient(top, #d20000 0%, #8b0002 100%);
+	background-image: -ms-linear-gradient(top, #d20000 0%, #8b0002 100%);
+}
+
+#RegisterSection {
+	width: 320px;
+	height: 472px;
+	float: left;
+	border-right: 1px #bc0001 solid;
+	margin-top: 30px;
+}
+
+#BilingSection {
+	width: 562px;
+	height: 451px;
+	float: right;
+	margin-top: 30px;
+	margin-right: 15px;
+}
+
+.BillingBox {
+	width:  560px;
+	min-height: 440px;
+	height: auto;
+	border-right: 1px #ff0003 solid;
+	border-left: 1px #ff0003 solid;
+	border-bottom: 1px #ff0003 solid;
+	background: #fffede;;
+}
+
+.RegisBox {
+	width: 295px;
+	height: 243px;
+	margin-left: 15px;
+}
+
+.RegisBorderBox {
+	width: 285px;
+	height: auto;
+	clear: both;
+	background: #fffede;
+	border-right: 1px #ff0003 solid;
+	border-left: 1px #ff0003 solid;
+	border-bottom: 1px #ff0003 solid;
+	padding: 4px;
+}
+
+.Nam {
+	color: #be0001;
+	font-weight: bold;
+	font-size: 14px;
+	padding-left: 3px;
+}
+
+.Nam2 {
+	color: #000;
+	font-weight: bold;
+	font-size: 13px;
+	padding-left: 3px;
+}
+
+.Nam3 {
+	color: #515151;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.line_hight {
+	line-height: 12px;
+}
+
+.InpTextBoxBg {
+	width: 425px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 13px;
+	color: #a6a6a6;
+	font-weight: bold;
+	padding-left: 10px;
+	border: none;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-o-border-radius: 4px;
+	-ms-border-radius: 4px;
+	box-shadow: inset 0 0 8px #939393;
+	-moz-box-shadow: inset 0 0 7px #939393;
+	-ms-box-shadow: inset 0 0 7px #939393;
+	-webkit-box-shadow: inset 0 0 7px #939393;
+	-o-box-shadow: inset 0 0 7px #939393;
+}
+
+.Inp_cont2 {
+	width: auto;
+	min-width: 94px;
+	height: 26px;
+	line-height: 25px;
+	background: #bb0001;
+	color: #FFF;
+	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	text-align: center;
+	border: none;
+	padding-bottom: 4px;
+	text-shadow: 2px 3px 3px #000000;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-o-border-radius: 6px;
+	-mos-border-radius: 6px;
+	background-image: -moz-linear-gradient(top, #d20000 0%, #8b0002 100%);
+	background-image: -webkit-linear-gradient(top, #d20000 0%, #8b0002 100%)
+		;
+	background-image: -o-linear-gradient(top, #d20000 0%, #8b0002 100%);
+	background-image: -ms-linear-gradient(top, #d20000 0%, #8b0002 100%);
+}
+
+.YeloStrip {
+	width: 98%;
+	height: 35px;
+	background: #ffb930;
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
+.YeloStrip p {
+	color: #970001;
+	font-size: 16px;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 8px 0px 0px 6px;
+}
+
+#BilingSectionSmallRight {
+	width: 48%;
+	min-height: 250px;
+	height: auto;
+	float: left;
+    margin-left: -56px;
+    margin-top: 284px;
+    position: absolute;
+	
+}
+#YelloBoxResponse {
+	width: 935px;
+	background: #f5af27;
+	margin: 0 auto;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+#Responsebox {
+	width: 920px;
+	background: #f5eabd;
+	border: 1px #d20000 solid;
+	margin: 0 auto;
+	font-size: 12px;
+	padding-bottom: 25px;
+	min-height: 200px;
+}
+#Responsebox h2 {
+	background: #a70002;
+	color: #FFF;
+	font-size: 15px;
+	line-height: 32px;
+	margin: 0px;
+	padding-left: 6px;
+	border-radius: 4px 4px 0px 0px;
+	background-image: -moz-linear-gradient(top, #d20000 0%, #8b0002 100%);
+	background-image: -webkit-linear-gradient(top, #d20000 0%, #8b0002 100%)
+		;
+	background-image: -o-linear-gradient(top, #d20000 0%, #8b0002 100%);
+	background-image: -ms-linear-gradient(top, #d20000 0%, #8b0002 100%);
+}

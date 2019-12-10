@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+   <session-factory>
+      <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+      <!--<property name="connection.datasource">java:/WeaverDS</property>-->
+
+<property name = "hibernate.connection.driver_class">
+         com.mysql.jdbc.Driver
+      </property>
+      
+      <!-- Assume test is the database name -->
+      
+      <property name = "hibernate.connection.url">
+         jdbc:mysql://localhost:3306/itgs_new
+      </property>
+      
+      <property name = "hibernate.connection.username">
+         root
+      </property>
+      
+      <property name = "hibernate.connection.password">
+         123456
+      </property>
+      <property name="hibernate.connection.autocommit">true</property>
+      <property name="hibernate.bytecode.provider">cglib</property>
+      <property name="format_sql">false</property>
+      <property name="show_sql">true</property>
+      <property name="use_sql_comments">false</property>
+      <property name="default_batch_fetch_size">5</property>
+      <property name="myeclipse.connection.profile">Mysql</property>
+      <property name="hibernate.jdbc.use_streams_for_binary">true</property>
+      <property name="hibernate.cache.use_second_level_cache">true</property>
+      <property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
+      <property name="hibernate.cache.use_query_cache">true</property>
+      <property name="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.EhCacheRegionFactory</property>
+      <property name="hibernate.generate_statistics">true</property>
+      <!-- Generic Module Start  -->
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenSmsEmailProviderMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenLanguageMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenCurrencyMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenPropertyMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenStateMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenCityMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenCurrencyCountryMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenCountryServiceMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenPlrGeoip.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenCountryMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenCurrencyConversionRateHistory.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenCurrencyConversionRate.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenVariableMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenSchedulerRunStatus.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StOfflineAffiliateMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmGameUserMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StPmPlrFalconideMailResponseHistory.hbm.xml" />
+      <!-- Role Mgmt Module Start  -->
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmBoUserInfo.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmBoUserMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmBoUserPrivMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmBoRoleMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmBoRolePrivMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmServiceVendorProperties.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmPlrRolePrivMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmServiceDeliveryMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmServiceMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmActionFunctionMappingMgmt.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmActionFunctionMappingCasino.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmMenuMasterMgmt.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmMenuMasterCasino.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmPrivilegeRepMgmt.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmPrivilegeRepCasino.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmVendorMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRummyPrivilegeRepMgmt.hbm.xml" />
+      <!-- Domain Module Start  -->
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmBlockedPhoneNo.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmBlockedEmailId.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmBlockedIp.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmDomainLanguageMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenPasswordPolicy.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmDomainInfo.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmDomainMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmDomainCurrencyMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmDomainWinApproveLimitMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmAliasAnalyticalToolMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/itgs.hbm.xml" />
+      <!-- Risk Mgmt Module Start  -->
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRiskDuplicateActionNotification.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRiskDuplicateMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRiskDuplicatePlayerScore.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRiskDuplicateWeightage.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRiskPlrProfileMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRiskPlrTxnControl.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo10.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRiskDecisionActivityDoerMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRiskDecisionActivityMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRiskDecisionDoerMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo11.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRiskDecisionInfo12.hbm.xml" />
+      <!-- Risk Mgmt Module End  -->
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenWordSentenceMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmDomainCountryMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmDomainStateMapping.hbm.xml" />
+      <!-- Allowed IP -->
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmBoAllowedIp.hbm.xml" />
+      <!-- Allowed IP -->
+      <!--	VIP Level Mgmt	-->
+      <!-- Affiliate Mgmt  -->
+      <mapping resource="com/stpl/pms/hibernate/mapping/StAffiliateInfo.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StAffiliateMaster.hbm.xml" />
+      <!-- Affiliate Mgmt  -->
+      <!-- Banner Mgmt Start -->
+      <!--<mapping
+			resource="com/stpl/pms/hibernate/mapping/StBannerCampaignMaster.hbm.xml" />
+		-->
+      <mapping resource="com/stpl/pms/hibernate/mapping/StBannerDetailMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StCmsTemplateMaster.hbm.xml" />
+      <!-- Bonus Mgmt Start -->
+      <mapping resource="com/stpl/pms/hibernate/mapping/StPromoBonusActivity.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StPromoBonusMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StPromoBonusCriteria.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StPmAvtaarMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StPmPlayerReferralContactList.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StPmPlayerReferralMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StPromoBonusPlayerMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmBoUserPasswordHistory.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StPmPlayerPasswordHistory.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StPmPlayerInboxMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StPmPlrAgeVerificationLog.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StGenVerificationSourceMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmBoUserLoginStatus.hbm.xml" />
+      <!-- Bonus Mgmt End -->
+      <!-- View Start -->
+      <mapping resource="com/stpl/pms/hibernate/mapping/MenuMasterView.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/FetchPlayerVip.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StTxnSettlementEbs.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRpBoGraphMaster.hbm.xml" />
+      <!-- View End -->
+      <!-- Apps Flyer Start -->
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmDomainAliasNameMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmAliasPropertyMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StRmDomainAliasVendorMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmDomainLocationDeviceMapping.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmDomainLocationMaster.hbm.xml" />
+      <mapping resource="com/stpl/pms/hibernate/mapping/StDmDomainDeviceMaster.hbm.xml" />
+
+   </session-factory>
+</hibernate-configuration>

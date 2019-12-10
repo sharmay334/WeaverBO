@@ -1,0 +1,274 @@
+body {
+	font-family: Verdana, Geneva, sans-serif;
+}
+
+img {
+	border: none;
+}
+
+h4 {
+	margin: 0px;
+	padding: 0px;
+}
+
+.yelowBG {
+	width: 908px;
+	height: 53px;
+	background: url(../../images/yelow-BG.png) left center no-repeat;
+	margin-top: 2px;
+}
+
+.RedBG {
+	width: 85%;
+	height: 37px;
+	background: url(../images/red_line.jpg) left center repeat-x;
+	margin: 0 auto;
+	margin-top: 10px;
+	border: 1px solid #640203;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+.code {
+	color: #FFF;
+	font-size: 16px;
+	font-weight: bold;
+	text-shadow: 1px 2px 1px #000000;
+}
+
+.amountBoxCash { /*width: 960px;*/
+	height: auto;
+	background: #f5eabd;
+	border: 1px #d20000 solid;
+	/*margin: 0 auto;*/
+	font-size: 12px;
+	padding: 4px 5px 12px 5px;
+}
+
+.CashDepoBox {
+	width: 908px;
+	height: auto;
+	margin: 0 auto;
+	margin-top: 8px;
+}
+
+.crdName {
+	color: #c70000;
+	font-size: 16px;
+	font-weight: bold;
+	padding-left: 8px;
+	text-align: left;
+}
+
+.InpTextBoxBg {
+	width: 100px;
+	font-size: 13px;
+	color: #a6a6a6;
+	font-weight: bold;
+	padding: 7px 4px 4px 8px;
+	border: 1px solid #F3BA2D;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.selectCash {
+	padding: 7px 4px 4px 8px;
+	font-size: 13px;
+	color: #a6a6a6;
+	font-weight: bold;
+	border: 1px solid #F3BA2D;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.Inp_cont2 {
+	width: 94px;
+	height: 26px;
+	background: url(../../images/cont.png) left center no-repeat;
+	color: #FFF;
+	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	text-align: center;
+	border: none;
+	padding-bottom: 4px;
+	text-shadow: 2px 3px 3px #000000;
+}
+
+#respDiv {
+	height: auto;
+	background: #f5eabd;
+	/*border: 1px #d20000 solid;*/
+	font-size: 12px;
+	 margin-top: -15px;
+}
+
+#respDiv h4 {
+	background: url(../images/red-rep.gif) left center repeat-x;
+	color: #FFF;
+	font-size: 14px;
+	line-height: 41px;
+	padding-left: 5px;
+}
+
+#successBox {
+	width: 572px;
+	height: 95px;
+	background: #f5eabd;
+	border: 1px #d20000 solid;
+	margin: 0 auto;
+	font-size: 12px;
+}
+
+#successBox h4 {
+	background: url(../images/red-rep.gif) left center repeat-x;
+	color: #FFF;
+	font-size: 16px;
+	line-height: 41px;
+	padding-left: 5px;
+	text-align: center;
+}
+
+.sucssMsg {
+	width: 90%;
+	height: 41px;
+	margin: 0 auto;
+	margin-top: 23px;
+}
+
+#successBox ul {
+	list-style-type: none;
+}
+
+#YelloBoxResponse {
+	width: 980px;
+	height: auto;
+	background: #f5af27;
+	margin: 0 auto;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+#Responsebox {
+	width: 958px;
+	height: auto;
+	background: #f5eabd;
+	border: 1px #d20000 solid;
+	margin: 0 auto;
+	font-size: 12px;
+	padding-bottom: 25px;
+	min-height: 200px;
+}
+
+.YeloStrip {
+	width: 98%;
+	height: 35px;
+	background: #ffb930;
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
+.YeloStrip p {
+	color: #970001;
+	font-size: 16px;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 8px 0px 0px 6px;
+}
+
+.YeloStrip ul {
+	list-style-type: none;
+}
+
+#wireTrans {
+	font-family: Arial, Helvetica, sans-serif;
+	width: 98%;
+	border-collapse: collapse;
+}
+
+#wireTrans td {
+	font-size: 14px;
+	border: 1px solid #ff0003;
+	padding: 3px 7px 2px 7px;
+	font-weight: bold;
+	line-height: 30px;
+}
+
+.hdwire {
+	color: #9f0202;
+}
+
+.wireText {
+	color: #000;
+	font-weight: normal;
+}
+
+.defaultIconRed {
+	background-image: url(images/ArrowRed1.png) !important;
+	width: 25px;
+	height: 28px;
+	margin-top: 10px;
+}
+
+.selectedIconRed {
+	background-image: url(images/ArrowRed2.png) !important;
+	width: 25px;
+	height: 28px;
+	margin-top: 10px;
+}
+.defaultIconWhite {
+	background-image: url(images/SmallArrow2.png) !important;
+	width: 20px;
+	height: 18px;
+	margin-top: 3px;
+}
+
+.selectedIconWhite {
+	background-image: url(images/SmallArrow1.png) !important;
+	width: 20px;
+	height: 18px;
+	margin-top: 3px;
+}
+
+
+.RedStripSmall {
+	width: 93%;
+	height: 25px;
+	background-color: #d20101;
+	clear: both;
+	margin: 0 auto;
+	margin-bottom: 4px;
+	background-image: -moz-linear-gradient(top, #d20000 0%, #8b0002 100%);
+	background-image: -webkit-linear-gradient(top, #d20000 0%, #8b0002 100%)
+		;
+	background-image: -o-linear-gradient(top, #d20000 0%, #8b0002 100%);
+	background-image: -ms-linear-gradient(top, #d20000 0%, #8b0002 100%);
+	border-radius: 4px 4px 0px 0px;
+}
+
+
+
+
+.hd8 {
+	font-size: 14px;
+	text-align: center;
+	padding-top: 0px;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+#DepositTbl {
+	font-family: Arial, Helvetica, sans-serif;
+	width: 93%;
+	border-collapse: collapse;
+}
+
+#DepositTbl td {
+	font-size: 1em;
+	border: 1px solid #d20101;
+	padding: 3px 7px 2px 7px;
+	line-height: 50px;
+}
