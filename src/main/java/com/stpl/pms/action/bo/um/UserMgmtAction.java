@@ -1,5 +1,6 @@
 package com.stpl.pms.action.bo.um;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,8 +16,10 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.stpl.pms.controller.commonMethods.CommonMethodController;
@@ -67,16 +70,16 @@ public class UserMgmtAction extends BaseActionSupport {
 	private String state;
 	private String city;
 	private String pincode;
-	private String photo_doc;
-	private String oldSalarySlip;
-	private String expCertificate;
-	private String eduCertificate;
-	private String panDoc;
-	private String aadharDoc;
-	private String voterDoc;
-	private String drivingDoc;
-	private String passbookDoc;
-	private String addressDoc;
+	private File photo_doc;
+	private File oldSalarySlip;
+	private File expCertificate;
+	private File eduCertificate;
+	private File panDoc;
+	private File aadharDoc;
+	private File voterDoc;
+	private File drivingDoc;
+	private File passbookDoc;
+	private File addressDoc;
 
 	// end of new params
 	private int[] mappingId;
@@ -232,83 +235,83 @@ public class UserMgmtAction extends BaseActionSupport {
 		this.pincode = pincode;
 	}
 
-	public String getPhoto_doc() {
+	public File getPhoto_doc() {
 		return photo_doc;
 	}
 
-	public void setPhoto_doc(String photo_doc) {
+	public void setPhoto_doc(File photo_doc) {
 		this.photo_doc = photo_doc;
 	}
 
-	public String getOldSalarySlip() {
+	public File getOldSalarySlip() {
 		return oldSalarySlip;
 	}
 
-	public void setOldSalarySlip(String oldSalarySlip) {
+	public void setOldSalarySlip(File oldSalarySlip) {
 		this.oldSalarySlip = oldSalarySlip;
 	}
 
-	public String getExpCertificate() {
+	public File getExpCertificate() {
 		return expCertificate;
 	}
 
-	public void setExpCertificate(String expCertificate) {
+	public void setExpCertificate(File expCertificate) {
 		this.expCertificate = expCertificate;
 	}
 
-	public String getEduCertificate() {
+	public File getEduCertificate() {
 		return eduCertificate;
 	}
 
-	public void setEduCertificate(String eduCertificate) {
+	public void setEduCertificate(File eduCertificate) {
 		this.eduCertificate = eduCertificate;
 	}
 
-	public String getPanDoc() {
+	public File getPanDoc() {
 		return panDoc;
 	}
 
-	public void setPanDoc(String panDoc) {
+	public void setPanDoc(File panDoc) {
 		this.panDoc = panDoc;
 	}
 
-	public String getAadharDoc() {
+	public File getAadharDoc() {
 		return aadharDoc;
 	}
 
-	public void setAadharDoc(String aadharDoc) {
+	public void setAadharDoc(File aadharDoc) {
 		this.aadharDoc = aadharDoc;
 	}
 
-	public String getVoterDoc() {
+	public File getVoterDoc() {
 		return voterDoc;
 	}
 
-	public void setVoterDoc(String voterDoc) {
+	public void setVoterDoc(File voterDoc) {
 		this.voterDoc = voterDoc;
 	}
 
-	public String getDrivingDoc() {
+	public File getDrivingDoc() {
 		return drivingDoc;
 	}
 
-	public void setDrivingDoc(String drivingDoc) {
+	public void setDrivingDoc(File drivingDoc) {
 		this.drivingDoc = drivingDoc;
 	}
 
-	public String getPassbookDoc() {
+	public File getPassbookDoc() {
 		return passbookDoc;
 	}
 
-	public void setPassbookDoc(String passbookDoc) {
+	public void setPassbookDoc(File passbookDoc) {
 		this.passbookDoc = passbookDoc;
 	}
 
-	public String getAddressDoc() {
+	public File getAddressDoc() {
 		return addressDoc;
 	}
 
-	public void setAddressDoc(String addressDoc) {
+	public void setAddressDoc(File addressDoc) {
 		this.addressDoc = addressDoc;
 	}
 
@@ -716,10 +719,14 @@ public class UserMgmtAction extends BaseActionSupport {
 		UserMgmtController service = new UserMgmtController();
 		// PrivFunctionBean privFunctionBean = (PrivFunctionBean)
 		// request.getAttribute("ALLOWED_PRIV");
-		
+
 		boolean returnType;
 		try {
-			System.out.println(getPassbookDoc());
+			if (!callDocumentsUpload()) {
+				addActionError("Error in file upload!");
+				return "exception";
+			}
+
 			returnType = service.checkUsernameAvailability(getUserName().trim(), userInfoBean.getDomainId());
 
 			if (!returnType) {
@@ -802,6 +809,13 @@ public class UserMgmtAction extends BaseActionSupport {
 			be.printStackTrace();
 			return "exception";
 		}
+	}
+
+	public boolean callDocumentsUpload() throws IOException {
+		String addressDocFilePath = ServletActionContext.getServletContext().getRealPath("/").concat("addressDoc"+userName);
+		File addressDocFileToCreate = new File(addressDocFilePath, "addressDoc");
+		FileUtils.copyFile(addressDoc, addressDocFileToCreate);// copying source file to new file
+		return true;
 	}
 
 	public String assignSubUserPriviledges() {
