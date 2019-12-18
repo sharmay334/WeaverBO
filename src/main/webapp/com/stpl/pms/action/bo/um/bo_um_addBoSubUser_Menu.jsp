@@ -115,7 +115,7 @@
 
 		<s:form name="newsubuser"
 			action="/com/stpl/pms/action/bo/um/bo_um_addBoSubUser_Save.action"
-			theme="simple" novalidate="true">
+			theme="simple" enctype="multipart/form-data" method="POST" novalidate="true">
 			<div class="innerBox">
 				<div class="FormMainBox">
 					<div class="labelDiv">
