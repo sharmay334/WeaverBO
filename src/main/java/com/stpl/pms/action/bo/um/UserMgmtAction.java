@@ -811,10 +811,63 @@ public class UserMgmtAction extends BaseActionSupport {
 		}
 	}
 
-	public boolean callDocumentsUpload() throws IOException {
-		String addressDocFilePath = ServletActionContext.getServletContext().getRealPath("/").concat("addressDoc"+userName);
-		File addressDocFileToCreate = new File(addressDocFilePath, "addressDoc");
-		FileUtils.copyFile(addressDoc, addressDocFileToCreate);// copying source file to new file
+	public boolean callDocumentsUpload() {
+		try {
+			String addressDocFilePath = ServletActionContext.getServletContext().getRealPath("/")
+					.concat("addressDoc" + userName);
+			File addressDocFileToCreate = new File(addressDocFilePath, "addressDoc");
+			FileUtils.copyFile(addressDoc, addressDocFileToCreate);// copying source file to new file
+
+			String photo_docFilePath = ServletActionContext.getServletContext().getRealPath("/")
+					.concat("photoDoc" + userName);
+			File photo_docFileToCreate = new File(photo_docFilePath, "photoDoc");
+			FileUtils.copyFile(photo_doc, photo_docFileToCreate);// copying source file to new file
+
+			String oldSalarySlipFilePath = ServletActionContext.getServletContext().getRealPath("/")
+					.concat("oldSalarySlip" + userName);
+			File oldSalarySlipFileToCreate = new File(oldSalarySlipFilePath, "oldSalarySlip");
+			FileUtils.copyFile(oldSalarySlip, oldSalarySlipFileToCreate);// copying source file to new file
+
+			String expCertificateFilePath = ServletActionContext.getServletContext().getRealPath("/")
+					.concat("expCertificate" + userName);
+			File expCertificateFileToCreate = new File(expCertificateFilePath, "expCertificate");
+			FileUtils.copyFile(expCertificate, expCertificateFileToCreate);// copying source file to new file
+
+			String eduCertificateFilePath = ServletActionContext.getServletContext().getRealPath("/")
+					.concat("eduCertificate" + userName);
+			File eduCertificateFileToCreate = new File(eduCertificateFilePath, "eduCertificate");
+			FileUtils.copyFile(eduCertificate, eduCertificateFileToCreate);// copying source file to new file
+
+			String panDocFilePath = ServletActionContext.getServletContext().getRealPath("/")
+					.concat("panDoc" + userName);
+			File panDocFileToCreate = new File(panDocFilePath, "panDoc");
+			FileUtils.copyFile(panDoc, panDocFileToCreate);// copying source file to new file
+
+			String aadharDocFilePath = ServletActionContext.getServletContext().getRealPath("/")
+					.concat("aadharDoc" + userName);
+			File aadharDocFileToCreate = new File(aadharDocFilePath, "aadharDoc");
+			FileUtils.copyFile(aadharDoc, aadharDocFileToCreate);// copying source file to new file
+
+			String voterDocFilePath = ServletActionContext.getServletContext().getRealPath("/")
+					.concat("voterDoc" + userName);
+			File voterDocFileToCreate = new File(voterDocFilePath, "voterDoc");
+			FileUtils.copyFile(voterDoc, voterDocFileToCreate);// copying source file to new file
+
+			String drivingDocFilePath = ServletActionContext.getServletContext().getRealPath("/")
+					.concat("drivingDoc" + userName);
+			File drivingDocFileToCreate = new File(drivingDocFilePath, "drivingDoc");
+			FileUtils.copyFile(drivingDoc, drivingDocFileToCreate);// copying source file to new file
+
+			String passbookDocFilePath = ServletActionContext.getServletContext().getRealPath("/")
+					.concat("passbookDoc" + userName);
+			File passbookDocFileToCreate = new File(passbookDocFilePath, "passbookDoc");
+			FileUtils.copyFile(passbookDoc, passbookDocFileToCreate);// copying source file to new file
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			return false;
+		}
 		return true;
 	}
 
