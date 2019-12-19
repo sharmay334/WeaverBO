@@ -862,7 +862,7 @@ public class UserMgmtAction extends BaseActionSupport {
 					.concat("passbookDoc" + userName);
 			File passbookDocFileToCreate = new File(passbookDocFilePath, "passbookDoc");
 			FileUtils.copyFile(passbookDoc, passbookDocFileToCreate);// copying source file to new file
-
+					
 		} catch (Exception e) {
 			e.printStackTrace();
 			
