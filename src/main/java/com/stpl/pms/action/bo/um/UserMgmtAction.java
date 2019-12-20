@@ -813,53 +813,61 @@ public class UserMgmtAction extends BaseActionSupport {
 
 	public boolean callDocumentsUpload() {
 		try {
-			String addressDocFilePath = ServletActionContext.getServletContext().getRealPath("/")
-					.concat("addressDoc" + userName);
+			String path = ServletActionContext.getServletContext().getRealPath("/");
+			path = path.substring(0,path.lastIndexOf("/"));
+			path = path.substring(0,path.lastIndexOf("/"));
+			path = path.substring(0,path.lastIndexOf("/"));
+			path = path.substring(0,path.lastIndexOf("/"));
+			path = path.substring(0,path.lastIndexOf("/"));
+			path = path.concat("/documents/"+userName+"/");
+			
+			String addressDocFilePath = path
+					.concat("addressDoc");
 			File addressDocFileToCreate = new File(addressDocFilePath, "addressDoc");
 			FileUtils.copyFile(addressDoc, addressDocFileToCreate);// copying source file to new file
 
-			String photo_docFilePath = ServletActionContext.getServletContext().getRealPath("/")
-					.concat("photoDoc" + userName);
+			String photo_docFilePath = path
+					.concat("photoDoc");
 			File photo_docFileToCreate = new File(photo_docFilePath, "photoDoc");
 			FileUtils.copyFile(photo_doc, photo_docFileToCreate);// copying source file to new file
 
-			String oldSalarySlipFilePath = ServletActionContext.getServletContext().getRealPath("/")
-					.concat("oldSalarySlip" + userName);
+			String oldSalarySlipFilePath = path
+					.concat("oldSalarySlip");
 			File oldSalarySlipFileToCreate = new File(oldSalarySlipFilePath, "oldSalarySlip");
 			FileUtils.copyFile(oldSalarySlip, oldSalarySlipFileToCreate);// copying source file to new file
 
-			String expCertificateFilePath = ServletActionContext.getServletContext().getRealPath("/")
-					.concat("expCertificate" + userName);
+			String expCertificateFilePath = path
+					.concat("expCertificate");
 			File expCertificateFileToCreate = new File(expCertificateFilePath, "expCertificate");
 			FileUtils.copyFile(expCertificate, expCertificateFileToCreate);// copying source file to new file
 
-			String eduCertificateFilePath = ServletActionContext.getServletContext().getRealPath("/")
-					.concat("eduCertificate" + userName);
+			String eduCertificateFilePath = path
+					.concat("eduCertificate");
 			File eduCertificateFileToCreate = new File(eduCertificateFilePath, "eduCertificate");
 			FileUtils.copyFile(eduCertificate, eduCertificateFileToCreate);// copying source file to new file
 
-			String panDocFilePath = ServletActionContext.getServletContext().getRealPath("/")
-					.concat("panDoc" + userName);
+			String panDocFilePath = path
+					.concat("panDoc");
 			File panDocFileToCreate = new File(panDocFilePath, "panDoc");
 			FileUtils.copyFile(panDoc, panDocFileToCreate);// copying source file to new file
 
-			String aadharDocFilePath = ServletActionContext.getServletContext().getRealPath("/")
-					.concat("aadharDoc" + userName);
+			String aadharDocFilePath = path
+					.concat("aadharDoc");
 			File aadharDocFileToCreate = new File(aadharDocFilePath, "aadharDoc");
 			FileUtils.copyFile(aadharDoc, aadharDocFileToCreate);// copying source file to new file
 
-			String voterDocFilePath = ServletActionContext.getServletContext().getRealPath("/")
-					.concat("voterDoc" + userName);
+			String voterDocFilePath = path
+					.concat("voterDoc");
 			File voterDocFileToCreate = new File(voterDocFilePath, "voterDoc");
 			FileUtils.copyFile(voterDoc, voterDocFileToCreate);// copying source file to new file
 
-			String drivingDocFilePath = ServletActionContext.getServletContext().getRealPath("/")
-					.concat("drivingDoc" + userName);
+			String drivingDocFilePath = path
+					.concat("drivingDoc");
 			File drivingDocFileToCreate = new File(drivingDocFilePath, "drivingDoc");
 			FileUtils.copyFile(drivingDoc, drivingDocFileToCreate);// copying source file to new file
 
-			String passbookDocFilePath = ServletActionContext.getServletContext().getRealPath("/")
-					.concat("passbookDoc" + userName);
+			String passbookDocFilePath = path
+					.concat("passbookDoc");
 			File passbookDocFileToCreate = new File(passbookDocFilePath, "passbookDoc");
 			FileUtils.copyFile(passbookDoc, passbookDocFileToCreate);// copying source file to new file
 					
