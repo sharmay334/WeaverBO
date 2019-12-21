@@ -1,5 +1,6 @@
 package com.stpl.pms.action.bo.um;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,8 +16,10 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.stpl.pms.controller.commonMethods.CommonMethodController;
@@ -50,6 +53,35 @@ public class UserMgmtAction extends BaseActionSupport {
 	private String secQues;
 	private String status;
 	private String userName;
+	// new params added
+	private String fatherName;
+	private String dob;
+	private String panNumber;
+	private String aadharNumber;
+	private String voterNumber;
+	private String passportNumber;
+	private String bloodGroup;
+	private String branch;
+	private String currentAddress;
+	private String permanentAddress;
+	private String doj;
+	private String dol;
+	private String country;
+	private String state;
+	private String city;
+	private String pincode;
+	private File photo_doc;
+	private File oldSalarySlip;
+	private File expCertificate;
+	private File eduCertificate;
+	private File panDoc;
+	private File aadharDoc;
+	private File voterDoc;
+	private File drivingDoc;
+	private File passbookDoc;
+	private File addressDoc;
+
+	// end of new params
 	private int[] mappingId;
 	private int[] privCount;
 	private String[] rolePrivRUMMY;
@@ -74,22 +106,231 @@ public class UserMgmtAction extends BaseActionSupport {
 	private List<UserDetailsBean> userList;
 	private Map<Integer, String> boUserMap;
 	private Integer impersonateeId;
+
+	public String getFatherName() {
+		return fatherName;
+	}
+
+	public void setFatherName(String fatherName) {
+		this.fatherName = fatherName;
+	}
+
+	public String getDob() {
+		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+
+	public String getPanNumber() {
+		return panNumber;
+	}
+
+	public void setPanNumber(String panNumber) {
+		this.panNumber = panNumber;
+	}
+
+	public String getAadharNumber() {
+		return aadharNumber;
+	}
+
+	public void setAadharNumber(String aadharNumber) {
+		this.aadharNumber = aadharNumber;
+	}
+
+	public String getVoterNumber() {
+		return voterNumber;
+	}
+
+	public void setVoterNumber(String voterNumber) {
+		this.voterNumber = voterNumber;
+	}
+
+	public String getPassportNumber() {
+		return passportNumber;
+	}
+
+	public void setPassportNumber(String passportNumber) {
+		this.passportNumber = passportNumber;
+	}
+
+	public String getBloodGroup() {
+		return bloodGroup;
+	}
+
+	public void setBloodGroup(String bloodGroup) {
+		this.bloodGroup = bloodGroup;
+	}
+
+	public String getBranch() {
+		return branch;
+	}
+
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+
+	public String getCurrentAddress() {
+		return currentAddress;
+	}
+
+	public void setCurrentAddress(String currentAddress) {
+		this.currentAddress = currentAddress;
+	}
+
+	public String getPermanentAddress() {
+		return permanentAddress;
+	}
+
+	public void setPermanentAddress(String permanentAddress) {
+		this.permanentAddress = permanentAddress;
+	}
+
+	public String getDoj() {
+		return doj;
+	}
+
+	public void setDoj(String doj) {
+		this.doj = doj;
+	}
+
+	public String getDol() {
+		return dol;
+	}
+
+	public void setDol(String dol) {
+		this.dol = dol;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getPincode() {
+		return pincode;
+	}
+
+	public void setPincode(String pincode) {
+		this.pincode = pincode;
+	}
+
+	public File getPhoto_doc() {
+		return photo_doc;
+	}
+
+	public void setPhoto_doc(File photo_doc) {
+		this.photo_doc = photo_doc;
+	}
+
+	public File getOldSalarySlip() {
+		return oldSalarySlip;
+	}
+
+	public void setOldSalarySlip(File oldSalarySlip) {
+		this.oldSalarySlip = oldSalarySlip;
+	}
+
+	public File getExpCertificate() {
+		return expCertificate;
+	}
+
+	public void setExpCertificate(File expCertificate) {
+		this.expCertificate = expCertificate;
+	}
+
+	public File getEduCertificate() {
+		return eduCertificate;
+	}
+
+	public void setEduCertificate(File eduCertificate) {
+		this.eduCertificate = eduCertificate;
+	}
+
+	public File getPanDoc() {
+		return panDoc;
+	}
+
+	public void setPanDoc(File panDoc) {
+		this.panDoc = panDoc;
+	}
+
+	public File getAadharDoc() {
+		return aadharDoc;
+	}
+
+	public void setAadharDoc(File aadharDoc) {
+		this.aadharDoc = aadharDoc;
+	}
+
+	public File getVoterDoc() {
+		return voterDoc;
+	}
+
+	public void setVoterDoc(File voterDoc) {
+		this.voterDoc = voterDoc;
+	}
+
+	public File getDrivingDoc() {
+		return drivingDoc;
+	}
+
+	public void setDrivingDoc(File drivingDoc) {
+		this.drivingDoc = drivingDoc;
+	}
+
+	public File getPassbookDoc() {
+		return passbookDoc;
+	}
+
+	public void setPassbookDoc(File passbookDoc) {
+		this.passbookDoc = passbookDoc;
+	}
+
+	public File getAddressDoc() {
+		return addressDoc;
+	}
+
+	public void setAddressDoc(File addressDoc) {
+		this.addressDoc = addressDoc;
+	}
+
 	@Override
 	public String execute() {
 		try {
-		if (userInfoBean.getIsMasterRole().equalsIgnoreCase("N")
-				|| userInfoBean.getIsRoleHeadUser().equalsIgnoreCase("N")) {
-			return "unauthorize";
-		}
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//		.getAttribute("ALLOWED_PRIV");
-		RoleMgmtController roleMgmtController = new RoleMgmtController();
-		
-				roleMap = roleMgmtController.fetchRoles(userInfoBean.getUserType(), true,userInfoBean.getUserId());
+			if (userInfoBean.getIsMasterRole().equalsIgnoreCase("N")
+					|| userInfoBean.getIsRoleHeadUser().equalsIgnoreCase("N")) {
+				return "unauthorize";
+			}
+			// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+			// .getAttribute("ALLOWED_PRIV");
+			RoleMgmtController roleMgmtController = new RoleMgmtController();
+
+			roleMap = roleMgmtController.fetchRoles(userInfoBean.getUserType(), true, userInfoBean.getUserId());
 		} catch (PMSException be) {
 			addActionError(be.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
@@ -100,132 +341,122 @@ public class UserMgmtAction extends BaseActionSupport {
 
 	public void validate() {
 		HttpSession session = getRequest().getSession();
-				ResourceBundle bundle;
-		if(session.getAttribute("localeValue")==null)
-			bundle = ResourceBundle.getBundle("global",new Locale("en"));
+		ResourceBundle bundle;
+		if (session.getAttribute("localeValue") == null)
+			bundle = ResourceBundle.getBundle("global", new Locale("en"));
 		else
-			 bundle = ResourceBundle.getBundle("global",new Locale(session.getAttribute("localeValue").toString()));
-		
+			bundle = ResourceBundle.getBundle("global", new Locale(session.getAttribute("localeValue").toString()));
+
 		try {
-		String actionName = (String) ActionContext.getContext().getContextMap()
-				.get(ActionContext.ACTION_NAME);
-		
-		if (actionName.equals("bo_um_editBoSubUserPriv_Save")) {
-			if (rolePrivCasino ==null && rolePrivRUMMY == null && rolePrivHome == null ) {
-				addFieldError("rolePriv", bundle.getString("global.um.priverr"));
-			}
-		}
-		if (actionName.equals("bo_um_boUserReg_Save")
-				|| actionName.equals("bo_um_addBoSubUser_Save")) {
-			if (firstName.equals("") || firstName == null) {
-				addFieldError("firstName", "Please enter the First name");
-			}
-			if (!(firstName.equals("") || firstName == null))
-				if (!UserValidation.isAlphabetic(firstName, false)) {
-					addFieldError("firstName",
-							"Please enter the First name Correctly");
+			String actionName = (String) ActionContext.getContext().getContextMap().get(ActionContext.ACTION_NAME);
+
+			if (actionName.equals("bo_um_editBoSubUserPriv_Save")) {
+				if (rolePrivCasino == null && rolePrivRUMMY == null && rolePrivHome == null) {
+					addFieldError("rolePriv", bundle.getString("global.um.priverr"));
 				}
-			if (lastName.equals("") || lastName == null) {
-				addFieldError("lastName", "Please enter the Last name");
 			}
-			if (!(lastName.equals("") || lastName == null))
-				if (!UserValidation.isAlphabetic(lastName, false)) {
-					addFieldError("lastName",
-							"Please enter the Last name Correctly");
+			if (actionName.equals("bo_um_boUserReg_Save") || actionName.equals("bo_um_addBoSubUser_Save")) {
+				if (firstName.equals("") || firstName == null) {
+					addFieldError("firstName", "Please enter the First name");
 				}
-			if (gender.equals("-1")) {
-				addFieldError("gender", "Please Select Gender");
-			}
-			if (userName.equals("") || userName == null) {
-				addFieldError("userName", "Please enter the Login name");
-			}
-			if (!(userName.equals("") || userName == null))
-				if (!UserValidation.isAlphanumeric(userName, false)) {
-					addFieldError("userName",
-							"Please enter the Login name Correctly");
+				if (!(firstName.equals("") || firstName == null))
+					if (!UserValidation.isAlphabetic(firstName, false)) {
+						addFieldError("firstName", "Please enter the First name Correctly");
+					}
+				if (lastName.equals("") || lastName == null) {
+					addFieldError("lastName", "Please enter the Last name");
 				}
-			if (email.equals("") || email == null) {
-				addFieldError("email", "Enter the email");
+				if (!(lastName.equals("") || lastName == null))
+					if (!UserValidation.isAlphabetic(lastName, false)) {
+						addFieldError("lastName", "Please enter the Last name Correctly");
+					}
+				if (gender.equals("-1")) {
+					addFieldError("gender", "Please Select Gender");
+				}
+				if (userName.equals("") || userName == null) {
+					addFieldError("userName", "Please enter the Login name");
+				}
+				if (!(userName.equals("") || userName == null))
+					if (!UserValidation.isAlphanumeric(userName, false)) {
+						addFieldError("userName", "Please enter the Login name Correctly");
+					}
+				if (email.equals("") || email == null) {
+					addFieldError("email", "Enter the email");
+
+				}
+				if (!(email.equals("") || email == null))
+					if (!UserValidation.validateEmail(email)) {
+						addFieldError("email", "Email is Invalid");
+					}
+				if (phone.equals("")) {
+					addFieldError("phone", "Please enter a valid phone number");
+				}
+				if (actionName.equals("bo_um_boUserReg_Save")) {
+					if (role.equals("-1")) {
+						addFieldError("role", "Please Select Any role");
+					}
+				}
+				if (secQues.equals("-1")) {
+					addFieldError("secQues", "Please Select Any Security Question");
+				}
+				if (secAns.equals("") || secAns == null) {
+					addFieldError("secAns", "Please Enter Security Answer");
+
+				}
+			}
+			if (actionName.equals("bo_um_searchBoUser_Search")) {
+				if (!userName.equals("")) {
+					if (!UserValidation.isAlphabetic(userName, false)) {
+						addFieldError("userName", "Please Enter a valid first Name");
+					}
+				}
+				/*
+				 * if(!(roleMap.containsValue(role) || role.equals("-1"))){
+				 * addFieldError("role","Enter the valid Department"); }
+				 */
 
 			}
-			if (!(email.equals("") || email == null))
-				if (!UserValidation.validateEmail(email)) {
-					addFieldError("email", "Email is Invalid");
+			if (actionName.equals("bo_um_searchBoUser_Save")) {
+				if (email == null || email.equals("")) {
+					addFieldError("emailId", "Please Enter the Email");
+				} else {
+					if (!UserValidation.validateEmail(email)) {
+						addFieldError("emailId", "Please Enter the Valid Email");
+					}
 				}
-			if (phone.equals("")) {
-				addFieldError("phone", "Please enter a valid phone number");
-			}
-			if (actionName.equals("bo_um_boUserReg_Save")) {
-				if (role.equals("-1")) {
-					addFieldError("role", "Please Select Any role");
+				if (phoneNbr == null || phoneNbr.equals("")) {
+					addFieldError("phoneNbr", "Please Enter the phone no.");
 				}
-			}
-			if (secQues.equals("-1")) {
-				addFieldError("secQues", "Please Select Any Security Question");
-			}
-			if (secAns.equals("") || secAns == null) {
-				addFieldError("secAns", "Please Enter Security Answer");
+				if (!phoneNbr.equals("")) {
+					if (!UserValidation.isNumeric(phoneNbr, false)) {
+						addFieldError("phoneNbr", "Please Enter valid phone no.");
+					} else if (phoneNbr.length() != 10) {
+						addFieldError("phoneNbr", "Please Enter the 10 digits phone no.");
+					}
+				}
+				UserMgmtController service = new UserMgmtController();
+				// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+				// .getAttribute("ALLOWED_PRIV");
 
-			}
-		}
-		if (actionName.equals("bo_um_searchBoUser_Search")) {
-			if (!userName.equals("")) {
-				if (!UserValidation.isAlphabetic(userName, false)) {
-					addFieldError("userName", "Please Enter a valid first Name");
-				}
-			}
-			/*
-			 * if(!(roleMap.containsValue(role) || role.equals("-1"))){
-			 * addFieldError("role","Enter the valid Department"); }
-			 */
-
-		}
-		if (actionName.equals("bo_um_searchBoUser_Save")) {
-			if (email == null || email.equals("")) {
-				addFieldError("emailId", "Please Enter the Email");
-			} else {
-				if (!UserValidation.validateEmail(email)) {
-					addFieldError("emailId", "Please Enter the Valid Email");
-				}
-			}
-			if (phoneNbr == null || phoneNbr.equals("")) {
-				addFieldError("phoneNbr", "Please Enter the phone no.");
-			}
-			if (!phoneNbr.equals("")) {
-				if (!UserValidation.isNumeric(phoneNbr, false)) {
-					addFieldError("phoneNbr", "Please Enter valid phone no.");
-				} else if (phoneNbr.length() != 10) {
-					addFieldError("phoneNbr",
-							"Please Enter the 10 digits phone no.");
-				}
-			}
-			UserMgmtController service = new UserMgmtController();
-//			PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//					.getAttribute("ALLOWED_PRIV");
-			
 				userDetailsBean = service.showBOUserDetails(user_id, type);
 			}
-		}catch (PMSException e) {
-				e.printStackTrace();
-			}catch (Exception be) {
-				be.printStackTrace();
-			}
+		} catch (PMSException e) {
+			e.printStackTrace();
+		} catch (Exception be) {
+			be.printStackTrace();
 		}
+	}
 
-	public void validateBOUsername(){
+	public void validateBOUsername() {
 		UserMgmtController object1 = new UserMgmtController();
 		try {
-			boolean isAvailable = object1.checkUsernameAvailability(userName,userInfoBean.getDomainId());
+			boolean isAvailable = object1.checkUsernameAvailability(userName, userInfoBean.getDomainId());
 			if (isAvailable) {
 				String message = "Available";
-				response.getWriter().write(
-						"<valid><message><p >" + message
-								+ "</p></message></valid>");
+				response.getWriter().write("<valid><message><p >" + message + "</p></message></valid>");
 			} else {
 				String message = "Not Available";
-				response.getWriter().write(
-						"<valid><message><p>" +message
-								+ "</p></message></valid>");
+				response.getWriter().write("<valid><message><p>" + message + "</p></message></valid>");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -233,25 +464,21 @@ public class UserMgmtAction extends BaseActionSupport {
 		return;
 	}
 
-	public void checkUserEmailIdAvailability(){
+	public void checkUserEmailIdAvailability() {
 		UserMgmtController object1 = new UserMgmtController();
 		try {
-			String oldEmailId=request.getParameter("prevEmailId");
-			boolean isAvailable = object1.checkUserEmailIdAvailability(email,userInfoBean.getDomainId());
-			if(oldEmailId!=null){
-				if(oldEmailId.equals(email))
-					isAvailable=true;
+			String oldEmailId = request.getParameter("prevEmailId");
+			boolean isAvailable = object1.checkUserEmailIdAvailability(email, userInfoBean.getDomainId());
+			if (oldEmailId != null) {
+				if (oldEmailId.equals(email))
+					isAvailable = true;
 			}
 			if (isAvailable) {
 				String message = "Available";
-				response.getWriter().write(
-						"<valid><message><p>" + message
-								+ "</p></message></valid>");
+				response.getWriter().write("<valid><message><p>" + message + "</p></message></valid>");
 			} else {
 				String message = "Not Available";
-				response.getWriter().write(
-						"<valid><message><p>" + message
-								+ "</p></message></valid>");
+				response.getWriter().write("<valid><message><p>" + message + "</p></message></valid>");
 			}
 
 		} catch (Exception e) {
@@ -260,20 +487,16 @@ public class UserMgmtAction extends BaseActionSupport {
 		return;
 	}
 
-	public void checkUserEmailIdAvailabilityForDomain(){
+	public void checkUserEmailIdAvailabilityForDomain() {
 		UserMgmtController object1 = new UserMgmtController();
 		try {
-			boolean isAvailable = object1.checkUserEmailIdAvailabilityForDomain(email,domainId,user_id);
+			boolean isAvailable = object1.checkUserEmailIdAvailabilityForDomain(email, domainId, user_id);
 			if (isAvailable) {
 				String message = "Available";
-				response.getWriter().write(
-						"<valid><message><p>" + message
-								+ "</p></message></valid>");
+				response.getWriter().write("<valid><message><p>" + message + "</p></message></valid>");
 			} else {
 				String message = "Not Available";
-				response.getWriter().write(
-						"<valid><message><p>" + message
-								+ "</p></message></valid>");
+				response.getWriter().write("<valid><message><p>" + message + "</p></message></valid>");
 			}
 
 		} catch (Exception e) {
@@ -281,36 +504,36 @@ public class UserMgmtAction extends BaseActionSupport {
 		}
 		return;
 	}
-	
+
 	public String createUser() {
 		String returnType = "ERROR";
 		UserMgmtController service = new UserMgmtController();
 
 		try {
 			returnType = "SUCCESS";
-			if (!service.checkUserEmailIdAvailability(email,userInfoBean.getDomainId())) {
+			if (!service.checkUserEmailIdAvailability(email, userInfoBean.getDomainId())) {
 				addFieldError("email", "Email Id Already Exists !!");
 				execute();
 				return INPUT;
 			}
-			returnType = service.createBoUser(userInfoBean, userName, status,
-					secQues, secAns, firstName, lastName, gender, email, phone,
-					role, "");
+			returnType = service.createBoUser(userInfoBean, userName, status, secQues, secAns, firstName, lastName,
+					gender, email, phone, role, "");
 			if (CommonMethodController.getInstance().isRummyActive()) {
-//				RummyAPI api = new RummyAPI();
-//				api.createUser(userName, status, secQues, secAns, firstName, lastName, gender, email, phone, roleName,
-//						userInfoBean.getUserName());
+				// RummyAPI api = new RummyAPI();
+				// api.createUser(userName, status, secQues, secAns, firstName, lastName,
+				// gender, email, phone, roleName,
+				// userInfoBean.getUserName());
 			}
 		} catch (PMSException be) {
 			addActionError(be.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
 		}
 		getRequest().getSession().setAttribute("USER_NAME", getUserName());
-		
+
 		if (returnType.equals("USER_ALREADY_EXIST")) {
 			addFieldError("userName", "Please Enter another User Name");
 			execute();
@@ -337,12 +560,14 @@ public class UserMgmtAction extends BaseActionSupport {
 			userBean.setSecQues(secQues);
 			userBean.setSecAns(secAns);
 			userBean.setStatus(status);
-//			PrivFunctionBean privFunctionBean = (PrivFunctionBean) request.getAttribute("ALLOWED_PRIV");
-//			Map<String, TreeMap<String, Integer>> activeServiceMap = service.fetchActiveServices("BO");
-//			for (String entry : activeServiceMap.keySet()) {
-//				String[] key = entry.split("#");
-//				String serviceCode = key[0];
-//			}
+			// PrivFunctionBean privFunctionBean = (PrivFunctionBean)
+			// request.getAttribute("ALLOWED_PRIV");
+			// Map<String, TreeMap<String, Integer>> activeServiceMap =
+			// service.fetchActiveServices("BO");
+			// for (String entry : activeServiceMap.keySet()) {
+			// String[] key = entry.split("#");
+			// String serviceCode = key[0];
+			// }
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -350,83 +575,83 @@ public class UserMgmtAction extends BaseActionSupport {
 	}
 
 	public void getParentRoleActivePriv(String parentUserName) {
-//		RoleMgmtController service = new RoleMgmtController();
-//		try {
-//			PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//					.getAttribute("ALLOWED_PRIV");
-//
-//			Map<String, TreeMap<String, Integer>> activeServiceMap = service.fetchActiveServices("BO", privFunctionBean);
-//			for (Map.Entry<String, TreeMap<String, Integer>> entry : activeServiceMap
-//					.entrySet()) {
-//				String[] key = entry.getKey().split("#");
-//				String serviceCode = key[0];
-//			}
-//
-//		} catch (PMSException e) {
-//			e.printStackTrace();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		// RoleMgmtController service = new RoleMgmtController();
+		// try {
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+		// .getAttribute("ALLOWED_PRIV");
+		//
+		// Map<String, TreeMap<String, Integer>> activeServiceMap =
+		// service.fetchActiveServices("BO", privFunctionBean);
+		// for (Map.Entry<String, TreeMap<String, Integer>> entry : activeServiceMap
+		// .entrySet()) {
+		// String[] key = entry.getKey().split("#");
+		// String serviceCode = key[0];
+		// }
+		//
+		// } catch (PMSException e) {
+		// e.printStackTrace();
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 	}
 
-	public void createSubUserService(UserInfoBean parentUserBean,
-			UserDetailsBean userDetails) {
+	public void createSubUserService(UserInfoBean parentUserBean, UserDetailsBean userDetails) {
 		StringBuilder privGroup = null;
 		String grpNameStr = null;
 		int privIdFrm = 0;
 		int privIdTo = 0;
 		HashMap<Integer, String> privMap = new HashMap<Integer, String>();
-		try{
-		for (int i = 0; i < mappingId.length; i++) {
-			if (servicePrivCount[i] != 0) {
-				privGroup = new StringBuilder("");
-				privIdTo = privIdTo + servicePrivCount[i];
-				for (int j = privIdFrm; j < privIdTo; j++) {
-					privGroup.append("'" + roleServicePriv[j] + "',");
-					privIdFrm++;
+		try {
+			for (int i = 0; i < mappingId.length; i++) {
+				if (servicePrivCount[i] != 0) {
+					privGroup = new StringBuilder("");
+					privIdTo = privIdTo + servicePrivCount[i];
+					for (int j = privIdFrm; j < privIdTo; j++) {
+						privGroup.append("'" + roleServicePriv[j] + "',");
+						privIdFrm++;
+					}
+					grpNameStr = privGroup.substring(0, privGroup.length() - 1);
+					privMap.put(mappingId[i], grpNameStr);
 				}
-				grpNameStr = privGroup.substring(0, privGroup.length() - 1);
-				privMap.put(mappingId[i], grpNameStr);
 			}
-		}
-	}catch (Exception be) {
+		} catch (Exception be) {
 			be.printStackTrace();
 		}
 	}
-//		RoleMgmtController service = new RoleMgmtController();
+	// RoleMgmtController service = new RoleMgmtController();
 
-//		try {
-//			PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//					.getAttribute("ALLOWED_PRIV");
-//
-//			Map<String, TreeMap<String, Integer>> activeServiceMap = service
-//					.fetchActiveServices("BO", privFunctionBean);
-//			for (Map.Entry<String, TreeMap<String, Integer>> entry : activeServiceMap
-//					.entrySet()) {
-//				String[] key = entry.getKey().split("#");
-//				String serviceCode = key[0];
-//			}
-//		} catch (PMSException e) {
-//			e.printStackTrace();
-//		}
+	// try {
+	// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+	// .getAttribute("ALLOWED_PRIV");
+	//
+	// Map<String, TreeMap<String, Integer>> activeServiceMap = service
+	// .fetchActiveServices("BO", privFunctionBean);
+	// for (Map.Entry<String, TreeMap<String, Integer>> entry : activeServiceMap
+	// .entrySet()) {
+	// String[] key = entry.getKey().split("#");
+	// String serviceCode = key[0];
+	// }
+	// } catch (PMSException e) {
+	// e.printStackTrace();
+	// }
 
 	public void getSubUserServicePriv(String userName) {
-//		RoleMgmtController service = new RoleMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//				.getAttribute("ALLOWED_PRIV");
-//		try {
-//			Map<String, TreeMap<String, Integer>> activeServiceMap = service
-//					.fetchActiveServices("BO", privFunctionBean);
-//			for (Map.Entry<String, TreeMap<String, Integer>> entry : activeServiceMap
-//					.entrySet()) {
-//				String[] key = entry.getKey().split("#");
-//				String serviceCode = key[0];
-//				String serviceDispName = key[1];
-//			}
-//
-//		} catch (PMSException e) {
-//			e.printStackTrace();
-//		}
+		// RoleMgmtController service = new RoleMgmtController();
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+		// .getAttribute("ALLOWED_PRIV");
+		// try {
+		// Map<String, TreeMap<String, Integer>> activeServiceMap = service
+		// .fetchActiveServices("BO", privFunctionBean);
+		// for (Map.Entry<String, TreeMap<String, Integer>> entry : activeServiceMap
+		// .entrySet()) {
+		// String[] key = entry.getKey().split("#");
+		// String serviceCode = key[0];
+		// String serviceDispName = key[1];
+		// }
+		//
+		// } catch (PMSException e) {
+		// e.printStackTrace();
+		// }
 	}
 
 	public void editSubUserServicePriv() {
@@ -435,54 +660,54 @@ public class UserMgmtAction extends BaseActionSupport {
 		int privIdFrm = 0;
 		int privIdTo = 0;
 		HashMap<Integer, String> privMap = new HashMap<Integer, String>();
-		try{
-		for (int i = 0; i < mappingId.length; i++) {
-			if (servicePrivCount[i] != 0) {
-				privGroup = new StringBuilder("");
-				privIdTo = privIdTo + servicePrivCount[i];
-				for (int j = privIdFrm; j < privIdTo; j++) {
-					privGroup.append("'" + roleServicePriv[j] + "',");
-					privIdFrm++;
-				}
-				grpNameStr = privGroup.substring(0, privGroup.length() - 1);
-				privMap.put(mappingId[i], grpNameStr);
+		try {
+			for (int i = 0; i < mappingId.length; i++) {
+				if (servicePrivCount[i] != 0) {
+					privGroup = new StringBuilder("");
+					privIdTo = privIdTo + servicePrivCount[i];
+					for (int j = privIdFrm; j < privIdTo; j++) {
+						privGroup.append("'" + roleServicePriv[j] + "',");
+						privIdFrm++;
+					}
+					grpNameStr = privGroup.substring(0, privGroup.length() - 1);
+					privMap.put(mappingId[i], grpNameStr);
 				}
 			}
-		}catch (Exception be) {
+		} catch (Exception be) {
 			be.printStackTrace();
 		}
 	}
-//		RoleMgmtController service = new RoleMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//				.getAttribute("ALLOWED_PRIV");
-//		try {
-//			Map<String, TreeMap<String, Integer>> activeServiceMap = service
-//					.fetchActiveServices("BO", privFunctionBean);
-//			for (Map.Entry<String, TreeMap<String, Integer>> entry : activeServiceMap
-//					.entrySet()) {
-//				String[] key = entry.getKey().split("#");
-//				String serviceCode = key[0];
-//			}
-//		} catch (PMSException e) {
-//			e.printStackTrace();
-//		}
+	// RoleMgmtController service = new RoleMgmtController();
+	// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+	// .getAttribute("ALLOWED_PRIV");
+	// try {
+	// Map<String, TreeMap<String, Integer>> activeServiceMap = service
+	// .fetchActiveServices("BO", privFunctionBean);
+	// for (Map.Entry<String, TreeMap<String, Integer>> entry : activeServiceMap
+	// .entrySet()) {
+	// String[] key = entry.getKey().split("#");
+	// String serviceCode = key[0];
+	// }
+	// } catch (PMSException e) {
+	// e.printStackTrace();
+	// }
 
 	public void editBOUserServiceDetails(UserDetailsBean userDetailsBean) {
-//		RoleMgmtController service = new RoleMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//				.getAttribute("ALLOWED_PRIV");
-//
-//		try {
-//			Map<String, TreeMap<String, Integer>> activeServiceMap = service
-//					.fetchActiveServices("BO", privFunctionBean);
-//			for (String entry : activeServiceMap.keySet()) {
-//				String[] key = entry.split("#");
-//				String serviceCode = key[0];
-//			}
-//
-//		} catch (PMSException e) {
-//			e.printStackTrace();
-//		}
+		// RoleMgmtController service = new RoleMgmtController();
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+		// .getAttribute("ALLOWED_PRIV");
+		//
+		// try {
+		// Map<String, TreeMap<String, Integer>> activeServiceMap = service
+		// .fetchActiveServices("BO", privFunctionBean);
+		// for (String entry : activeServiceMap.keySet()) {
+		// String[] key = entry.split("#");
+		// String serviceCode = key[0];
+		// }
+		//
+		// } catch (PMSException e) {
+		// e.printStackTrace();
+		// }
 	}
 
 	public String newSubUserReg() {
@@ -492,17 +717,23 @@ public class UserMgmtAction extends BaseActionSupport {
 		String type = userInfoBean.getUserType();
 
 		UserMgmtController service = new UserMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request.getAttribute("ALLOWED_PRIV");
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean)
+		// request.getAttribute("ALLOWED_PRIV");
+
 		boolean returnType;
 		try {
-			returnType = service.checkUsernameAvailability(getUserName().trim(),userInfoBean.getDomainId());
-		
-			
+			if (!callDocumentsUpload()) {
+				addActionError("Error in file upload!");
+				return "exception";
+			}
+
+			returnType = service.checkUsernameAvailability(getUserName().trim(), userInfoBean.getDomainId());
+
 			if (!returnType) {
 				addFieldError("userName", "User Name Already Exists !!");
 				return INPUT;
-			} 
-			if (!service.checkUserEmailIdAvailability(getEmail(),userInfoBean.getDomainId())) {
+			}
+			if (!service.checkUserEmailIdAvailability(getEmail(), userInfoBean.getDomainId())) {
 				addFieldError("email", "Email Id Already Exists !!");
 				return INPUT;
 			}
@@ -510,7 +741,7 @@ public class UserMgmtAction extends BaseActionSupport {
 			e.printStackTrace();
 			addActionError(e.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
@@ -520,8 +751,8 @@ public class UserMgmtAction extends BaseActionSupport {
 
 		// now get the priviledges list of head
 		try {
-			rolePrivMap = roleMgmtHelper.getHeadsGroupNames(userInfoBean
-					.getUserId(), userInfoBean.getRoleId(), userInfoBean.getUserType(), userInfoBean.getDomainId());
+			rolePrivMap = roleMgmtHelper.getHeadsGroupNames(userInfoBean.getUserId(), userInfoBean.getRoleId(),
+					userInfoBean.getUserType(), userInfoBean.getDomainId());
 
 			// getParentRoleActivePriv(userBean.getUserName());
 
@@ -536,112 +767,175 @@ public class UserMgmtAction extends BaseActionSupport {
 					rolePrivMap.put(key, interfaceMap);
 				}
 			}
-			
+
 			// FOR RUMMY
-			/*if (CommonMethodController.getInstance().isRummyActive()) {
-//				RummyAPI rummyAPI = new RummyAPI();
-				TreeMap<String, TreeMap<String, TreeMap<String, List<String>>>> rummy = rummyAPI
-						.createRoleMenu(userInfoBean.getUserName());
+			/*
+			 * if (CommonMethodController.getInstance().isRummyActive()) { // RummyAPI
+			 * rummyAPI = new RummyAPI(); TreeMap<String, TreeMap<String, TreeMap<String,
+			 * List<String>>>> rummy = rummyAPI .createRoleMenu(userInfoBean.getUserName());
+			 * 
+			 * if (rummy != null) { Set<String> keyset = rummy.keySet();
+			 * 
+			 * for (String key : keyset) { rolePrivMap.get("Home").put(key, rummy.get(key));
+			 * } } }
+			 */
 
-				if (rummy != null) {
-					Set<String> keyset = rummy.keySet();
+			log.info("Head Priv Map: " + rolePrivMap);
+			// put user details in session
+			UserDetailsBean usrdetBean = new UserDetailsBean();
+			usrdetBean.setFirstName(getFirstName());
+			usrdetBean.setLastName(getLastName());
+			usrdetBean.setEmailId(getEmail());
+			usrdetBean.setPhoneNbr(getPhone());
+			usrdetBean.setUserName(getUserName());
+			usrdetBean.setStatus(getStatus());
+			usrdetBean.setSecQues(getSecQues());
+			usrdetBean.setSecAns(getSecAns());
+			usrdetBean.setOrgId(orgId);
+			usrdetBean.setRoleId(roleId);
+			usrdetBean.setOrgType(type);
+			usrdetBean.setBoUserType(type);
+			usrdetBean.setGender(gender);
+			session.setAttribute("USER_DETAILS", usrdetBean);
+			session.setAttribute("HEAD_PRIV_MAP", rolePrivMap);
 
-					for (String key : keyset) {
-						rolePrivMap.get("Home").put(key, rummy.get(key));
-					}
-				}
-			}*/
-			
-		log.info("Head Priv Map: " + rolePrivMap);
-		// put user details in session
-		UserDetailsBean usrdetBean = new UserDetailsBean();
-		usrdetBean.setFirstName(getFirstName());
-		usrdetBean.setLastName(getLastName());
-		usrdetBean.setEmailId(getEmail());
-		usrdetBean.setPhoneNbr(getPhone());
-		usrdetBean.setUserName(getUserName());
-		usrdetBean.setStatus(getStatus());
-		usrdetBean.setSecQues(getSecQues());
-		usrdetBean.setSecAns(getSecAns());
-		usrdetBean.setOrgId(orgId);
-		usrdetBean.setRoleId(roleId);
-		usrdetBean.setOrgType(type);
-		usrdetBean.setBoUserType(type);
-		usrdetBean.setGender(gender);
-		session.setAttribute("USER_DETAILS", usrdetBean);
-		session.setAttribute("HEAD_PRIV_MAP", rolePrivMap);
-
-		return SUCCESS;
+			return SUCCESS;
 		} catch (PMSException be) {
 			be.printStackTrace();
 			addActionError(be.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
 		}
 	}
 
+	public boolean callDocumentsUpload() {
+		try {
+			String path = ServletActionContext.getServletContext().getRealPath("/");
+			path = path.substring(0,path.lastIndexOf("/"));
+			path = path.substring(0,path.lastIndexOf("/"));
+			path = path.substring(0,path.lastIndexOf("/"));
+			path = path.substring(0,path.lastIndexOf("/"));
+			path = path.substring(0,path.lastIndexOf("/"));
+			path = path.concat("/documents/"+userName+"/");
+			
+			String addressDocFilePath = path
+					.concat("addressDoc");
+			File addressDocFileToCreate = new File(addressDocFilePath, "addressDoc");
+			FileUtils.copyFile(addressDoc, addressDocFileToCreate);// copying source file to new file
+
+			String photo_docFilePath = path
+					.concat("photoDoc");
+			File photo_docFileToCreate = new File(photo_docFilePath, "photoDoc");
+			FileUtils.copyFile(photo_doc, photo_docFileToCreate);// copying source file to new file
+
+			String oldSalarySlipFilePath = path
+					.concat("oldSalarySlip");
+			File oldSalarySlipFileToCreate = new File(oldSalarySlipFilePath, "oldSalarySlip");
+			FileUtils.copyFile(oldSalarySlip, oldSalarySlipFileToCreate);// copying source file to new file
+
+			String expCertificateFilePath = path
+					.concat("expCertificate");
+			File expCertificateFileToCreate = new File(expCertificateFilePath, "expCertificate");
+			FileUtils.copyFile(expCertificate, expCertificateFileToCreate);// copying source file to new file
+
+			String eduCertificateFilePath = path
+					.concat("eduCertificate");
+			File eduCertificateFileToCreate = new File(eduCertificateFilePath, "eduCertificate");
+			FileUtils.copyFile(eduCertificate, eduCertificateFileToCreate);// copying source file to new file
+
+			String panDocFilePath = path
+					.concat("panDoc");
+			File panDocFileToCreate = new File(panDocFilePath, "panDoc");
+			FileUtils.copyFile(panDoc, panDocFileToCreate);// copying source file to new file
+
+			String aadharDocFilePath = path
+					.concat("aadharDoc");
+			File aadharDocFileToCreate = new File(aadharDocFilePath, "aadharDoc");
+			FileUtils.copyFile(aadharDoc, aadharDocFileToCreate);// copying source file to new file
+
+			String voterDocFilePath = path
+					.concat("voterDoc");
+			File voterDocFileToCreate = new File(voterDocFilePath, "voterDoc");
+			FileUtils.copyFile(voterDoc, voterDocFileToCreate);// copying source file to new file
+
+			String drivingDocFilePath = path
+					.concat("drivingDoc");
+			File drivingDocFileToCreate = new File(drivingDocFilePath, "drivingDoc");
+			FileUtils.copyFile(drivingDoc, drivingDocFileToCreate);// copying source file to new file
+
+			String passbookDocFilePath = path
+					.concat("passbookDoc");
+			File passbookDocFileToCreate = new File(passbookDocFilePath, "passbookDoc");
+			FileUtils.copyFile(passbookDoc, passbookDocFileToCreate);// copying source file to new file
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			return false;
+		}
+		return true;
+	}
+
 	public String assignSubUserPriviledges() {
 
 		HttpSession session = getRequest().getSession();
 		UserDetailsBean usrdetBean = (UserDetailsBean) session.getAttribute("USER_DETAILS");
-		short roleId = Short.valueOf(userInfoBean.getRoleId()+"");
+		short roleId = Short.valueOf(userInfoBean.getRoleId() + "");
 		UserMgmtController service = new UserMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request.getAttribute("ALLOWED_PRIV");
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean)
+		// request.getAttribute("ALLOWED_PRIV");
 
 		try {
 			rolePrivWEB = (String[]) ArrayUtils.addAll(rolePrivCasino, rolePrivHome);
-			if(privCount.length==1){
-				if(rolePrivCasino !=null)
-					privCount[0]=rolePrivCasino.length;
-				if(rolePrivHome !=null)
-					privCount[0]=rolePrivHome.length;
-			}else{
-				
-				if(userInfoBean.getUserType().equals("DOMAIN")){
-					if(null !=rolePrivCasino){
+			if (privCount.length == 1) {
+				if (rolePrivCasino != null)
+					privCount[0] = rolePrivCasino.length;
+				if (rolePrivHome != null)
+					privCount[0] = rolePrivHome.length;
+			} else {
+
+				if (userInfoBean.getUserType().equals("DOMAIN")) {
+					if (null != rolePrivCasino) {
 						privCount[0] = rolePrivCasino.length;
 					}
-					if(null !=rolePrivHome)
-					{
-						privCount[0]=rolePrivHome.length;
-					}else if(null == rolePrivWEB){
-						privCount[1]=0;
+					if (null != rolePrivHome) {
+						privCount[0] = rolePrivHome.length;
+					} else if (null == rolePrivWEB) {
+						privCount[1] = 0;
 					}
-					
-				}else{
-					if(null !=rolePrivCasino){
+
+				} else {
+					if (null != rolePrivCasino) {
 						privCount[0] = rolePrivCasino.length;
 					}
-					if(null !=rolePrivHome)
-					{
-						privCount[1]=rolePrivHome.length;
-					}else if(null == rolePrivWEB){
-						privCount[0]=0;
+					if (null != rolePrivHome) {
+						privCount[1] = rolePrivHome.length;
+					} else if (null == rolePrivWEB) {
+						privCount[0] = 0;
 					}
 				}
 			}
-			//domainId 0 For BO
+			// domainId 0 For BO
 			roleName = userInfoBean.getRoleName();
 			short domainId = userInfoBean.getDomainId();
-		service.assignGroups(userInfoBean.getUserId(), rolePrivWEB, roleId,
-					usrdetBean, mappingId, privCount, "ipAddress",domainId);
-			/*if (CommonMethodController.getInstance().isRummyActive()) {
-				RummyAPI rummyAPI = new RummyAPI();
-				String rolePriv = "";
-				if (rolePrivRUMMY != null) {
-					rolePriv = Arrays.asList(rolePrivRUMMY).toString().replace("[", "").replace("]", "")
-							.replace(" ", "").replace(",", "-");
-				}
-				rummyAPI.createSubUser(userInfoBean.getUserName(), rolePriv, usrdetBean, roleName);
-			}*/
+			service.assignGroups(userInfoBean.getUserId(), rolePrivWEB, roleId, usrdetBean, mappingId, privCount,
+					"ipAddress", domainId);
+			/*
+			 * if (CommonMethodController.getInstance().isRummyActive()) { RummyAPI rummyAPI
+			 * = new RummyAPI(); String rolePriv = ""; if (rolePrivRUMMY != null) { rolePriv
+			 * = Arrays.asList(rolePrivRUMMY).toString().replace("[", "").replace("]", "")
+			 * .replace(" ", "").replace(",", "-"); }
+			 * rummyAPI.createSubUser(userInfoBean.getUserName(), rolePriv, usrdetBean,
+			 * roleName); }
+			 */
 		} catch (PMSException be) {
 			be.printStackTrace();
 			addActionError(be.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
@@ -654,20 +948,20 @@ public class UserMgmtAction extends BaseActionSupport {
 			return "unauthorize";
 		}
 		int roleId = userInfoBean.getRoleId();
-	
+
 		int userId = userInfoBean.getUserId();
 		UserMgmtController service = new UserMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//				.getAttribute("ALLOWED_PRIV");
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+		// .getAttribute("ALLOWED_PRIV");
 
 		try {
 			subUserList = service.fetchSubUserName(roleId, userId);
-			
+
 		} catch (PMSException be) {
 			be.printStackTrace();
 			addActionError(be.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
@@ -675,10 +969,9 @@ public class UserMgmtAction extends BaseActionSupport {
 		getRequest().getSession().setAttribute("subUserList", subUserList);
 		return SUCCESS;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	public String fetchAllSubUsers()
-	{
+	public String fetchAllSubUsers() {
 
 		if (userInfoBean.getIsRoleHeadUser().equalsIgnoreCase("N")) {
 			return "unauthorize";
@@ -687,8 +980,8 @@ public class UserMgmtAction extends BaseActionSupport {
 		List<String> roleHeadUsers = new ArrayList<>();
 		int userId = userInfoBean.getUserId();
 		UserMgmtController service = new UserMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//				.getAttribute("ALLOWED_PRIV");
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+		// .getAttribute("ALLOWED_PRIV");
 
 		try {
 			subUserList = service.fetchSubUserName(roleId, userId);
@@ -702,43 +995,41 @@ public class UserMgmtAction extends BaseActionSupport {
 			be.printStackTrace();
 			addActionError(be.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
 		}
 		getRequest().getSession().setAttribute("subUserList", subUserList);
 		return SUCCESS;
-	
+
 	}
 
 	public String getSubUserPriviledges() {
 		UserMgmtController service = new UserMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//				.getAttribute("ALLOWED_PRIV");
-		
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+		// .getAttribute("ALLOWED_PRIV");
+
 		try {
-			setRolePriviledgeMap(service.getSubUserPriviledges(getUserName(),
-					userInfoBean.getUserId(), userInfoBean.getUserType(),userInfoBean.getDomainId()));
+			setRolePriviledgeMap(service.getSubUserPriviledges(getUserName(), userInfoBean.getUserId(),
+					userInfoBean.getUserType(), userInfoBean.getDomainId()));
 			;
 			// getSubUserServicePriv(getUserName());
-			/*if (CommonMethodController.getInstance().isRummyActive()) {
-//				RummyAPI api = new RummyAPI();
-				TreeMap<String, TreeMap<String, TreeMap<String, List<UserPrivBean>>>> rummyPrivMap = api
-						.getSubUserPriv(getUserName(), userInfoBean.getUserName());
-
-				if (rummyPrivMap != null) {
-					Set<String> keyset = rummyPrivMap.keySet();
-					for (String key : keyset) {
-						rolePriviledgeMap.get("Home").put(key, rummyPrivMap.get(key));
-					}
-				}
-			}*/
+			/*
+			 * if (CommonMethodController.getInstance().isRummyActive()) { // RummyAPI api =
+			 * new RummyAPI(); TreeMap<String, TreeMap<String, TreeMap<String,
+			 * List<UserPrivBean>>>> rummyPrivMap = api .getSubUserPriv(getUserName(),
+			 * userInfoBean.getUserName());
+			 * 
+			 * if (rummyPrivMap != null) { Set<String> keyset = rummyPrivMap.keySet(); for
+			 * (String key : keyset) { rolePriviledgeMap.get("Home").put(key,
+			 * rummyPrivMap.get(key)); } } }
+			 */
 		} catch (PMSException be) {
 			be.printStackTrace();
 			addActionError(be.getErrorMessage());
 			return "exception_nodecorate";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception_nodecorate";
@@ -757,55 +1048,48 @@ public class UserMgmtAction extends BaseActionSupport {
 		return SUCCESS;
 	}
 
-
-
 	public String editSubUserPriviledges() {
 		HttpSession session = getRequest().getSession();
 		UserMgmtController service = new UserMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//				.getAttribute("ALLOWED_PRIV");
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+		// .getAttribute("ALLOWED_PRIV");
 
 		try {
 			rolePrivWEB = (String[]) ArrayUtils.addAll(rolePrivCasino, rolePrivHome);
-			if(privCount.length==1){
-				if(rolePrivCasino !=null)
-					privCount[0]=rolePrivCasino.length;
-				if(rolePrivHome !=null)
-					privCount[0]=rolePrivHome.length;
-			}else{
-				if(null !=rolePrivCasino){
+			if (privCount.length == 1) {
+				if (rolePrivCasino != null)
+					privCount[0] = rolePrivCasino.length;
+				if (rolePrivHome != null)
+					privCount[0] = rolePrivHome.length;
+			} else {
+				if (null != rolePrivCasino) {
 					privCount[0] = rolePrivCasino.length;
 				}
-				if(null !=rolePrivHome)
-				{
-					privCount[0]=rolePrivHome.length;
-				}else if(null == rolePrivWEB){
-					privCount[1]=0;
+				if (null != rolePrivHome) {
+					privCount[0] = rolePrivHome.length;
+				} else if (null == rolePrivWEB) {
+					privCount[1] = 0;
 				}
 			}
-			service.editSubUserPriviledges(getUserName(), rolePrivWEB, mappingId,
-					privCount);
+			service.editSubUserPriviledges(getUserName(), rolePrivWEB, mappingId, privCount);
 			/*
-			if (CommonMethodController.getInstance().isRummyActive()) {
-				String rolePriv = "";
-				privCount[0] = 0;
-				if (rolePrivRUMMY != null) {
-					privCount[0] = rolePrivRUMMY.length;
-					rolePriv = Arrays.asList(rolePrivRUMMY).toString().replace("[", "").replace("]", "")
-							.replace(" ", "").replace(",", "-");
-				}
-				if(CommonMethodController.getInstance().fetchVendorInfo("rummyuser")!=null){
-					RummyAPI rummyAPI = new RummyAPI();
-					rummyAPI.editSubUserPriviledges(getUserName(), rolePriv);
-				}
-					
-			}*/
-			
+			 * if (CommonMethodController.getInstance().isRummyActive()) { String rolePriv =
+			 * ""; privCount[0] = 0; if (rolePrivRUMMY != null) { privCount[0] =
+			 * rolePrivRUMMY.length; rolePriv =
+			 * Arrays.asList(rolePrivRUMMY).toString().replace("[", "").replace("]", "")
+			 * .replace(" ", "").replace(",", "-"); }
+			 * if(CommonMethodController.getInstance().fetchVendorInfo("rummyuser")!=null){
+			 * RummyAPI rummyAPI = new RummyAPI();
+			 * rummyAPI.editSubUserPriviledges(getUserName(), rolePriv); }
+			 * 
+			 * }
+			 */
+
 		} catch (PMSException be) {
 			be.printStackTrace();
 			addActionError(be.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
@@ -818,20 +1102,19 @@ public class UserMgmtAction extends BaseActionSupport {
 		if (userInfoBean.getIsRoleHeadUser().equalsIgnoreCase("N")) {
 			return "unauthorize";
 		}
-		
+
 		RoleMgmtController rmController = new RoleMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//				.getAttribute("ALLOWED_PRIV");
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+		// .getAttribute("ALLOWED_PRIV");
 
 		try {
-			userName ="";
-			roleMap = rmController.fetchRoles(userInfoBean.getUserType(),
-					false,userInfoBean.getUserId());
+			userName = "";
+			roleMap = rmController.fetchRoles(userInfoBean.getUserType(), false, userInfoBean.getUserId());
 		} catch (PMSException be) {
 			be.printStackTrace();
 			addActionError(be.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
@@ -839,20 +1122,18 @@ public class UserMgmtAction extends BaseActionSupport {
 		return SUCCESS;
 	}
 
-	public String searchBoUsers(){
+	public String searchBoUsers() {
 		UserMgmtController service = new UserMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//				.getAttribute("ALLOWED_PRIV");
-		try{
-		userList = service.searchBoUsers(userName,
-				roleId, type, status, userInfoBean);
-		return SUCCESS;
-		}catch (PMSException be) {
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+		// .getAttribute("ALLOWED_PRIV");
+		try {
+			userList = service.searchBoUsers(userName, roleId, type, status, userInfoBean);
+			return SUCCESS;
+		} catch (PMSException be) {
 			addActionError(be.getErrorMessage());
 			be.printStackTrace();
 			return "exception_nodecorate";
-		}
-		catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception_nodecorate";
@@ -861,8 +1142,8 @@ public class UserMgmtAction extends BaseActionSupport {
 
 	public String showBOUserDetails() {
 		UserMgmtController service = new UserMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//				.getAttribute("ALLOWED_PRIV");
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+		// .getAttribute("ALLOWED_PRIV");
 
 		try {
 			userDetailsBean = service.showBOUserDetails(user_id, type);
@@ -870,7 +1151,7 @@ public class UserMgmtAction extends BaseActionSupport {
 			be.printStackTrace();
 			addActionError(be.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
@@ -882,107 +1163,104 @@ public class UserMgmtAction extends BaseActionSupport {
 	public String searchAjax() {
 		int endValue = 0;
 		int startValue = 0;
-		try{
-		HttpSession session = getRequest().getSession();
-		List<UserDetailsBean> ajaxList = (List<UserDetailsBean>) session
-				.getAttribute("USER_LIST1");
-		List<UserDetailsBean> ajaxSearchList = new ArrayList<UserDetailsBean>();
-		log.info("end " + ajaxList);
-		if (ajaxList != null) {
-			if (getEnd() != null) {
-				end = getEnd();
-			} else {
-				end = "first";
-			}
-			// log.info("end "+end);
-			startValue = (Integer) session.getAttribute("startValueUserSearch");
-			if (end.equals("first")) {
-				startValue = 0;
-				endValue = startValue + 10;
-
-				if (endValue > ajaxList.size()) {
-					endValue = ajaxList.size();
+		try {
+			HttpSession session = getRequest().getSession();
+			List<UserDetailsBean> ajaxList = (List<UserDetailsBean>) session.getAttribute("USER_LIST1");
+			List<UserDetailsBean> ajaxSearchList = new ArrayList<UserDetailsBean>();
+			log.info("end " + ajaxList);
+			if (ajaxList != null) {
+				if (getEnd() != null) {
+					end = getEnd();
+				} else {
+					end = "first";
 				}
-			} else if (end.equals("Previous")) {
-				startValue = startValue - 10;
-				if (startValue < 10) {
+				// log.info("end "+end);
+				startValue = (Integer) session.getAttribute("startValueUserSearch");
+				if (end.equals("first")) {
 					startValue = 0;
-				}
+					endValue = startValue + 10;
 
-				endValue = startValue + 10;
-				if (endValue > ajaxList.size()) {
+					if (endValue > ajaxList.size()) {
+						endValue = ajaxList.size();
+					}
+				} else if (end.equals("Previous")) {
+					startValue = startValue - 10;
+					if (startValue < 10) {
+						startValue = 0;
+					}
+
+					endValue = startValue + 10;
+					if (endValue > ajaxList.size()) {
+						endValue = ajaxList.size();
+					}
+				} else if (end.equals("Next")) {
+					startValue = startValue + 10;
+					endValue = startValue + 10;
+					if (endValue > ajaxList.size()) {
+						endValue = ajaxList.size();
+					}
+					if (startValue > ajaxList.size()) {
+						startValue = ajaxList.size() - ajaxList.size() % 10;
+					}
+				} else if (end.equals("last")) {
 					endValue = ajaxList.size();
-				}
-			} else if (end.equals("Next")) {
-				startValue = startValue + 10;
-				endValue = startValue + 10;
-				if (endValue > ajaxList.size()) {
-					endValue = ajaxList.size();
-				}
-				if (startValue > ajaxList.size()) {
-					startValue = ajaxList.size() - ajaxList.size() % 10;
-				}
-			} else if (end.equals("last")) {
-				endValue = ajaxList.size();
-				startValue = endValue - endValue % 10;
+					startValue = endValue - endValue % 10;
 
+				}
+				if (startValue == endValue) {
+					startValue = endValue - 10;
+				}
+				for (int i = startValue; i < endValue; i++) {
+					ajaxSearchList.add(ajaxList.get(i));
+				}
+				session.setAttribute("USER_LIST", ajaxSearchList);
+				session.setAttribute("startValueUserSearch", startValue);
 			}
-			if (startValue == endValue) {
-				startValue = endValue - 10;
-			}
-			for (int i = startValue; i < endValue; i++) {
-				ajaxSearchList.add(ajaxList.get(i));
-			}
-			session.setAttribute("USER_LIST", ajaxSearchList);
-			session.setAttribute("startValueUserSearch", startValue);
-		}
 
-		return SUCCESS;
-		}catch (Exception be) {
+			return SUCCESS;
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
 		}
 	}
 
-	public void resetPassBO(){
-		//PrintWriter out = getResponse().getWriter();
-		try{
-		String autoPass = AutoGenerate.autoPassword();
-		UserMgmtController service = new UserMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//				.getAttribute("ALLOWED_PRIV");
+	public void resetPassBO() {
+		// PrintWriter out = getResponse().getWriter();
+		try {
+			String autoPass = AutoGenerate.autoPassword();
+			UserMgmtController service = new UserMgmtController();
+			// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+			// .getAttribute("ALLOWED_PRIV");
 
-		service.resetPassBO(user_id, autoPass, emailId, userName, firstName,lastName);
-		response.setContentType("text/html");
-		}
-		catch (PMSException be) {
+			service.resetPassBO(user_id, autoPass, emailId, userName, firstName, lastName);
+			response.setContentType("text/html");
+		} catch (PMSException be) {
 			addActionError(be.getErrorMessage());
 			be.printStackTrace();
-		}
-		catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 		}
-		//out.write("Reset Succesfully");
-		//out.print(true);
+		// out.write("Reset Succesfully");
+		// out.print(true);
 	}
 
 	public String editBOUserDetails() {
 		HttpSession session = getRequest().getSession();
-		//if (status.equalsIgnoreCase("INACTIVE")
-				//|| status.equalsIgnoreCase("TERMINATE")) {
-//			ServletContext sc = ServletActionContext.getServletContext();
-//			Map currentUserSessionMap = (Map) sc
-//					.getAttribute("LOGGED_IN_USERS");
-//			currentUserSessionMap.remove(userName);
-		//}
+		// if (status.equalsIgnoreCase("INACTIVE")
+		// || status.equalsIgnoreCase("TERMINATE")) {
+		// ServletContext sc = ServletActionContext.getServletContext();
+		// Map currentUserSessionMap = (Map) sc
+		// .getAttribute("LOGGED_IN_USERS");
+		// currentUserSessionMap.remove(userName);
+		// }
 		UserMgmtController service = new UserMgmtController();
-//		PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
-//				.getAttribute("ALLOWED_PRIV");
+		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
+		// .getAttribute("ALLOWED_PRIV");
 
 		try {
-			service.editBOUserDetails(user_id, email, phoneNbr,lastnameedit, status, type,1.1);
+			service.editBOUserDetails(user_id, email, phoneNbr, lastnameedit, status, type, 1.1);
 			UserDetailsBean userDetailsBean = new UserDetailsBean();
 			userDetailsBean.setUserName(userName);
 			userDetailsBean.setLastName(lastnameedit);
@@ -994,19 +1272,18 @@ public class UserMgmtAction extends BaseActionSupport {
 			be.printStackTrace();
 			addActionError(be.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
 		}
 		lastName = userDetailsBean.getLastName();
-		session.setAttribute("BO_USER_NAME", firstName.toUpperCase() + " "
-				+ lastName.toUpperCase());
+		session.setAttribute("BO_USER_NAME", firstName.toUpperCase() + " " + lastName.toUpperCase());
 		return SUCCESS;
 	}
-	
+
 	public String fetchDomainUserName() {
-		if (userInfoBean.getDomainId()!=1) {
+		if (userInfoBean.getDomainId() != 1) {
 			return "unauthorize";
 		}
 		int roleId = 2;
@@ -1018,7 +1295,7 @@ public class UserMgmtAction extends BaseActionSupport {
 			be.printStackTrace();
 			addActionError(be.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
@@ -1031,45 +1308,41 @@ public class UserMgmtAction extends BaseActionSupport {
 		UserMgmtController service = new UserMgmtController();
 
 		try {
-			setRolePriviledgeMap(service.getDomainUserPriviledges(getUserName(),"Domain"));
-			
-			// getSubUserServicePriv(getUserName());
-			/*if (CommonMethodController.getInstance().isRummyActive()) {
-				RummyAPI api = new RummyAPI();
-				TreeMap<String, TreeMap<String, TreeMap<String, List<UserPrivBean>>>> rummyPrivMap = api
-						.getSubUserPriv(getUserName(), userInfoBean.getUserName());
+			setRolePriviledgeMap(service.getDomainUserPriviledges(getUserName(), "Domain"));
 
-				if (rummyPrivMap != null) {
-					Set<String> keyset = rummyPrivMap.keySet();
-					for (String key : keyset) {
-						rolePriviledgeMap.get("Home").put(key, rummyPrivMap.get(key));
+			// getSubUserServicePriv(getUserName());
+			/*
+			 * if (CommonMethodController.getInstance().isRummyActive()) { RummyAPI api =
+			 * new RummyAPI(); TreeMap<String, TreeMap<String, TreeMap<String,
+			 * List<UserPrivBean>>>> rummyPrivMap = api .getSubUserPriv(getUserName(),
+			 * userInfoBean.getUserName());
+			 * 
+			 * if (rummyPrivMap != null) { Set<String> keyset = rummyPrivMap.keySet(); for
+			 * (String key : keyset) { rolePriviledgeMap.get("Home").put(key,
+			 * rummyPrivMap.get(key)); } } }
+			 */
+			serviceSet = new TreeSet<String>(getRolePriviledgeMap().keySet());
+			for (String key : servicePriviledgeMap.keySet()) {
+				if (!serviceSet.contains(key)) {
+					serviceSet.add(key);
+					TreeMap<String, TreeMap<String, TreeMap<String, List<UserPrivBean>>>> interfaceMap = new TreeMap<String, TreeMap<String, TreeMap<String, List<UserPrivBean>>>>();
+					for (String serKey : servicePriviledgeMap.get(key).keySet()) {
+						interfaceMap.put(serKey, null);
 					}
+					getRolePriviledgeMap().put(key, interfaceMap);
 				}
-			}*/
-		serviceSet = new TreeSet<String>(getRolePriviledgeMap().keySet());
-		for (String key : servicePriviledgeMap.keySet()) {
-			if (!serviceSet.contains(key)) {
-				serviceSet.add(key);
-				TreeMap<String, TreeMap<String, TreeMap<String, List<UserPrivBean>>>> interfaceMap = new TreeMap<String, TreeMap<String, TreeMap<String, List<UserPrivBean>>>>();
-				for (String serKey : servicePriviledgeMap.get(key).keySet()) {
-					interfaceMap.put(serKey, null);
-				}
-				getRolePriviledgeMap().put(key, interfaceMap);
 			}
-		}
-		return SUCCESS;
+			return SUCCESS;
 		} catch (PMSException be) {
 			be.printStackTrace();
 			addActionError(be.getErrorMessage());
 			return "exception_nodecorate";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception_nodecorate";
 		}
 	}
-
-	
 
 	public String editDomainUserPriviledges() {
 		HttpSession session = getRequest().getSession();
@@ -1077,43 +1350,38 @@ public class UserMgmtAction extends BaseActionSupport {
 
 		try {
 			rolePrivWEB = (String[]) ArrayUtils.addAll(rolePrivCasino, rolePrivHome);
-			if(privCount.length==1){
-				if(rolePrivCasino !=null)
-					privCount[0]=rolePrivCasino.length;
-				if(rolePrivHome !=null)
-					privCount[0]=rolePrivHome.length;
-			}else{
-				if(null !=rolePrivCasino){
+			if (privCount.length == 1) {
+				if (rolePrivCasino != null)
+					privCount[0] = rolePrivCasino.length;
+				if (rolePrivHome != null)
+					privCount[0] = rolePrivHome.length;
+			} else {
+				if (null != rolePrivCasino) {
 					privCount[0] = rolePrivCasino.length;
 				}
-				if(null !=rolePrivHome)
-				{
-					privCount[0]=rolePrivHome.length;
-				}else if(null == rolePrivWEB){
-					privCount[1]=0;
+				if (null != rolePrivHome) {
+					privCount[0] = rolePrivHome.length;
+				} else if (null == rolePrivWEB) {
+					privCount[1] = 0;
 				}
 			}
-			service.editDomainUserPriviledges(getUserName(), rolePrivWEB, mappingId,
-					privCount,rolePrivRUMMY);
-			/*if (CommonMethodController.getInstance().isRummyActive()) {
-				String rolePriv = "";
-				privCount[0] = 0;
-				if (rolePrivRUMMY != null) {
-					privCount[0] = rolePrivRUMMY.length;
-					rolePriv = Arrays.asList(rolePrivRUMMY).toString().replace("[", "").replace("]", "")
-							.replace(" ", "").replace(",", "-");
-				}
-				if(CommonMethodController.getInstance().fetchVendorInfo("rummyuser")!=null){
-					RummyAPI rummyAPI = new RummyAPI();
-					rummyAPI.editSubUserPriviledges(getUserName(), rolePriv);
-				}
-			}*/
-			
+			service.editDomainUserPriviledges(getUserName(), rolePrivWEB, mappingId, privCount, rolePrivRUMMY);
+			/*
+			 * if (CommonMethodController.getInstance().isRummyActive()) { String rolePriv =
+			 * ""; privCount[0] = 0; if (rolePrivRUMMY != null) { privCount[0] =
+			 * rolePrivRUMMY.length; rolePriv =
+			 * Arrays.asList(rolePrivRUMMY).toString().replace("[", "").replace("]", "")
+			 * .replace(" ", "").replace(",", "-"); }
+			 * if(CommonMethodController.getInstance().fetchVendorInfo("rummyuser")!=null){
+			 * RummyAPI rummyAPI = new RummyAPI();
+			 * rummyAPI.editSubUserPriviledges(getUserName(), rolePriv); } }
+			 */
+
 		} catch (PMSException be) {
 			be.printStackTrace();
 			addActionError(be.getErrorMessage());
 			return "exception";
-		}catch (Exception be) {
+		} catch (Exception be) {
 			addActionError("Some internal error.");
 			be.printStackTrace();
 			return "exception";
@@ -1121,8 +1389,6 @@ public class UserMgmtAction extends BaseActionSupport {
 		session.setAttribute("USER_NAME", getUserName());
 		return SUCCESS;
 	}
-	
-	
 
 	public String subUserRegistration() {
 		if (userInfoBean.getIsRoleHeadUser().equalsIgnoreCase("N")) {
@@ -1131,11 +1397,10 @@ public class UserMgmtAction extends BaseActionSupport {
 		return SUCCESS;
 	}
 
-
 	public String getBoUserList() {
 		try {
 			CommonMethodController.getInstance().checkBoUserLogin(request.getSession().getId());
-			 setBoUserMap(new UserMgmtController().getBoUserMap(userInfoBean.getUserId()));
+			setBoUserMap(new UserMgmtController().getBoUserMap(userInfoBean.getUserId()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			addActionError("Some Internal Error!");
@@ -1143,12 +1408,13 @@ public class UserMgmtAction extends BaseActionSupport {
 		}
 		return SUCCESS;
 	}
-	
-	public void triggerImpersonation() throws IOException{
+
+	public void triggerImpersonation() throws IOException {
 		try {
-			if("ADMIN".equals(userInfoBean.getUserType())){
-				HttpSession session=request.getSession();
-				UserInfoBean impersonatee=new UserMgmtController().getImpersonatee(session.getId(),getImpersonateeId());
+			if ("ADMIN".equals(userInfoBean.getUserType())) {
+				HttpSession session = request.getSession();
+				UserInfoBean impersonatee = new UserMgmtController().getImpersonatee(session.getId(),
+						getImpersonateeId());
 				session.setAttribute("impersionateeBean", impersonatee);
 			}
 		} catch (Exception e) {
@@ -1156,12 +1422,12 @@ public class UserMgmtAction extends BaseActionSupport {
 		}
 		response.getWriter().write("done");
 	}
-	
+
 	public void quitImpersonation() throws IOException {
 		try {
-			HttpSession session=request.getSession();
+			HttpSession session = request.getSession();
 			session.removeAttribute("impersionateeBean");
-//			session.removeAttribute("actualInfoBean");
+			// session.removeAttribute("actualInfoBean");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1191,7 +1457,6 @@ public class UserMgmtAction extends BaseActionSupport {
 	public void setRoleMap(Map<Integer, String> roleMap) {
 		this.roleMap = roleMap;
 	}
-
 
 	public String getEmail() {
 		return email;
@@ -1306,8 +1571,6 @@ public class UserMgmtAction extends BaseActionSupport {
 		this.privCount = privCount;
 	}
 
-	
-
 	public String[] getRolePrivRUMMY() {
 		return rolePrivRUMMY;
 	}
@@ -1421,6 +1684,7 @@ public class UserMgmtAction extends BaseActionSupport {
 	public Map<String, TreeMap<String, TreeMap<String, TreeMap<String, List<UserPrivBean>>>>> getRolePriviledgeMap() {
 		return rolePriviledgeMap;
 	}
+
 	public String[] getRolePrivHome() {
 		return rolePrivHome;
 	}
@@ -1444,6 +1708,7 @@ public class UserMgmtAction extends BaseActionSupport {
 	public void setUserList(List<UserDetailsBean> userList) {
 		this.userList = userList;
 	}
+
 	public short getDomainId() {
 		return domainId;
 	}
