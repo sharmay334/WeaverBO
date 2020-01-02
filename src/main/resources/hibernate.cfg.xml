@@ -12,7 +12,7 @@
       <!-- Assume test is the database name  -->
       
       <property name = "hibernate.connection.url">
-         jdbc:mysql://localhost:3306/product_mgmt_system
+         jdbc:mysql://localhost:3306/crm?autoReconnect=true
       </property>
       
       <property name = "hibernate.connection.username">
@@ -24,7 +24,8 @@
       <property name="hibernate.bytecode.provider">cglib</property>
       <property name="format_sql">false</property>
       <property name="show_sql">false</property>
-	  
+	  <!--<property name="hibernate.hbm2ddl.auto">update</property> -->
+
 
 
 	<!--<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
@@ -119,6 +120,7 @@
       <!-- Affiliate Mgmt  -->
       <mapping resource="com/stpl/pms/hibernate/mapping/StAffiliateInfo.hbm.xml" />
       <mapping resource="com/stpl/pms/hibernate/mapping/StAffiliateMaster.hbm.xml" />
+	  <mapping resource="com/stpl/pms/hibernate/mapping/St_um_createCompany.hbm.xml" />
       <!-- Affiliate Mgmt  -->
       <!-- Banner Mgmt Start -->
       <!--<mapping

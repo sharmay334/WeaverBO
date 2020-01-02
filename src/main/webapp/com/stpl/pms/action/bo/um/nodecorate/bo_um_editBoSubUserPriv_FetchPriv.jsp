@@ -183,6 +183,8 @@ String basePath = (String)request.getAttribute("basePathURL") ;
 										<input type="checkbox" class="chkAll" />
 										<b> <s:if test="%{key=='ACT_MGT'}">Account Management</s:if>
 												<s:elseif test="%{key=='TICKET_MGMT'}">Ticket Management</s:elseif>
+												<s:elseif test="%{key=='COMPANY_MGMT'}">Company Management</s:elseif>
+												<s:elseif test="%{key=='ACCOUNTING_MGMT'}">Accounting Management</s:elseif>
 											<s:elseif test="%{key=='GAME_MGT'}">Game Management</s:elseif>
 											<s:elseif test="%{key=='REPORTS'}">Reports</s:elseif> <s:elseif
 												test="%{key=='USER_MGT'}">User Management</s:elseif> <s:elseif

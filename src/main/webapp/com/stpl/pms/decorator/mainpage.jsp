@@ -87,12 +87,12 @@
 		<decorator:head />
 	</head>
 	<body >
-	<s:if test="%{@com.stpl.pms.utility.Utility@getServerDate(0,0,0,\"dd\") > 10}">
+	<%-- <s:if test="%{@com.stpl.pms.utility.Utility@getServerDate(0,0,0,\"dd\") > 10}">
 		<div style="width: 100%; background-color: #cb0600; padding: 7px 4px; text-align: center; color: #ffffff; font-weight: 600;"><s:text name="global.licence"></s:text> <%= Utility.getServerDate(0, 1, 0, "MMMMM")%>.</div>
 	</s:if>
 	<s:else>
 		<div style="width: 100%; background-color: #cb0600; padding: 7px 4px; text-align: center; color: #ffffff; font-weight: 600;"><s:text name="global.licence"></s:text> <%= Utility.getServerDate(0, 0, 0, "MMMMM")%>.</div>
-	</s:else>
+	</s:else> --%>
 	 <!-- top section start-->
   		<div id="TopBar">
          <div class="logo"><img src="<%= request.getContextPath()%>/images/client-specific/<%=Utility.getClientName() %>/logo-new.png" alt="logo" /></div>

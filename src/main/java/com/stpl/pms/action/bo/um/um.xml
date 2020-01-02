@@ -133,6 +133,15 @@
 				/com/stpl/pms/action/bo/um/bo_um_searchBoUser_EditDet.jsp
 			</result>
 		</action>
+		<action name="bo_um_searchCompany_Detail"
+			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
+			method="showCompanyDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_searchCompany_EditDet.jsp
+			</result>
+		</action>
 		<action name="bo_um_searchBoUser_ResetPassBO"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction" method="resetPassBO">
 			<interceptor-ref name="customStack"></interceptor-ref>
@@ -351,7 +360,15 @@
 			<result name="error">
 				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/st_dm_boBlockedIpEdit_Error.jsp
 			</result>
-				
+
+		</action>
+
+		<action name="bo_um_createCompany"
+			class="com.stpl.pms.action.bo.um.CreateCompanyAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createCompany.jsp
+			</result>
 		</action>
 		<action name="st_um_bo_assignSubUserNetworkAccess"
 			class="com.stpl.pms.action.bo.um.NetworkAccessAction"
@@ -363,5 +380,84 @@
 			<result name="error">/com/stpl/pms/action/bo/um/bo_um_addPrivilege_error.jsp
 			</result>
 		</action>
+		<action name="bo_um_createCompany_Reg"
+			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
+			method="createCompany">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createCompany_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/bo_um_createCompany_error.jsp
+			</result>
+		</action>
+		<action name="bo_um_viewCompany"
+			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
+			method="getCompanyList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewCompany.jsp
+			</result>
+		</action>
+		<action name="bo_um_BoCompany_Search"
+			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
+			method="viewCompanyDetails">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_searchCompany_SearchResult.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/um/nodecorate/field_error.jsp
+			</result>
+		</action>
+		<action name="bo_um_removeCompany"
+			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
+			method="getCompanyList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_deleteCompany.jsp
+			</result>
+		</action>
+		<action name="bo_um_BoCompany_Delete"
+			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
+			method="deleteCompany">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteCompany_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteCompany_error.jsp
+			</result>
+		</action>
+		<action name="bo_um_Company_Save"
+			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
+			method="editCompany">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_editCompany_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/bo_um_editCompany_error.jsp
+			</result>
+		</action>
+
+		<!-- Accounting management actions only -->
+		<action name="bo_um_createGroup"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="createGroup">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createGroup.jsp
+			</result>
+		</action>
+		<action name="bo_um_create_group"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="insertGroup">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createGroup_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/bo_um_createGroup_error.jsp
+			</result>
+		</action>
+		<!-- end of accounting management -->
 	</package>
 </struts>

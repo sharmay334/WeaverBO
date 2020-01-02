@@ -796,6 +796,34 @@ public class UserMgmtAction extends BaseActionSupport {
 			usrdetBean.setOrgType(type);
 			usrdetBean.setBoUserType(type);
 			usrdetBean.setGender(gender);
+			usrdetBean.setFatherName(fatherName);
+			usrdetBean.setDob(dob);
+			usrdetBean.setPanNumber(panNumber);
+			usrdetBean.setAadharNumber(aadharNumber);
+			usrdetBean.setVoterNumber(voterNumber);
+			usrdetBean.setPassportNumber(passportNumber);
+			usrdetBean.setBloodGroup(bloodGroup);
+			usrdetBean.setBranch(branch);
+			usrdetBean.setCurrentAddress(currentAddress);
+			usrdetBean.setPermanentAddress(permanentAddress);
+			usrdetBean.setDoj(doj);
+			usrdetBean.setDol(dol);
+			usrdetBean.setCountry(country);
+			usrdetBean.setState(state);
+			usrdetBean.setPincode(pincode);
+			usrdetBean.setCity(city);
+			usrdetBean.setPhoto_doc(photo_doc!=null?status:"pending");
+			usrdetBean.setOldSalarySlip(oldSalarySlip!=null?status:"pending");
+			usrdetBean.setExpCertificate(expCertificate!=null?status:"pending");
+			usrdetBean.setEduCertificate(eduCertificate!=null?status:"pending");
+			usrdetBean.setPanDoc(panDoc!=null?status:"pending");
+			usrdetBean.setAddressDoc(addressDoc!=null?status:"pending");
+			usrdetBean.setVoterDoc(voterDoc!=null?status:"pending");
+			usrdetBean.setDrivingDoc(drivingDoc!=null?status:"pending");
+			usrdetBean.setPassbookDoc(passbookDoc!=null?status:"pending");
+			usrdetBean.setAddressDoc(addressDoc!=null?status:"pending");
+
+
 			session.setAttribute("USER_DETAILS", usrdetBean);
 			session.setAttribute("HEAD_PRIV_MAP", rolePrivMap);
 
@@ -813,13 +841,13 @@ public class UserMgmtAction extends BaseActionSupport {
 
 	public boolean callDocumentsUpload() {
 		try {
-			String path = ServletActionContext.getServletContext().getRealPath("/");
-			path = path.substring(0,path.lastIndexOf("/"));
-			path = path.substring(0,path.lastIndexOf("/"));
-			path = path.substring(0,path.lastIndexOf("/"));
-			path = path.substring(0,path.lastIndexOf("/"));
-			path = path.substring(0,path.lastIndexOf("/"));
-			path = path.concat("/documents/"+userName+"/");
+			String path = ServletActionContext.getServletContext().getRealPath(File.separator);
+			path = path.substring(0,path.lastIndexOf(File.separator));
+			path = path.substring(0,path.lastIndexOf(File.separator));
+			path = path.substring(0,path.lastIndexOf(File.separator));
+			path = path.substring(0,path.lastIndexOf(File.separator));
+			path = path.substring(0,path.lastIndexOf(File.separator));
+			path = path.concat(File.separator+"documents"+File.separator+userName+File.separator);
 			
 			String addressDocFilePath = path
 					.concat("addressDoc");
@@ -874,7 +902,7 @@ public class UserMgmtAction extends BaseActionSupport {
 		} catch (Exception e) {
 			e.printStackTrace();
 			
-			return false;
+			return false; //bypass the file upload temporary
 		}
 		return true;
 	}
@@ -944,10 +972,10 @@ public class UserMgmtAction extends BaseActionSupport {
 	}
 
 	public String fetchSubUserName() {
-		if (userInfoBean.getIsRoleHeadUser().equalsIgnoreCase("N")) {
-			return "unauthorize";
-		}
-		int roleId = userInfoBean.getRoleId();
+		/*
+		 * if (userInfoBean.getIsRoleHeadUser().equalsIgnoreCase("N")) { return
+		 * "unauthorize"; }
+		 */	int roleId = userInfoBean.getRoleId();
 
 		int userId = userInfoBean.getUserId();
 		UserMgmtController service = new UserMgmtController();
@@ -1099,9 +1127,10 @@ public class UserMgmtAction extends BaseActionSupport {
 	}
 
 	public String dispSearchBoUser() {
-		if (userInfoBean.getIsRoleHeadUser().equalsIgnoreCase("N")) {
-			return "unauthorize";
-		}
+		/*
+		 * if (userInfoBean.getIsRoleHeadUser().equalsIgnoreCase("N")) { return
+		 * "unauthorize"; }
+		 */
 
 		RoleMgmtController rmController = new RoleMgmtController();
 		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request

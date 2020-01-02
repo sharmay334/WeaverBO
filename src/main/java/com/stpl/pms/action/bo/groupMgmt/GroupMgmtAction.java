@@ -16,6 +16,7 @@ public class GroupMgmtAction extends BaseActionSupport{
 	private String groupName;
 	
 	
+	
 	public String addPlrToPlrGroup(){
 		StringBuilder pokerReq = new StringBuilder();
 		String url = null;
