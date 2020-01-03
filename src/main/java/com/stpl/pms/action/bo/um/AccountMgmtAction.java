@@ -1,5 +1,6 @@
 package com.stpl.pms.action.bo.um;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,13 +26,22 @@ public class AccountMgmtAction extends BaseActionSupport implements ServletReque
 	public String createGroup() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		groupNamesList = gameLobbyController.getGroupNamesList();
-		return SUCCESS; 
+		return SUCCESS;
+	}
+
+	public String getGroupList() {
+		groupNamesList = new ArrayList<String>();
+		GameLobbyController gameLobbyController = new GameLobbyController();
+		groupNamesList = gameLobbyController.getCustomGroupNameList();
+		return SUCCESS;
 	}
 
 	public String insertGroup() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
-		gameLobbyController.insertGroup(groupName,groupUnder.toUpperCase(),subLedger.toUpperCase(),blncForRep.toUpperCase(),forCalc.toUpperCase(),purInvoice.toUpperCase().replaceAll(" ","_"));
+		if(gameLobbyController.insertGroup(groupName,groupUnder.toUpperCase(),subLedger.toUpperCase(),blncForRep.toUpperCase(),forCalc.toUpperCase(),purInvoice.toUpperCase().replaceAll(" ","_")))
 		return SUCCESS;
+		else
+		return ERROR;
 	}
 
 	@Override

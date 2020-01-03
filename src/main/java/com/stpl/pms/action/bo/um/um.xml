@@ -458,6 +458,22 @@
 			<result name="error">/com/stpl/pms/action/bo/um/bo_um_createGroup_error.jsp
 			</result>
 		</action>
+		<action name="bo_um_viewGroup"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="getGroupList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewGroup.jsp
+			</result>
+		</action>
+		<action name="bo_um_deleteGroup"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="getGroupList">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_deleteGroup.jsp
+			</result>
+		</action>
 		<!-- end of accounting management -->
 	</package>
 </struts>
