@@ -45,8 +45,7 @@
 						</div>
 						<div class="InputDiv">
 							<ss:textfield maxlength="100" name="groupName" id="groupName"
-								theme="myTheme" pattern="^[a-zA-Z]*$"
-								errorMassage="Numeric and Special Character not allowed"
+								theme="myTheme"
 								applyscript="true"></ss:textfield>
 							<div id="groupName_error" class="fieldError">
 								<s:fielderror>
@@ -59,12 +58,18 @@
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
-							<label> Under </label>
+							<label> Under </label><em class="Req">*</em>
 						</div>
 						<div class="InputDiv">
 							<s:select name="groupUnder" headerKey="-1"
 								headerValue="Select Group Name" list="groupNamesList"
-								cssClass="select1" theme="myTheme"></s:select>
+								cssClass="select1" theme="myTheme" applyscript="true"></s:select>
+								
+							<div id="groupUnder_error" class="fieldError">
+								<s:fielderror>
+									<s:param>groupUnder</s:param>
+								</s:fielderror>
+							</div>
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -72,12 +77,18 @@
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
-							<label> Group behaves like a sub-legers </label>
+							<label> Group behaves like a sub-legers </label><em class="Req">*</em>
 						</div>
 						<div class="InputDiv">
 							<s:select name="subLedger" headerKey="-1"
 								headerValue="Select Any One" list="{'Yes','No'}"
-								cssClass="select1" theme="myTheme"></s:select>
+								cssClass="select1" theme="myTheme" applyscript="true"></s:select>
+								
+							<div id="subLedger_error" class="fieldError">
+								<s:fielderror>
+									<s:param>subLedger</s:param>
+								</s:fielderror>
+							</div>
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -85,12 +96,18 @@
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
-							<label> Nett Debit/Credit balance for report </label>
+							<label> Nett Debit/Credit balance for report </label><em class="Req">*</em>
 						</div>
 						<div class="InputDiv">
 							<s:select name="blncForRep" headerKey="-1"
 								headerValue="Select Any One" list="{'Yes','No'}"
-								cssClass="select1" theme="myTheme"></s:select>
+								cssClass="select1" theme="myTheme" applyscript="true"></s:select>
+								
+							<div id="blncForRep_error" class="fieldError">
+								<s:fielderror>
+									<s:param>blncForRep</s:param>
+								</s:fielderror>
+							</div>
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -102,7 +119,13 @@
 						<div class="InputDiv">
 							<s:select name="forCalc" headerKey="-1"
 								headerValue="Select Any One" list="{'Yes','No'}"
-								cssClass="select1" theme="myTheme"></s:select>
+								cssClass="select1" theme="myTheme" applyscript="true"></s:select>
+								
+							<div id="forCalc_error" class="fieldError">
+								<s:fielderror>
+									<s:param>forCalc</s:param>
+								</s:fielderror>
+							</div>
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -110,12 +133,17 @@
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
-							<label> Method to allocate when used in &nbsp;&nbsp;&nbsp;purchase invoice </label>
+							<label> Method to allocate when used in &nbsp;&nbsp;&nbsp;purchase invoice </label><em class="Req">*</em>
 						</div>
 						<div class="InputDiv">
 							<s:select name="purInvoice" headerKey="-1"
 								headerValue="Select Any One" list="{'Applicable','Not Applicable'}"
-								cssClass="select1" theme="myTheme"></s:select>
+								cssClass="select1" theme="myTheme" applyscript="true"></s:select>
+							<div id="purInvoice_error" class="fieldError">
+								<s:fielderror>
+									<s:param>purInvoice</s:param>
+								</s:fielderror>
+							</div>
 						</div>
 					</div>
 					<div class="clearFRM"></div>

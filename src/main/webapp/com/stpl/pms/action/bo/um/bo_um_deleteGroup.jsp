@@ -21,7 +21,7 @@
 	<body>
 		<div class="clear2"></div>
 		<h2>
-			View Group
+			Delete Group
 			<s:if test="%{userInfoBean.getUserType().equalsIgnoreCase('BO')}"></s:if>
 		</h2>
 
@@ -30,10 +30,10 @@
 
 			<div class="greyStrip">
 				<h4>
-					View Group
+					Delete Group
 				</h4>
 			</div>
-			<s:form action="/com/stpl/pms/action/bo/um/bo_um_BoCompany_Search.action" id="searchUserFrm"
+			<s:form action="/com/stpl/pms/action/bo/um/bo_um_BoGroup_delete.action" id="searchUserFrm"
 				theme="simple" target="searchDiv">
 				<div class="innerBox">
 					

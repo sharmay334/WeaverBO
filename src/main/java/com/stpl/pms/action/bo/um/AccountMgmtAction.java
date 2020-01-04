@@ -10,6 +10,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.javabeans.AccountGroupMaster;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
 public class AccountMgmtAction extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
@@ -22,10 +23,41 @@ public class AccountMgmtAction extends BaseActionSupport implements ServletReque
 	private String blncForRep;
 	private String forCalc;
 	private String purInvoice;
+	private List<AccountGroupMaster> accountGroupMaster;
+	private AccountGroupMaster groupMaster;
+	private int group_id;
 
 	public String createGroup() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		groupNamesList = gameLobbyController.getGroupNamesList();
+		return SUCCESS;
+	}
+
+	public String editGroup() {
+		GameLobbyController gameLobbyController = new GameLobbyController();
+		if (gameLobbyController.editGroupDetails(groupMaster))
+			return SUCCESS;
+		else
+			return ERROR;
+	}
+
+	public String showGroupDetails() {
+		GameLobbyController gameLobbyController = new GameLobbyController();
+		groupMaster = gameLobbyController.getEditGroupDisplay(group_id);
+		return SUCCESS;
+	}
+
+	public String deleteGroup() {
+		GameLobbyController gameLobbyController = new GameLobbyController();
+		if (gameLobbyController.deleteGroupByName(groupName))
+			return SUCCESS;
+		else
+			return ERROR;
+	}
+
+	public String groupSearchResult() {
+		GameLobbyController gameLobbyController = new GameLobbyController();
+		accountGroupMaster = gameLobbyController.getAccountGroupMaster(groupName);
 		return SUCCESS;
 	}
 
@@ -38,10 +70,11 @@ public class AccountMgmtAction extends BaseActionSupport implements ServletReque
 
 	public String insertGroup() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
-		if(gameLobbyController.insertGroup(groupName,groupUnder.toUpperCase(),subLedger.toUpperCase(),blncForRep.toUpperCase(),forCalc.toUpperCase(),purInvoice.toUpperCase().replaceAll(" ","_")))
-		return SUCCESS;
+		if (gameLobbyController.insertGroup(groupName, groupUnder.toUpperCase(), subLedger.toUpperCase(),
+				blncForRep.toUpperCase(), forCalc.toUpperCase(), purInvoice.toUpperCase().replaceAll(" ", "_")))
+			return SUCCESS;
 		else
-		return ERROR;
+			return ERROR;
 	}
 
 	@Override
@@ -121,4 +154,29 @@ public class AccountMgmtAction extends BaseActionSupport implements ServletReque
 	public void setGroupNamesList(List<String> groupNamesList) {
 		this.groupNamesList = groupNamesList;
 	}
+
+	public List<AccountGroupMaster> getAccountGroupMaster() {
+		return accountGroupMaster;
+	}
+
+	public void setAccountGroupMaster(List<AccountGroupMaster> accountGroupMaster) {
+		this.accountGroupMaster = accountGroupMaster;
+	}
+
+	public AccountGroupMaster getGroupMaster() {
+		return groupMaster;
+	}
+
+	public void setGroupMaster(AccountGroupMaster groupMaster) {
+		this.groupMaster = groupMaster;
+	}
+
+	public int getGroup_id() {
+		return group_id;
+	}
+
+	public void setGroup_id(int group_id) {
+		this.group_id = group_id;
+	}
+
 }

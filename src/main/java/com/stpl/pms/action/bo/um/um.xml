@@ -453,9 +453,9 @@
 			method="insertGroup">
 			<interceptor-ref name="customStack"></interceptor-ref>
 			<interceptor-ref name="actions"></interceptor-ref>
-			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createGroup_success.jsp
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createGroup_success.jsp
 			</result>
-			<result name="error">/com/stpl/pms/action/bo/um/bo_um_createGroup_error.jsp
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createGroup_error.jsp
 			</result>
 		</action>
 		<action name="bo_um_viewGroup"
@@ -474,6 +474,112 @@
 			<result name="success">/com/stpl/pms/action/bo/um/bo_um_deleteGroup.jsp
 			</result>
 		</action>
+		<action name="bo_um_BoGroup_Search"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="groupSearchResult">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_searchGroup_SearchResult.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/um/nodecorate/field_error.jsp
+			</result>
+		</action>
+		<action name="bo_um_BoGroup_delete"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="deleteGroup">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteGroup_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteGroup_error.jsp
+			</result>
+		</action>
+		<action name="bo_um_searchGroup_Detail"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="showGroupDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_searchGroup_EditDet.jsp
+			</result>
+		</action>
+		<action name="bo_um_Group_Save"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="editGroup">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_editGroup_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/bo_um_editGroup_error.jsp
+			</result>
+
+		</action>
 		<!-- end of accounting management -->
+
+		<!-- ledger action start -->
+		<action name="bo_um_createLedger"
+			class="com.stpl.pms.action.bo.um.LedgerMgmtAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createLedger.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_viewLedger"
+			class="com.stpl.pms.action.bo.um.LedgerMgmtAction"
+			method="viewLedger">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewLedger.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_deleteLedger"
+			class="com.stpl.pms.action.bo.um.LedgerMgmtAction"
+			method="deleteLedger">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_deleteLedger.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_create_ledger"
+			class="com.stpl.pms.action.bo.um.LedgerMgmtAction"
+			method="insertLedger">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createLedger_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createLedger_error.jsp
+			</result>
+
+		</action>
+
+		<action name="bo_um_BoLedger_Search"
+			class="com.stpl.pms.action.bo.um.LedgerMgmtAction"
+			method="viewLedgerResult">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_searchLedger_SearchResult.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/um/nodecorate/field_error.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_BoLedger_delete"
+			class="com.stpl.pms.action.bo.um.LedgerMgmtAction"
+			method="deleteLedgerDB">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteLedger_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteLedger_error.jsp
+			</result>
+		</action>
+		<!-- ledger action end -->
 	</package>
 </struts>

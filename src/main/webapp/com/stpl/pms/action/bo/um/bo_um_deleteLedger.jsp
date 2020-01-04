@@ -21,7 +21,7 @@
 	<body>
 		<div class="clear2"></div>
 		<h2>
-			View Group
+			Delete Ledger
 			<s:if test="%{userInfoBean.getUserType().equalsIgnoreCase('BO')}"></s:if>
 		</h2>
 
@@ -30,10 +30,10 @@
 
 			<div class="greyStrip">
 				<h4>
-					View Group
+					Delete Ledger
 				</h4>
 			</div>
-			<s:form action="/com/stpl/pms/action/bo/um/bo_um_BoGroup_Search.action" id="searchUserFrm"
+			<s:form action="/com/stpl/pms/action/bo/um/bo_um_BoLedger_delete.action" id="searchUserFrm"
 				theme="simple" target="searchDiv">
 				<div class="innerBox">
 					
@@ -44,12 +44,12 @@
 
 							<div class="labelDiv">
 								<label>
-									Select Group
+									Select Ledger
 								</label>
 							</div>
 							<div class="InputDiv">
-								<s:select name="groupName" headerKey="-1"
-									headerValue="Select Group Name" list="groupNamesList"
+								<s:select name="ledgerName" headerKey="-1"
+									headerValue="Select Ledger Name" list="ledgerNamesList"
 									cssClass="select1" theme="myTheme"></s:select>
 							</div>
 						</div>
@@ -60,7 +60,7 @@
 					<%-- <s:submit value="Search" align="left" cssStyle="margin-left:0px"
 						cssClass="button" theme="simple"></s:submit>
 					 --%>	
-						<input type="submit" value='View' align="left" style="margin-left:0px"
+						<input type="submit" value='Delete' align="left" style="margin-left:0px"
 						class="button"/>
 				</div>
 			</s:form>

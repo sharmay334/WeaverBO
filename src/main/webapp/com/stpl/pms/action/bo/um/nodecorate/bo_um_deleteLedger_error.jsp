@@ -11,7 +11,7 @@
 	<head>
 		<base href="<%=basePath%>">
 
-		<title>Error creating Group</title>
+		<title>Error creating Ledger</title>
 
 		<meta http-equiv="pragma" content="no-cache">
 		<meta http-equiv="cache-control" content="no-cache">
@@ -27,12 +27,12 @@
 		<div class="FormSection">
 			<div class="greyStrip">
 				<h4>
-					Error Creating Group!
+					Error Deleting Ledger!
 				</h4>
 			</div>
 			<div class="innerBox">
 				<div class="alert error_msg">
-					<span class="alert_close"></span><strong>Error Creating Group: </strong> <s:actionerror theme="simple"/>
+					<span class="alert_close"></span><strong>Error Deleting Ledger: </strong> <s:actionerror theme="simple"/>
 				</div>
 			</div>
 		</div>

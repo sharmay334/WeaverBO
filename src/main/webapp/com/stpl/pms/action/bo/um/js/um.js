@@ -77,6 +77,23 @@ function getSelectedRoleValue(roleId, roleName) {
  * actionParam='userName='+userName;
  * _ajaxCallDiv(actionName,actionParam,'result'); } return false; }
  */
+function enableBoxesGroup(){
+	var continue_button = document.getElementById('submitButton');
+	var edit_button = document.getElementById('editButton');
+	// alert(document.getElementById('submitButton'));
+	continue_button.style.display = 'block';
+	edit_button.style.display = 'none';
+	document.getElementById('subLedger').readOnly = false;
+	document.getElementById('blncForRep').readOnly = false;
+	document.getElementById('forCalc').readOnly = false;
+	document.getElementById('purInvoice').readOnly = false;
+	
+	document.getElementById('subLedger').style.backgroundColor = "#F9FCCD";
+	document.getElementById('blncForRep').style.backgroundColor = "#F9FCCD";
+	document.getElementById('forCalc').style.backgroundColor = "#F9FCCD";
+	document.getElementById('purInvoice').style.backgroundColor = "#F9FCCD";
+	
+}
 function enableBoxesCompany() {
 	var continue_button = document.getElementById('submitButton');
 	var edit_button = document.getElementById('editButton');
