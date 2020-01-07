@@ -554,7 +554,7 @@
 			</result>
 			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createLedger_error.jsp
 			</result>
-
+			
 		</action>
 
 		<action name="bo_um_BoLedger_Search"

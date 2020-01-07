@@ -10,6 +10,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.javabeans.LedgerBankAccount;
 import com.stpl.pms.javabeans.LedgerBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
@@ -18,7 +19,6 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 	private HttpServletResponse servletResponse;
 	private List<String> groupNamesList;
 	private List<String> ledgerNamesList;
-
 	private String ledgerName;
 	private String groupUnder;
 	private String name;
@@ -26,7 +26,7 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 	private String country;
 	private String state;
 	private String pincode;
-	
+	private LedgerBankAccount ledgerBankAccount;
 	private List<LedgerBean> accountLedgerMaster;
 
 	@Override
@@ -37,32 +37,37 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 		groupNamesList.remove(0);
 		return SUCCESS;
 	}
+
 	public String deleteLedgerDB() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		if (gameLobbyController.deleteLedgerByName(ledgerName))
 			return SUCCESS;
 		else
 			return ERROR;
-		
+
 	}
+
 	public String viewLedgerResult() {
-		
+
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		accountLedgerMaster = gameLobbyController.getAccountLedgerMaster(ledgerName);
 		return SUCCESS;
 	}
+
 	public String viewLedger() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		ledgerNamesList = new ArrayList<String>();
 		ledgerNamesList = gameLobbyController.getLedgerNamesList();
-		
+
 		return SUCCESS;
 	}
 
 	public String insertLedger() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
-		if (gameLobbyController.createLedger(ledgerName,groupUnder,name,address,country,state,pincode))
+		
+		if (gameLobbyController.createLedger(ledgerName, groupUnder, name, address, country, state, pincode,ledgerBankAccount)) {
 			return SUCCESS;
+		}	
 		else
 			return ERROR;
 	}
@@ -168,6 +173,14 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 
 	public void setAccountLedgerMaster(List<LedgerBean> accountLedgerMaster) {
 		this.accountLedgerMaster = accountLedgerMaster;
+	}
+
+	public LedgerBankAccount getLedgerBankAccount() {
+		return ledgerBankAccount;
+	}
+
+	public void setLedgerBankAccount(LedgerBankAccount ledgerBankAccount) {
+		this.ledgerBankAccount = ledgerBankAccount;
 	}
 
 }

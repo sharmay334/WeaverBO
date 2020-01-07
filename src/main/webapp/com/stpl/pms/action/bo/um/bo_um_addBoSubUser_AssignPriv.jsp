@@ -307,6 +307,7 @@
 																			test="%{key=='GAME_MGT'}">Game Management</s:elseif>
 																		<s:elseif test="%{key=='TICKET_MGMT'}">Ticket Management</s:elseif>
 																		<s:elseif test="%{key=='MASTER_MGMT'}">Master Management</s:elseif>
+																		<s:elseif test="%{key=='INVENTORY_MGMT'}">Inventory Management</s:elseif>
 																		<s:elseif test="%{key=='COMPANY_MGMT'}">Company Management</s:elseif>
 																		<s:elseif test="%{key=='ACCOUNTING_MGMT'}">Accounting Management</s:elseif>
 																		<s:elseif test="%{key=='REPORTS'}">Reports</s:elseif>

@@ -10,13 +10,209 @@
 <html>
 <head>
 <Script>
+	function callactivateInterestCalculation() {
+		if (document.getElementById('activateInterestCalculation').value == "Yes")
+			$("#interest_parameter").css("display", "block");
+		else
+			$("#interest_parameter").css("display", "none");
+	}
+	
+	function functionMaintainBillByBill(){
+		if (document.getElementById('balance_billbybill').value == "Yes"){
+			$("#balance_billbybill_div").css("display", "block");
+			$("#defCreditPeriod_div").css("display", "block");
+			$("#creditDayDuringVoucher_div").css("display", "block");
+		}
+		else{
+			$("#balance_billbybill_div").css("display", "none");
+			$("#defCreditPeriod_div").css("display", "none");
+			$("#creditDayDuringVoucher_div").css("display", "none");
+		}
+			
+		
+	}
 	function get_account_interset_calculation() {
+		$("#use_for_payroll_div").css("display", "none");
+		$("#balance_billbybill_div").css("display", "none");
 		if (document.getElementById('groupUnder').value == "Bank Account") {
 
 			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "block");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "none");
+			$("#pan_It_Number_div").css("display", "none");
+		} else if (document.getElementById('groupUnder').value == "stock in hand") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+		} else if (document.getElementById('groupUnder').value == "Suspense account") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+		} else if (document.getElementById('groupUnder').value == "Bank occ a/c") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "block");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "block");
+			$("#pan_It_Number_div").css("display", "none");
+			$("#invtry_values_affect").css("display", "none");
+		} else if (document.getElementById('groupUnder').value == "Bank od a/c") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "block");
+			$("#pan_It_Number_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "block");
+
+		} else if (document.getElementById('groupUnder').value == "Cash in hand") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+		} else if (document.getElementById('groupUnder').value == "Branch/Division") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#pan_It_Number_div").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+		} else if (document.getElementById('groupUnder').value == "Capital account") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#pan_It_Number_div").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+		} else if (document.getElementById('groupUnder').value == "Deposit(assets)") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#pan_It_Number_div").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+		} else if (document.getElementById('groupUnder').value == "Investment") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#pan_It_Number_div").css("display", "block");
+		} else if (document.getElementById('groupUnder').value == "Misc. expense(assets)") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#pan_It_Number_div").css("display", "block");
+		} else if (document.getElementById('groupUnder').value == "Reserves & surplus") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#pan_It_Number_div").css("display", "block");
+		} else if (document.getElementById('groupUnder').value == "Retained earning") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#pan_It_Number_div").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
 		}
-		else{
+		else if (document.getElementById('groupUnder').value == "Current assets") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#pan_It_Number_div").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#use_for_payroll_div").css("display", "block");
+		}
+		else if (document.getElementById('groupUnder').value == "Current liabilities") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#pan_It_Number_div").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#use_for_payroll_div").css("display", "block");
+		}
+		else if (document.getElementById('groupUnder').value == "Loans & advances(assets)") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#pan_It_Number_div").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#use_for_payroll_div").css("display", "block");
+		}
+		else if (document.getElementById('groupUnder').value == "Provision") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#pan_It_Number_div").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#use_for_payroll_div").css("display", "block");
+		}
+		else if (document.getElementById('groupUnder').value == "Unsecured Loans") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#pan_It_Number_div").css("display", "block");
+		}
+		else if (document.getElementById('groupUnder').value == "Sundry creditors") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#pan_It_Number_div").css("display", "block");
+			$("#balance_billbybill_div").css("display", "block");
+		}
+		else if (document.getElementById('groupUnder').value == "Sundry debtors") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#pan_It_Number_div").css("display", "block");
+			$("#balance_billbybill_div").css("display", "block");
+		}
+		else {
 			$("#account_interset_calculation").css("display", "none");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "none");
+			$("#bank_configuration").css("display", "none");
+			$("#interest_parameter").css("display", "none");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#invtry_values_affect").css("display", "none");
+			$("#pan_It_Number_div").css("display", "none");
+			$("#balance_billbybill_div").css("display", "none");
+			$("#use_for_payroll_div").css("display", "none");
 		}
 	}
 </Script>
@@ -87,16 +283,80 @@
 
 					<!-- conditional for every group under -->
 
-					<div class="FormMainBox" id="account_interset_calculation"
+
+						<div class="FormMainBox" id="balance_billbybill_div"
 						style="display: none;">
 
 						<div class="labelDiv">
-							<label> Activate interest calculation</label>
+							<label> Maintain balances bill-by-bill</label>
 						</div>
 						<div class="InputDiv">
-							<s:select name="bankAccActIntCalc" headerKey="-1"
-								headerValue="Please select" list="{'Yes','No'}"
-								cssClass="select1" theme="myTheme"></s:select>
+							<s:select name="blcBillByBill" headerKey="-1"
+								id="balance_billbybill" headerValue="Please select"
+								list="{'Yes','No'}" cssClass="select1" theme="myTheme" onchange="functionMaintainBillByBill()"></s:select>
+
+
+						</div>
+
+					</div>
+					
+					<div class="FormMainBox" id="defCreditPeriod_div"
+						style="display: none;">
+
+						<div class="labelDiv">
+							<label> Default credit period</label>
+						</div>
+						<div class="InputDiv">
+							<ss:textfield maxlength="100" name="defCreditPeriod" id="defCreditPeriod"
+								theme="myTheme"></ss:textfield>
+
+
+						</div>
+
+					</div>
+					<div class="FormMainBox" id="creditDayDuringVoucher_div"
+						style="display: none;">
+
+						<div class="labelDiv">
+							<label> Check for credit day during voucher entry</label>
+						</div>
+						<div class="InputDiv">
+							<s:select name="creditDayDuringVoucher" headerKey="-1"
+								id="creditDayDuringVoucher" headerValue="Please select"
+								list="{'Yes','No'}" cssClass="select1" theme="myTheme"></s:select>
+
+
+						</div>
+
+					</div>
+
+					<div class="FormMainBox" id="invtry_values_affect"
+						style="display: none;">
+
+						<div class="labelDiv">
+							<label> Inventory values are affected</label>
+						</div>
+						<div class="InputDiv">
+							<s:select name="invtryValuesAffect" headerKey="-1"
+								id="invtryValuesAffect" headerValue="Please select"
+								list="{'Yes','No'}" cssClass="select1" theme="myTheme"></s:select>
+
+
+						</div>
+
+					</div>
+					
+					
+					<div class="FormMainBox" id="use_for_payroll_div"
+						style="display: none;">
+
+						<div class="labelDiv">
+							<label> Use for payroll</label>
+						</div>
+						<div class="InputDiv">
+							<s:select name="use_for_payroll" headerKey="-1"
+								id="use_for_payroll" headerValue="Please select"
+								list="{'Yes','No'}" cssClass="select1" theme="myTheme"></s:select>
 
 
 						</div>
@@ -104,6 +364,137 @@
 					</div>
 
 
+					<div class="FormMainBox" id="account_interset_calculation"
+						style="display: none;">
+
+						<div class="labelDiv">
+							<label> Activate interest calculation</label>
+						</div>
+						<div class="InputDiv">
+							<s:select name="ledgerBankAccount.activateInterestCalculation"
+								headerKey="-1" id="activateInterestCalculation"
+								headerValue="Please select" list="{'Yes','No'}"
+								cssClass="select1" theme="myTheme"
+								onchange="callactivateInterestCalculation();"></s:select>
+
+
+						</div>
+
+					</div>
+					<div class="FormMainBox" id="od_oc_LimitBankAcc"
+						style="display: none;">
+
+						<div class="labelDiv">
+							<label> Set OD limit</label>
+						</div>
+						<div class="InputDiv">
+							<ss:textfield maxlength="100" name="odLimit" id="od_limit"
+								theme="myTheme" style="width:50%"></ss:textfield>
+
+
+						</div>
+
+					</div>
+
+					<!-- bank acount ledger -->
+
+					<div id="interest_parameter" style="display: none;">
+						<div class="FormSectionMenu" id="subdocform_ip">
+							<div class="greyStrip">
+								<h4>Interset Parameter</h4>
+							</div>
+							<div class="innerbox">
+
+								<div class="FormMainBox">
+
+									<div class="labelDiv">
+										<label>Calculate interest based on </label>
+									</div>
+									<div class="InputDiv">
+										<s:select name="intesestBasedOn" headerKey="-1"
+											headerValue="Select Any One"
+											list="{'Bank/Reco date','Voucher date'}" cssClass="select1"
+											theme="myTheme"></s:select>
+									</div>
+								</div>
+
+								<div class="FormSectionMenu" id="subdocform_ic">
+									<div class="greyStrip">
+										<h4>Include transaction date for interest calculation:</h4>
+									</div>
+									<div class="innerbox">
+
+										<div class="FormMainBox">
+
+											<div class="labelDiv">
+												<label>for amount added </label>
+											</div>
+											<div class="InputDiv">
+												<s:select name="foramtAdded" headerKey="-1"
+													headerValue="Select Any One" list="{'Yes','No'}"
+													cssClass="select1" theme="myTheme"></s:select>
+											</div>
+										</div>
+										<div class="FormMainBox">
+
+											<div class="labelDiv">
+												<label>for amount deducted </label>
+											</div>
+											<div class="InputDiv">
+												<s:select name="foramtDeduct" headerKey="-1"
+													headerValue="Select Any One" list="{'Yes','No'}"
+													cssClass="select1" theme="myTheme"></s:select>
+											</div>
+										</div>
+
+										<div class="clearFRM"></div>
+										<div class="FormMainBox">
+
+											<div class="labelDiv">
+												<label> Rate </label>
+											</div>
+											<div class="InputDiv">
+												<ss:textfield maxlength="100" name="rate" id="accHolder"
+													theme="myTheme" style="width:30%"></ss:textfield>
+
+											</div>
+										</div>
+										<div class="FormMainBox">
+
+											<div class="labelDiv">
+												<label>Rate % per </label>
+											</div>
+											<div class="InputDiv">
+												<s:select name="ratePer" headerKey="-1"
+													headerValue="Select Any One"
+													list="{'30-Day Month','356-Day Year','Calendar Month','Calendar Year'}"
+													cssClass="select1" theme="myTheme"></s:select>
+
+											</div>
+										</div>
+
+										<div class="FormMainBox">
+
+											<div class="labelDiv">
+												<label> on </label>
+											</div>
+											<div class="InputDiv">
+												<s:select name="on" headerKey="-1"
+													headerValue="Select Any One"
+													list="{'All Balances','Credit Balances Only','Debit Balances Only'}"
+													cssClass="select1" theme="myTheme"></s:select>
+
+											</div>
+										</div>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+					<!-- end -->
 
 
 					<!-- end -->
@@ -112,8 +503,8 @@
 
 
 
-					<div id="subdocform" style="display: none;">
-						<div class="FormSectionMenu" id="subdocform">
+					<div id="bank_acc_details_div" style="display: none;">
+						<div class="FormSectionMenu" id="bank_acc_details_div_acc">
 							<div class="greyStrip">
 								<h4>Bank Account Details</h4>
 							</div>
@@ -121,10 +512,11 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label> A/C holder's name </label><em class="Req">*</em>
+										<label> A/C holder's name </label>
 									</div>
 									<div class="InputDiv">
-										<ss:textfield maxlength="100" name="accHolder" id="accHolder"
+										<ss:textfield maxlength="100"
+											name="ledgerBankAccount.accHolderName" id="accHolder"
 											theme="myTheme"></ss:textfield>
 
 
@@ -135,11 +527,11 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label> A/C no </label><em class="Req">*</em>
+										<label> A/C no </label>
 									</div>
 									<div class="InputDiv">
-										<ss:textfield maxlength="100" name="accNo" id="accNo"
-											theme="myTheme"></ss:textfield>
+										<ss:textfield maxlength="100"
+											name="ledgerBankAccount.accNumber" id="accNo" theme="myTheme"></ss:textfield>
 
 
 									</div>
@@ -149,11 +541,11 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label> IFSC code </label><em class="Req">*</em>
+										<label> IFSC code </label>
 									</div>
 									<div class="InputDiv">
-										<ss:textfield maxlength="100" name="ifsc" id="ifsc"
-											theme="myTheme"></ss:textfield>
+										<ss:textfield maxlength="100" name="ledgerBankAccount.ifsc"
+											id="ifsc" theme="myTheme"></ss:textfield>
 
 
 									</div>
@@ -163,10 +555,11 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label> bank name </label><em class="Req">*</em>
+										<label> bank name </label>
 									</div>
 									<div class="InputDiv">
-										<ss:textfield maxlength="100" name="bankName" id="bankName"
+										<ss:textfield maxlength="100"
+											name="ledgerBankAccount.bankName" id="bankName"
 											theme="myTheme"></ss:textfield>
 
 
@@ -178,11 +571,11 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label>Branch </label><em class="Req">*</em>
+										<label>Branch </label>
 									</div>
 									<div class="InputDiv">
-										<ss:textfield maxlength="100" name="branch" id="branch"
-											theme="myTheme"></ss:textfield>
+										<ss:textfield maxlength="100" name="ledgerBankAccount.branch"
+											id="branch" theme="myTheme"></ss:textfield>
 
 
 									</div>
@@ -193,9 +586,8 @@
 						</div>
 					</div>
 
-					<div id="subdocform">
-						<div class="FormSectionMenu" id="subdocform"
-							style="display: none;">
+					<div id="bank_configuration" style="display: none;">
+						<div class="FormSectionMenu" id="subdocform">
 							<div class="greyStrip">
 								<h4>Bank Configuration</h4>
 							</div>
@@ -204,10 +596,10 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label>Set cheque books </label><em class="Req">*</em>
+										<label>Set cheque books </label>
 									</div>
 									<div class="InputDiv">
-										<s:select name="chequeBook" headerKey="-1"
+										<s:select name="ledgerBankAccount.chequeBook" headerKey="-1"
 											headerValue="Select Any One" list="{'Yes','No'}"
 											cssClass="select1" theme="myTheme"></s:select>
 									</div>
@@ -220,9 +612,9 @@
 										<label>Cheque printing </label>
 									</div>
 									<div class="InputDiv">
-										<s:select name="chequePrinting" headerKey="-1"
-											headerValue="Select Any One" list="{'Yes','No'}"
-											cssClass="select1" theme="myTheme"></s:select>
+										<s:select name="ledgerBankAccount.chequePrinting"
+											headerKey="-1" headerValue="Select Any One"
+											list="{'Yes','No'}" cssClass="select1" theme="myTheme"></s:select>
 									</div>
 								</div>
 								<div class="clearFRM"></div>
@@ -231,7 +623,7 @@
 						</div>
 					</div>
 
-					<div id="subdocform">
+					<div id="subdocform1">
 						<div class="FormSectionMenu" id="subdocform">
 							<div class="greyStrip">
 								<h4>Mailing Details</h4>
@@ -241,17 +633,13 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label>Name </label><em class="Req">*</em>
+										<label>Name </label>
 									</div>
 									<div class="InputDiv">
 										<ss:textfield maxlength="100" name="name" id="name"
-											theme="myTheme" applyscript="true"></ss:textfield>
+											theme="myTheme"></ss:textfield>
 
-										<div id="name_error" class="fieldError">
-											<s:fielderror>
-												<s:param>name</s:param>
-											</s:fielderror>
-										</div>
+
 									</div>
 								</div>
 								<div class="clearFRM"></div>
@@ -259,11 +647,11 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label>Address </label><em class="Req">*</em>
+										<label>Address </label>
 									</div>
 									<div class="InputDiv">
 										<ss:textfield maxlength="150" name="address" id="address"
-											theme="myTheme" applyscript="true"></ss:textfield>
+											theme="myTheme"></ss:textfield>
 
 										<div id="address_error" class="fieldError">
 											<s:fielderror>
@@ -277,11 +665,11 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label>Country </label><em class="Req">*</em>
+										<label>Country </label>
 									</div>
 									<div class="InputDiv">
 										<ss:textfield maxlength="40" name="country" id="country"
-											theme="myTheme" applyscript="true"></ss:textfield>
+											theme="myTheme"></ss:textfield>
 
 										<div id="country_error" class="fieldError">
 											<s:fielderror>
@@ -295,11 +683,11 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label>State </label><em class="Req">*</em>
+										<label>State </label>
 									</div>
 									<div class="InputDiv">
 										<ss:textfield maxlength="40" name="state" id="state"
-											theme="myTheme" applyscript="true"></ss:textfield>
+											theme="myTheme"></ss:textfield>
 
 										<div id="state_error" class="fieldError">
 											<s:fielderror>
@@ -313,7 +701,7 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label>Pincode </label><em class="Req">*</em>
+										<label>Pincode </label>
 									</div>
 									<div class="InputDiv">
 										<ss:textfield maxlength="40" name="pincode" id="pincode"
@@ -332,24 +720,37 @@
 						</div>
 					</div>
 
-					<div id="subdocform">
-						<div class="FormSectionMenu" id="subdocform">
+					<div id="tax_reg_detail_div" style="display: none;">
+						<div class="FormSectionMenu" id="tax_reg_detail_div_acc">
 							<div class="greyStrip">
 								<h4>Tax Registration Details</h4>
 							</div>
 							<div class="innerbox">
 
+								<div class="FormMainBox" id="pan_It_Number_div"
+									style="disply: none;">
+
+									<div class="labelDiv">
+										<label>PAN/IT No. </label>
+									</div>
+									<div class="InputDiv">
+										<ss:textfield maxlength="40" name="panItNumber"
+											id="panItNumber" theme="myTheme"></ss:textfield>
+									</div>
+								</div>
+								<div class="clearFRM"></div>
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
 										<label>GSTIN/UN </label>
 									</div>
 									<div class="InputDiv">
-										<ss:textfield maxlength="40" name="gstin" id="state"
-											theme="myTheme"></ss:textfield>
+										<ss:textfield maxlength="40"
+											name="ledgerBankAccount.gstNumber" id="gstin" theme="myTheme"></ss:textfield>
 									</div>
 								</div>
-								<div class="clearFRM"></div>
+
+
 
 							</div>
 						</div>
@@ -358,9 +759,6 @@
 
 			</div>
 			<div class="box_footer" align="right">
-				<%-- <s:submit value="Search" align="left" cssStyle="margin-left:0px"
-						cssClass="button" theme="simple"></s:submit>
-					 --%>
 				<input type="submit" value='Create Group' align="left"
 					style="margin-left: 0px" class="button" />
 			</div>
