@@ -17,23 +17,27 @@
 			$("#interest_parameter").css("display", "none");
 	}
 	
-	function functionMaintainBillByBill(){
+	/* function functionMaintainBillByBill(){
 		if (document.getElementById('balance_billbybill').value == "Yes"){
 			$("#balance_billbybill_div").css("display", "block");
 			$("#defCreditPeriod_div").css("display", "block");
 			$("#creditDayDuringVoucher_div").css("display", "block");
+			$("#specify_credit_limit_div").css("display", "block");
 		}
 		else{
-			$("#balance_billbybill_div").css("display", "none");
 			$("#defCreditPeriod_div").css("display", "none");
 			$("#creditDayDuringVoucher_div").css("display", "none");
 		}
 			
 		
-	}
+	} */
 	function get_account_interset_calculation() {
 		$("#use_for_payroll_div").css("display", "none");
+		$("#specify_credit_limit_div").css("display", "none");
 		$("#balance_billbybill_div").css("display", "none");
+		$("#balance_billbybill_div").css("display", "none");
+		$("#defCreditPeriod_div").css("display", "none");
+		$("#creditDayDuringVoucher_div").css("display", "none");
 		if (document.getElementById('groupUnder').value == "Bank Account") {
 
 			$("#account_interset_calculation").css("display", "block");
@@ -46,14 +50,15 @@
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 		} else if (document.getElementById('groupUnder').value == "Suspense account") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
+			$("#invtry_values_affect").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Bank occ a/c") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "block");
@@ -74,7 +79,8 @@
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#invtry_values_affect").css("display", "none");
+			$("#bank_configuration").css("display", "none");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 		} else if (document.getElementById('groupUnder').value == "Branch/Division") {
 			$("#account_interset_calculation").css("display", "block");
@@ -96,7 +102,7 @@
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
@@ -105,14 +111,14 @@
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Misc. expense(assets)") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#pan_It_Number_div").css("display", "block");
@@ -120,7 +126,7 @@
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#pan_It_Number_div").css("display", "block");
@@ -128,7 +134,7 @@
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
@@ -137,7 +143,7 @@
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
@@ -147,7 +153,7 @@
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
@@ -157,17 +163,27 @@
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#use_for_payroll_div").css("display", "block");
 		}
+		else if (document.getElementById('groupUnder').value == "Loans(liabilities)") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "none");
+			$("#invtry_values_affect").css("display", "block");
+			$("#pan_It_Number_div").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#use_for_payroll_div").css("display", "none");
+		}
 		else if (document.getElementById('groupUnder').value == "Provision") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
@@ -177,7 +193,16 @@
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
+			$("#invtry_values_affect").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#pan_It_Number_div").css("display", "block");
+		}
+		else if (document.getElementById('groupUnder').value == "Secured loans") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#pan_It_Number_div").css("display", "block");
@@ -186,21 +211,27 @@
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#balance_billbybill_div").css("display", "block");
+			$("#specify_credit_limit_div").css("display", "block");
+			$("#defCreditPeriod_div").css("display", "block");
+			$("#creditDayDuringVoucher_div").css("display", "block");
 		}
 		else if (document.getElementById('groupUnder').value == "Sundry debtors") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "block");
+			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#balance_billbybill_div").css("display", "block");
+			$("#specify_credit_limit_div").css("display", "block");
+			$("#defCreditPeriod_div").css("display", "block");
+			$("#creditDayDuringVoucher_div").css("display", "block");
 		}
 		else {
 			$("#account_interset_calculation").css("display", "none");
@@ -212,6 +243,7 @@
 			$("#invtry_values_affect").css("display", "none");
 			$("#pan_It_Number_div").css("display", "none");
 			$("#balance_billbybill_div").css("display", "none");
+			$("#specify_credit_limit_div").css("display", "none");
 			$("#use_for_payroll_div").css("display", "none");
 		}
 	}
@@ -293,7 +325,7 @@
 						<div class="InputDiv">
 							<s:select name="blcBillByBill" headerKey="-1"
 								id="balance_billbybill" headerValue="Please select"
-								list="{'Yes','No'}" cssClass="select1" theme="myTheme" onchange="functionMaintainBillByBill()"></s:select>
+								list="{'Yes','No'}" cssClass="select1" theme="myTheme"></s:select>
 
 
 						</div>
@@ -324,6 +356,22 @@
 							<s:select name="creditDayDuringVoucher" headerKey="-1"
 								id="creditDayDuringVoucher" headerValue="Please select"
 								list="{'Yes','No'}" cssClass="select1" theme="myTheme"></s:select>
+
+
+						</div>
+
+					</div>
+					
+					
+					<div class="FormMainBox" id="specify_credit_limit_div"
+						style="display: none;">
+
+						<div class="labelDiv">
+							<label> Specify credit limit</label>
+						</div>
+						<div class="InputDiv">
+							<ss:textfield maxlength="100" name="specifyCreditLimit" id="specifyCreditLimit"
+								theme="myTheme"></ss:textfield>
 
 
 						</div>
