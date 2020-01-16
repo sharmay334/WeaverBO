@@ -30,6 +30,7 @@ public class AccountMgmtAction extends BaseActionSupport implements ServletReque
 	public String createGroup() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		groupNamesList = gameLobbyController.getGroupNamesList();
+		
 		return SUCCESS;
 	}
 

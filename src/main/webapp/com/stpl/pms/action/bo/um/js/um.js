@@ -77,6 +77,31 @@ function getSelectedRoleValue(roleId, roleName) {
  * actionParam='userName='+userName;
  * _ajaxCallDiv(actionName,actionParam,'result'); } return false; }
  */
+function enableStockCatBoxesGroup(){
+	var continue_button = document.getElementById('submitButton');
+	var edit_button = document.getElementById('editButton');
+	// alert(document.getElementById('submitButton'));
+	continue_button.style.display = 'block';
+	edit_button.style.display = 'none';
+	document.getElementById('stockName').readOnly = false;
+	
+	document.getElementById('stockName').style.backgroundColor = "#F9FCCD";
+}
+function enableStockBoxesGroup(){
+	
+	var continue_button = document.getElementById('submitButton');
+	var edit_button = document.getElementById('editButton');
+	// alert(document.getElementById('submitButton'));
+	continue_button.style.display = 'block';
+	edit_button.style.display = 'none';
+	document.getElementById('stockName').readOnly = false;
+	document.getElementById('qtyCheck').readOnly = false;
+	document.getElementById('gstDetCheck').readOnly = false;
+	
+	document.getElementById('qtyCheck').style.backgroundColor = "#F9FCCD";
+	document.getElementById('stockName').style.backgroundColor = "#F9FCCD";
+	document.getElementById('gstDetCheck').style.backgroundColor = "#F9FCCD";
+}
 function enableBoxesGroup(){
 	var continue_button = document.getElementById('submitButton');
 	var edit_button = document.getElementById('editButton');

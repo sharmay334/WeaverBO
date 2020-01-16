@@ -27,6 +27,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_Game_search.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_boUserReg_Save"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction" method="createUser">
 			<interceptor-ref name="customTokenStack"></interceptor-ref>
@@ -41,6 +42,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_boUserReg_Menu.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_addBoSubUser_Menu"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="subUserRegistration">
@@ -50,6 +52,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_addBoSubUser_Menu.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_addBoSubUser_Save"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="newSubUserReg">
@@ -62,6 +65,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_addBoSubUser_Menu.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_addBoSubUser_AssignPriv"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="assignSubUserPriviledges">
@@ -71,6 +75,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_addBoSubUser_Success.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_editBoSubUserPriv_Menu"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="fetchSubUserName">
@@ -80,6 +85,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_editBoSubUserPriv_Menu.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_editBoSubUserPriv_FetchPriv"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="getSubUserPriviledges">
@@ -102,6 +108,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_editBoSubUserPriv_Menu.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_searchBoUser_Menu"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="dispSearchBoUser">
@@ -111,6 +118,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_searchBoUser_Menu.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_searchBoUser_Search"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="searchBoUsers">
@@ -123,6 +131,7 @@
 				/com/stpl/pms/action/bo/um/nodecorate/field_error.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_searchBoUser_Detail"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="showBOUserDetails">
@@ -133,6 +142,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_searchBoUser_EditDet.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_searchCompany_Detail"
 			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
 			method="showCompanyDetails">
@@ -142,11 +152,13 @@
 				/com/stpl/pms/action/bo/um/bo_um_searchCompany_EditDet.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_searchBoUser_ResetPassBO"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction" method="resetPassBO">
 			<interceptor-ref name="customStack"></interceptor-ref>
 			<interceptor-ref name="actions"></interceptor-ref>
 		</action>
+
 		<action name="bo_um_searchBoUser_Save"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="editBOUserDetails">
@@ -159,6 +171,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_searchBoUser_EditDet.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_searchBoUser_Navigate"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction" method="searchAjax">
 			<interceptor-ref name="customStack"></interceptor-ref>
@@ -167,6 +180,7 @@
 				/com/stpl/pms/action/bo/um/nodecorate/bo_um_searchBoUser_SearchResult.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_validateusername"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="validateBOUsername">
@@ -183,8 +197,6 @@
 			method="checkUserEmailIdAvailabilityForDomain">
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
-
-
 		<!-- Role Management Start -->
 
 		<action name="bo_rm_create_role_menu"
@@ -222,6 +234,7 @@
 				/com/stpl/pms/action/bo/rm/bo_rm_editRole_Menu.jsp
 			</result>
 		</action>
+
 		<action name="bo_rm_edit_role_FetchPriv"
 			class="com.stpl.pms.action.bo.um.RoleMgmtAction"
 			method="fetchRolePriv">
@@ -231,6 +244,7 @@
 				/com/stpl/pms/action/bo/rm/nodecorate/bo_rm_editRole_FetchPriv.jsp
 			</result>
 		</action>
+
 		<action name="bo_rm_edit_role_save"
 			class="com.stpl.pms.action.bo.um.RoleMgmtAction"
 			method="editRolePriv">
@@ -244,15 +258,18 @@
 				/com/stpl/pms/action/bo/rm/bo_rm_editRole_Success.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_validateRole"
 			class="com.stpl.pms.action.bo.um.RoleMgmtAction"
 			method="checkRoleAvailability">
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
+
 		<action name="assignPriv"
 			class="com.stpl.pms.action.bo.um.RoleMgmtAction" method="assignPriv">
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
+
 		<action name="bo_rm_edit_domain_user_priv"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="fetchDomainUserName">
@@ -262,6 +279,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_editDomainUserPriv_Menu.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_fetchDomainUserPriv"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="getDomainUserPriviledges">
@@ -271,6 +289,7 @@
 				/com/stpl/pms/action/bo/um/nodecorate/bo_um_fetchDomainUserPriv.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_editDomainUserPriv"
 			class="com.stpl.pms.action.bo.um.UserMgmtAction"
 			method="editDomainUserPriviledges">
@@ -333,6 +352,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_editNetworkAccess.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_editNetwork_Access"
 			class="com.stpl.pms.action.bo.um.NetworkAccessAction"
 			method="getSubUserNetworkAccess">
@@ -342,6 +362,7 @@
 				/com/stpl/pms/action/bo/um/nodecorate/bo_um_networkAccessSubUserResult.jsp
 			</result>
 		</action>
+
 		<action name="bo_dm_blockIp_SearchResult"
 			class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
 			method="blockIpSearchResult">
@@ -350,6 +371,7 @@
 				/com/stpl/pms/action/bo/riskMgmt/blocked_pages/nodecorate/st_dm_boBlockedIpEdit_Fetch.jsp
 			</result>
 		</action>
+
 		<action name="bo_dm_blockIpEdit_Save"
 			class="com.stpl.pms.action.bo.riskMgmt.RiskMgmtAction"
 			method="blockIpEditSave">
@@ -370,6 +392,7 @@
 			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createCompany.jsp
 			</result>
 		</action>
+
 		<action name="st_um_bo_assignSubUserNetworkAccess"
 			class="com.stpl.pms.action.bo.um.NetworkAccessAction"
 			method="assignSubUserNetworkAccess">
@@ -380,6 +403,7 @@
 			<result name="error">/com/stpl/pms/action/bo/um/bo_um_addPrivilege_error.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_createCompany_Reg"
 			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
 			method="createCompany">
@@ -390,6 +414,7 @@
 			<result name="error">/com/stpl/pms/action/bo/um/bo_um_createCompany_error.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_viewCompany"
 			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
 			method="getCompanyList">
@@ -398,6 +423,7 @@
 			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewCompany.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_BoCompany_Search"
 			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
 			method="viewCompanyDetails">
@@ -410,6 +436,7 @@
 				/com/stpl/pms/action/bo/um/nodecorate/field_error.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_removeCompany"
 			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
 			method="getCompanyList">
@@ -418,6 +445,7 @@
 			<result name="success">/com/stpl/pms/action/bo/um/bo_um_deleteCompany.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_BoCompany_Delete"
 			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
 			method="deleteCompany">
@@ -428,6 +456,7 @@
 			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteCompany_error.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_Company_Save"
 			class="com.stpl.pms.action.bo.um.CreateCompanyAction"
 			method="editCompany">
@@ -448,6 +477,7 @@
 			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createGroup.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_create_group"
 			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
 			method="insertGroup">
@@ -458,6 +488,7 @@
 			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createGroup_error.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_viewGroup"
 			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
 			method="getGroupList">
@@ -466,6 +497,7 @@
 			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewGroup.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_deleteGroup"
 			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
 			method="getGroupList">
@@ -474,6 +506,7 @@
 			<result name="success">/com/stpl/pms/action/bo/um/bo_um_deleteGroup.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_BoGroup_Search"
 			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
 			method="groupSearchResult">
@@ -486,6 +519,7 @@
 				/com/stpl/pms/action/bo/um/nodecorate/field_error.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_BoGroup_delete"
 			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
 			method="deleteGroup">
@@ -496,6 +530,7 @@
 			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteGroup_error.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_searchGroup_Detail"
 			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
 			method="showGroupDetails">
@@ -505,6 +540,7 @@
 				/com/stpl/pms/action/bo/um/bo_um_searchGroup_EditDet.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_Group_Save"
 			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
 			method="editGroup">
@@ -554,7 +590,7 @@
 			</result>
 			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createLedger_error.jsp
 			</result>
-			
+
 		</action>
 
 		<action name="bo_um_BoLedger_Search"
@@ -580,6 +616,218 @@
 			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteLedger_error.jsp
 			</result>
 		</action>
+
+		<action name="bo_um_createStockGroup"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createStock.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_create_stock"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="createStockGroup">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createStock_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createStock_error.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_viewStockGroup"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewStockGroup">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewStockGroup.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_BoStockGroup_Search"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewStockGroupResult">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_Stock_SearchResult.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/um/nodecorate/field_error.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_searchStockGroup_Detail"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="editStockGroupResult">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_searchStovkGroup_EditDet.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_StockGroup_Save"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="editStockSave">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_editStockGroup_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/bo_um_editStockGroup_error.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_deleteStockGroup"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewStockGroup">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_deleteStockGroup.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_BoStock_delete"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="deleteStock">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteStock_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteStock_error.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_createStockCatagory"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="getAvailableStockGroup">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createStockCatagory.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_create_stockCatagory"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="createStockCatagory">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createStockCat_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createStockCat_error.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_viewStockCatagory"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewStockCatagory">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewStockCatagory.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_BoStockCatagory_Search"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewStockCatagoryResult">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_Stock_Catagory_SearchResult.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/um/nodecorate/field_error.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_searchStockCatagory_Detail"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="editStockCatagory">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_searchCategory_EditDet.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_deleteStockCategory"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewStockCatagory">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_deleteStockCatagory.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_BoStockCat_delete"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="deleteStockCatagory">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteStockCat_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteStockCat_error.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_createStockItem"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewCreateStockItemPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createStockItem.jsp
+			</result>
+		</action>
+
 		<!-- ledger action end -->
+
+		<action name="bo_um_createUnitofMeasure"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewUnitPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createUnitPage.jsp
+			</result>
+		</action>
+		<action name="bo_um_create_unitMeasure"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="createUnitPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createUnitMeasure_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createUnitMeasure_error.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_viewUnitOfMeasure"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewUnitMeasure">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewUnitMeasure.jsp
+			</result>
+		</action>
+		<action name="bo_um_BoviewUnitMeasure_Search"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewUnitMeasureResult">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_Unit_Measure_SearchResult.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/um/nodecorate/field_error.jsp
+			</result>
+		</action>
+		<action name="bo_um_deleteUnitOfMeasure"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewUnitMeasure">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_deleteUnitMeasure.jsp
+			</result>
+		</action>
 	</package>
 </struts>

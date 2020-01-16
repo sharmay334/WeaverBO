@@ -311,7 +311,26 @@
 							</div>
 						</div>
 					</div>
+					<div class="clearFRM"></div>
+					<div class="FormMainBox">
 
+						<div class="labelDiv">
+							<label>Employee Under </label><em class="Req">*</em>
+						</div>
+						<div class="InputDiv">
+							<s:select name="employeeUnder" headerKey="-1"
+								headerValue="Select Employee Name" list="employeeUnderList"
+								cssClass="select1" theme="myTheme" applyscript="true"></s:select>
+								
+							<div id="employeeUnder_error" class="fieldError">
+								<s:fielderror>
+									<s:param>employeeUnder</s:param>
+								</s:fielderror>
+							</div>
+						</div>
+					</div>
+					<div class="clearFRM"></div>
+					
 
 					<!-- conditional for every group under -->
 
@@ -807,7 +826,7 @@
 
 			</div>
 			<div class="box_footer" align="right">
-				<input type="submit" value='Create Group' align="left"
+				<input type="submit" value='Create Ledger' align="left"
 					style="margin-left: 0px" class="button" />
 			</div>
 		</s:form>

@@ -28,6 +28,8 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 	private String pincode;
 	private LedgerBankAccount ledgerBankAccount;
 	private List<LedgerBean> accountLedgerMaster;
+	private List<String> employeeUnderList;
+
 
 	@Override
 	public String execute() throws Exception {
@@ -35,6 +37,7 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		groupNamesList = gameLobbyController.getGroupNamesList();
 		groupNamesList.remove(0);
+		employeeUnderList = gameLobbyController.getEmployeeNamesList();
 		return SUCCESS;
 	}
 
@@ -181,6 +184,14 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 
 	public void setLedgerBankAccount(LedgerBankAccount ledgerBankAccount) {
 		this.ledgerBankAccount = ledgerBankAccount;
+	}
+
+	public List<String> getEmployeeUnderList() {
+		return employeeUnderList;
+	}
+
+	public void setEmployeeUnderList(List<String> employeeUnderList) {
+		this.employeeUnderList = employeeUnderList;
 	}
 
 }
