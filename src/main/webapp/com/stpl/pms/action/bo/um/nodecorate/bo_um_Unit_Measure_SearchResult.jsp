@@ -50,7 +50,6 @@
 											href="bo_um_searchStockCatagory_Detail.action?unit_id=%{unitId}"
 											theme="simple">
 											<s:property value="unitType" />
-
 										</s:a></td>
 									<td style="text-align: center;" nowrap="nowrap"><s:property
 											value="unitSymbol" /></td>

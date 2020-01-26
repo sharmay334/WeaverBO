@@ -10,7 +10,7 @@
 <html>
 	<head>
 		
-		<title>View Group</title>
+		<title>Delete Unit</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="pragma" content="no-cache">
 		<meta http-equiv="cache-control" content="no-cache">
@@ -21,7 +21,7 @@
 	<body>
 		<div class="clear2"></div>
 		<h2>
-			Delete Ledger
+			Delete Unit
 			<s:if test="%{userInfoBean.getUserType().equalsIgnoreCase('BO')}"></s:if>
 		</h2>
 
@@ -30,7 +30,7 @@
 
 			<div class="greyStrip">
 				<h4>
-					Delete Ledger
+					Delete Unit
 				</h4>
 			</div>
 			<s:form action="/com/stpl/pms/action/bo/um/bo_um_BoUnit_delete.action" id="searchUserFrm"

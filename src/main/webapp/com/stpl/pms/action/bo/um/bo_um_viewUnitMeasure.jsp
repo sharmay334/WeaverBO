@@ -48,7 +48,7 @@
 								</label>
 							</div>
 							<div class="InputDiv">
-								<s:select name="unitMeasureName" headerKey="-1"
+								<s:select name="unitSymbol" headerKey="-1"
 									headerValue="Select Name" list="viewunitMeasureList"
 									cssClass="select1" theme="myTheme"></s:select>
 							</div>

@@ -45,6 +45,12 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 	private String decimalPlace;
 	private List<String> viewunitMeasureList;
 	private List<UnitBean> UnitBeanList;
+	// compound unit
+
+	private String compoundFirstUnit;
+	private String compundConversion;
+	private String compoundSecondUnit;
+
 	@Override
 	public String execute() throws Exception {
 		// TODO Auto-generated method stub
@@ -148,6 +154,8 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		GameLobbyController controller = new GameLobbyController();
 		stockItemCatList = controller.getAllStockCatagory();
 		stockItemUnitList = controller.getAllStockItem();
+		viewStockGroupList = new ArrayList<String>();
+		viewStockGroupList = controller.getAllStockGroup();
 		return SUCCESS;
 	}
 
@@ -198,6 +206,10 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		UQCList.add("UGS – US GALLONS");
 		UQCList.add("UNT – UNITS");
 		UQCList.add("YDS – YARDS ");
+		viewunitMeasureList = new ArrayList<>();
+		GameLobbyController controller = new GameLobbyController();
+		viewunitMeasureList = controller.getUnitMeasureList();
+
 		return SUCCESS;
 	}
 
@@ -216,9 +228,18 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 
 	public String createUnitPage() {
 		GameLobbyController controller = new GameLobbyController();
-		if (controller.createNewUnit(unitType, unitSymbol, formalName, UQC, decimalPlace))
+		if (controller.createNewUnit(unitType, unitSymbol, formalName, UQC, decimalPlace, compoundFirstUnit,
+				compundConversion, compoundSecondUnit))
 			return SUCCESS;
 		return ERROR;
+	}
+
+	public String deleteUnitMeasure() {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.deleteUnitMeasure(unitSymbol))
+			return SUCCESS;
+		else
+			return ERROR;
 	}
 
 	public HttpServletRequest getServletRequest() {
@@ -443,6 +464,30 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 
 	public void setUnitBeanList(List<UnitBean> unitBeanList) {
 		UnitBeanList = unitBeanList;
+	}
+
+	public String getCompoundFirstUnit() {
+		return compoundFirstUnit;
+	}
+
+	public void setCompoundFirstUnit(String compoundFirstUnit) {
+		this.compoundFirstUnit = compoundFirstUnit;
+	}
+
+	public String getCompundConversion() {
+		return compundConversion;
+	}
+
+	public void setCompundConversion(String compundConversion) {
+		this.compundConversion = compundConversion;
+	}
+
+	public String getCompoundSecondUnit() {
+		return compoundSecondUnit;
+	}
+
+	public void setCompoundSecondUnit(String compoundSecondUnit) {
+		this.compoundSecondUnit = compoundSecondUnit;
 	}
 
 }
