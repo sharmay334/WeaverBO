@@ -58,7 +58,7 @@
 			<h4>Create Stock Item</h4>
 		</div>
 		<s:form
-			action="/com/stpl/pms/action/bo/um/bo_um_create_stockCatagory.action"
+			action="/com/stpl/pms/action/bo/um/bo_um_create_stockItem.action"
 			id="searchUserFrm" theme="simple" target="searchDiv">
 			<div class="innerBox">
 
@@ -146,11 +146,11 @@
 							onChange="checkForAlternateUnit()"></s:select>
 						<span id="applicableIfalternative" style="display: none;">
 							<label><b>Where:</b></label> <ss:textfield maxlength="100"
-								name="stockItemName" id="stockItemName" theme="myTheme"
-								cssStyle="width:20%" applyscript="true"></ss:textfield> <b><label
+								name="funit" id="funit" theme="myTheme"
+								cssStyle="width:20%"></ss:textfield> <b><label
 								id="unitVal1"></label>&nbsp; = &nbsp;<ss:textfield
-									maxlength="100" name="stockItemName" id="stockItemName"
-									theme="myTheme" cssStyle="width:20%" applyscript="true"></ss:textfield><label
+									maxlength="100" name="sunit" id="sunit"
+									theme="myTheme" cssStyle="width:20%"></ss:textfield><label
 								id="unitVal2"></label></b>
 						</span>
 						<div id="stockItemAlterUnit_error" class="fieldError">
@@ -168,14 +168,13 @@
 								<label> Maintain in Batches </label><em class="Req">*</em>
 							</div>
 							<div class="InputDiv">
-								<s:select name="stockUnderItem" id="stockUnderItem"
+								<s:select name="isbatches" id="isbatches"
 									headerKey="-1" headerValue="Select Stock Name"
-									list="{'Yes','No'}" cssClass="select1" theme="myTheme"
-									applyscript="true"></s:select>
+									list="{'Yes','No'}" cssClass="select1" theme="myTheme"></s:select>
 
-								<div id="stockUnderItem_error" class="fieldError">
+								<div id="isbatches_error" class="fieldError">
 									<s:fielderror>
-										<s:param>stockUnderItem</s:param>
+										<s:param>isbatches</s:param>
 									</s:fielderror>
 								</div>
 							</div>
@@ -186,14 +185,13 @@
 								<label> Track date of manufacturing?</label><em class="Req">*</em>
 							</div>
 							<div class="InputDiv">
-								<s:select name="stockUnderItem" id="stockUnderItem"
+								<s:select name="dom" id="dom"
 									headerKey="-1" headerValue="Select Stock Name"
-									list="{'Yes','No'}" cssClass="select1" theme="myTheme"
-									applyscript="true"></s:select>
+									list="{'Yes','No'}" cssClass="select1" theme="myTheme"></s:select>
 
-								<div id="stockUnderItem_error" class="fieldError">
+								<div id="dom_error" class="fieldError">
 									<s:fielderror>
-										<s:param>stockUnderItem</s:param>
+										<s:param>dom</s:param>
 									</s:fielderror>
 								</div>
 							</div>
@@ -204,14 +202,13 @@
 								<label> Use expiry dates</label><em class="Req">*</em>
 							</div>
 							<div class="InputDiv">
-								<s:select name="stockUnderItem" id="stockUnderItem"
+								<s:select name="expDate" id="expDate"
 									headerKey="-1" headerValue="Select Stock Name"
-									list="{'Yes','No'}" cssClass="select1" theme="myTheme"
-									applyscript="true"></s:select>
+									list="{'Yes','No'}" cssClass="select1" theme="myTheme"></s:select>
 
-								<div id="stockUnderItem_error" class="fieldError">
+								<div id="expDate_error" class="fieldError">
 									<s:fielderror>
-										<s:param>stockUnderItem</s:param>
+										<s:param>expDate</s:param>
 									</s:fielderror>
 								</div>
 							</div>
@@ -223,14 +220,13 @@
 								<label> Set Standard rates?</label><em class="Req">*</em>
 							</div>
 							<div class="InputDiv">
-								<s:select name="stockUnderItem" id="stockUnderItem"
+								<s:select name="standRate" id="standRate"
 									headerKey="-1" headerValue="Select Stock Name"
-									list="{'Yes','No'}" cssClass="select1" theme="myTheme"
-									applyscript="true"></s:select>
+									list="{'Yes','No'}" cssClass="select1" theme="myTheme"></s:select>
 
-								<div id="stockUnderItem_error" class="fieldError">
+								<div id="standRate_error" class="fieldError">
 									<s:fielderror>
-										<s:param>stockUnderItem</s:param>
+										<s:param>standRate</s:param>
 									</s:fielderror>
 								</div>
 							</div>
@@ -242,14 +238,13 @@
 								<label> Enable cost tracking?</label><em class="Req">*</em>
 							</div>
 							<div class="InputDiv">
-								<s:select name="stockUnderItem" id="stockUnderItem"
+								<s:select name="costTrack" id="costTrack"
 									headerKey="-1" headerValue="Select Stock Name"
-									list="{'Yes','No'}" cssClass="select1" theme="myTheme"
-									applyscript="true"></s:select>
+									list="{'Yes','No'}" cssClass="select1" theme="myTheme"></s:select>
 
-								<div id="stockUnderItem_error" class="fieldError">
+								<div id="costTrack_error" class="fieldError">
 									<s:fielderror>
-										<s:param>stockUnderItem</s:param>
+										<s:param>costTrack</s:param>
 									</s:fielderror>
 								</div>
 							</div>
@@ -264,12 +259,12 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label> GST Applicable </label>
+										<label> GST Applicable </label><em class="Req">*</em>
 									</div>
 									<div class="InputDiv">
-										<s:select name="stockItemAlterUnit" id="stockItemAlterUnit"
+										<s:select name="isGst" id="isGst"
 											headerKey="-1" headerValue="Select One"
-											list="{'Applicable','Not Applicable'}" cssClass="select1"
+											list="{'Applicable','Not Applicable'}" applyscript="true" cssClass="select1"
 											theme="myTheme" cssStyle="width:50%"></s:select>
 
 
@@ -280,12 +275,12 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label> Set/alter GST Details </label>
+										<label> Set/alter GST Details </label><em class="Req">*</em>
 									</div>
 									<div class="InputDiv">
-										<s:select name="stockItemAlterUnit" id="stockItemAlterUnit"
+										<s:select name="alterGst" id="alterGst"
 											headerKey="-1" headerValue="Select One" list="{'Yes','No'}"
-											cssClass="select1" theme="myTheme" cssStyle="width:50%"></s:select>
+											cssClass="select1" applyscript="true" theme="myTheme" cssStyle="width:50%"></s:select>
 
 
 									</div>
@@ -295,11 +290,11 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label>Types of Supply</label>
+										<label>Types of Supply</label><em class="Req">*</em>
 									</div>
 									<div class="InputDiv">
-										<s:select name="stockItemAlterUnit" id="stockItemAlterUnit"
-											headerKey="-1" headerValue="Select One"
+										<s:select name="supplyType" id="supplyType"
+											headerKey="-1" applyscript="true" headerValue="Select One"
 											list="{'Goods','Services'}" cssClass="select1"
 											theme="myTheme" cssStyle="width:50%"></s:select>
 
@@ -315,7 +310,7 @@
 									</div>
 									<div class="InputDiv">
 										<ss:textfield maxlength="100"
-											name="ledgerBankAccount.bankName" id="bankName"
+											name="dutyRate" id="dutyRate"
 											theme="myTheme" cssStyle="width:30%"></ss:textfield>
 
 

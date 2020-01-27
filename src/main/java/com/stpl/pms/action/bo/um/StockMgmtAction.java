@@ -51,6 +51,17 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 	private String compundConversion;
 	private String compoundSecondUnit;
 
+	// stock item creation
+
+	private String stockItemName;
+	private String stockUnderItem;
+	private String stockItemCat;
+	private String stockItemUnit;
+	private String isGst;
+	private String alterGst;
+	private String supplyType;
+	private String dutyRate;
+
 	@Override
 	public String execute() throws Exception {
 		// TODO Auto-generated method stub
@@ -239,6 +250,14 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		if (controller.deleteUnitMeasure(unitSymbol))
 			return SUCCESS;
 		else
+			return ERROR;
+	}
+
+	public String createStockItemFirstStep() {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.itemCreationFirstStep(stockItemName,stockUnderItem,stockItemCat,stockItemUnit,isGst,alterGst,supplyType,dutyRate)) {
+			return SUCCESS;
+		} else
 			return ERROR;
 	}
 
@@ -488,6 +507,70 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 
 	public void setCompoundSecondUnit(String compoundSecondUnit) {
 		this.compoundSecondUnit = compoundSecondUnit;
+	}
+
+	public String getStockItemName() {
+		return stockItemName;
+	}
+
+	public void setStockItemName(String stockItemName) {
+		this.stockItemName = stockItemName;
+	}
+
+	public String getStockUnderItem() {
+		return stockUnderItem;
+	}
+
+	public void setStockUnderItem(String stockUnderItem) {
+		this.stockUnderItem = stockUnderItem;
+	}
+
+	public String getStockItemCat() {
+		return stockItemCat;
+	}
+
+	public void setStockItemCat(String stockItemCat) {
+		this.stockItemCat = stockItemCat;
+	}
+
+	public String getStockItemUnit() {
+		return stockItemUnit;
+	}
+
+	public void setStockItemUnit(String stockItemUnit) {
+		this.stockItemUnit = stockItemUnit;
+	}
+
+	public String getIsGst() {
+		return isGst;
+	}
+
+	public void setIsGst(String isGst) {
+		this.isGst = isGst;
+	}
+
+	public String getAlterGst() {
+		return alterGst;
+	}
+
+	public void setAlterGst(String alterGst) {
+		this.alterGst = alterGst;
+	}
+
+	public String getSupplyType() {
+		return supplyType;
+	}
+
+	public void setSupplyType(String supplyType) {
+		this.supplyType = supplyType;
+	}
+
+	public String getDutyRate() {
+		return dutyRate;
+	}
+
+	public void setDutyRate(String dutyRate) {
+		this.dutyRate = dutyRate;
 	}
 
 }

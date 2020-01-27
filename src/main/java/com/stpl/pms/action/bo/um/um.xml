@@ -839,5 +839,17 @@
 			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteUnitMeasure_error.jsp
 			</result>
 		</action>
+		<!-- stock item creation -->
+
+		<action name="bo_um_create_stockItem"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="createStockItemFirstStep">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createStockItem_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createStockItem_error.jsp
+			</result>
+		</action>
 	</package>
 </struts>
