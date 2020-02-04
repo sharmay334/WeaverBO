@@ -12,14 +12,14 @@
       <!-- Assume test is the database name  -->
       
       <property name = "hibernate.connection.url">
-         jdbc:mysql://localhost:3306/crm?autoReconnect=true
+         jdbc:mysql://ubuntu.ckzbhqoki8rc.ap-south-1.rds.amazonaws.com:3306/crm?autoReconnect=true
       </property>
       
       <property name = "hibernate.connection.username">
-         root
+         ubuntu
       </property>
       
-      <property name = "hibernate.connection.password"></property>
+      <property name = "hibernate.connection.password">12345678</property>
       <property name="hibernate.connection.autocommit">true</property>
       <property name="hibernate.bytecode.provider">cglib</property>
       <property name="format_sql">false</property>

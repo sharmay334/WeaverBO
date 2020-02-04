@@ -12,6 +12,7 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.javabeans.StockCatBean;
 import com.stpl.pms.javabeans.StockGroupBean;
+import com.stpl.pms.javabeans.StockItemBean;
 import com.stpl.pms.javabeans.UnitBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
@@ -57,10 +58,23 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 	private String stockUnderItem;
 	private String stockItemCat;
 	private String stockItemUnit;
+	private String stockItemAlterUnit;
+	private String funit;
+	private String sunit;
+	private String isbatches;
+	private String dom;
+	private String expDate;
+	private String standRate;
+	private String costTrack;
 	private String isGst;
 	private String alterGst;
 	private String supplyType;
 	private String dutyRate;
+
+	// view unit item
+	private List<String> stockItemsList;
+	private String stockItemSelected;
+	private List<StockItemBean> itemBean;
 
 	@Override
 	public String execute() throws Exception {
@@ -255,10 +269,34 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 
 	public String createStockItemFirstStep() {
 		GameLobbyController controller = new GameLobbyController();
-		if (controller.itemCreationFirstStep(stockItemName,stockUnderItem,stockItemCat,stockItemUnit,isGst,alterGst,supplyType,dutyRate)) {
+		if (controller.itemCreationFirstStep(stockItemName, stockUnderItem, stockItemCat, stockItemUnit, isGst,
+				alterGst, supplyType, dutyRate, stockItemAlterUnit, funit, sunit, isbatches, dom, expDate, standRate,
+				costTrack)) {
 			return SUCCESS;
 		} else
 			return ERROR;
+	}
+
+	public String deleteStockItem() {
+
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.deleteStockItem(stockItemSelected)) {
+			return SUCCESS;
+		}
+		return ERROR;
+	}
+
+	public String viewStockItemPage() {
+		stockItemsList = new ArrayList();
+		GameLobbyController controller = new GameLobbyController();
+		stockItemsList = controller.getAllStockItemsList();
+		return SUCCESS;
+	}
+
+	public String viewStockItemPageResult() {
+		GameLobbyController controller = new GameLobbyController();
+		itemBean = controller.getStockItemBeanByName(stockItemSelected);
+		return SUCCESS;
 	}
 
 	public HttpServletRequest getServletRequest() {
@@ -573,4 +611,91 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		this.dutyRate = dutyRate;
 	}
 
+	public String getStockItemAlterUnit() {
+		return stockItemAlterUnit;
+	}
+
+	public void setStockItemAlterUnit(String stockItemAlterUnit) {
+		this.stockItemAlterUnit = stockItemAlterUnit;
+	}
+
+	public String getFunit() {
+		return funit;
+	}
+
+	public void setFunit(String funit) {
+		this.funit = funit;
+	}
+
+	public String getSunit() {
+		return sunit;
+	}
+
+	public void setSunit(String sunit) {
+		this.sunit = sunit;
+	}
+
+	public String getIsbatches() {
+		return isbatches;
+	}
+
+	public void setIsbatches(String isbatches) {
+		this.isbatches = isbatches;
+	}
+
+	public String getDom() {
+		return dom;
+	}
+
+	public void setDom(String dom) {
+		this.dom = dom;
+	}
+
+	public String getExpDate() {
+		return expDate;
+	}
+
+	public void setExpDate(String expDate) {
+		this.expDate = expDate;
+	}
+
+	public String getStandRate() {
+		return standRate;
+	}
+
+	public void setStandRate(String standRate) {
+		this.standRate = standRate;
+	}
+
+	public String getCostTrack() {
+		return costTrack;
+	}
+
+	public void setCostTrack(String costTrack) {
+		this.costTrack = costTrack;
+	}
+
+	public List<String> getStockItemsList() {
+		return stockItemsList;
+	}
+
+	public void setStockItemsList(List<String> stockItemsList) {
+		this.stockItemsList = stockItemsList;
+	}
+
+	public String getStockItemSelected() {
+		return stockItemSelected;
+	}
+
+	public void setStockItemSelected(String stockItemSelected) {
+		this.stockItemSelected = stockItemSelected;
+	}
+
+	public List<StockItemBean> getItemBean() {
+		return itemBean;
+	}
+
+	public void setItemBean(List<StockItemBean> itemBean) {
+		this.itemBean = itemBean;
+	}
 }

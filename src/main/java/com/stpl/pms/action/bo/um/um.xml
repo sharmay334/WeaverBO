@@ -851,5 +851,70 @@
 			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createStockItem_error.jsp
 			</result>
 		</action>
+		<action name="bo_um_viewStockItem"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewStockItemPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewStockItemPage.jsp
+			</result>
+		</action>
+		<action name="bo_um_BoviewStockItem_Search"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewStockItemPageResult">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_Stock_Item_SearchResult.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/um/nodecorate/field_error.jsp
+			</result>
+		</action>
+		<action name="bo_um_deleteStockItem"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="viewStockItemPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_deleteStockItemPage.jsp
+			</result>
+		</action>
+		<action name="bo_um_BodeleteStockItem_Search"
+			class="com.stpl.pms.action.bo.um.StockMgmtAction"
+			method="deleteStockItem">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteStockItem_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteStockItem_error.jsp
+			</result>
+		</action>
+		<!-- godown action start -->
+		<action name="bo_um_createGodown"
+			class="com.stpl.pms.action.bo.um.GoDownMgmtAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createDodown.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_create_goDown" class="com.stpl.pms.action.bo.um.GoDownMgmtAction"
+			method="creategoDown">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createGodown_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createGodown_error.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_viewGodown" class="com.stpl.pms.action.bo.um.GoDownMgmtAction" method="viewGodownList">
+		<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewGodownPage.jsp
+			</result>
+		
+		</action>
+		<!-- godown action end -->
 	</package>
 </struts>
