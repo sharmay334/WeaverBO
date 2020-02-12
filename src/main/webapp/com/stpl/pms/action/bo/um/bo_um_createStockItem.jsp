@@ -18,9 +18,19 @@
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
 <script>
-	$(document).ready(function() {
+/* 	$(document).ready(function() {
 		$('#payTransaction').dataTable();
-	});
+	}); */
+	function updateGSTValues(){
+		
+		var Igst = document.getElementById('Itax').value;
+		var tx= Igst/2 ;
+			if(Igst>0){
+				document.getElementById('Ctax').value = tx;
+				document.getElementById('Stax').value = tx ;
+			}
+		
+	}
 	function setalterGSTDiv(){
 		$("#set_alter_gst_form_div").css("display", "none");
 		if(document.getElementById('alterGst').value=='Yes'){
@@ -444,8 +454,8 @@
 												<td style="text-align: center;" nowrap="nowrap">Based
 													on value</td>
 												<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-														maxlength="30" name="rate" value="0" id="rate"
-														theme="myTheme" cssStyle="width:20%"></ss:textfield>%</td>
+														maxlength="30" name="Itax" value="0" id="Itax"
+														theme="myTheme" pattern="^[0-9]*$" cssStyle="width:20%" onchange="updateGSTValues()"></ss:textfield>%</td>
 
 
 											</tr>
@@ -455,8 +465,8 @@
 												<td style="text-align: center;" nowrap="nowrap">Based
 													on value</td>
 												<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-														maxlength="30" name="rate" value="0" id="rate"
-														theme="myTheme" cssStyle="width:20%"></ss:textfield>%</td>
+														maxlength="30" name="Ctax" value="0" id="Ctax"
+														theme="myTheme" pattern="^[0-9]*$" cssStyle="width:20%"></ss:textfield>%</td>
 
 
 											</tr>
@@ -466,8 +476,8 @@
 												<td style="text-align: center;" nowrap="nowrap">Based
 													on value</td>
 												<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-														maxlength="30" name="rate" value="0" id="rate"
-														theme="myTheme" cssStyle="width:20%"></ss:textfield>%</td>
+														maxlength="30" name="Stax" value="0" id="Stax"
+														theme="myTheme" pattern="^[0-9]*$" cssStyle="width:20%"></ss:textfield>%</td>
 
 
 											</tr>
@@ -477,7 +487,7 @@
 													on value</td>
 												<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 														maxlength="30" name="rate" value="0" id="rate"
-														theme="myTheme" cssStyle="width:20%"></ss:textfield>%</td>
+														theme="myTheme" pattern="^[0-9]*$" cssStyle="width:20%"></ss:textfield>%</td>
 
 
 											</tr>

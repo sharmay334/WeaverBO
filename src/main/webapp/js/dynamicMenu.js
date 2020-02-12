@@ -7,7 +7,7 @@ function relatedToData() {
 	if(Language=="vi")
 	var relatedToArr = "RG|RG,BONUS|Bonus,CASHIER|Cashier,RISK_MGT|Risk Mgmt,ROLE_MGT|Role MGMT,MISC|Miscellaneous,PLAYER_MGT|Player Mgmt,ACT_MGT|Account Mgmt,USER_MGT|Quản lý người dùng,HURDLE_MGT|Hurdle Mgmt,GAME_MGT|Quản lý trò chơi,CMS|CMS,REPORTS|Reports,SERVICE_MGMT|Service Mgmt,DOMAIN_MGT|Domain Mgmt,LOYALTY|Loyalty,COMM_MGMT|Communication Mgmt,TICKET_MGMT|Ticket Mgmt,MASTER_MGMT|MASTER MGMT".split(",");
 	else
-	var relatedToArr = "CASHIER|Cashier,RISK_MGT|Risk Mgmt,ROLE_MGT|Role MGMT,MISC|Miscellaneous,PLAYER_MGT|Player Mgmt,ACT_MGT|Account Mgmt,USER_MGT|User Master,CMS|CMS,REPORTS|Reports,SERVICE_MGMT|Service Mgmt,DOMAIN_MGT|Domain Mgmt,COMM_MGMT|Communication Mgmt,COMPANY_MGMT|Company Master,ACCOUNTING_MGMT|Accounting Master,INVENTORY_MGMT|Inventory Master".split(",");
+	var relatedToArr = "CASHIER|Cashier,RISK_MGT|Risk Mgmt,ROLE_MGT|Role MGMT,MISC|Miscellaneous,PLAYER_MGT|Player Mgmt,ACT_MGT|Account Mgmt,USER_MGT|User Master,CMS|CMS,REPORTS|Reports,SERVICE_MGMT|Service Mgmt,DOMAIN_MGT|Domain Mgmt,COMM_MGMT|Communication Mgmt,COMPANY_MGMT|Company Master,ACCOUNTING_MGMT|Accounting Master,INVENTORY_MGMT|Inventory Master,TRANSACTION_MGMT|Transaction Master".split(",");
 
 		for ( var i = 0; i < relatedToArr.length; i += 1) {
 		var relatedToStr = relatedToArr[i].split("|");
@@ -38,7 +38,7 @@ function _buidActionPath(relatedTo,service) {
 					if (relatedTo == "ACT_MGT") {
 						return projectName +"/com/stpl/pms/action/bo/am/";// +service+"/action/accMgmt/";
 					}else {
-						if (relatedTo == "USER_MGT" || relatedTo=="COMPANY_MGMT" || relatedTo=="ACCOUNTING_MGMT" || relatedTo=="INVENTORY_MGMT") {
+						if (relatedTo == "USER_MGT" || relatedTo=="COMPANY_MGMT" || relatedTo=="ACCOUNTING_MGMT" || relatedTo=="INVENTORY_MGMT" || relatedTo=="TRANSACTION_MGMT") {
 							return projectName +"/com/stpl/pms/action/bo/um/";// +service+"/action/userMgmt/";
 						}
 						else {
@@ -172,7 +172,20 @@ function createMenu(activeTab) {
 									.replace('}', '').split(':');
 						
 							 var dropdownUrl = drapdown[1].split('|');
-							subMenu = subMenu
+							 if(drapdown[0].replace('{', '').replace('}','').includes("header")){
+								 subMenu = subMenu
+									+ '<li style="white-space: normal; float: left; width: 100%;"><a style="float: none; width: auto;pointer-events: none;" href="'
+									+ actionPath
+									+ (dropdownUrl[0].replace('{', '').replace(
+											'}', ''))
+									+ '.action">'
+									+ drapdown[0].replace('{', '').replace('}',
+											'').replace('header','')
+									+ '</a></li>'; 
+								 
+							 }
+							 else{
+								 subMenu = subMenu
 									+ '<li style="white-space: normal; float: left; width: 100%;"><a style="float: none; width: auto;" href="'
 									+ actionPath
 									+ (dropdownUrl[0].replace('{', '').replace(
@@ -181,6 +194,8 @@ function createMenu(activeTab) {
 									+ drapdown[0].replace('{', '').replace('}',
 											'')
 									+ '</a></li>';
+							 }
+							
 						}
 						subMenu = subMenu + '</ul></li>';
 					}

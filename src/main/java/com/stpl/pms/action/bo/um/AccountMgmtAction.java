@@ -11,6 +11,7 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.javabeans.AccountGroupMaster;
+import com.stpl.pms.javabeans.VoucherBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
 public class AccountMgmtAction extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
@@ -26,11 +27,15 @@ public class AccountMgmtAction extends BaseActionSupport implements ServletReque
 	private List<AccountGroupMaster> accountGroupMaster;
 	private AccountGroupMaster groupMaster;
 	private int group_id;
+	private List<String> voucherList;
+	private VoucherBean voucherBean;
+	private List<String> voucherNameList;
+	private List<VoucherBean> voucherBeans;
 
 	public String createGroup() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		groupNamesList = gameLobbyController.getGroupNamesList();
-		
+
 		return SUCCESS;
 	}
 
@@ -78,9 +83,37 @@ public class AccountMgmtAction extends BaseActionSupport implements ServletReque
 			return ERROR;
 	}
 
+	public String createVoucher() {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.createNewVoucher(voucherBean))
+			return SUCCESS;
+		else
+			return ERROR;
+	}
+
+	public String viewVoucher() {
+		GameLobbyController controller = new GameLobbyController();
+		voucherNameList = controller.getCustomVoucherList();
+		return SUCCESS;
+	}
+
+	public String getVoucherResult() {
+		GameLobbyController controller = new GameLobbyController();
+		voucherBeans = controller.getVouchetBeanByName(voucherBean.getVoucherName());
+		return SUCCESS;
+	}
+	public String deleteVoucher() {
+		GameLobbyController controller = new GameLobbyController();
+		if(controller.deleteVoucher(voucherBean.getVoucherName()))
+		return SUCCESS;
+		else
+			return ERROR;
+	}
 	@Override
 	public String execute() throws Exception {
 		// TODO Auto-generated method stub
+		GameLobbyController controller = new GameLobbyController();
+		voucherList = controller.getVoucherTypeList();
 		return SUCCESS;
 	}
 
@@ -178,6 +211,38 @@ public class AccountMgmtAction extends BaseActionSupport implements ServletReque
 
 	public void setGroup_id(int group_id) {
 		this.group_id = group_id;
+	}
+
+	public List<String> getVoucherList() {
+		return voucherList;
+	}
+
+	public void setVoucherList(List<String> voucherList) {
+		this.voucherList = voucherList;
+	}
+
+	public VoucherBean getVoucherBean() {
+		return voucherBean;
+	}
+
+	public void setVoucherBean(VoucherBean voucherBean) {
+		this.voucherBean = voucherBean;
+	}
+
+	public List<String> getVoucherNameList() {
+		return voucherNameList;
+	}
+
+	public void setVoucherNameList(List<String> voucherNameList) {
+		this.voucherNameList = voucherNameList;
+	}
+
+	public List<VoucherBean> getVoucherBeans() {
+		return voucherBeans;
+	}
+
+	public void setVoucherBeans(List<VoucherBean> voucherBeans) {
+		this.voucherBeans = voucherBeans;
 	}
 
 }

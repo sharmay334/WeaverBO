@@ -552,6 +552,68 @@
 			</result>
 
 		</action>
+
+		<action name="bo_um_createVoucher"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createVoucher.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_create_voucher"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="createVoucher">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createVoucher_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createVoucher_error.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_viewVoucher"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="viewVoucher">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewVoucher.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_BoVoucher_Search"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="getVoucherResult">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_searchVoucher_SearchResult.jsp
+			</result>
+			<result name="input">
+				/com/stpl/pms/action/bo/um/nodecorate/field_error.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_deleteVoucher"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="viewVoucher">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_deleteVoucher.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_BoDeleteVoucher"
+			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
+			method="deleteVoucher">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteVoucher_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_deleteVoucher_error.jsp
+			</result>
+		</action>
+
 		<!-- end of accounting management -->
 
 		<!-- ledger action start -->
@@ -898,7 +960,8 @@
 			</result>
 		</action>
 
-		<action name="bo_um_create_goDown" class="com.stpl.pms.action.bo.um.GoDownMgmtAction"
+		<action name="bo_um_create_goDown"
+			class="com.stpl.pms.action.bo.um.GoDownMgmtAction"
 			method="creategoDown">
 			<interceptor-ref name="customStack"></interceptor-ref>
 			<interceptor-ref name="actions"></interceptor-ref>
@@ -907,14 +970,28 @@
 			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createGodown_error.jsp
 			</result>
 		</action>
-		
-		<action name="bo_um_viewGodown" class="com.stpl.pms.action.bo.um.GoDownMgmtAction" method="viewGodownList">
-		<interceptor-ref name="customStack"></interceptor-ref>
+
+		<action name="bo_um_viewGodown"
+			class="com.stpl.pms.action.bo.um.GoDownMgmtAction"
+			method="viewGodownList">
+			<interceptor-ref name="customStack"></interceptor-ref>
 			<interceptor-ref name="actions"></interceptor-ref>
 			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewGodownPage.jsp
 			</result>
-		
 		</action>
 		<!-- godown action end -->
+
+		<!-- Transaction Management -->
+
+		<action name="bo_um_tm_payment"
+			class="com.stpl.pms.action.bo.um.TMPaymentMgmtAction"
+			method="loadPaymentPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewPaymentPage.jsp
+			</result>
+		</action>
+
+		<!-- end of transaction management -->
 	</package>
 </struts>

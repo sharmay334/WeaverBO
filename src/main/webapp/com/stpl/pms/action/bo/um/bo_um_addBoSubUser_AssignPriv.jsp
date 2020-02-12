@@ -300,14 +300,13 @@
 																height="24px">
 
 																<th style="text-align: left;"><input
-																	type="checkbox" class="chkAll" /> <b> 
-																	<s:if
-																			test="%{key=='ACT_MGT'}">Account Management</s:if> 
-																			<s:elseif
+																	type="checkbox" class="chkAll" /> <b> <s:if
+																			test="%{key=='ACT_MGT'}">Account Management</s:if> <s:elseif
 																			test="%{key=='GAME_MGT'}">Game Management</s:elseif>
 																		<s:elseif test="%{key=='TICKET_MGMT'}">Ticket Management</s:elseif>
 																		<s:elseif test="%{key=='MASTER_MGMT'}">Master Management</s:elseif>
 																		<s:elseif test="%{key=='INVENTORY_MGMT'}">Inventory Management</s:elseif>
+																		<s:elseif test="%{key=='TRANSACTION_MGMT'}">Transaction Management</s:elseif>
 																		<s:elseif test="%{key=='COMPANY_MGMT'}">Company Management</s:elseif>
 																		<s:elseif test="%{key=='ACCOUNTING_MGMT'}">Accounting Management</s:elseif>
 																		<s:elseif test="%{key=='REPORTS'}">Reports</s:elseif>
