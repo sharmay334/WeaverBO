@@ -30,6 +30,25 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 	private List<LedgerBean> accountLedgerMaster;
 	private List<String> employeeUnderList;
 
+	//sundry credtors fields
+	
+	private String blcBillByBill;
+	private String defCreditPeriod;
+	private String creditDayDuringVoucher;
+	private String specifyCreditLimit;
+	// + interest calculation fields for sundary cred..
+	
+	private String intesestBasedOn;
+	private String foramtAdded;
+	private String foramtDeduct; 
+	private String rate;
+	private String ratePer;
+	private String rateOn;
+	//ledger opening blnc
+	
+	private String openingDate;
+	private String openingBalance;
+	private String Cr_Dr;
 
 	@Override
 	public String execute() throws Exception {
@@ -68,11 +87,20 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 	public String insertLedger() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		
-		if (gameLobbyController.createLedger(ledgerName, groupUnder, name, address, country, state, pincode,ledgerBankAccount)) {
-			return SUCCESS;
+		if (gameLobbyController.createLedger(ledgerName, groupUnder, name, address, country, state, pincode,ledgerBankAccount,blcBillByBill,defCreditPeriod,creditDayDuringVoucher,specifyCreditLimit)) {
+			if(gameLobbyController.InitialBalace(openingDate,openingBalance,Cr_Dr,ledgerName,groupUnder))
+				if(ledgerBankAccount.getActivateInterestCalculation().equals("Yes"))
+					if(gameLobbyController.insertCalculateInterest(ledgerName,intesestBasedOn,foramtAdded,foramtDeduct,rate,ratePer,rateOn))
+							return SUCCESS;
+				else
+					return SUCCESS;
+				else
+					return SUCCESS;
+			
 		}	
 		else
 			return ERROR;
+		return ERROR;
 	}
 
 	public String deleteLedger() {
@@ -192,6 +220,110 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 
 	public void setEmployeeUnderList(List<String> employeeUnderList) {
 		this.employeeUnderList = employeeUnderList;
+	}
+
+	public String getBlcBillByBill() {
+		return blcBillByBill;
+	}
+
+	public void setBlcBillByBill(String blcBillByBill) {
+		this.blcBillByBill = blcBillByBill;
+	}
+
+	public String getDefCreditPeriod() {
+		return defCreditPeriod;
+	}
+
+	public void setDefCreditPeriod(String defCreditPeriod) {
+		this.defCreditPeriod = defCreditPeriod;
+	}
+
+	public String getCreditDayDuringVoucher() {
+		return creditDayDuringVoucher;
+	}
+
+	public void setCreditDayDuringVoucher(String creditDayDuringVoucher) {
+		this.creditDayDuringVoucher = creditDayDuringVoucher;
+	}
+
+	public String getSpecifyCreditLimit() {
+		return specifyCreditLimit;
+	}
+
+	public void setSpecifyCreditLimit(String specifyCreditLimit) {
+		this.specifyCreditLimit = specifyCreditLimit;
+	}
+
+	public String getOpeningDate() {
+		return openingDate;
+	}
+
+	public void setOpeningDate(String openingDate) {
+		this.openingDate = openingDate;
+	}
+
+	public String getOpeningBalance() {
+		return openingBalance;
+	}
+
+	public void setOpeningBalance(String openingBalance) {
+		this.openingBalance = openingBalance;
+	}
+
+	public String getCr_Dr() {
+		return Cr_Dr;
+	}
+
+	public void setCr_Dr(String cr_Dr) {
+		Cr_Dr = cr_Dr;
+	}
+
+	public String getIntesestBasedOn() {
+		return intesestBasedOn;
+	}
+
+	public void setIntesestBasedOn(String intesestBasedOn) {
+		this.intesestBasedOn = intesestBasedOn;
+	}
+
+	public String getForamtAdded() {
+		return foramtAdded;
+	}
+
+	public void setForamtAdded(String foramtAdded) {
+		this.foramtAdded = foramtAdded;
+	}
+
+	public String getForamtDeduct() {
+		return foramtDeduct;
+	}
+
+	public void setForamtDeduct(String foramtDeduct) {
+		this.foramtDeduct = foramtDeduct;
+	}
+
+	public String getRate() {
+		return rate;
+	}
+
+	public void setRate(String rate) {
+		this.rate = rate;
+	}
+
+	public String getRatePer() {
+		return ratePer;
+	}
+
+	public void setRatePer(String ratePer) {
+		this.ratePer = ratePer;
+	}
+
+	public String getRateOn() {
+		return rateOn;
+	}
+
+	public void setRateOn(String rateOn) {
+		this.rateOn = rateOn;
 	}
 
 }

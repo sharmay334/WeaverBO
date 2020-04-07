@@ -9,14 +9,47 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<script src="/WeaverBO/js/sweetalert.min.js"></script>
+<script type="text/javascript"
+	src="/WeaverBO/js/jQuery/1.11.3/jquery-ui.min.js">
+      </script>
+<link rel="stylesheet" href="/WeaverBO/js/jQuery/1.11.3/jquery-ui.css">
+
 <Script>
+	$(document).ready(
+			function() {
+				$("#openingDate").datetimepicker(
+						{
+							dateFormat : 'dd-mm-yy',
+							showSecond : false,
+							showMinute : false,
+							showHour : false,
+							changeYear : true,
+							changeMonth : true,
+							minDate : '01-01-1930',
+							onSelect : function(selectedDate) {
+								if (selectedDate != "") {
+									$("#openingDate").datepicker("option",
+											"minDate", selectedDate);
+								} else {
+									var date = new Date().getDate();
+									$(function() {
+										$("#openingDate").datepicker({
+											dateFormat : 'dd-mm-yy'
+										}).datepicker("setDate", date);
+									});
+								}
+							}
+						});
+
+			});
 	function callactivateInterestCalculation() {
 		if (document.getElementById('activateInterestCalculation').value == "Yes")
 			$("#interest_parameter").css("display", "block");
 		else
 			$("#interest_parameter").css("display", "none");
 	}
-	
+
 	/* function functionMaintainBillByBill(){
 		if (document.getElementById('balance_billbybill').value == "Yes"){
 			$("#balance_billbybill_div").css("display", "block");
@@ -138,8 +171,7 @@
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
-		}
-		else if (document.getElementById('groupUnder').value == "Current assets") {
+		} else if (document.getElementById('groupUnder').value == "Current assets") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
@@ -148,8 +180,7 @@
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#use_for_payroll_div").css("display", "block");
-		}
-		else if (document.getElementById('groupUnder').value == "Current liabilities") {
+		} else if (document.getElementById('groupUnder').value == "Current liabilities") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
@@ -158,8 +189,7 @@
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#use_for_payroll_div").css("display", "block");
-		}
-		else if (document.getElementById('groupUnder').value == "Loans & advances(assets)") {
+		} else if (document.getElementById('groupUnder').value == "Loans & advances(assets)") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
@@ -168,8 +198,7 @@
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#use_for_payroll_div").css("display", "block");
-		}
-		else if (document.getElementById('groupUnder').value == "Loans(liabilities)") {
+		} else if (document.getElementById('groupUnder').value == "Loans(liabilities)") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
@@ -178,8 +207,7 @@
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#use_for_payroll_div").css("display", "none");
-		}
-		else if (document.getElementById('groupUnder').value == "Provision") {
+		} else if (document.getElementById('groupUnder').value == "Provision") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
@@ -188,8 +216,7 @@
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#use_for_payroll_div").css("display", "block");
-		}
-		else if (document.getElementById('groupUnder').value == "Unsecured Loans") {
+		} else if (document.getElementById('groupUnder').value == "Unsecured Loans") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
@@ -197,8 +224,7 @@
 			$("#invtry_values_affect").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#pan_It_Number_div").css("display", "block");
-		}
-		else if (document.getElementById('groupUnder').value == "Secured loans") {
+		} else if (document.getElementById('groupUnder').value == "Secured loans") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
@@ -206,21 +232,7 @@
 			$("#invtry_values_affect").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#pan_It_Number_div").css("display", "block");
-		}
-		else if (document.getElementById('groupUnder').value == "Sundry creditors") {
-			$("#account_interset_calculation").css("display", "block");
-			$("#bank_acc_details_div").css("display", "none");
-			$("#tax_reg_detail_div").css("display", "block");
-			$("#bank_configuration").css("display", "none");
-			$("#invtry_values_affect").css("display", "block");
-			$("#od_oc_LimitBankAcc").css("display", "none");
-			$("#pan_It_Number_div").css("display", "block");
-			$("#balance_billbybill_div").css("display", "block");
-			$("#specify_credit_limit_div").css("display", "block");
-			$("#defCreditPeriod_div").css("display", "block");
-			$("#creditDayDuringVoucher_div").css("display", "block");
-		}
-		else if (document.getElementById('groupUnder').value == "Sundry debtors") {
+		} else if (document.getElementById('groupUnder').value == "Sundry creditors") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
@@ -232,8 +244,19 @@
 			$("#specify_credit_limit_div").css("display", "block");
 			$("#defCreditPeriod_div").css("display", "block");
 			$("#creditDayDuringVoucher_div").css("display", "block");
-		}
-		else {
+		} else if (document.getElementById('groupUnder').value == "Sundry debtors") {
+			$("#account_interset_calculation").css("display", "block");
+			$("#bank_acc_details_div").css("display", "none");
+			$("#tax_reg_detail_div").css("display", "block");
+			$("#bank_configuration").css("display", "none");
+			$("#invtry_values_affect").css("display", "block");
+			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#pan_It_Number_div").css("display", "block");
+			$("#balance_billbybill_div").css("display", "block");
+			$("#specify_credit_limit_div").css("display", "block");
+			$("#defCreditPeriod_div").css("display", "block");
+			$("#creditDayDuringVoucher_div").css("display", "block");
+		} else {
 			$("#account_interset_calculation").css("display", "none");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "none");
@@ -301,8 +324,8 @@
 						<div class="InputDiv">
 							<s:select name="groupUnder" id="groupUnder" headerKey="-1"
 								headerValue="Select Group Name" list="groupNamesList"
-								cssClass="select1" theme="myTheme" applyscript="true"
-								onchange="get_account_interset_calculation()"></s:select>
+								cssClass="select1" cssStyle="width:50%" theme="myTheme"
+								applyscript="true" onchange="get_account_interset_calculation()"></s:select>
 
 							<div id="groupUnder_error" class="fieldError">
 								<s:fielderror>
@@ -315,13 +338,13 @@
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
-							<label>Employee Under </label><em class="Req">*</em>
+							<label>Employee Under </label>
 						</div>
 						<div class="InputDiv">
 							<s:select name="employeeUnder" headerKey="-1"
 								headerValue="Select Employee Name" list="employeeUnderList"
-								cssClass="select1" theme="myTheme" applyscript="true"></s:select>
-								
+								cssClass="select1" theme="myTheme"></s:select>
+
 							<div id="employeeUnder_error" class="fieldError">
 								<s:fielderror>
 									<s:param>employeeUnder</s:param>
@@ -330,12 +353,12 @@
 						</div>
 					</div>
 					<div class="clearFRM"></div>
-					
+
 
 					<!-- conditional for every group under -->
 
 
-						<div class="FormMainBox" id="balance_billbybill_div"
+					<div class="FormMainBox" id="balance_billbybill_div"
 						style="display: none;">
 
 						<div class="labelDiv">
@@ -350,16 +373,16 @@
 						</div>
 
 					</div>
-					
+
 					<div class="FormMainBox" id="defCreditPeriod_div"
 						style="display: none;">
 
 						<div class="labelDiv">
-							<label> Default credit period</label>
+							<label> Default credit period(in days)</label>
 						</div>
 						<div class="InputDiv">
-							<ss:textfield maxlength="100" name="defCreditPeriod" id="defCreditPeriod"
-								theme="myTheme"></ss:textfield>
+							<ss:textfield maxlength="100" pattern="^[0-9]*$" name="defCreditPeriod"
+								id="defCreditPeriod" cssStyle="width:50%" theme="myTheme"></ss:textfield>
 
 
 						</div>
@@ -380,8 +403,8 @@
 						</div>
 
 					</div>
-					
-					
+
+
 					<div class="FormMainBox" id="specify_credit_limit_div"
 						style="display: none;">
 
@@ -389,8 +412,8 @@
 							<label> Specify credit limit</label>
 						</div>
 						<div class="InputDiv">
-							<ss:textfield maxlength="100" name="specifyCreditLimit" id="specifyCreditLimit"
-								theme="myTheme"></ss:textfield>
+							<ss:textfield maxlength="100" pattern="^[0-9]*$" name="specifyCreditLimit"
+								id="specifyCreditLimit" cssStyle="width:50%" theme="myTheme"></ss:textfield>
 
 
 						</div>
@@ -412,8 +435,8 @@
 						</div>
 
 					</div>
-					
-					
+
+
 					<div class="FormMainBox" id="use_for_payroll_div"
 						style="display: none;">
 
@@ -546,7 +569,7 @@
 												<label> on </label>
 											</div>
 											<div class="InputDiv">
-												<s:select name="on" headerKey="-1"
+												<s:select name="rateOn" headerKey="-1"
 													headerValue="Select Any One"
 													list="{'All Balances','Credit Balances Only','Debit Balances Only'}"
 													cssClass="select1" theme="myTheme"></s:select>
@@ -822,6 +845,36 @@
 							</div>
 						</div>
 					</div>
+					<div class="clearFRM"></div>
+
+					<table width="100%" cellspacing="0" align="center"
+						id="payTransactionTable" class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Date</th>
+								<th style="text-align: center;" nowrap="nowrap">Opening Balance</th>
+								<th style="text-align: center;" nowrap="nowrap">CR/DR</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr id="rowId1">
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										name="openingDate" placeholder="Date" cssClass="dateField"
+										id="openingDate" readonly="true" theme="myTheme"></ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield maxlength="40"
+								name="openingBalance" pattern="^[0-9]*$" id="openingBalance"
+								theme="myTheme"></ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><s:select name="Cr_Dr"
+										id="Cr_Dr" list="{'Cr','Dr'}" cssClass="select1" theme="myTheme"
+										cssStyle="width:100px;" /></td>
+
+							</tr>
+
+
+						</tbody>
+					</table>
+
 				</s:if>
 
 			</div>

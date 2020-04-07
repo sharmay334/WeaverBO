@@ -4,14 +4,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import com.stpl.pms.controller.commonMethods.CommonMethodController;
 import com.stpl.pms.controller.lm.BOLoginController;
-import com.stpl.pms.exception.PMSException;
-import com.stpl.pms.javabeans.UserInfoBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
 import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
 
 
 public class Logout extends BaseActionSupport {

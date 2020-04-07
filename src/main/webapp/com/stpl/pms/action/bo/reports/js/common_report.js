@@ -1,27 +1,28 @@
 var domainMap;
 
 $(function() {
-	$(".dateField").datetimepicker(
-			{
-				dateFormat : 'dd/mm/yy',
-				timeFormat : 'HH:mm:ss',
-				showSecond : true,
-				maxDate: serverDateStr,
-				maxDateTime:$.datepicker.parseDateTime('dd/mm/yy','HH:mm:ss',serverDateStr),
-				onClose : function(dateText, inst) {
-					if ($(this).attr('id').indexOf('fromDate') != -1) {
-						$('#toDate').datetimepicker("option", "minDate",
-								dateText);
-						$('#toDate').datetimepicker("option", "minDateTime",
-								$.datepicker.parseDateTime('dd/mm/yy','HH:mm:ss',dateText));
-					} else if ($(this).attr('id').indexOf('toDate') != -1) {
-						$('#fromDate').datetimepicker("option", "maxDate",
-								dateText);
-						$('#fromDate').datetimepicker("option", "maxDateTime",
-								$.datepicker.parseDateTime('dd/mm/yy','HH:mm:ss',dateText));
-					}
-				}
-			});
+	/*$(".dateField").datetimepicker({
+		dateFormat : 'yy-mm-dd',
+		showSecond : false,
+		showMinute : false,
+		showHour : false,
+		changeYear : true,
+		changeMonth : true,
+		startDate: '1980-01-01',
+		minDate : '1930-01-01',
+		onSelect : function(selectedDate) {
+			if (selectedDate != "") {
+				$("#paymentDate").datepicker("option", "minDate", selectedDate);
+			} else {
+				var date = new Date().getDate();
+				$(function() {
+					$("#paymentDate").datepicker({
+						dateFormat : 'yy-mm-dd'
+					}).datepicker("setDate", date);
+				});
+			}
+		}
+	});*/
 
 	$('.jsonFrm').submit(function() {
 		var allElement = $(this).serializeFromIdArray();

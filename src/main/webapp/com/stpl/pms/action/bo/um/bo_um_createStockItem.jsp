@@ -18,22 +18,75 @@
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
 <script>
-/* 	$(document).ready(function() {
-		$('#payTransaction').dataTable();
-	}); */
-	function updateGSTValues(){
-		
-		var Igst = document.getElementById('Itax').value;
-		var tx= Igst/2 ;
-			if(Igst>0){
-				document.getElementById('Ctax').value = tx;
-				document.getElementById('Stax').value = tx ;
+	/* 	$(document).ready(function() {
+	 $('#payTransaction').dataTable();
+	 }); */
+	$(document).ready(function() {
+		$("#mfg").datetimepicker({
+			dateFormat : 'mm/dd/yy',
+			showSecond : false,
+			showMinute : false,
+			showHour : false,
+			changeYear : true,
+			changeMonth : true,
+			minDate : '01/01/1930',
+			onSelect : function(selectedDate) {
+				if (selectedDate != "") {
+					$("#mfg").datepicker("option", "minDate", selectedDate);
+				} else {
+					var date = new Date().getDate();
+					$(function() {
+						$("#mfg").datepicker({
+							dateFormat : 'dd-mm-yy'
+						}).datepicker("setDate", date);
+					});
+				}
 			}
-		
+		});
+
+		$("#exp").datetimepicker({
+			dateFormat : 'mm/dd/yy',
+			showSecond : false,
+			showMinute : false,
+			showHour : false,
+			changeYear : true,
+			changeMonth : true,
+			minDate : '01/01/1930',
+			onSelect : function(selectedDate) {
+				if (selectedDate != "") {
+					$("#exp").datepicker("option", "minDate", selectedDate);
+				} else {
+					var date = new Date().getDate();
+					$(function() {
+						$("#exp").datepicker({
+							dateFormat : 'dd-mm-yy'
+						}).datepicker("setDate", date);
+					});
+				}
+			}
+		});
+
+	});
+	function updateGSTValues() {
+
+		var Igst = document.getElementById('Itax').value;
+		var tx = Igst / 2;
+		if (Igst > 0) {
+			document.getElementById('Ctax').value = tx;
+			document.getElementById('Stax').value = tx;
+		}
+
 	}
-	function setalterGSTDiv(){
+	function calladjustamt(){
+		
+		var rate = document.getElementById('rate').value;
+		var qty = document.getElementById('itemQty').value;
+		document.getElementById('amount').value = Number(rate)*Number(qty);
+		document.getElementById('unitItem').innerHTML = document.getElementById('stockItemUnit').value;
+	}
+	function setalterGSTDiv() {
 		$("#set_alter_gst_form_div").css("display", "none");
-		if(document.getElementById('alterGst').value=='Yes'){
+		if (document.getElementById('alterGst').value == 'Yes') {
 			$("#set_alter_gst_form_div").css("display", "block");
 		}
 	}
@@ -455,7 +508,8 @@
 													on value</td>
 												<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 														maxlength="30" name="Itax" value="0" id="Itax"
-														theme="myTheme" pattern="^[0-9]*$" cssStyle="width:20%" onchange="updateGSTValues()"></ss:textfield>%</td>
+														theme="myTheme" pattern="^[0-9]*$" cssStyle="width:20%"
+														onchange="updateGSTValues()"></ss:textfield>%</td>
 
 
 											</tr>
@@ -486,7 +540,7 @@
 												<td style="text-align: center;" nowrap="nowrap">Based
 													on value</td>
 												<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-														maxlength="30" name="rate" value="0" id="rate"
+														maxlength="30" name="cess" value="0" id="cess"
 														theme="myTheme" pattern="^[0-9]*$" cssStyle="width:20%"></ss:textfield>%</td>
 
 
@@ -503,6 +557,59 @@
 
 					<!-- end of set/alter GST details -->
 
+					<table width="100%" cellspacing="0" align="center"
+						id="payTransactionTable" class="transactionTable">
+						<thead>
+							<tr>
+
+								<th style="text-align: center;" nowrap="nowrap">GoDown</th>
+								<th style="text-align: center;" nowrap="nowrap">batch</th>
+								<th style="text-align: center;" nowrap="nowrap">Mfg Dt.</th>
+								<th style="text-align: center;" nowrap="nowrap">Expirt Dt.</th>
+								<th style="text-align: center;" nowrap="nowrap">Quantity</th>
+								<th style="text-align: center;" nowrap="nowrap">Rate</th>
+								<th style="text-align: center;" nowrap="nowrap">per</th>
+								<th style="text-align: center;" nowrap="nowrap">Amount</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr id="rowId1">
+								<td style="text-align: center;" nowrap="nowrap"><s:select
+										headerKey="-1" headerValue="Please Select" name="itemGodown"
+										id="itemGodown" list="goDownList" cssClass="select1"
+										theme="myTheme" cssStyle="width:120px;" /></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="itemBatch" value="0" id="itemBatch"
+										theme="myTheme" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										name="mfg" placeholder="Date" cssClass="dateField" id="mfg"
+										cssStyle="width:50%" readonly="true" theme="myTheme"></ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										name="exp" cssStyle="width:50%" placeholder="Date"
+										cssClass="dateField" id="exp" theme="myTheme"></ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" pattern="^[0-9]*$" name="itemQty" value="0" id="itemQty"
+										theme="myTheme" cssStyle="width:50%" onchange="calladjustamt()">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="rate" value="0" id="rate"
+										theme="myTheme" pattern="^[0-9]*$" onchange="calladjustamt()" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><span
+									id="unitItem"></span></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="openingBalance" value="0" id="amount"
+										theme="myTheme" readOnly="true" pattern="^[0-9]*$"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+
+							</tr>
+
+
+						</tbody>
+					</table>
 				</s:if>
 			</div>
 			<div class="box_footer" align="right">

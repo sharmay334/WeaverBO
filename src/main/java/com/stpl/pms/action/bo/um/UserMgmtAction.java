@@ -23,6 +23,7 @@ import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.stpl.pms.controller.commonMethods.CommonMethodController;
+import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.controller.rm.RoleMgmtController;
 import com.stpl.pms.controller.um.UserMgmtController;
 import com.stpl.pms.exception.PMSException;
@@ -107,6 +108,18 @@ public class UserMgmtAction extends BaseActionSupport {
 	private Map<Integer, String> boUserMap;
 	private Integer impersonateeId;
 
+	// add dynamic field variables
+	private List<String> fieldList;
+	private Map<Integer, String> fieldValuesMap;
+	private String fieldName;
+	private String dynamicList;
+
+	public String addDynamicValues() {
+		GameLobbyController controller = new GameLobbyController();
+		if(controller.addDynamicValues(fieldName,dynamicList))
+		return SUCCESS;
+		return ERROR;
+	}
 	public String getFatherName() {
 		return fatherName;
 	}
@@ -336,6 +349,18 @@ public class UserMgmtAction extends BaseActionSupport {
 			return "exception";
 		}
 		getRequest().getSession().setAttribute("roleMap", roleMap);
+		return SUCCESS;
+	}
+
+	public String showDynamicPage() {
+		GameLobbyController controller = new GameLobbyController();
+		fieldList = controller.getFieldList();
+		return SUCCESS;
+	}
+
+	public String getDynamicValues() {
+		GameLobbyController controller = new GameLobbyController();
+		fieldValuesMap = controller.getFieldValuesByName(fieldName);
 		return SUCCESS;
 	}
 
@@ -812,17 +837,16 @@ public class UserMgmtAction extends BaseActionSupport {
 			usrdetBean.setState(state);
 			usrdetBean.setPincode(pincode);
 			usrdetBean.setCity(city);
-			usrdetBean.setPhoto_doc(photo_doc!=null?status:"pending");
-			usrdetBean.setOldSalarySlip(oldSalarySlip!=null?status:"pending");
-			usrdetBean.setExpCertificate(expCertificate!=null?status:"pending");
-			usrdetBean.setEduCertificate(eduCertificate!=null?status:"pending");
-			usrdetBean.setPanDoc(panDoc!=null?status:"pending");
-			usrdetBean.setAddressDoc(addressDoc!=null?status:"pending");
-			usrdetBean.setVoterDoc(voterDoc!=null?status:"pending");
-			usrdetBean.setDrivingDoc(drivingDoc!=null?status:"pending");
-			usrdetBean.setPassbookDoc(passbookDoc!=null?status:"pending");
-			usrdetBean.setAddressDoc(addressDoc!=null?status:"pending");
-
+			usrdetBean.setPhoto_doc(photo_doc != null ? status : "pending");
+			usrdetBean.setOldSalarySlip(oldSalarySlip != null ? status : "pending");
+			usrdetBean.setExpCertificate(expCertificate != null ? status : "pending");
+			usrdetBean.setEduCertificate(eduCertificate != null ? status : "pending");
+			usrdetBean.setPanDoc(panDoc != null ? status : "pending");
+			usrdetBean.setAddressDoc(addressDoc != null ? status : "pending");
+			usrdetBean.setVoterDoc(voterDoc != null ? status : "pending");
+			usrdetBean.setDrivingDoc(drivingDoc != null ? status : "pending");
+			usrdetBean.setPassbookDoc(passbookDoc != null ? status : "pending");
+			usrdetBean.setAddressDoc(addressDoc != null ? status : "pending");
 
 			session.setAttribute("USER_DETAILS", usrdetBean);
 			session.setAttribute("HEAD_PRIV_MAP", rolePrivMap);
@@ -842,67 +866,57 @@ public class UserMgmtAction extends BaseActionSupport {
 	public boolean callDocumentsUpload() {
 		try {
 			String path = ServletActionContext.getServletContext().getRealPath(File.separator);
-			path = path.substring(0,path.lastIndexOf(File.separator));
-			path = path.substring(0,path.lastIndexOf(File.separator));
-			path = path.substring(0,path.lastIndexOf(File.separator));
-			path = path.substring(0,path.lastIndexOf(File.separator));
-			path = path.substring(0,path.lastIndexOf(File.separator));
-			path = path.concat(File.separator+"documents"+File.separator+userName+File.separator);
-			
-			String addressDocFilePath = path
-					.concat("addressDoc");
+			path = path.substring(0, path.lastIndexOf(File.separator));
+			path = path.substring(0, path.lastIndexOf(File.separator));
+			path = path.substring(0, path.lastIndexOf(File.separator));
+			path = path.substring(0, path.lastIndexOf(File.separator));
+			path = path.substring(0, path.lastIndexOf(File.separator));
+			path = path.concat(File.separator + "documents" + File.separator + userName + File.separator);
+
+			String addressDocFilePath = path.concat("addressDoc");
 			File addressDocFileToCreate = new File(addressDocFilePath, "addressDoc");
 			FileUtils.copyFile(addressDoc, addressDocFileToCreate);// copying source file to new file
 
-			String photo_docFilePath = path
-					.concat("photoDoc");
+			String photo_docFilePath = path.concat("photoDoc");
 			File photo_docFileToCreate = new File(photo_docFilePath, "photoDoc");
 			FileUtils.copyFile(photo_doc, photo_docFileToCreate);// copying source file to new file
 
-			String oldSalarySlipFilePath = path
-					.concat("oldSalarySlip");
+			String oldSalarySlipFilePath = path.concat("oldSalarySlip");
 			File oldSalarySlipFileToCreate = new File(oldSalarySlipFilePath, "oldSalarySlip");
 			FileUtils.copyFile(oldSalarySlip, oldSalarySlipFileToCreate);// copying source file to new file
 
-			String expCertificateFilePath = path
-					.concat("expCertificate");
+			String expCertificateFilePath = path.concat("expCertificate");
 			File expCertificateFileToCreate = new File(expCertificateFilePath, "expCertificate");
 			FileUtils.copyFile(expCertificate, expCertificateFileToCreate);// copying source file to new file
 
-			String eduCertificateFilePath = path
-					.concat("eduCertificate");
+			String eduCertificateFilePath = path.concat("eduCertificate");
 			File eduCertificateFileToCreate = new File(eduCertificateFilePath, "eduCertificate");
 			FileUtils.copyFile(eduCertificate, eduCertificateFileToCreate);// copying source file to new file
 
-			String panDocFilePath = path
-					.concat("panDoc");
+			String panDocFilePath = path.concat("panDoc");
 			File panDocFileToCreate = new File(panDocFilePath, "panDoc");
 			FileUtils.copyFile(panDoc, panDocFileToCreate);// copying source file to new file
 
-			String aadharDocFilePath = path
-					.concat("aadharDoc");
+			String aadharDocFilePath = path.concat("aadharDoc");
 			File aadharDocFileToCreate = new File(aadharDocFilePath, "aadharDoc");
 			FileUtils.copyFile(aadharDoc, aadharDocFileToCreate);// copying source file to new file
 
-			String voterDocFilePath = path
-					.concat("voterDoc");
+			String voterDocFilePath = path.concat("voterDoc");
 			File voterDocFileToCreate = new File(voterDocFilePath, "voterDoc");
 			FileUtils.copyFile(voterDoc, voterDocFileToCreate);// copying source file to new file
 
-			String drivingDocFilePath = path
-					.concat("drivingDoc");
+			String drivingDocFilePath = path.concat("drivingDoc");
 			File drivingDocFileToCreate = new File(drivingDocFilePath, "drivingDoc");
 			FileUtils.copyFile(drivingDoc, drivingDocFileToCreate);// copying source file to new file
 
-			String passbookDocFilePath = path
-					.concat("passbookDoc");
+			String passbookDocFilePath = path.concat("passbookDoc");
 			File passbookDocFileToCreate = new File(passbookDocFilePath, "passbookDoc");
 			FileUtils.copyFile(passbookDoc, passbookDocFileToCreate);// copying source file to new file
-					
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			
-			return false; //bypass the file upload temporary
+
+			return false; // bypass the file upload temporary
 		}
 		return true;
 	}
@@ -975,7 +989,7 @@ public class UserMgmtAction extends BaseActionSupport {
 		/*
 		 * if (userInfoBean.getIsRoleHeadUser().equalsIgnoreCase("N")) { return
 		 * "unauthorize"; }
-		 */	int roleId = userInfoBean.getRoleId();
+		 */ int roleId = userInfoBean.getRoleId();
 
 		int userId = userInfoBean.getUserId();
 		UserMgmtController service = new UserMgmtController();
@@ -1776,6 +1790,38 @@ public class UserMgmtAction extends BaseActionSupport {
 
 	public void setLastnameedit(String lastnameedit) {
 		this.lastnameedit = lastnameedit;
+	}
+
+	public List<String> getFieldList() {
+		return fieldList;
+	}
+
+	public void setFieldList(List<String> fieldList) {
+		this.fieldList = fieldList;
+	}
+
+	public Map<Integer, String> getFieldValuesMap() {
+		return fieldValuesMap;
+	}
+
+	public void setFieldValuesMap(Map<Integer, String> fieldValuesMap) {
+		this.fieldValuesMap = fieldValuesMap;
+	}
+
+	public String getFieldName() {
+		return fieldName;
+	}
+
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
+	}
+
+	public String getDynamicList() {
+		return dynamicList;
+	}
+
+	public void setDynamicList(String dynamicList) {
+		this.dynamicList = dynamicList;
 	}
 
 }

@@ -307,6 +307,8 @@
 																		<s:elseif test="%{key=='MASTER_MGMT'}">Master Management</s:elseif>
 																		<s:elseif test="%{key=='INVENTORY_MGMT'}">Inventory Management</s:elseif>
 																		<s:elseif test="%{key=='TRANSACTION_MGMT'}">Transaction Management</s:elseif>
+																		<s:elseif test="%{key=='HR_MGMT'}">HR Management</s:elseif>
+																		<s:elseif test="%{key=='ORDER_VCHR'}">Order Voucher</s:elseif>
 																		<s:elseif test="%{key=='COMPANY_MGMT'}">Company Management</s:elseif>
 																		<s:elseif test="%{key=='ACCOUNTING_MGMT'}">Accounting Management</s:elseif>
 																		<s:elseif test="%{key=='REPORTS'}">Reports</s:elseif>

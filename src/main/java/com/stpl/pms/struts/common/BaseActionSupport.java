@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
-import org.apache.struts2.util.tomcat.buf.Utf8Decoder;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.stpl.pms.controller.commonMethods.CommonMethodController;
@@ -27,10 +26,6 @@ import com.stpl.pms.javabeans.LoginBean;
 import com.stpl.pms.javabeans.PrivFunctionBean;
 import com.stpl.pms.javabeans.UserInfoBean;
 import com.stpl.pms.javabeans.VipLevelMasterBean;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
 
 public class BaseActionSupport extends ActionSupport implements
 		ServletRequestAware, ServletResponseAware {

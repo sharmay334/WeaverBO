@@ -2,31 +2,32 @@
 <%@ page language="java" contentType="text/html"%>
 <%@ page import="java.util.*" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="ss" uri="/extended-struts2-tags"%>
-<%@include file="/com/stpl/pms/action/bo/common/baseUrl.jsp" %>
+<%@include file="/com/stpl/pms/action/bo/common/baseUrl.jsp"%>
 <%
-String path = request.getContextPath();
-String basePath =  (String)request.getAttribute("basePathURL") ;
+	String path = request.getContextPath();
+	String basePath = (String) request.getAttribute("basePathURL");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <base href="<%=basePath%>">
 <title>Privilege Manager</title>
-<SCRIPT type="text/javascript" src="<%=path %>/com/stpl/pms/action/bo/um/js/um.js"></SCRIPT>
+<SCRIPT type="text/javascript"
+	src="<%=path%>/com/stpl/pms/action/bo/um/js/um.js"></SCRIPT>
 <script type="text/javascript">
-$(function(){
-	$("#privForm").submit(function(){
-		$("#groupNameCode").val($("#groupNameCode").val().trim());
-	});	
-})
+	$(function() {
+		$("#privForm").submit(function() {
+			$("#groupNameCode").val($("#groupNameCode").val().trim());
+		});
+	})
 </script>
 </head>
 <body>
 	<div id="container">
 		<h2>Privilege Management</h2>
 		<s:form
-			action="/com/stpl/pms/action/bo/um/st_pms_bo_um_addPrivilege.action" id="privForm"
-			theme="simple" method="POST" name="privilegeForm">
+			action="/com/stpl/pms/action/bo/um/st_pms_bo_um_addPrivilege.action"
+			id="privForm" theme="simple" method="POST" name="privilegeForm">
 			<s:token name="strutsToken" id="strutsToken" />
 			<div id="centerdiv">
 				<div class="FormSection">
@@ -69,7 +70,7 @@ $(function(){
 								<label>Group Name Code</label><em class="Req">*</em>
 							</div>
 							<div class="InputDiv">
-								<ss:textfield name="groupNameCode" id="groupNameCode"  
+								<ss:textfield name="groupNameCode" id="groupNameCode"
 									maxlength="55" applyscript="true"></ss:textfield>
 								<div id="address_error" class="fieldError">
 									<s:fielderror>
@@ -78,7 +79,7 @@ $(function(){
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="FormMainBox">
 							<div class="labelDiv">
 								<label> Tier </label> <em class="Req">*</em>
@@ -86,8 +87,7 @@ $(function(){
 							<div class="InputDiv">
 								<s:select name="tier" headerKey="-1"
 									headerValue="-- Please Select --" cssClass="select1"
-									list="#{'BO':'BO','DOMAIN':'DOMAIN'}"
-									applyscript="true" />
+									list="#{'BO':'BO','DOMAIN':'DOMAIN'}" applyscript="true" />
 							</div>
 						</div>
 						<div class="FormMainBox">
@@ -133,33 +133,33 @@ $(function(){
 							</div>
 						</div>
 						<div class="FormMainBox">
-						<div class="labelDiv">
-							<label>Action name</label><em class="Req">*</em>
+							<div class="labelDiv">
+								<label>Action name</label><em class="Req">*</em>
+							</div>
+							<div class="InputDiv">
+								<ss:textfield name="actionName" id="actionName"
+									pattern="^[A-z]+$" errorMassage="Only characters allowed"
+									applyscript="true" applyscript="true"></ss:textfield>
+							</div>
 						</div>
-						<div class="InputDiv">
-							<ss:textfield name="actionName" id="actionName" pattern="^[A-z]+$"
-									errorMassage="Only characters allowed" applyscript="true"
-								applyscript="true"></ss:textfield>
+						<div class="FormMainBox">
+							<div class="labelDiv">
+								<label>Action description</label><em class="Req">*</em>
+							</div>
+							<div class="InputDiv">
+								<ss:textfield name="actionDesc" applyscript="true"></ss:textfield>
+							</div>
+						</div>
+						<div class="box_footer" align="right">
+							<s:submit name="createPrivilege" value="Create Privilege"
+								cssClass="button"></s:submit>
 						</div>
 					</div>
-					<div class="FormMainBox">
-						<div class="labelDiv">
-							<label>Action description</label><em class="Req">*</em>
-						</div>
-						<div class="InputDiv">
-							<ss:textfield name="actionDesc" applyscript="true" ></ss:textfield>
-						</div>
-					</div>
-					<div class="box_footer" align="right">
-						<s:submit name="createPrivilege" value="Create Privilege"
-							cssClass="button"></s:submit>
-					</div>
-				  </div>
 				</div>
 			</div>
 		</s:form>
 		<div style="margin-bottom: 50px;"></div>
 	</div>
-	<br/>
+	<br />
 </body>
 </html>

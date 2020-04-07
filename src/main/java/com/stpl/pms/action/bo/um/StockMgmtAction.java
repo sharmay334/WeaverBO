@@ -37,6 +37,7 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 	private int st_ct_id;
 	private List<String> stockItemCatList;
 	private List<String> stockItemUnitList;
+	private List<String> goDownList;
 	// unit measure variables
 	private List<String> UQCList;
 	private String unitType;
@@ -76,6 +77,22 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 	private String stockItemSelected;
 	private List<StockItemBean> itemBean;
 
+	// gst variables
+
+	private String Itax;
+	private String Ctax;
+	private String Stax;
+	private String cess;
+	
+	//stock opening balance
+	
+	private String itemGodown;
+	private String itemBatch;
+	private String mfg;
+	private String exp;
+	private String itemQty;
+	private String rate;
+	private String openingBalance;
 	@Override
 	public String execute() throws Exception {
 		// TODO Auto-generated method stub
@@ -181,6 +198,8 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		stockItemUnitList = controller.getAllStockItem();
 		viewStockGroupList = new ArrayList<String>();
 		viewStockGroupList = controller.getAllStockGroup();
+		goDownList = new ArrayList<>();
+		goDownList = controller.getAllGoDownList();
 		return SUCCESS;
 	}
 
@@ -271,10 +290,13 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		GameLobbyController controller = new GameLobbyController();
 		if (controller.itemCreationFirstStep(stockItemName, stockUnderItem, stockItemCat, stockItemUnit, isGst,
 				alterGst, supplyType, dutyRate, stockItemAlterUnit, funit, sunit, isbatches, dom, expDate, standRate,
-				costTrack)) {
+				costTrack,Itax, Ctax, Stax, cess)) {
+		if(controller.insert_st_rm_stock_item_godown_opening_blc(stockItemName,itemGodown,itemBatch,mfg,exp,itemQty,rate,openingBalance,stockItemUnit))
 			return SUCCESS;
+	
 		} else
 			return ERROR;
+		return ERROR;
 	}
 
 	public String deleteStockItem() {
@@ -698,4 +720,101 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 	public void setItemBean(List<StockItemBean> itemBean) {
 		this.itemBean = itemBean;
 	}
+
+	public String getItax() {
+		return Itax;
+	}
+
+	public void setItax(String itax) {
+		Itax = itax;
+	}
+
+	public String getCtax() {
+		return Ctax;
+	}
+
+	public void setCtax(String ctax) {
+		Ctax = ctax;
+	}
+
+	public String getStax() {
+		return Stax;
+	}
+
+	public void setStax(String stax) {
+		Stax = stax;
+	}
+
+	public String getCess() {
+		return cess;
+	}
+
+	public void setCess(String cess) {
+		this.cess = cess;
+	}
+
+	public List<String> getGoDownList() {
+		return goDownList;
+	}
+
+	public void setGoDownList(List<String> goDownList) {
+		this.goDownList = goDownList;
+	}
+
+	public String getItemGodown() {
+		return itemGodown;
+	}
+
+	public void setItemGodown(String itemGodown) {
+		this.itemGodown = itemGodown;
+	}
+
+	public String getItemBatch() {
+		return itemBatch;
+	}
+
+	public void setItemBatch(String itemBatch) {
+		this.itemBatch = itemBatch;
+	}
+
+	public String getMfg() {
+		return mfg;
+	}
+
+	public void setMfg(String mfg) {
+		this.mfg = mfg;
+	}
+
+	public String getExp() {
+		return exp;
+	}
+
+	public void setExp(String exp) {
+		this.exp = exp;
+	}
+
+	public String getItemQty() {
+		return itemQty;
+	}
+
+	public void setItemQty(String itemQty) {
+		this.itemQty = itemQty;
+	}
+
+	public String getRate() {
+		return rate;
+	}
+
+	public void setRate(String rate) {
+		this.rate = rate;
+	}
+
+	public String getOpeningBalance() {
+		return openingBalance;
+	}
+
+	public void setOpeningBalance(String openingBalance) {
+		this.openingBalance = openingBalance;
+	}
+
 }
