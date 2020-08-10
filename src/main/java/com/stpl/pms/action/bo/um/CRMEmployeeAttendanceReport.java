@@ -12,6 +12,7 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 import org.drools.core.command.runtime.GetIdCommand;
 
 import com.stpl.pms.commonJavabeans.AttendanceBean;
+import com.stpl.pms.commonJavabeans.VisitBean;
 import com.stpl.pms.controller.commonMethods.CommonMethodController;
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.struts.common.BaseActionSupport;
@@ -28,6 +29,10 @@ public class CRMEmployeeAttendanceReport extends BaseActionSupport
 	private String employeeName;
 	private String fromDate;
 	private String toDate;
+	private String empId;
+	private String attendanceDate;
+	private Map<String,VisitBean> visitMapResult;
+	
 	@Override
 	public String execute() throws Exception {
 		// TODO Auto-generated method stub
@@ -37,6 +42,11 @@ public class CRMEmployeeAttendanceReport extends BaseActionSupport
 		return SUCCESS;
 	}
 	
+	public String getAttendanceReportVisit() {
+		GameLobbyController controller = new GameLobbyController();
+		visitMapResult = controller.getVisitReport(attendanceDate,empId);
+		return SUCCESS;
+	}
 	public String getAttendanceReport() {
 		GameLobbyController controller = new GameLobbyController();
 		int empId = controller.getUserIdByName(employeeName);
@@ -108,6 +118,30 @@ public class CRMEmployeeAttendanceReport extends BaseActionSupport
 
 	public void setToDate(String toDate) {
 		this.toDate = toDate;
+	}
+
+	public String getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(String empId) {
+		this.empId = empId;
+	}
+
+	public String getAttendanceDate() {
+		return attendanceDate;
+	}
+
+	public void setAttendanceDate(String attendanceDate) {
+		this.attendanceDate = attendanceDate;
+	}
+
+	public Map<String,VisitBean> getVisitMapResult() {
+		return visitMapResult;
+	}
+
+	public void setVisitMapResult(Map<String,VisitBean> visitMapResult) {
+		this.visitMapResult = visitMapResult;
 	}
 
 }

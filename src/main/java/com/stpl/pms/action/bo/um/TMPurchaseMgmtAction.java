@@ -1,9 +1,13 @@
 package com.stpl.pms.action.bo.um;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +19,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.javabeans.ItemBean;
+import com.stpl.pms.javabeans.VoucherBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
 public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
@@ -29,8 +35,10 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 	private List<String> salesStockItemList;
 	private List<String> batchLists;
 	// create payment fields
-
+	private String purchaseNoVoucher;
+	private VoucherBean voucherBean;
 	private String referenceNo;
+	private String orderNo;
 	private String employeeUnder;
 	private String partyAcc;
 	private String salesAccount;
@@ -45,8 +53,8 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 	private String totalQty;
 	private String unit;
 	private String availableQtyInGodown;
-	//batch number variable hower effect
-	
+	// batch number variable hower effect
+
 	private String hiddenBatchNumber;
 	private String hiddenMfgDate;
 	private String hiddenExpDate;
@@ -56,74 +64,130 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 	private String totalAmt;
 	private String hcrdr;
 	private String partyName;
+	private List<ItemBean> itemBeans;
+	private String POId;
+	private String partyAccNamePO;
+	private String activeVoucherNumber;
+	private String consignee;
+	private String Dname;
+	private String propName;
+	private String contact;
+	private String address;
+	private String gstnNo;
+	private String ddn;
+	private String tn;
+	private String des;
+	private String billt;
+	private String vn;
+	private String transportFreight;
+
 	public void getCurrentBalance() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		String balance = controller.getPartyBalanceByName(partyAcc);
 		servletResponse.getWriter().write("" + balance);
 		return;
 	}
+
+	public void getStandardRate() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		String response = controller.getStandardRate(itemName);
+		servletResponse.getWriter().write("" + response);
+		return;
+
+	}
+
+	public void getIsBatchApplicable() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		String response = controller.getBatchApplicable(itemName);
+		if (response.equals("Yes"))
+			servletResponse.getWriter().write("Yes");
+		else
+			servletResponse.getWriter().write("No");
+		return;
+	}
+
 	public void getPartyPeriodLimit() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		int partyId = controller.findLedgerIdByName(partyName);
 		int creditPeriod = controller.getCreditPeriod(partyId);
-		if(creditPeriod!=-1) {
-			DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy-MM-dd");
-			LocalDateTime date = LocalDateTime.parse(paymentDate);
-		//	DateTime dateTime = new DateTime();
-			String dateBeforePeriod = dtfOut.print(date.minusDays(creditPeriod));
-			List<String> billDetailsMap = controller.getBillDetails(partyId,"",dateBeforePeriod);
-			String result="";
-			if(billDetailsMap!=null && !billDetailsMap.isEmpty()) {
-				for(String st:billDetailsMap)
-					result=result+st+";";
-				servletResponse.getWriter().write(""+result);
+		if (creditPeriod != -1) {
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			Calendar c = Calendar.getInstance();
+			TimeZone tz = TimeZone.getTimeZone("Asia/Kolkata");
+			c.setTimeZone(tz);
+		
+			try {
+				// Setting the date to the given date
+				c.setTime(sdf.parse(paymentDate));
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
-			else {
+
+			// Number of Days to add
+			c.add(Calendar.DAY_OF_MONTH, -creditPeriod);
+			// Date after adding the days to the given date
+			String dateBeforePeriod = sdf.format(c.getTime());
+			
+			
+			List<String> billDetailsMap = controller.getBillDetails(partyId, "", dateBeforePeriod);
+			String result = "";
+			if (billDetailsMap != null && !billDetailsMap.isEmpty()) {
+				for (String st : billDetailsMap)
+					result = result + st + ";";
+				servletResponse.getWriter().write("" + result);
+			} else {
 				servletResponse.getWriter().write("skip");
 			}
-			
-		}
-		else {
+
+		} else {
 			servletResponse.getWriter().write("skip");
 		}
 	}
-	public void getCreditLimit() throws IOException{
+
+	public void getCreditLimit() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		String limit = controller.getPartyCreditLimitByName(partyAcc);
-		if(!limit.equals("none"))
-		servletResponse.getWriter().write("" + limit);
+		if (!limit.equals("none"))
+			servletResponse.getWriter().write("" + limit);
 		else
-			servletResponse.getWriter().write("Not Specified");	
+			servletResponse.getWriter().write("Not Specified");
 		return;
 	}
+
 	public void getTotalQtyCall() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		String totalQty = controller.TotalQtyFromGoDown(itemName);
 		servletResponse.getWriter().write("" + totalQty);
 		return;
 	}
+
 	public void getAvailableQtyCall() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		String availableQtyInGodown = controller.TotalQtyFromGoDownByName(goDown,itemName);
+		String availableQtyInGodown = controller.TotalQtyFromGoDownByName(goDown, itemName);
 		servletResponse.getWriter().write("" + availableQtyInGodown);
 		return;
 	}
+
 	public void getAvailableBatches() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		String availableBatchesInGodown = "Not Applicable,New Number";
-		availableBatchesInGodown+=controller.TotalBatchesFromGoDownByName(goDown,itemName);
+		availableBatchesInGodown += controller.TotalBatchesFromGoDownByName(goDown, itemName);
 		servletResponse.getWriter().write("" + availableBatchesInGodown);
 		return;
 	}
-	public void getAvailableBatcheDates() throws IOException{
+
+	public void getAvailableBatcheDates() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		String availableBatchesdtInGodown=controller.TotalBatchesDtFromGoDownByName(goDown,itemName,hiddenBatchNumber);
+		String availableBatchesdtInGodown = controller.TotalBatchesDtFromGoDownByName(goDown, itemName,
+				hiddenBatchNumber);
 		servletResponse.getWriter().write("" + availableBatchesdtInGodown);
 		return;
 	}
+
 	public void getTaxBalance() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		Map<String, Integer> taxes = controller.getTaxesByItemName(itemName);
+		Map<String, Double> taxes = controller.getTaxesByItemName(itemName);
 		if (taxes == null)
 			servletResponse.getWriter().write("none");
 		else
@@ -131,40 +195,231 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 					.write("" + taxes.get("IGST") + ";" + taxes.get("CGST") + ";" + taxes.get("SGST"));
 		return;
 	}
-	
+
 	public String loadPurchasePage() {
 		GameLobbyController controller = new GameLobbyController();
 		particularsList = new ArrayList<String>();
 		salesStockItemList = new ArrayList<>();
-		particularsList = controller.getaccountListForTxnPayment("");
+		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
 		partyAccName = new ArrayList<>();
-		partyAccName = controller.getaccountListForTxnPayment("");
+		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
 		employeeUnderList = controller.getEmployeeNamesList();
-		salesAccountList = controller.getaccountListForTxnPayment("purchase acc");
+		salesAccountList = controller.getaccountListForTxnPayment("purchase acc", getUserInfoBean().getUserId());
 		salesStockItemList = controller.getSalesStockItemList();
 		purchaseNo = controller.getPurchaseNo();
 		goDownList = new ArrayList<>();
 		goDownList = controller.getAllGoDownList();
-		
-		
+		String checkIsVoucherActive = controller.getActiveVoucher("purchase");
+		if (checkIsVoucherActive.equalsIgnoreCase("duplicate")) {
+			return ERROR;
+		}
+
+		else {
+			voucherBean = controller.getVoucherNumbering("purchase", checkIsVoucherActive);
+			if (checkIsVoucherActive.equalsIgnoreCase("not found"))
+				activeVoucherNumber = "0";
+			else
+				activeVoucherNumber = checkIsVoucherActive;
+			if (voucherBean == null)
+				purchaseNoVoucher = String.valueOf(controller.getPurchaseNo());
+			else {
+
+				if (voucherBean.getVoucherNumbering().equals("Manual")) {
+					purchaseNoVoucher = String.valueOf(controller.getPurchaseNo());
+				} else {
+					if (voucherBean.getAdvanceNumbering().equals("Yes")) {
+						int getMaxNumber = controller.getPurchaseVoucherNumber(activeVoucherNumber);
+						if (getMaxNumber == 0) {
+							purchaseNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix()
+									+ String.format("%0" + Integer.valueOf(voucherBean.getDecimalNumber()) + "d",
+											Integer.valueOf(voucherBean.getStartingNumber()));
+						} else {
+							getMaxNumber++;
+							purchaseNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix() + String
+									.format("%0" + Integer.valueOf(voucherBean.getDecimalNumber()) + "d", getMaxNumber);
+							;
+
+						}
+					} else {
+						purchaseNoVoucher = String.valueOf(controller.getPurchaseNo());
+					}
+
+				}
+
+			}
+			return SUCCESS;
+		}
+
+	}
+
+	public String loadPurchasePageAlert() {
+
+		GameLobbyController controller = new GameLobbyController();
+		String str = controller.fetchEmpPOData(0, POId);
+		String[] resArr = str.split("\\|");
+		orderNo = resArr[0].trim();
+		ItemBean bean = null;
+		itemBeans = new ArrayList<ItemBean>();
+		int id = 1;
+		for (int i = 0; i < resArr.length; i++) {
+
+			if (resArr[3].split(",")[i].trim().equals("-1")) {
+
+			} else {
+
+				bean = new ItemBean();
+				bean.setRowId(String.valueOf(id));
+				bean.setItemName(resArr[3].split(",")[i].trim());
+				bean.setItemQty(resArr[4].split(",")[i].trim());
+				bean.setItemRate(resArr[5].split(",")[i].trim());
+				bean.setItemAmount(resArr[6].split(",")[i].trim());
+				itemBeans.add(bean);
+				id++;
+			}
+		}
+		partyAccNamePO = resArr[1].trim();
+		totalAmt = resArr[8].trim();
+		narration = resArr[7].trim();
+		particularsList = new ArrayList<String>();
+		salesStockItemList = new ArrayList<>();
+		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		partyAccName = new ArrayList<>();
+		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		employeeUnderList = controller.getEmployeeNamesList();
+		salesAccountList = controller.getaccountListForTxnPayment("purchase acc", getUserInfoBean().getUserId());
+		salesStockItemList = controller.getSalesStockItemList();
+		purchaseNo = controller.getPurchaseNo();
+		goDownList = new ArrayList<>();
+		goDownList = controller.getAllGoDownList();
+		voucherBean = controller.getVoucherNumbering("purchase");
+		if (voucherBean == null)
+			purchaseNoVoucher = String.valueOf(controller.getPurchaseNo());
+		else {
+			if (voucherBean.getVoucherNumbering().equals("Manual")) {
+				purchaseNoVoucher = String.valueOf(controller.getPurchaseNo());
+			} else {
+				if (voucherBean.getAdvanceNumbering().equals("Yes")) {
+					int getMaxNumber = controller.getPurchaseVoucherNumber("");
+					if (getMaxNumber == 0) {
+						purchaseNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix()
+								+ voucherBean.getStartingNumber();
+					} else {
+						getMaxNumber++;
+						purchaseNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix() + getMaxNumber;
+
+					}
+				} else {
+					purchaseNoVoucher = String.valueOf(controller.getPurchaseNo());
+				}
+
+			}
+		}
 		return SUCCESS;
 	}
 
 	public void createPurchase() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		if (controller.createTransactionPurchase(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
-				amount, Qty, rate, narration)) {
-			if (controller.updateTransactionPartyBalance(partyAcc, currBalance,hcrdr)) {
-				if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit,hiddenBatchNumber,hiddenMfgDate,hiddenExpDate,hiddenExpAlert,hiddenExpAlertDate)) // st_rm_item_qty_godown update
-					if(controller.insertNewBill(paymentDate,"Agst Ref",partyAcc,totalAmt))
-						servletResponse.getWriter().write("success");
+		if (activeVoucherNumber.equals("0")) {
+			if (controller.createTransactionPurchase(referenceNo, employeeUnder, partyAcc, salesAccount,
+					salesStockItems, amount, Qty, rate, narration, purchaseNoVoucher, consignee, Dname, propName,
+					contact, address, gstnNo, ddn, tn, des, billt, vn, transportFreight, paymentDate,
+					activeVoucherNumber)) {
+				if (controller.updateTransactionPartyBalance(partyAcc, currBalance, hcrdr)) {
+					if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
+							hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) // st_rm_item_qty_godown
+																								// update
+						if (controller.insertNewBill(paymentDate, "Agst Ref", partyAcc, totalAmt, purchaseNoVoucher)) {
+							if (orderNo != null && !orderNo.isEmpty()) {
+								if (controller.changeStatusSuccessPurchase(Integer.valueOf(orderNo),
+										userInfoBean.getUserId()))
+									servletResponse.getWriter().write("success");
+
+							} else {
+								servletResponse.getWriter().write("success");
+							}
+
+						}
+
+				}
+
+			} else {
+				servletResponse.getWriter().write("error");
 			}
 
+		} else {
+			voucherBean = controller.getVoucherNumbering("purchase", activeVoucherNumber);
+			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(), paymentDate + " 00:00");
+			if (voucherDate == true) {
+				servletResponse.getWriter().write("date");
+			} else {
+				if (controller.createTransactionPurchase(referenceNo, employeeUnder, partyAcc, salesAccount,
+						salesStockItems, amount, Qty, rate, narration, purchaseNoVoucher, consignee, Dname, propName,
+						contact, address, gstnNo, ddn, tn, des, billt, vn, transportFreight, paymentDate,
+						activeVoucherNumber)) {
+					if (controller.updateTransactionPartyBalance(partyAcc, currBalance, hcrdr)) {
+						if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
+								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) // st_rm_item_qty_godown
+																									// update
+							if (controller.insertNewBill(paymentDate, "Agst Ref", partyAcc, totalAmt,purchaseNoVoucher)) {
+								if (orderNo != null && !orderNo.isEmpty()) {
+									if (controller.changeStatusSuccessPurchase(Integer.valueOf(orderNo),
+											userInfoBean.getUserId()))
+										servletResponse.getWriter().write("success");
+
+								} else {
+									servletResponse.getWriter().write("success");
+								}
+
+							}
+
+					}
+
+				} else {
+					servletResponse.getWriter().write("error");
+				}
+
+			}
 		}
-		else {
+
+		return;
+	}
+
+	private boolean compareTwoDate(String endDate, String currentDate) {
+		// TODO Auto-generated method stub
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy h:m");
+			if (sdf.parse(currentDate).after(sdf.parse(endDate))) {
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	public void checkPurchaseStatus() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		String status = controller.checkPurchaseOrder(Integer.valueOf(orderNo));
+		if (status == null) {
+			servletResponse.getWriter().write("error");
+		} else if (status.equalsIgnoreCase("pending")) {
+			servletResponse.getWriter().write("pending");
+		} else if (status.equalsIgnoreCase("accepted")) {
+			servletResponse.getWriter().write("accept");
+		} else if (status.equalsIgnoreCase("rejected")) {
+			servletResponse.getWriter().write("reject");
+		}
+
+	}
+
+	public void rejectPurchase() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.rejectPurchaseOrder(Integer.valueOf(orderNo), userInfoBean.getUserId())) {
+			servletResponse.getWriter().write("success");
+		} else {
 			servletResponse.getWriter().write("error");
 		}
-		return;
 	}
 
 	public HttpServletRequest getServletRequest() {
@@ -406,29 +661,189 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 	public void setBatchLists(List<String> batchLists) {
 		this.batchLists = batchLists;
 	}
+
 	public String getPaymentDate() {
 		return paymentDate;
 	}
+
 	public void setPaymentDate(String paymentDate) {
 		this.paymentDate = paymentDate;
 	}
+
 	public String getTotalAmt() {
 		return totalAmt;
 	}
+
 	public void setTotalAmt(String totalAmt) {
 		this.totalAmt = totalAmt;
 	}
+
 	public String getHcrdr() {
 		return hcrdr;
 	}
+
 	public void setHcrdr(String hcrdr) {
 		this.hcrdr = hcrdr;
 	}
+
 	public String getPartyName() {
 		return partyName;
 	}
+
 	public void setPartyName(String partyName) {
 		this.partyName = partyName;
+	}
+
+	public String getPOId() {
+		return POId;
+	}
+
+	public void setPOId(String pOId) {
+		POId = pOId;
+	}
+
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
+
+	public String getPartyAccNamePO() {
+		return partyAccNamePO;
+	}
+
+	public void setPartyAccNamePO(String partyAccNamePO) {
+		this.partyAccNamePO = partyAccNamePO;
+	}
+
+	public String getPurchaseNoVoucher() {
+		return purchaseNoVoucher;
+	}
+
+	public void setPurchaseNoVoucher(String purchaseNoVoucher) {
+		this.purchaseNoVoucher = purchaseNoVoucher;
+	}
+
+	public VoucherBean getVoucherBean() {
+		return voucherBean;
+	}
+
+	public void setVoucherBean(VoucherBean voucherBean) {
+		this.voucherBean = voucherBean;
+	}
+
+	public List<ItemBean> getItemBeans() {
+		return itemBeans;
+	}
+
+	public void setItemBeans(List<ItemBean> itemBeans) {
+		this.itemBeans = itemBeans;
+	}
+
+	public String getActiveVoucherNumber() {
+		return activeVoucherNumber;
+	}
+
+	public void setActiveVoucherNumber(String activeVoucherNumber) {
+		this.activeVoucherNumber = activeVoucherNumber;
+	}
+
+	public String getConsignee() {
+		return consignee;
+	}
+
+	public void setConsignee(String consignee) {
+		this.consignee = consignee;
+	}
+
+	public String getDname() {
+		return Dname;
+	}
+
+	public void setDname(String dname) {
+		Dname = dname;
+	}
+
+	public String getPropName() {
+		return propName;
+	}
+
+	public void setPropName(String propName) {
+		this.propName = propName;
+	}
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getGstnNo() {
+		return gstnNo;
+	}
+
+	public void setGstnNo(String gstnNo) {
+		this.gstnNo = gstnNo;
+	}
+
+	public String getDdn() {
+		return ddn;
+	}
+
+	public void setDdn(String ddn) {
+		this.ddn = ddn;
+	}
+
+	public String getTn() {
+		return tn;
+	}
+
+	public void setTn(String tn) {
+		this.tn = tn;
+	}
+
+	public String getDes() {
+		return des;
+	}
+
+	public void setDes(String des) {
+		this.des = des;
+	}
+
+	public String getBillt() {
+		return billt;
+	}
+
+	public void setBillt(String billt) {
+		this.billt = billt;
+	}
+
+	public String getVn() {
+		return vn;
+	}
+
+	public void setVn(String vn) {
+		this.vn = vn;
+	}
+
+	public String getTransportFreight() {
+		return transportFreight;
+	}
+
+	public void setTransportFreight(String transportFreight) {
+		this.transportFreight = transportFreight;
 	}
 
 }

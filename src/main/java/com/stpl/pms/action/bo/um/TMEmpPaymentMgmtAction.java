@@ -33,36 +33,37 @@ public class TMEmpPaymentMgmtAction extends BaseActionSupport implements Servlet
 	private String currBalance;
 	private String narration;
 	private String billByBill;
+
 	public String loadPaymentPage() {
 		GameLobbyController controller = new GameLobbyController();
 		accountList = new ArrayList<String>();
 		particularsList = new ArrayList<String>();
-		accountList = controller.getaccountListForTxnPayment("accList");
-		particularsList = controller.getaccountListForTxnPayment("payment");
+		accountList = controller.getaccountListForTxnPayment("accList", getUserInfoBean().getUserId());
+		particularsList = controller.getaccountListForTxnPayment("payment", getUserInfoBean().getUserId());
 		employeeUnderList = controller.getEmployeeNamesList();
 		paymentNo = controller.getPaymentNo();
 		return SUCCESS;
 	}
 
-	public String createPayment() {
+	public void createPayment() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		/*
-		 * if (controller.createTransactionPayment(account, employeeUnder, totalAmt,
-		 * particulars, amount, bankName, txnType, narration)) { if
-		 * (controller.updateTransactionPartyBalance(account,currBalance )) return
-		 * SUCCESS; } else return ERROR;
-		 */
-		return ERROR;
-	}
 	
+		if (controller.createTransactionPaymentEmp(account, particulars, amount, bankName, txnType, narration,
+				userInfoBean.getUserId(), userInfoBean.getParentUserId()))
+			servletResponse.getWriter().write("success");
+		else
+			servletResponse.getWriter().write("error");
+	}
+
 	public void checkForBillByBill() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		if(controller.checkForBillByBill(billByBill))
+		if (controller.checkForBillByBill(billByBill))
 			servletResponse.getWriter().write("true");
 		else
 			servletResponse.getWriter().write("false");
-		return ;
+		return;
 	}
+
 	public HttpServletRequest getServletRequest() {
 		return servletRequest;
 	}

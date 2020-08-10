@@ -4,7 +4,12 @@
 <head>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#payTransaction').dataTable();
+		bonusTable = $('#payTransactionStockItem').dataTable({
+			"scrollX" : true,
+			"sPaginationType" : "full_numbers"
+			
+		});
+		
 	});
 </script>
 </head>
@@ -24,7 +29,7 @@
 			<s:if test="%{(itemBean.size()>0)}">
 				<div class="FormMainBox1">
 					<table width="100%" cellspacing="0" align="center"
-						id="payTransaction" class="transactionTable">
+						id="payTransactionStockItem" class="transactionTable">
 						<thead>
 							<tr>
 								<th style="text-align: center;" nowrap="nowrap">Name</th>
@@ -51,7 +56,7 @@
 
 								<tr>
 									<td><s:a
-											href="bo_um_searchStockCatagory_Detail.action?unit_id=%{itemId}"
+											href="bo_um_editStockItem_Detail.action?unit_id=%{itemId}"
 											theme="simple">
 											<s:property value="itemName" />
 										</s:a></td>

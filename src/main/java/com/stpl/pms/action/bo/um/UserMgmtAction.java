@@ -1145,7 +1145,6 @@ public class UserMgmtAction extends BaseActionSupport {
 		 * if (userInfoBean.getIsRoleHeadUser().equalsIgnoreCase("N")) { return
 		 * "unauthorize"; }
 		 */
-
 		RoleMgmtController rmController = new RoleMgmtController();
 		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
 		// .getAttribute("ALLOWED_PRIV");

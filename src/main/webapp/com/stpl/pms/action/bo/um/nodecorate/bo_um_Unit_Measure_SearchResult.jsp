@@ -47,7 +47,7 @@
 
 								<tr>
 									<td><s:a
-											href="bo_um_searchStockCatagory_Detail.action?unit_id=%{unitId}"
+											href="bo_um_editUnitMeasure.action?unit_id=%{unitId}"
 											theme="simple">
 											<s:property value="unitType" />
 										</s:a></td>

@@ -27,6 +27,7 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 	private List<StockGroupBean> stockBeanList;
 	private StockGroupBean stockBean;
 	private int st_gp_id;
+	private String unit_id;
 	private List<String> stockCatagoryList;
 	private List<String> viewStockCatagoryList;
 	private String stockCatName;
@@ -76,7 +77,7 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 	private List<String> stockItemsList;
 	private String stockItemSelected;
 	private List<StockItemBean> itemBean;
-
+	private StockItemBean stockItemBean;
 	// gst variables
 
 	private String Itax;
@@ -99,7 +100,11 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 
 		return SUCCESS;
 	}
+	public String editUnitMeasure() {
+		GameLobbyController controller = new GameLobbyController();
 
+		return SUCCESS;
+	}
 	public String editStockCatagory() {
 		GameLobbyController controller = new GameLobbyController();
 		stockCatagoryBean = controller.getStockCategoryBean(st_ct_id);
@@ -228,6 +233,7 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		UQCList.add("KGS – KILOGRAMS");
 		UQCList.add("KLS – KILOLITRE");
 		UQCList.add("KME – KILOMITRE");
+		UQCList.add("LTR – LETER");
 		UQCList.add("MLT – MILILITRE");
 		UQCList.add("MTR – METERS");
 		UQCList.add("MTS – METRIC TON");
@@ -320,7 +326,22 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		itemBean = controller.getStockItemBeanByName(stockItemSelected);
 		return SUCCESS;
 	}
-
+	public String editStockItem() {
+		GameLobbyController controller = new GameLobbyController();
+		stockItemCatList = controller.getAllStockCatagory();
+		stockItemUnitList = controller.getAllStockItem();
+		viewStockGroupList = new ArrayList<String>();
+		viewStockGroupList = controller.getAllStockGroup();
+		stockItemBean = controller.getStockItemBeanById(unit_id);
+		return SUCCESS;
+	}
+	public String editStockItemSave() {
+		GameLobbyController controller = new GameLobbyController();
+		if(controller.updateStockItemDetails(stockItemBean))
+		return SUCCESS;
+		else
+			return ERROR;
+	}
 	public HttpServletRequest getServletRequest() {
 		return servletRequest;
 	}
@@ -815,6 +836,22 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 
 	public void setOpeningBalance(String openingBalance) {
 		this.openingBalance = openingBalance;
+	}
+
+	public String getUnit_id() {
+		return unit_id;
+	}
+
+	public void setUnit_id(String unit_id) {
+		this.unit_id = unit_id;
+	}
+
+	public StockItemBean getStockItemBean() {
+		return stockItemBean;
+	}
+
+	public void setStockItemBean(StockItemBean stockItemBean) {
+		this.stockItemBean = stockItemBean;
 	}
 
 }

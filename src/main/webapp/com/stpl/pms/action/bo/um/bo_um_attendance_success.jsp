@@ -3,14 +3,12 @@
 
 <div class="FormSection">
 	<div class="greyStrip">
-		<h4>
-			Success
-		</h4>
+		<h4>Success</h4>
 	</div>
 	<div class="innerBox">
-	<div class="alert saved_msg"><span class="alert_close"></span><strong>Success: </strong>
-	Attendance Marked Success!
-         </div>          
-              </div>
-   </div>
-	
+		<div class="alert saved_msg">
+			<span class="alert_close"></span><strong>Success: </strong>
+			<s:property value="resultType" />
+		</div>
+	</div>
+</div>

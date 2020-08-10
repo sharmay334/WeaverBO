@@ -45,7 +45,7 @@
 
 								<tr>
 									<td><s:a
-											href="bo_um_searchVoucher_Detail.action?voucher_id=%{voucherId}"
+											href="bo_um_searchVoucher_Detail.action?voucherId=%{voucherId}"
 											theme="simple">
 											<s:property value="voucherName" />
 

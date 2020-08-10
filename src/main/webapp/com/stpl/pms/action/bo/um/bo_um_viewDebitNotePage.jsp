@@ -10,6 +10,47 @@
 <html>
 <head>
 <style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .form-popup {
 	display: none;
 	position: fixed;
@@ -140,6 +181,28 @@ $(document).ready(function() {
 				$(function() {
 					$("#mfg").datepicker({
 						dateFormat : 'dd-mm-yy'
+					}).datepicker("setDate", date);
+				});
+			}
+		}
+	});
+	$("#paymentDate").datetimepicker({
+		dateFormat : 'yy-mm-dd',
+		showSecond : false,
+		showMinute : false,
+		showHour : false,
+		changeYear : true,
+		changeMonth : true,
+		startDate: '1980-01-01',
+		minDate : '1930-01-01',
+		onSelect : function(selectedDate) {
+			if (selectedDate != "") {
+				$("#paymentDate").datepicker("option", "minDate", selectedDate);
+			} else {
+				var date = new Date().getDate();
+				$(function() {
+					$("#paymentDate").datepicker({
+						dateFormat : 'yy-mm-dd'
 					}).datepicker("setDate", date);
 				});
 			}
@@ -415,7 +478,7 @@ function showBatchesPopup(id){
 			url : myurl,
 			success : function(itr) {
 				
-				document.getElementById('unit' + res).innerHTML = itr;
+				document.getElementById('unit' + res).value = itr;
 			},
 
 			error : function(itr) {
@@ -515,9 +578,11 @@ function showBatchesPopup(id){
 							</label>
 						</div>
 						<div class="InputDiv">
+						<s:textfield id="dnNoVoucher" name="dnNoVoucher" value="%{dnNoVoucher}"
+								theme="myTheme" readonly="true" cssStyle="width:30%" />
 							<s:textfield id="dnNo" name="dnNo"
 								value="%{dnNo}" theme="myTheme" readonly="true"
-								cssStyle="width:10%" />
+								cssStyle="width:10%;display:none" />
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -528,7 +593,7 @@ function showBatchesPopup(id){
 							</label>
 						</div>
 						<div class="InputDiv">
-							<s:textfield id="orderNo" name="orderNo" value=""
+							<s:textfield id="orderNo" name="orderNo" value="%{orderNo}"
 								theme="myTheme" readonly="true" cssStyle="width:10%" />
 						</div>
 					</div>
@@ -543,6 +608,22 @@ function showBatchesPopup(id){
 								cssStyle="width:10%" />
 						</div>
 					</div>
+					
+					<div class="clearFRM"></div>
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label>Date</label><em class="Req">*</em>
+						</div>
+						<div class="InputDiv">
+							<s:textfield id="paymentDate" name="paymentDate" placeholder="Date" cssClass="dateField" theme="myTheme" readonly="true" applyscript="true" cssStyle="width:50%" />
+						<div id="paymentDate_error" class="fieldError">
+								<s:fielderror>
+									<s:param>paymentDate</s:param>
+								</s:fielderror>
+							</div>
+						</div>
+					</div>
 					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
@@ -550,7 +631,7 @@ function showBatchesPopup(id){
 							<label> Party A/c Name </label>
 						</div>
 						<div class="InputDiv">
-							<s:select name="partyAcc" headerKey="none" id="partyAcc"
+							<s:select name="partyAcc" headerKey="none" id="partyAcc" value="%{partyAccNameSO}"
 								headerValue="--Please Select--" onchange="getCurrentBalance(this.id)" list="partyAccName"
 								cssClass="select1" theme="myTheme" />
 						</div>
@@ -703,7 +784,7 @@ function showBatchesPopup(id){
 							<tr id="rowId1">
 								<td style="text-align: center;" nowrap="nowrap"><s:select
 										headerKey="-1" headerValue="End Of List"
-										name="salesStockItems" id="salesStockItems1"
+										name="salesStockItems" id="salesStockItems1" value="%{itemName}"
 										list="salesStockItemList" cssClass="select1" theme="myTheme"
 										cssStyle="width:120px;" onchange="callForMoreRow(this.id)" /></td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
@@ -721,12 +802,12 @@ function showBatchesPopup(id){
 										 cssStyle="width:50%">
 									</ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="Qty" value="0" id="Qty1" theme="myTheme"
+										maxlength="30" name="Qty" value="%{Qty}" id="Qty1" theme="myTheme"
 										pattern="^[0-9]*$" onchange="adjustTotalAmount(this.id)"
 										oninput="calAmount(this.id)" cssStyle="width:50%">
 									</ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="rate" value="0" id="rate1"
+										maxlength="30" name="rate" value="%{rate}" id="rate1"
 										theme="myTheme" pattern="^[0-9]*$"
 										onchange="adjustTotalAmount(this.id)"
 										oninput="calAmount(this.id)" cssStyle="width:50%">
@@ -802,7 +883,7 @@ function showBatchesPopup(id){
 							<label> Total Amount </label>
 						</div>
 						<div class="InputDiv" align="right">
-							<s:textfield name="totalAmt" cssClass="InpTextBoxBg"
+							<s:textfield name="totalAmt" value="%{totalAmt}" cssClass="InpTextBoxBg"
 								id="totalAmt" style="margin-left: 0px" align="left"
 								readOnly="true" theme="simple" style="width:30%"></s:textfield>
 						</div>
@@ -834,7 +915,79 @@ function showBatchesPopup(id){
 					style="margin-left: 0px" class="button">Save</button>
 			</div>
 		</s:form>
-		<div class="form-popup" id="myForm">
+		
+		
+		<div id="myForm" class="modal">
+
+  <!-- Modal content -->
+  			<div class="modal-content">
+ 			   <button id="closeme" type="button" class="close" onclick="closeDialogue()">&times;</button>
+ 			  <div id="bill_by_bill">
+						<div class="FormSectionMenu" id="bill_by_bill_div_acc">
+							<div class="greyStrip">
+								<h4>Godown</h4>
+							</div>
+							<table width="100%" cellspacing="0" align="center"
+						id="payTransactionTableBillWise" class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Batch No.</th>
+								<th style="text-align:center;display:none;" nowrap="nowrap" id="batchTh">Number</th>
+								<th style="text-align:center;display:none;" nowrap="nowrap" id="QtyTh">Qty</th>
+								<th style="text-align: center;" nowrap="nowrap">Mfg Dt.</th>
+								<th style="text-align: center;" nowrap="nowrap">Expiry
+											Dt.</th>
+								<th style="text-align: center;" nowrap="nowrap">Remind Expiry</th>
+								<th style="text-align: center;" nowrap="nowrap">Remind Date</th>
+								
+						
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr>
+								<td style="text-align: center;" nowrap="nowrap">
+										
+										<select	name="batchList" id="batchList" onchange="showtdfornewNo()">
+										
+										</select>		
+												</td>
+										<td  id="batchTd" style="text-align: center;display:none;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="batchNewNo" value="0" id="batchNewNo"
+										theme="myTheme" cssStyle="width:50%">
+									</ss:textfield></td>
+									
+									<td id="QtyTd" style="text-align: center;display:none;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="BatchQty" value="0" id="BatchQty"
+										theme="myTheme" cssStyle="width:50%">
+									</ss:textfield></td>
+										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+												name="mfg" cssStyle="width:40%" placeholder="Date" cssClass="dateField"
+												id="mfg" readonly="true" theme="myTheme"></ss:textfield></td>
+										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+												name="exp" cssStyle="width:40%" placeholder="Date" cssClass="dateField"
+												id="exp" readonly="true" theme="myTheme"></ss:textfield></td>
+										<td style="text-align: center;" nowrap="nowrap"><s:select
+												name="expAlert" id="expAlert"
+												list="{'No','Yes'}" cssClass="select1" theme="myTheme"
+												cssStyle="width:120px;"/></td>
+										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+												name="reminderDate" cssStyle="width:40%" placeholder="Date" cssClass="dateField"
+												id="reminderDate" readonly="true" theme="myTheme"></ss:textfield></td>
+										
+							</tr>
+
+
+						</tbody>
+					</table>
+						</div>
+					</div>
+ 			 </div>
+
+		</div>
+		
+		
+		<%-- <div class="form-popup" id="myForm">
 						<div class="form-container">
 							<table width="100%" cellspacing="0" align="center"
 								id="payTransactionTable" class="transactionTable">
@@ -888,10 +1041,17 @@ function showBatchesPopup(id){
 								</tbody>
 							</table>
 						</div>
-					</div>		
+					</div>		 --%>
 	</div>
 	<div id="searchDiv"></div>
 	<br />
 	<br />
+	<script>
+if(document.getElementById('partyAcc').value!='none'){
+	getCurrentBalance('partyAcc');
+}
+
+	
+</script>
 </body>
 </html>

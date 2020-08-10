@@ -32,7 +32,7 @@
 			</div>
 			<div class="innerBox">
 				<div class="alert error_msg">
-					<span class="alert_close"></span><strong>Error Editing Group(Internal Error): </strong> <s:actionerror theme="simple"/>
+					<span class="alert_close"></span><strong>Error Editing Data(Internal Error): </strong> <s:actionerror theme="simple"/>
 				</div>
 			</div>
 		</div>

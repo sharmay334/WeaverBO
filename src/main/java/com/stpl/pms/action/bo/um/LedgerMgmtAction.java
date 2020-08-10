@@ -12,6 +12,7 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.javabeans.LedgerBankAccount;
 import com.stpl.pms.javabeans.LedgerBean;
+import com.stpl.pms.javabeans.LedgerCustomBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
 public class LedgerMgmtAction extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
@@ -19,6 +20,7 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 	private HttpServletResponse servletResponse;
 	private List<String> groupNamesList;
 	private List<String> ledgerNamesList;
+	private String ledger_id;
 	private String ledgerName;
 	private String groupUnder;
 	private String name;
@@ -29,23 +31,30 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 	private LedgerBankAccount ledgerBankAccount;
 	private List<LedgerBean> accountLedgerMaster;
 	private List<String> employeeUnderList;
+	private LedgerCustomBean ledgerCustomBean;
+	// sundry credtors fields
 
-	//sundry credtors fields
-	
 	private String blcBillByBill;
 	private String defCreditPeriod;
 	private String creditDayDuringVoucher;
 	private String specifyCreditLimit;
 	// + interest calculation fields for sundary cred..
-	
+
+	private String txnByTxnInterest;
 	private String intesestBasedOn;
 	private String foramtAdded;
-	private String foramtDeduct; 
+	private String foramtDeduct;
 	private String rate;
 	private String ratePer;
 	private String rateOn;
-	//ledger opening blnc
-	
+	private String intersetCalculationApplicability;
+	private String intersetCalculationApplicabilityDays;
+	private String intersetCalculationFrom;
+	private String intersetCalculationApplicabilityGracePeriod;
+	private String employeeUnder;
+	private String intersetCalculationSecurityAmt;
+	// ledger opening blnc
+
 	private String openingDate;
 	private String openingBalance;
 	private String Cr_Dr;
@@ -69,10 +78,25 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 
 	}
 
+	public String editLedgerSave() {
+		GameLobbyController gameLobbyController = new GameLobbyController();
+		if (gameLobbyController.saveUpdateLedgerData(ledgerCustomBean))
+			return SUCCESS;
+		else
+			return ERROR;
+	}
+
 	public String viewLedgerResult() {
 
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		accountLedgerMaster = gameLobbyController.getAccountLedgerMaster(ledgerName);
+		return SUCCESS;
+	}
+
+	public String editLedger() {
+		GameLobbyController gameLobbyController = new GameLobbyController();
+		ledgerCustomBean = gameLobbyController.getLedgerDetails(ledger_id);
+		employeeUnderList = gameLobbyController.getEmployeeNamesList();
 		return SUCCESS;
 	}
 
@@ -86,21 +110,19 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 
 	public String insertLedger() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
-		
-		if (gameLobbyController.createLedger(ledgerName, groupUnder, name, address, country, state, pincode,ledgerBankAccount,blcBillByBill,defCreditPeriod,creditDayDuringVoucher,specifyCreditLimit)) {
-			if(gameLobbyController.InitialBalace(openingDate,openingBalance,Cr_Dr,ledgerName,groupUnder))
-				if(ledgerBankAccount.getActivateInterestCalculation().equals("Yes"))
-					if(gameLobbyController.insertCalculateInterest(ledgerName,intesestBasedOn,foramtAdded,foramtDeduct,rate,ratePer,rateOn))
-							return SUCCESS;
-				else
-					return SUCCESS;
-				else
-					return SUCCESS;
-			
-		}	
-		else
+
+		if (gameLobbyController.createLedger(ledgerName, groupUnder, name, address, country, state, pincode,
+				ledgerBankAccount, blcBillByBill, defCreditPeriod, creditDayDuringVoucher, specifyCreditLimit,
+				employeeUnder, txnByTxnInterest, intesestBasedOn, foramtAdded, foramtDeduct, rate, ratePer, rateOn,
+				intersetCalculationApplicability, intersetCalculationApplicabilityDays, intersetCalculationFrom,
+				intersetCalculationApplicabilityGracePeriod, intersetCalculationSecurityAmt)) {
+			if (gameLobbyController.InitialBalace(openingDate, openingBalance, Cr_Dr, ledgerName, groupUnder))
+						return SUCCESS;
+					else
+						return ERROR;
+
+		} else
 			return ERROR;
-		return ERROR;
 	}
 
 	public String deleteLedger() {
@@ -324,6 +346,78 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 
 	public void setRateOn(String rateOn) {
 		this.rateOn = rateOn;
+	}
+
+	public String getTxnByTxnInterest() {
+		return txnByTxnInterest;
+	}
+
+	public void setTxnByTxnInterest(String txnByTxnInterest) {
+		this.txnByTxnInterest = txnByTxnInterest;
+	}
+
+	public String getIntersetCalculationApplicability() {
+		return intersetCalculationApplicability;
+	}
+
+	public void setIntersetCalculationApplicability(String intersetCalculationApplicability) {
+		this.intersetCalculationApplicability = intersetCalculationApplicability;
+	}
+
+	public String getIntersetCalculationApplicabilityDays() {
+		return intersetCalculationApplicabilityDays;
+	}
+
+	public void setIntersetCalculationApplicabilityDays(String intersetCalculationApplicabilityDays) {
+		this.intersetCalculationApplicabilityDays = intersetCalculationApplicabilityDays;
+	}
+
+	public String getIntersetCalculationFrom() {
+		return intersetCalculationFrom;
+	}
+
+	public void setIntersetCalculationFrom(String intersetCalculationFrom) {
+		this.intersetCalculationFrom = intersetCalculationFrom;
+	}
+
+	public String getLedger_id() {
+		return ledger_id;
+	}
+
+	public void setLedger_id(String ledger_id) {
+		this.ledger_id = ledger_id;
+	}
+
+	public LedgerCustomBean getLedgerCustomBean() {
+		return ledgerCustomBean;
+	}
+
+	public void setLedgerCustomBean(LedgerCustomBean ledgerCustomBean) {
+		this.ledgerCustomBean = ledgerCustomBean;
+	}
+
+	public String getEmployeeUnder() {
+		return employeeUnder;
+	}
+
+	public void setEmployeeUnder(String employeeUnder) {
+		this.employeeUnder = employeeUnder;
+	}
+
+	public String getIntersetCalculationApplicabilityGracePeriod() {
+		return intersetCalculationApplicabilityGracePeriod;
+	}
+
+	public void setIntersetCalculationApplicabilityGracePeriod(String intersetCalculationApplicabilityGracePeriod) {
+		this.intersetCalculationApplicabilityGracePeriod = intersetCalculationApplicabilityGracePeriod;
+	}
+
+	public String getIntersetCalculationSecurityAmt() {
+		return intersetCalculationSecurityAmt;
+	}
+
+	public void setIntersetCalculationSecurityAmt(String intersetCalculationSecurityAmt) {
+		this.intersetCalculationSecurityAmt = intersetCalculationSecurityAmt;
 	}
 
 }

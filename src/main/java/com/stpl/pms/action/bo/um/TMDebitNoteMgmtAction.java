@@ -11,6 +11,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.javabeans.VoucherBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
 public class TMDebitNoteMgmtAction extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
@@ -23,7 +24,8 @@ public class TMDebitNoteMgmtAction extends BaseActionSupport implements ServletR
 	private int dnNo;
 	private List<String> salesStockItemList;
 	private List<String> goDownList;
-
+	private String dnNoVoucher;
+	private VoucherBean voucherBean;
 	// create payment fields
 
 	private String referenceNo;
@@ -46,33 +48,111 @@ public class TMDebitNoteMgmtAction extends BaseActionSupport implements ServletR
 	private String hiddenExpAlertDate;
 	private String hcrdr;
 
-	public String loadDebitNotePage() {
+	private String DNId;
+	private String orderNo;
+	private String partyAccNameSO;
+	private String itemName;
+	private String totalAmt;
+
+	public String loadDebitNotePageAlert() {
 		GameLobbyController controller = new GameLobbyController();
+		String str = controller.fetchEmpDNData(0, DNId);
+		String[] resArr = str.split("\\|");
+		orderNo = resArr[0].trim();
+		partyAccNameSO = resArr[1].trim();
+		itemName = resArr[3].split(",")[0].trim();
+		Qty = resArr[4].split(",")[0].trim();
+		rate = resArr[5].split(",")[0].trim();
+		totalAmt = resArr[8].trim();
+		narration = resArr[7].trim();
 		particularsList = new ArrayList<String>();
 		salesStockItemList = new ArrayList<>();
-		particularsList = controller.getaccountListForTxnPayment("");
+		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
 		partyAccName = new ArrayList<>();
-		partyAccName = controller.getaccountListForTxnPayment("");
+		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
 		employeeUnderList = controller.getEmployeeNamesList();
-		salesAccountList = controller.getaccountListForTxnPayment("purchase acc");
+		salesAccountList = controller.getaccountListForTxnPayment("purchase acc", getUserInfoBean().getUserId());
 		salesStockItemList = controller.getSalesStockItemList();
 		dnNo = controller.getDebitNoteNo();
 		goDownList = new ArrayList<>();
 		goDownList = controller.getAllGoDownList();
+		voucherBean = controller.getVoucherNumbering("Debit Note");
+		if (voucherBean == null)
+			dnNoVoucher = String.valueOf(controller.getDebitNoteNo());
+		else {
+			if (voucherBean.getVoucherNumbering().equals("Manual")) {
+				dnNoVoucher = String.valueOf(controller.getDebitNoteNo());
+			} else {
+				if (voucherBean.getAdvanceNumbering().equals("Yes")) {
+					int getMaxNumber = controller.getDNVoucherNumber();
+					if (getMaxNumber == 0) {
+						dnNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix()
+								+ voucherBean.getStartingNumber();
+					} else {
+						getMaxNumber++;
+						dnNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix() + getMaxNumber;
+
+					}
+				} else {
+					dnNoVoucher = String.valueOf(controller.getDebitNoteNo());
+				}
+
+			}
+		}
+		return SUCCESS;
+	}
+
+	public String loadDebitNotePage() {
+		GameLobbyController controller = new GameLobbyController();
+		particularsList = new ArrayList<String>();
+		salesStockItemList = new ArrayList<>();
+		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		partyAccName = new ArrayList<>();
+		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		employeeUnderList = controller.getEmployeeNamesList();
+		salesAccountList = controller.getaccountListForTxnPayment("purchase acc", getUserInfoBean().getUserId());
+		salesStockItemList = controller.getSalesStockItemList();
+		dnNo = controller.getDebitNoteNo();
+		goDownList = new ArrayList<>();
+		goDownList = controller.getAllGoDownList();
+		voucherBean = controller.getVoucherNumbering("Debit Note");
+		if (voucherBean == null)
+			dnNoVoucher = String.valueOf(controller.getDebitNoteNo());
+		else {
+			if (voucherBean.getVoucherNumbering().equals("Manual")) {
+				dnNoVoucher = String.valueOf(controller.getDebitNoteNo());
+			} else {
+				if (voucherBean.getAdvanceNumbering().equals("Yes")) {
+					int getMaxNumber = controller.getDNVoucherNumber();
+					if (getMaxNumber == 0) {
+						dnNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix()
+								+ voucherBean.getStartingNumber();
+					} else {
+						getMaxNumber++;
+						dnNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix() + getMaxNumber;
+
+					}
+				} else {
+					dnNoVoucher = String.valueOf(controller.getDebitNoteNo());
+				}
+
+			}
+		}
 		return SUCCESS;
 	}
 
 	public void createDebitNote() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		if (controller.createTransactionDebitNote(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
-				amount, Qty, rate, narration)) {
+				amount, Qty, rate, narration, dnNoVoucher)) {
 			if (controller.updateTransactionPartyBalance(partyAcc, currBalance, hcrdr))
 				if (controller.updateOrCreateStockSale(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-						hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) 
+						hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate,""))
 					servletResponse.getWriter().write("success");
 		} else
 			servletResponse.getWriter().write("success");
 		return;
+
 	}
 
 	public HttpServletRequest getServletRequest() {
@@ -289,6 +369,62 @@ public class TMDebitNoteMgmtAction extends BaseActionSupport implements ServletR
 
 	public void setHcrdr(String hcrdr) {
 		this.hcrdr = hcrdr;
+	}
+
+	public String getDNId() {
+		return DNId;
+	}
+
+	public void setDNId(String dNId) {
+		DNId = dNId;
+	}
+
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
+
+	public String getPartyAccNameSO() {
+		return partyAccNameSO;
+	}
+
+	public void setPartyAccNameSO(String partyAccNameSO) {
+		this.partyAccNameSO = partyAccNameSO;
+	}
+
+	public String getItemName() {
+		return itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+	public String getTotalAmt() {
+		return totalAmt;
+	}
+
+	public void setTotalAmt(String totalAmt) {
+		this.totalAmt = totalAmt;
+	}
+
+	public String getDnNoVoucher() {
+		return dnNoVoucher;
+	}
+
+	public void setDnNoVoucher(String dnNoVoucher) {
+		this.dnNoVoucher = dnNoVoucher;
+	}
+
+	public VoucherBean getVoucherBean() {
+		return voucherBean;
+	}
+
+	public void setVoucherBean(VoucherBean voucherBean) {
+		this.voucherBean = voucherBean;
 	}
 
 }

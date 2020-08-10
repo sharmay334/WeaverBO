@@ -22,13 +22,5 @@
       <source>${basedir}/extResources/ehcache.xml</source>
       <outputDirectory>resources</outputDirectory>
     </file>
-    <file>
-      <source>${basedir}/extResources/Loyaltyconfig.properties</source>
-      <outputDirectory>resources</outputDirectory>
-    </file>
-    <file>
-      <source>${basedir}/extResources/quartz.properties</source>
-      <outputDirectory>resources</outputDirectory>
-    </file>
   </files>
 </assembly>

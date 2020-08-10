@@ -48,7 +48,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 .close {
   color: #aaaaaa;
   float: right;
-  font-size: 28px;
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -85,6 +85,7 @@ function promptSave(){
 			  $.ajax({
 			        type: frm.attr('method'),
 			        url: frm.attr('action'),
+			        async:false,
 			        data: frm.serialize(),
 			        success: function (data) {
 			        	if(data=="success"){
@@ -93,13 +94,25 @@ function promptSave(){
 			        			   window.location.reload(1);
 			        			}, 1000);
 			        	}
+			        	else if(data=="date"){
+			        		swal("Error! Receipt date is greater than voucher end date.");
+			        		setTimeout(function(){
+			        			   window.location.reload(1);
+			        			}, 1000);
+			        	}
 			        	else{
-			        		swal("Some Error Occured!");
+			        		swal("Error! Wrong data entry.");
+			        		setTimeout(function(){
+			        			   window.location.reload(1);
+			        			}, 1000);
 			        	}
 			            
 			        },
 			        error: function (data) {
 			        	swal("Server Error Occured!");
+			        	setTimeout(function(){
+		        			   window.location.reload(1);
+		        			}, 1000);
 			        },
 			    });
 			  
@@ -147,28 +160,29 @@ function closeMe(){
 		
 }
 $(document).ready(function() {
-	$("#paymentDate").datetimepicker({
-		dateFormat : 'yy-mm-dd',
-		showSecond : false,
-		showMinute : false,
-		showHour : false,
-		changeYear : true,
-		changeMonth : true,
-		startDate: '1980-01-01',
-		minDate : '1930-01-01',
-		onSelect : function(selectedDate) {
-			if (selectedDate != "") {
-				$("#paymentDate").datepicker("option", "minDate", selectedDate);
-			} else {
-				var date = new Date().getDate();
-				$(function() {
-					$("#paymentDate").datepicker({
-						dateFormat : 'yy-mm-dd'
-					}).datepicker("setDate", date);
-				});
-			}
-		}
-	});
+	$("#paymentDate").datetimepicker(
+			{
+				dateFormat : 'dd-mm-yy',
+				showSecond : false,
+				showMinute : false,
+				showHour : false,
+				changeYear : true,
+				changeMonth : true,
+				minDate : '01-01-1930',
+				onSelect : function(selectedDate) {
+					if (selectedDate != "") {
+						$("#paymentDate").datepicker("option",
+								"minDate", selectedDate);
+					} else {
+						var date = new Date().getDate();
+						$(function() {
+							$("#paymentDate").datepicker({
+								dateFormat : 'dd-mm-yy'
+							}).datepicker("setDate", date);
+						});
+					}
+				}
+			});
 	});
 function callForMoreBillRow(id){
 	var res = id.match(/\d/g);
@@ -197,8 +211,8 @@ function callToGetAgstRef(id,tor){
 	var rowCountBillWise = countTotalRowsBillWise();
 
 	var amt = Number(document.getElementById('debitAmt'+res).value)+Number(document.getElementById('creditAmt'+res).value);
-	myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_bill_agst_ref_id.action?partyAcc="
-			+ particular+"&typeOfRef="+tor+"&suffix=";
+	myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_bill_agst_ref_id_journal.action?partyAcc="
+			+ particular+"&typeOfRef="+tor;
 	
 	$.ajax({
 		type : "GET",
@@ -365,6 +379,7 @@ function callformorebillwiserow(id){
 				+ partyName;
 		$.ajax({
 			type : "GET",
+			async:false,
 			url : myurl,
 			success : function(itr) {
 				if(itr=='eligible'){
@@ -461,7 +476,8 @@ function callformorebillwiserow(id){
 				+ document.getElementById(id).value;
 		var res = id.match(/\d/g);
 		$.ajax({
-			type : "GET",
+			type : "POST",
+			async:false,
 			url : myurl,
 			success : function(itr) {
 				var arr = itr.split(",");
@@ -564,8 +580,12 @@ function callformorebillwiserow(id){
 							</label>
 						</div>
 						<div class="InputDiv">
+						<s:textfield id="journalNoVoucher" name="journalNoVoucher" value="%{journalNoVoucher}"
+								theme="myTheme" cssStyle="width:40%" />
 							<s:textfield id="journalNo" name="journalNo" value="%{journalNo}"
-								theme="myTheme" readonly="true" cssStyle="width:10%" />
+								theme="myTheme" readonly="true" cssStyle="width:10%;display:none" />
+							<s:textfield id="activeVoucherNumber" name="activeVoucherNumber" value="%{activeVoucherNumber}"
+								theme="myTheme" readonly="true" cssStyle="width:10%;display:none" />		
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -667,7 +687,7 @@ function callformorebillwiserow(id){
 
   <!-- Modal content -->
   			<div class="modal-content">
- 			   <button id="closeme" type="button" class="close" onclick="closeMe()">&times;</button>
+ 			   <button id="closeme" type="button" class="close" onclick="closeMe()">Save</button>
  			  <div id="bill_by_bill">
 						<div class="FormSectionMenu" id="bill_by_bill_div_acc">
 							<div class="greyStrip">

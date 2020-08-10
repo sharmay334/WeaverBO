@@ -58,8 +58,6 @@
 			var currentLoggedUser='<s:property value="%{userInfoBean.userName}"/>';
 			window.onload = function (ev) {
 				BrowserDetect.init();	
-				
-					
 				//initDojo.startDojo(ev);
 			 	
 				
@@ -83,6 +81,260 @@
 					$("#container").removeClass( "chartPage");
 				}
 			});		
+			function deleteNotificationById(dlt_id){
+				var myurl = "<%=path%>";
+				myurl+="/com/stpl/pms/action/bo/lm/delete_alert.action?deleteId="+dlt_id;
+				 $.ajax({
+				  url: myurl,
+				  type: 'post',
+				  success: function(response){
+					alert('alert successfully deleted!');
+					fetchdataAlert();
+				  }
+				 });
+			}
+			
+			function goToPurchaseOrder(po_id){
+				var myurl = "<%=path%>";
+				var myurlRedirect = "<%=path%>";
+				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_purchase_alert.action?POId="+po_id;
+				myurl+="/com/stpl/pms/action/bo/lm/bo_um_get_emp_purchase_order_data.action?POId="+po_id;
+				 $.ajax({
+				  url: myurl,
+				  type: 'post',
+				  success: function(response){
+					window.location.href = myurlRedirect;
+
+				  }
+				 });
+			}
+			function goToSaleOrder(so_id){
+				var myurl = "<%=path%>";
+				var myurlRedirect = "<%=path%>";
+				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_sale_alert.action?SOId="+so_id;
+				window.location.href = myurlRedirect;
+				
+				
+			}
+			
+			function goToCN(cn_id){
+				
+				var myurl = "<%=path%>";
+				var myurlRedirect = "<%=path%>";
+				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_creditNote_alert.action?CNId="+cn_id;
+				window.location.href = myurlRedirect;
+				
+				
+			}
+		  function goToDN(dn_id){
+				
+				var myurl = "<%=path%>";
+				var myurlRedirect = "<%=path%>";
+				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_debitNote_alert.action?DNId="+dn_id;
+				window.location.href = myurlRedirect;
+			}
+		  function goToPMT(dn_id){
+				
+				var myurl = "<%=path%>";
+				var myurlRedirect = "<%=path%>";
+				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_payment_alert.action?pmtId="+dn_id;
+				window.location.href = myurlRedirect;
+			}
+		  function goToRCPT(dn_id){
+				
+				var myurl = "<%=path%>";
+				var myurlRedirect = "<%=path%>";
+				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_receipt_alert.action?rcptId="+dn_id;
+				window.location.href = myurlRedirect;
+			}
+			
+			function fetchdataAlert(){
+				var myurl = "<%=path%>";
+				myurl+="/com/stpl/pms/action/bo/lm/getAlert.action";
+				 $.ajax({
+				  url: myurl,
+				  type: 'post',
+				  success: function(response){
+					  var arr_msg = response.split('|');
+				   // Perform operation on the return value
+				   if(response.includes('|')){
+					   document.getElementById('badge_value').innerHTML = arr_msg[1];
+					   document.getElementById('noti_alerts_msg').innerHTML = arr_msg[0];
+				   }
+				   else{
+					   var val = 0;
+					   document.getElementById('badge_value').innerHTML = val;
+					   document.getElementById('noti_alerts_msg').innerHTML = 'There is no notification yet!';
+				   }
+				  
+				  }
+				 });
+				}
+			function fetchdataAlertPO(){
+				var myurl = "<%=path%>";
+				myurl+="/com/stpl/pms/action/bo/lm/getAlertPO.action";
+				 $.ajax({
+				  url: myurl,
+				  type: 'post',
+				  success: function(response){
+					  var arr_msg = response.split('|');
+				   // Perform operation on the return value
+				   if(response.includes('|')){
+					   document.getElementById('badge_value_po').innerHTML = arr_msg[1];
+					   document.getElementById('noti_alerts_msg_po').innerHTML = arr_msg[0];
+				   }
+				   else{
+					   var val = 0;
+					   document.getElementById('badge_value_po').innerHTML = val;
+					   document.getElementById('noti_alerts_msg_po').innerHTML = 'There is no notification yet!';
+				   }
+				  
+				  }
+				 });
+				}
+			
+			
+			function fetchdataAlertSO(){
+				var myurl = "<%=path%>";
+				myurl+="/com/stpl/pms/action/bo/lm/getAlertSO.action";
+				 $.ajax({
+				  url: myurl,
+				  type: 'post',
+				  success: function(response){
+					  var arr_msg = response.split('|');
+				   // Perform operation on the return value
+				   if(response.includes('|')){
+					   document.getElementById('badge_value_so').innerHTML = arr_msg[1];
+					   document.getElementById('noti_alerts_msg_so').innerHTML = arr_msg[0];
+				   }
+				   else{
+					   var val = 0;
+					   document.getElementById('badge_value_so').innerHTML = val;
+					   document.getElementById('noti_alerts_msg_so').innerHTML = 'There is no notification yet!';
+				   }
+				  
+				  }
+				 });
+				}
+			function fetchdataAlertCN(){
+				var myurl = "<%=path%>";
+				myurl+="/com/stpl/pms/action/bo/lm/getAlertCN.action";
+				 $.ajax({
+				  url: myurl,
+				  type: 'post',
+				  success: function(response){
+					  var arr_msg = response.split('|');
+				   // Perform operation on the return value
+				   if(response.includes('|')){
+					   document.getElementById('badge_value_cn').innerHTML = arr_msg[1];
+					   document.getElementById('noti_alerts_msg_cn').innerHTML = arr_msg[0];
+				   }
+				   else{
+					   var val = 0;
+					   document.getElementById('badge_value_cn').innerHTML = val;
+					   document.getElementById('noti_alerts_msg_cn').innerHTML = 'There is no notification yet!';
+				   }
+				  
+				  }
+				 });
+				}
+			function fetchdataAlertDN(){
+				var myurl = "<%=path%>";
+				myurl+="/com/stpl/pms/action/bo/lm/getAlertDN.action";
+				 $.ajax({
+				  url: myurl,
+				  type: 'post',
+				  success: function(response){
+					  var arr_msg = response.split('|');
+				   // Perform operation on the return value
+				   if(response.includes('|')){
+					   document.getElementById('badge_value_dn').innerHTML = arr_msg[1];
+					   document.getElementById('noti_alerts_msg_dn').innerHTML = arr_msg[0];
+				   }
+				   else{
+					   var val = 0;
+					   document.getElementById('badge_value_dn').innerHTML = val;
+					   document.getElementById('noti_alerts_msg_dn').innerHTML = 'There is no notification yet!';
+				   }
+				  
+				  }
+				 });
+				}
+			function fetchdataAlertPMT(){
+				var myurl = "<%=path%>";
+				myurl+="/com/stpl/pms/action/bo/lm/getAlertPMT.action";
+				 $.ajax({
+				  url: myurl,
+				  type: 'post',
+				  success: function(response){
+					  var arr_msg = response.split('|');
+				   // Perform operation on the return value
+				   if(response.includes('|')){
+					   document.getElementById('badge_value_pmt').innerHTML = arr_msg[1];
+					   document.getElementById('noti_alerts_msg_pmt').innerHTML = arr_msg[0];
+				   }
+				   else{
+					   var val = 0;
+					   document.getElementById('badge_value_pmt').innerHTML = val;
+					   document.getElementById('noti_alerts_msg_pmt').innerHTML = 'There is no notification yet!';
+				   }
+				  
+				  }
+				 });
+				}
+			function fetchdataAlertRCPT(){
+				var myurl = "<%=path%>";
+				myurl+="/com/stpl/pms/action/bo/lm/getAlertRCPT.action";
+				 $.ajax({
+				  url: myurl,
+				  type: 'post',
+				  success: function(response){
+					  var arr_msg = response.split('|');
+				   // Perform operation on the return value
+				   if(response.includes('|')){
+					   document.getElementById('badge_value_rcpt').innerHTML = arr_msg[1];
+					   document.getElementById('noti_alerts_msg_rcpt').innerHTML = arr_msg[0];
+				   }
+				   else{
+					   var val = 0;
+					   document.getElementById('badge_value_rcpt').innerHTML = val;
+					   document.getElementById('noti_alerts_msg_rcpt').innerHTML = 'There is no notification yet!';
+				   }
+				  
+				  }
+				 });
+				}
+			
+
+				$(document).ready(function(){
+				 setInterval(fetchdataAlert,60000);
+				});
+				$(document).ready(function(){
+					 setInterval(fetchdataAlertPO,60000);
+					});
+				$(document).ready(function(){
+					 setInterval(fetchdataAlertSO,60000);
+					});
+				$(document).ready(function(){
+					 setInterval(fetchdataAlertCN,60000);
+					});
+				$(document).ready(function(){
+					 setInterval(fetchdataAlertDN,60000);
+					});
+				$(document).ready(function(){
+					 setInterval(fetchdataAlertPMT,60000);
+					});
+				$(document).ready(function(){
+					 setInterval(fetchdataAlertRCPT,60000);
+					});
+				fetchdataAlert();
+				fetchdataAlertPO();
+				fetchdataAlertSO();
+				fetchdataAlertCN();
+				fetchdataAlertDN();
+				fetchdataAlertPMT();
+				fetchdataAlertRCPT();
+				
         </script>	
 		<decorator:head />
 	</head>
@@ -130,13 +382,21 @@
  	<!-- top section end-->
  	<div id="container">
     <!-- container div start-->
- 
+ 	<a href="javascript:;" class="notification" onclick="openAlertBox()"><span>Alert</span><span id="badge_value" class="badge">0</span></a>
+ 	<a href="javascript:;" class="notification" onclick="openAlertBoxPO()" style="margin-right:20px;"><span>Purchase Order</span><span id="badge_value_po" class="badge">0</span></a>
+	<a href="javascript:;" class="notification" onclick="openAlertBoxSO()" style="margin-right:20px;"><span>Sale Order</span><span id="badge_value_so" class="badge">0</span></a>
+	<a href="javascript:;" class="notification" onclick="openAlertBoxCN()" style="margin-right:20px;"><span>Credit Note</span><span id="badge_value_cn" class="badge">0</span></a>
+	<a href="javascript:;" class="notification" onclick="openAlertBoxDN()" style="margin-right:20px;"><span>Debit Note</span><span id="badge_value_dn" class="badge">0</span></a>
+	<a href="javascript:;" class="notification" onclick="openAlertBoxPMT()" style="margin-right:20px;"><span>Payment</span><span id="badge_value_pmt" class="badge">0</span></a>
+	<a href="javascript:;" class="notification" onclick="openAlertBoxRCPT()" style="margin-right:20px;"><span>Receipt</span><span id="badge_value_rcpt" class="badge">0</span></a>
+	
 		<s:include value="/com/stpl/pms/action/bo/common/header.jsp" />
 		<div class="clear"></div>
 		<!--navigation start-->
 		<div id="Navigation">
 			<div id="top">
 				<div id="navbox">
+				
 				</div>
 				<div id="top_bar">
 					<div id="main_menu">
@@ -144,6 +404,8 @@
 					<div class="clear"></div>
 					</div>
 	          					</div>
+	          					
+	          					
 				<div class="clear"></div>
 			</div>
 		</div>
@@ -153,6 +415,69 @@
 		<decorator:body />
 	</div>
 	</div>
+	<div id="noti_myModal" class="noti_modal">
+
+  <!-- Modal content -->
+  <div class="noti_modal-content">
+    <span class="noti_close">&times;</span>
+    <div id="noti_alerts_msg"></div>
+  </div>
+
+</div>
+<div id="noti_myModal_po" class="noti_modal_po">
+
+  <!-- Modal content -->
+  <div class="noti_modal-content_po">
+    <span class="noti_close_po">&times;</span>
+    <div id="noti_alerts_msg_po"></div>
+  </div>
+
+</div>
+<div id="noti_myModal_so" class="noti_modal_so">
+
+  <!-- Modal content -->
+  <div class="noti_modal-content_so">
+    <span class="noti_close_so">&times;</span>
+    <div id="noti_alerts_msg_so"></div>
+  </div>
+
+</div>
+<div id="noti_myModal_cn" class="noti_modal_cn">
+
+  <!-- Modal content -->
+  <div class="noti_modal-content_cn">
+    <span class="noti_close_cn">&times;</span>
+    <div id="noti_alerts_msg_cn"></div>
+  </div>
+
+</div>
+<div id="noti_myModal_dn" class="noti_modal_dn">
+
+  <!-- Modal content -->
+  <div class="noti_modal-content_dn">
+    <span class="noti_close_dn">&times;</span>
+    <div id="noti_alerts_msg_dn"></div>
+  </div>
+
+</div>
+<div id="noti_myModal_pmt" class="noti_modal_pmt">
+
+  <!-- Modal content -->
+  <div class="noti_modal-content_pmt">
+    <span class="noti_close_pmt">&times;</span>
+    <div id="noti_alerts_msg_pmt"></div>
+  </div>
+
+</div>
+<div id="noti_myModal_rcpt" class="noti_modal_rcpt">
+
+  <!-- Modal content -->
+  <div class="noti_modal-content_rcpt">
+    <span class="noti_close_rcpt">&times;</span>
+    <div id="noti_alerts_msg_rcpt"></div>
+  </div>
+
+</div>
 	<div class="footer-main"><p><jsp:include page="/com/stpl/pms/action/bo/common/copyright-client-specific.jsp"/></p></div>
 	<script type="text/javascript" src="<%=path%>/js/common.js"></script>		
 	</body>

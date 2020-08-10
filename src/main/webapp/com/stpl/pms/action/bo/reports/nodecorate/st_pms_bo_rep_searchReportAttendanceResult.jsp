@@ -17,7 +17,114 @@
 <meta http-equiv="expires" content="0">
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
 <script>
+function closeMe(){
+	
+		document.getElementById("myModal").style.display = "none";
+			
+}
+function callPictureReport(empId,attDate){
+	empIdArr = empId.split("-");
+	var myurl = "<%=basePath%>";
+	myurl += "com/stpl/pms/action/bo/um/bo_um_emp_picture_report.action?employeeUserName="
+			+ empIdArr[1]+"&attendaceDate="+attDate;
+	$.ajax({
+		type : "GET",
+		url : myurl,
+		success : function(itr) {
+			itrArr = itr.split(";");
+			var list1 = document.getElementById("one");
+			var list2 = document.getElementById("two");
+			var list3 = document.getElementById("three");
+			var list4 = document.getElementById("four");
+				if(typeof(list1.childNodes[0])!="undefined")
+				list1.removeChild(list1.childNodes[0]);
+				if(typeof(list2.childNodes[0])!="undefined")
+					list2.removeChild(list2.childNodes[0]);
+				if(typeof(list3.childNodes[0])!="undefined")
+					list3.removeChild(list3.childNodes[0]);
+				if(typeof(list4.childNodes[0])!="undefined")
+					list4.removeChild(list4.childNodes[0]);
+					
+				
+			  var x = document.createElement("IMG");
+				  x.setAttribute("src", itrArr[0]);
+				  x.setAttribute("width", "228");
+				  x.setAttribute("height", "228");
+				  x.setAttribute("alt", "Employee Img");
+				  document.getElementById('one').appendChild(x);
+			
+				  var xx = document.createElement("IMG");
+				  xx.setAttribute("src", itrArr[1]);
+				  xx.setAttribute("width", "228");
+				  xx.setAttribute("height", "228");
+				  xx.setAttribute("alt", "Employee Img");
+				  document.getElementById('two').appendChild(xx);
+			
+				  var y = document.createElement("IMG");
+				  y.setAttribute("src", itrArr[2]);
+				  y.setAttribute("width", "228");
+				  y.setAttribute("height", "228");
+				  y.setAttribute("alt", "Employee Img");
+				  document.getElementById('three').appendChild(y);
+			
+				  var yy = document.createElement("IMG");
+				  yy.setAttribute("src", itrArr[3]);
+				  yy.setAttribute("width", "228");
+				  yy.setAttribute("height", "228");
+				  yy.setAttribute("alt", "Employee Img");
+				  document.getElementById('four').appendChild(yy);
+			
+			 
+			document.getElementById("myModal").style.display = "block";
+		},
+		error : function(itr) {
+
+		}
+	});
+}
 	$(document).ready(function() {
 		// fromAndToDate();
 		$('#waitDiv').hide();
@@ -48,6 +155,8 @@
 				
 			</div>
 			<div class="innerBox">
+			<s:form id="searchUserFrm" action="/com/stpl/pms/action/bo/um/st_pms_bo_rep_searchReportAttendanceVisit.action"
+			 target="searchResult1" theme="simple">
 				<table id="payTransactionTable" cellspacing="0"
 					cellpadding="4" border="0" align="center" class="payTransaction">
 					<thead>
@@ -75,7 +184,9 @@
 							<th width="5%" valign="middle" style="text-align: center;"
 								id="th_3">Odometer Reading Out</th>
 							<th width="5%" valign="middle" style="text-align: center;"
-								id="th_3">Total Reading</th>	
+								id="th_3">Total Reading</th> 
+							<th width="5%" valign="middle" style="text-align: center;" is_link="false"
+								id="th_3">Visit Report</th>	
 						</tr>
 					</thead>
 					<tbody>
@@ -84,10 +195,12 @@
 							<tr>
 
 								<td width="5%" valign="middle" style="text-align: center;">
-									<s:property value="#attendanceMap.empId" />
+									<a href="javascript:;" onclick="callPictureReport('<s:property value="#attendanceMap.empId" />','<s:property value="#attendanceMap.attendanceDate" />')"><s:property value="#attendanceMap.empId" /></a>
+									<s:hidden name="empId" value="%{#attendanceMap.empId}"></s:hidden>
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
 									<s:property value="#attendanceMap.attendanceDate" />
+									<s:hidden name="attendanceDate" value="%{#attendanceMap.attendanceDate}"></s:hidden>
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
 										<b> <s:property value="#attendanceMap.attendaceMark" /> </b> 
@@ -119,14 +232,57 @@
 								<td width="5%" valign="middle" style="text-align: center;">
 									<s:property value="#attendanceMap.totalReading" />
 								</td>
+								<td width="5%" valign="middle" style="text-align: center;">
+								<s:submit name="Search" value="GET" id="searchButton"
+					           cssClass="button"></s:submit>
+								</td>
 								
 
 							</tr>
 						</s:iterator>
 					</tbody>
 				</table>
+				</s:form>
 			</div>
 			<div class="box_footer"></div>
+			<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  			<div class="modal-content">
+ 			   <button id="closeme" type="button" class="close" onclick="closeMe()">&times;</button>
+ 			  <div id="bill_by_bill">
+						<div class="FormSectionMenu">
+							<div class="greyStrip">
+								<h4>Picture Report :<b></h4>
+							</div>
+							<table width="100%" cellspacing="0" align="center">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Odometer Picture In</th>
+								<th style="text-align: center;" nowrap="nowrap">Odometer Picture Out</th>
+								<th style="text-align: center;" nowrap="nowrap">Selfie In</th>
+								<th style="text-align: center;" nowrap="nowrap">Selfie Out</th>
+						
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr>
+								<td style="text-align: center;" nowrap="nowrap"><div id="one"></div></td>
+								<td style="text-align: center;" nowrap="nowrap"><div id="two"></div></td>
+								<td style="text-align: center;" nowrap="nowrap"><div id="three"></div></td>
+								<td style="text-align: center;" nowrap="nowrap"><div id="four"></div></td>
+								
+							</tr>
+
+
+						</tbody>
+					</table>
+						</div>
+					</div>
+ 			 </div>
+
+			</div>
 		</s:if>
 		<s:else>
 			<div class="greyStrip">

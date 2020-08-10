@@ -11,6 +11,30 @@
 				/com/stpl/pms/common/execption/nodecorate/sessionTimeOut.jsp
 			</result>
 		</action>
+		<action name="getAlert" class="com.stpl.pms.action.bo.lm.AlertManagementAction" method="getAlert">
+		<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="getAlertPO" class="com.stpl.pms.action.bo.lm.AlertManagementAction" method="getAlertPO">
+		<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="getAlertSO" class="com.stpl.pms.action.bo.lm.AlertManagementAction" method="getAlertSO">
+		<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="getAlertCN" class="com.stpl.pms.action.bo.lm.AlertManagementAction" method="getAlertCN">
+		<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="getAlertDN" class="com.stpl.pms.action.bo.lm.AlertManagementAction" method="getAlertDN">
+		<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="getAlertPMT" class="com.stpl.pms.action.bo.lm.AlertManagementAction" method="getAlertPMT">
+		<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="getAlertRCPT" class="com.stpl.pms.action.bo.lm.AlertManagementAction" method="getAlertRCPT">
+		<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="delete_alert" class="com.stpl.pms.action.bo.lm.AlertManagementAction" method="deleteAlert">
+		<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
 		<action name="bo_lm_newLogin" class="com.stpl.pms.action.bo.lm.AuthenticationAction" method="welcomeUser">
 			<interceptor-ref name="customStack"></interceptor-ref>
 			<result name="success">
@@ -114,6 +138,10 @@
 		<action name="st_check_system_storage" class="com.stpl.pms.action.bo.lm.DiskStorageMgmt" method="returnDiskSpace">
 		<interceptor-ref name="customStack"></interceptor-ref>
 		
+		</action>
+		
+		<action name="bo_um_get_emp_purchase_order_data" class="com.stpl.pms.action.bo.lm.EmpOrderManagement" method="fetchPOData">
+		<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
 	</package>
 </struts>

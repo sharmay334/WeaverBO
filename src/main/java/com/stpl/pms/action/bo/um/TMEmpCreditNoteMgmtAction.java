@@ -36,7 +36,7 @@ public class TMEmpCreditNoteMgmtAction extends BaseActionSupport implements Serv
 	private String narration;
 	private String goDown;
 	private String unit;
-	
+	private String totalAmt;
 	
 	private String hiddenBatchNumber;
 	private String hiddenMfgDate;
@@ -48,13 +48,13 @@ public class TMEmpCreditNoteMgmtAction extends BaseActionSupport implements Serv
 		GameLobbyController controller = new GameLobbyController();
 		particularsList = new ArrayList<String>();
 		salesStockItemList = new ArrayList<>();
-		particularsList = controller.getaccountListForTxnPayment("");
+		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
 		partyAccName = new ArrayList<>();
-		partyAccName = controller.getaccountListForTxnPayment("");
+		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
 		employeeUnderList = controller.getEmployeeNamesList();
-		salesAccountList = controller.getaccountListForTxnPayment("sales acc");
+		salesAccountList = controller.getaccountListForTxnPayment("sales acc", getUserInfoBean().getUserId());
 		salesStockItemList = controller.getSalesStockItemList();
-		cnNo = controller.getCreditNoteNo();
+		cnNo = controller.getCreditNoteNoEmp(userInfoBean.getUserId());
 		goDownList = new ArrayList<>();
 		goDownList = controller.getAllGoDownList();
 		return SUCCESS;
@@ -62,16 +62,15 @@ public class TMEmpCreditNoteMgmtAction extends BaseActionSupport implements Serv
 
 	public String createCreditNote() {
 		GameLobbyController controller = new GameLobbyController();
-		if (controller.createTransactionSales(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
-				amount, Qty, rate, narration)) {
+		if (controller.createEmpTransactionCreditNote(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
+				amount, Qty, rate, narration,userInfoBean.getUserId(),userInfoBean.getParentUserId(),totalAmt)) {
 			//if (controller.updateTransactionPartyBalance(partyAcc, currBalance))
-				if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit,hiddenBatchNumber,hiddenMfgDate,hiddenExpDate,hiddenExpAlert,hiddenExpAlertDate)) // st_rm_item_qty_godown update
+				//if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit,hiddenBatchNumber,hiddenMfgDate,hiddenExpDate,hiddenExpAlert,hiddenExpAlertDate)) // st_rm_item_qty_godown update
 					return SUCCESS;
 		}
 			
 		else
 			return ERROR;
-		return ERROR;
 	}
 
 	public HttpServletRequest getServletRequest() {
@@ -280,6 +279,14 @@ public class TMEmpCreditNoteMgmtAction extends BaseActionSupport implements Serv
 
 	public void setHiddenExpAlertDate(String hiddenExpAlertDate) {
 		this.hiddenExpAlertDate = hiddenExpAlertDate;
+	}
+
+	public String getTotalAmt() {
+		return totalAmt;
+	}
+
+	public void setTotalAmt(String totalAmt) {
+		this.totalAmt = totalAmt;
 	}
 	
 }

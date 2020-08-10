@@ -145,7 +145,7 @@ public class AuthenticationAction extends BaseActionSupport {
 				}
 				session.setAttribute("FIRST", false);
 				session.setAttribute("ACTIVE_SERVICE", "MGMT");
-
+				controller.insertLoginAlert(loginBean);	
 				return SUCCESS;
 			}
 

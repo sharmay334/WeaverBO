@@ -10,8 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.javabeans.UserInfoBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
 public class TMEmpPurchaseMgmtAction extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
@@ -49,93 +53,40 @@ public class TMEmpPurchaseMgmtAction extends BaseActionSupport implements Servle
 	private String hiddenExpDate;
 	private String hiddenExpAlert;
 	private String hiddenExpAlertDate;
+	private String paymentDate;
+	private String totalAmt;
+	private String hcrdr;
+	private String partyName;
 	
 	
-	public void getCurrentBalance() throws IOException {
-		GameLobbyController controller = new GameLobbyController();
-		String balance = controller.getPartyBalanceByName(partyAcc);
-		servletResponse.getWriter().write("" + balance);
-		return;
-	}
-	public void getCreditLimit() throws IOException{
-		GameLobbyController controller = new GameLobbyController();
-		String limit = controller.getPartyCreditLimitByName(partyAcc);
-		if(!limit.equals("none"))
-		servletResponse.getWriter().write("" + limit);
-		else
-			servletResponse.getWriter().write("Not Specified");	
-		return;
-	}
-	public void getTotalQtyCall() throws IOException {
-		GameLobbyController controller = new GameLobbyController();
-		String totalQty = controller.TotalQtyFromGoDown(itemName);
-		servletResponse.getWriter().write("" + totalQty);
-		return;
-	}
-	public void getAvailableQtyCall() throws IOException {
-		GameLobbyController controller = new GameLobbyController();
-		String availableQtyInGodown = controller.TotalQtyFromGoDownByName(goDown,itemName);
-		servletResponse.getWriter().write("" + availableQtyInGodown);
-		return;
-	}
-	public void getAvailableBatches() throws IOException {
-		GameLobbyController controller = new GameLobbyController();
-		String availableBatchesInGodown = "Not Applicable,New Number";
-		availableBatchesInGodown+=controller.TotalBatchesFromGoDownByName(goDown,itemName);
-		servletResponse.getWriter().write("" + availableBatchesInGodown);
-		return;
-	}
-	public void getAvailableBatcheDates() throws IOException{
-		GameLobbyController controller = new GameLobbyController();
-		String availableBatchesdtInGodown=controller.TotalBatchesDtFromGoDownByName(goDown,itemName,hiddenBatchNumber);
-		servletResponse.getWriter().write("" + availableBatchesdtInGodown);
-		return;
-	}
-	public void getTaxBalance() throws IOException {
-		GameLobbyController controller = new GameLobbyController();
-		Map<String, Integer> taxes = controller.getTaxesByItemName(itemName);
-		if (taxes == null)
-			servletResponse.getWriter().write("none");
-		else
-			servletResponse.getWriter()
-					.write("" + taxes.get("IGST") + ";" + taxes.get("CGST") + ";" + taxes.get("SGST"));
-		return;
-	}
 	
 	public String loadPurchasePage() {
 		GameLobbyController controller = new GameLobbyController();
 		particularsList = new ArrayList<String>();
 		salesStockItemList = new ArrayList<>();
-		particularsList = controller.getaccountListForTxnPayment("");
+		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
 		partyAccName = new ArrayList<>();
-		partyAccName = controller.getaccountListForTxnPayment("");
+		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
 		employeeUnderList = controller.getEmployeeNamesList();
-		salesAccountList = controller.getaccountListForTxnPayment("purchase acc");
+		salesAccountList = controller.getaccountListForTxnPayment("purchase acc", getUserInfoBean().getUserId());
 		salesStockItemList = controller.getSalesStockItemList();
-		purchaseNo = controller.getPurchaseNo();
+		purchaseNo = controller.getEmpPurchaseNo(userInfoBean.getUserId());
 		goDownList = new ArrayList<>();
 		goDownList = controller.getAllGoDownList();
-		
-		
 		return SUCCESS;
 	}
 
-	public String createPurchase() {
+	public void createPurchase() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		if (controller.createTransactionPurchase(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
-				amount, Qty, rate, narration)) {
-			/*
-			 * if (controller.updateTransactionPartyBalance(partyAcc, currBalance)) { if
-			 * (controller.updateOrCreateStock(salesStockItems, goDown, Qty,
-			 * unit,hiddenBatchNumber,hiddenMfgDate,hiddenExpDate,hiddenExpAlert,
-			 * hiddenExpAlertDate)) // st_rm_item_qty_godown update return SUCCESS; }
-			 */
+		if (controller.createEmpTransactionPurchase(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
+				amount, Qty, rate, narration,userInfoBean.getUserId(),userInfoBean.getParentUserId(),totalAmt)) {
+			servletResponse.getWriter().write("success");
 
 		}
-
-		else
-			return ERROR;
-		return ERROR;
+		else {
+			servletResponse.getWriter().write("error");
+		}
+		return;
 	}
 
 	public HttpServletRequest getServletRequest() {
@@ -377,6 +328,29 @@ public class TMEmpPurchaseMgmtAction extends BaseActionSupport implements Servle
 	public void setBatchLists(List<String> batchLists) {
 		this.batchLists = batchLists;
 	}
+	public String getPaymentDate() {
+		return paymentDate;
+	}
+	public void setPaymentDate(String paymentDate) {
+		this.paymentDate = paymentDate;
+	}
+	public String getTotalAmt() {
+		return totalAmt;
+	}
+	public void setTotalAmt(String totalAmt) {
+		this.totalAmt = totalAmt;
+	}
+	public String getHcrdr() {
+		return hcrdr;
+	}
+	public void setHcrdr(String hcrdr) {
+		this.hcrdr = hcrdr;
+	}
+	public String getPartyName() {
+		return partyName;
+	}
+	public void setPartyName(String partyName) {
+		this.partyName = partyName;
+	}
 
 }
-

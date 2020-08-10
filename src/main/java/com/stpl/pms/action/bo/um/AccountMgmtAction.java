@@ -1,7 +1,9 @@
 package com.stpl.pms.action.bo.um;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,8 +31,40 @@ public class AccountMgmtAction extends BaseActionSupport implements ServletReque
 	private int group_id;
 	private List<String> voucherList;
 	private VoucherBean voucherBean;
+	private int voucherId;
 	private List<String> voucherNameList;
 	private List<VoucherBean> voucherBeans;
+	private String voucherUnderName;
+	private Map<String, VoucherBean> voucherMap;
+	private String status;
+	private String voucheRowId;
+
+	public String billingNumber() {
+
+		return SUCCESS;
+
+	}
+
+	public void changeStatusVoucher() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.changeVoucherStatus(voucheRowId, status))
+			servletResponse.getWriter().write("success");
+		else
+			servletResponse.getWriter().write("error");
+			return;
+	}
+
+	public String loadPageVocuherReport() {
+		GameLobbyController gameLobbyController = new GameLobbyController();
+		voucherList = gameLobbyController.getVoucherTypeList();
+		return SUCCESS;
+	}
+
+	public String getVouchers() {
+		GameLobbyController gameLobbyController = new GameLobbyController();
+		voucherMap = gameLobbyController.getAvailableVoucherList(voucherUnderName);
+		return SUCCESS;
+	}
 
 	public String createGroup() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
@@ -97,18 +131,36 @@ public class AccountMgmtAction extends BaseActionSupport implements ServletReque
 		return SUCCESS;
 	}
 
+	public String showVoucherDetails() {
+		GameLobbyController controller = new GameLobbyController();
+		voucherBean = controller.getVouchetBeanById(voucherId);
+		voucherList = controller.getVoucherTypeList();
+
+		return SUCCESS;
+	}
+
 	public String getVoucherResult() {
 		GameLobbyController controller = new GameLobbyController();
 		voucherBeans = controller.getVouchetBeanByName(voucherBean.getVoucherName());
 		return SUCCESS;
 	}
+
 	public String deleteVoucher() {
 		GameLobbyController controller = new GameLobbyController();
-		if(controller.deleteVoucher(voucherBean.getVoucherName()))
-		return SUCCESS;
+		if (controller.deleteVoucher(voucherBean.getVoucherName()))
+			return SUCCESS;
 		else
 			return ERROR;
 	}
+
+	public String editVoucher() {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.updateVoucher(voucherBean))
+			return SUCCESS;
+		else
+			return ERROR;
+	}
+
 	@Override
 	public String execute() throws Exception {
 		// TODO Auto-generated method stub
@@ -243,6 +295,46 @@ public class AccountMgmtAction extends BaseActionSupport implements ServletReque
 
 	public void setVoucherBeans(List<VoucherBean> voucherBeans) {
 		this.voucherBeans = voucherBeans;
+	}
+
+	public int getVoucherId() {
+		return voucherId;
+	}
+
+	public void setVoucherId(int voucherId) {
+		this.voucherId = voucherId;
+	}
+
+	public String getVoucherUnderName() {
+		return voucherUnderName;
+	}
+
+	public void setVoucherUnderName(String voucherUnderName) {
+		this.voucherUnderName = voucherUnderName;
+	}
+
+	public Map<String, VoucherBean> getVoucherMap() {
+		return voucherMap;
+	}
+
+	public void setVoucherMap(Map<String, VoucherBean> voucherMap) {
+		this.voucherMap = voucherMap;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getVoucheRowId() {
+		return voucheRowId;
+	}
+
+	public void setVoucheRowId(String voucheRowId) {
+		this.voucheRowId = voucheRowId;
 	}
 
 }

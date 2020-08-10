@@ -1,5 +1,6 @@
 package com.stpl.pms.action.bo.um;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,26 +38,25 @@ public class TMEmpReceiptMgmtAction  extends BaseActionSupport implements Servle
 		GameLobbyController controller = new GameLobbyController();
 		accountList = new ArrayList<String>();
 		particularsList = new ArrayList<String>();
-		accountList = controller.getaccountListForTxnPayment("accList");
+		accountList = controller.getaccountListForTxnPayment("accList", getUserInfoBean().getUserId());
 		accountList.add("Cash");
-		particularsList = controller.getaccountListForTxnPayment("particulars");
+		particularsList = controller.getaccountListForTxnPayment("particulars", getUserInfoBean().getUserId());
 		particularsList.add("Cash");
 		employeeUnderList = controller.getEmployeeNamesList();
-		receiptNo = controller.getReceiptNo();
+		receiptNo = controller.getReceiptNoEmp(userInfoBean.getUserId());
 		bankNameList = new ArrayList<String>();
 		bankNameList = controller.getBankNameList();
 		return SUCCESS;
 	}
 
-	public String createReceipt() {
+	public void createReceipt() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		/*
-		 * if (controller.createTransactionReceipt(account, employeeUnder, currBalance,
-		 * particulars, amount, bankName, txnType,narration)) { if
-		 * (controller.updateTransactionPartyBalance(account, currBalance)) return
-		 * SUCCESS; } else return ERROR;
-		 */
-		return ERROR;
+		
+		if (controller.createTransactionReceiptEmp(account, particulars, amount, bankName, txnType, narration,
+				userInfoBean.getUserId(), userInfoBean.getParentUserId()))
+			servletResponse.getWriter().write("success");
+		else
+			servletResponse.getWriter().write("error");
 	}
 
 	public HttpServletRequest getServletRequest() {

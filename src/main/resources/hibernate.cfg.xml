@@ -11,8 +11,8 @@
       
        <!--Assume test is the database name  -->
       
-  	<!--<property name = "hibernate.connection.url">
-         jdbc:mysql://root.c4tbc2ucoaiz.us-east-2.rds.amazonaws.com:3306/crm?autoReconnect=true
+  <!-- 	<property name = "hibernate.connection.url">
+         jdbc:mysql://localhost:3306/crm?autoReconnect=true
       </property>
       
       <property name = "hibernate.connection.username">
@@ -21,15 +21,15 @@
       
       <property name = "hibernate.connection.password">12345678</property> -->
 	
-	    <property name = "hibernate.connection.url">
+	   <property name = "hibernate.connection.url">
          jdbc:mysql://localhost:3306/crm?autoReconnect=true
       </property>
       
       <property name = "hibernate.connection.username">
          root
       </property>
-      
-      <property name = "hibernate.connection.password">root</property> 
+ 	<!--  <property name = "hibernate.connection.password">root</property> -->
+	    <property name = "hibernate.connection.password">uUrckMoipBZTmTAZ</property>
       <property name="hibernate.connection.autocommit">true</property>
       <property name="hibernate.bytecode.provider">cglib</property>
       <property name="format_sql">false</property>

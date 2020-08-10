@@ -508,7 +508,7 @@
 													on value</td>
 												<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 														maxlength="30" name="Itax" value="0" id="Itax"
-														theme="myTheme" pattern="^[0-9]*$" cssStyle="width:20%"
+														theme="myTheme" cssStyle="width:20%"
 														onchange="updateGSTValues()"></ss:textfield>%</td>
 
 
@@ -520,7 +520,7 @@
 													on value</td>
 												<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 														maxlength="30" name="Ctax" value="0" id="Ctax"
-														theme="myTheme" pattern="^[0-9]*$" cssStyle="width:20%"></ss:textfield>%</td>
+														theme="myTheme" cssStyle="width:20%"></ss:textfield>%</td>
 
 
 											</tr>
@@ -531,7 +531,7 @@
 													on value</td>
 												<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 														maxlength="30" name="Stax" value="0" id="Stax"
-														theme="myTheme" pattern="^[0-9]*$" cssStyle="width:20%"></ss:textfield>%</td>
+														theme="myTheme" cssStyle="width:20%"></ss:textfield>%</td>
 
 
 											</tr>
@@ -541,7 +541,7 @@
 													on value</td>
 												<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 														maxlength="30" name="cess" value="0" id="cess"
-														theme="myTheme" pattern="^[0-9]*$" cssStyle="width:20%"></ss:textfield>%</td>
+														theme="myTheme" cssStyle="width:20%"></ss:textfield>%</td>
 
 
 											</tr>

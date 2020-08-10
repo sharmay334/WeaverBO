@@ -31,7 +31,7 @@ public class TMEmpJournalMgmtAction extends BaseActionSupport implements Servlet
 		GameLobbyController controller = new GameLobbyController();
 		employeeUnderList = controller.getEmployeeNamesList();
 		particularsList = new ArrayList<String>();
-		particularsList = controller.getaccountListForTxnPayment("particulars");
+		particularsList = controller.getaccountListForTxnPayment("particulars", getUserInfoBean().getUserId());
 		journalNo = controller.getJournalNo();
 		return SUCCESS;
 	}

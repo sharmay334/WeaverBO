@@ -260,6 +260,7 @@ function showBatchesPopup(id){
 	}
 	function callForMoreRow(id) {
 		getUnitByItem(id);
+		getItemRateIfStandardCheck(id);
 		getTotalQty(id);
 		adjustTotalAmount(id);
 		getTaxes(id);
@@ -272,27 +273,23 @@ function showBatchesPopup(id){
 			clone.id = "rowId" + rowCount; // change id or other attributes/contents
 			table.appendChild(clone); // add new row to end of table
 			var oInput = document.getElementById("rowId" + rowCount);
-			var e = oInput.childNodes[9].childNodes[1];
+			var e = oInput.childNodes[5].childNodes[1];
 			var f = oInput.childNodes[1].childNodes[1];
-			var g = oInput.childNodes[11].childNodes[1];
-			var h = oInput.childNodes[15].childNodes[1];
-			var i = oInput.childNodes[13].childNodes[1];
+			var g = oInput.childNodes[7].childNodes[1];
+			var h = oInput.childNodes[11].childNodes[1];
+			var i = oInput.childNodes[9].childNodes[1];
 			var j = oInput.childNodes[3].childNodes[1];
-			var k = oInput.childNodes[5].childNodes[1];
-			var q = oInput.childNodes[7].childNodes[1];
-			var l = oInput.childNodes[17].childNodes[1];
-			var m = oInput.childNodes[19].childNodes[1];
-			var n = oInput.childNodes[21].childNodes[1];
-			var o = oInput.childNodes[23].childNodes[1];
-			var p = oInput.childNodes[25].childNodes[1];
+			var l = oInput.childNodes[13].childNodes[1];
+			var m = oInput.childNodes[15].childNodes[1];
+			var n = oInput.childNodes[17].childNodes[1];
+			var o = oInput.childNodes[19].childNodes[1];
+			var p = oInput.childNodes[21].childNodes[1];
 			e.id = "Qty" + rowCount;
 			f.id = "salesStockItems" + rowCount;
 			g.id = "rate" + rowCount;
 			h.id = "amount" + rowCount;
 			i.id = "unit"+rowCount;
 			j.id = "totalQty"+rowCount;
-			k.id = "goDown"+rowCount;
-			q.id = "godownQty"+rowCount;
 			l.id = "hiddenBatchNumber"+rowCount;
 			m.id = "hiddenMfgDate"+rowCount;
 			n.id = "hiddenExpDate"+rowCount;
@@ -367,7 +364,7 @@ function showBatchesPopup(id){
 			url : myurl,
 			success : function(itr) {
 				
-				document.getElementById('unit' + res).innerHTML = itr;
+				document.getElementById('unit' + res).value = itr;
 			},
 
 			error : function(itr) {
@@ -384,9 +381,28 @@ function showBatchesPopup(id){
 				finalAmount = Number(finalAmount)
 						+ Number(document.getElementById('amount' + i).value);
 		}
-		document.getElementById('totalAmt').value = finalAmount+Number(totalTax);
-		document.getElementById('currBalance').value = Number(CurrentBalance)-(finalAmount+Number(totalTax));
+		document.getElementById('totalAmt').value = Number(finalAmount)+Number(totalTax);
+		document.getElementById('currBalance').value = Number(CurrentBalance)-(Number(finalAmount)+Number(totalTax));
 	}
+	function getItemRateIfStandardCheck(id) {
+		var myurl = "<%=basePath%>";
+		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_sales_item_rate.action?itemName="
+				+ document.getElementById(id).value;
+		var res = id.match(/\d/g);
+		$.ajax({
+			type : "GET",
+			url : myurl,
+			success : function(itr) {
+				
+				document.getElementById('rate' + res).value = itr;
+			},
+
+			error : function(itr) {
+
+			}
+		});
+	}
+
 	function calAmount(id) {
 		
 		var res = id.match(/\d/g);
@@ -407,8 +423,8 @@ function showBatchesPopup(id){
 				var arr = itr.split(","); 
 				document.getElementById('currBalance').value = arr[0];
 				document.getElementById('crdr').innerHTML = arr[1];
-				CurrentBalance = itr;
-				getCreditLimit(id);
+				CurrentBalance = arr[0];
+			//	getCreditLimit(id);
 			},
 
 			error : function(itr) {
@@ -472,7 +488,7 @@ function showBatchesPopup(id){
 								cssStyle="width:10%" />
 						</div>
 					</div>
-					<div class="clearFRM"></div>
+					<%-- <div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -483,8 +499,8 @@ function showBatchesPopup(id){
 							<s:textfield id="orderNo" name="orderNo" value=""
 								theme="myTheme" readonly="true" cssStyle="width:10%" />
 						</div>
-					</div>
-					<div class="FormMainBox">
+					</div> --%>
+					<%-- <div class="FormMainBox">
 
 						<div class="labelDiv">
 							<label> <b><font color='red'>Reference No.:</font></b>
@@ -494,7 +510,7 @@ function showBatchesPopup(id){
 							<s:textfield id="referenceNo" name="referenceNo" theme="myTheme"
 								cssStyle="width:10%" />
 						</div>
-					</div>
+					</div> --%>
 					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
@@ -507,9 +523,8 @@ function showBatchesPopup(id){
 								cssClass="select1" theme="myTheme" />
 						</div>
 					</div>
-					<div class="clearFRM"></div>
 
-					<div class="FormMainBox">
+					<%-- <div class="FormMainBox">
 
 						<div class="labelDiv">
 							<label> Assign Employee </label>
@@ -519,8 +534,8 @@ function showBatchesPopup(id){
 								id="isEmployee" headerValue="--Please Select--"
 								list="{'Applicable','Not Applicable'}" onchange="showhideEmployee(this.value)" cssClass="select1" theme="myTheme" />
 						</div>
-					</div>
-					<div id="showEmployeeDiv" style="display:none;">
+					</div> --%>
+					<%-- <div id="showEmployeeDiv" style="display:none;">
 					<div class="clearFRM"></div>
 
 					<div class="FormMainBox">
@@ -535,8 +550,8 @@ function showBatchesPopup(id){
 						</div>
 					</div>
 					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
+					<div class="clearFRM"></div> --%>
+					<%-- <div class="FormMainBox">
 
 						<div class="labelDiv">
 							<label>Purchase Ledger</label>
@@ -546,8 +561,8 @@ function showBatchesPopup(id){
 								headerValue="--Please Select--" list="salesAccountList"
 								cssClass="select1" theme="myTheme" />
 						</div>
-					</div>
-					<div class="clearFRM"></div>
+					</div> --%>
+					 <div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -558,8 +573,8 @@ function showBatchesPopup(id){
 								theme="myTheme" readonly="true" cssStyle="width:20%" />
 								<span id="crdr"></span>
 						</div>
-					</div>
-					<div class="clearFRM"></div>
+					</div> 
+					<%-- <div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -570,7 +585,7 @@ function showBatchesPopup(id){
 								theme="myTheme" readonly="true" cssStyle="width:20%" />
 							
 						</div>
-					</div>
+					</div> --%>
 					<div class="clearFRM"></div>
 					<br />
 					<div class="clearFRM"></div>
@@ -581,10 +596,10 @@ function showBatchesPopup(id){
 							<tr>
 								<th style="text-align: center;" nowrap="nowrap">Name of
 									item</th>
-								<th style="text-align: center;" nowrap="nowrap">Total Qty.</th>
-								<th style="text-align: center;" nowrap="nowrap">GoDown</th>
+								<th style="text-align: center;display:none" nowrap="nowrap">Total Qty.</th>
+								<!-- <th style="text-align: center;" nowrap="nowrap">GoDown</th>
 								<th style="text-align: center;" nowrap="nowrap">Available</th>
-								<th style="text-align: center;" nowrap="nowrap">Billed Qty.</th>
+								 --><th style="text-align: center;" nowrap="nowrap">Billed Qty.</th>
 								<th style="text-align: center;" nowrap="nowrap">Rate</th>
 								<th style="text-align: center;" nowrap="nowrap">unit</th>
 								<th style="text-align: center;" nowrap="nowrap">Amount</th>
@@ -603,12 +618,12 @@ function showBatchesPopup(id){
 										name="salesStockItems" id="salesStockItems1"
 										list="salesStockItemList" cssClass="select1" theme="myTheme"
 										cssStyle="width:120px;" onchange="callForMoreRow(this.id)" /></td>
-								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+								<td style="text-align: center;display:none" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="totalQty" readOnly="true" value="0" id="totalQty1"
 										theme="myTheme" readOnly="true"
 										cssStyle="width:50%">
 									</ss:textfield></td>
-									<td style="text-align: center;" nowrap="nowrap"><s:select
+									<%-- <td style="text-align: center;" nowrap="nowrap"><s:select
 										headerKey="-1" headerValue="Please Select"
 										name="goDown" id="goDown1" onchange="showGodownQty(this.id)"
 										list="goDownList" cssClass="select1" theme="myTheme"
@@ -616,7 +631,7 @@ function showBatchesPopup(id){
 									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="godownQty" readOnly="true" value="0" id="godownQty1" theme="myTheme"
 										 cssStyle="width:50%">
-									</ss:textfield></td>
+									</ss:textfield></td> --%>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="Qty" value="0" id="Qty1" theme="myTheme"
 										pattern="^[0-9]*$" onchange="adjustTotalAmount(this.id)"
@@ -711,7 +726,7 @@ function showBatchesPopup(id){
 							<label> Narration </label>
 						</div>
 						<div class="InputDiv">
-							<s:textfield name="narration" cssClass="InpTextBoxBg"
+							<s:textfield name="narration" value="debit note" cssClass="InpTextBoxBg"
 								id="narration" theme="simple" title="Enter Narration"></s:textfield>
 						</div>
 					</div>

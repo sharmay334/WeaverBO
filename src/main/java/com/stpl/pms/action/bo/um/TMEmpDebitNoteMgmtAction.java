@@ -37,6 +37,7 @@ public class TMEmpDebitNoteMgmtAction extends BaseActionSupport implements Servl
 	private String goDown;
 	private String currBalance;
 	private String narration;
+	private String totalAmt;
 	
 	private String hiddenBatchNumber;
 	private String hiddenMfgDate;
@@ -48,13 +49,12 @@ public class TMEmpDebitNoteMgmtAction extends BaseActionSupport implements Servl
 		GameLobbyController controller = new GameLobbyController();
 		particularsList = new ArrayList<String>();
 		salesStockItemList = new ArrayList<>();
-		particularsList = controller.getaccountListForTxnPayment("");
+		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
 		partyAccName = new ArrayList<>();
-		partyAccName = controller.getaccountListForTxnPayment("");
-		employeeUnderList = controller.getEmployeeNamesList();
-		salesAccountList = controller.getaccountListForTxnPayment("purchase acc");
+		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		salesAccountList = controller.getaccountListForTxnPayment("purchase acc", getUserInfoBean().getUserId());
 		salesStockItemList = controller.getSalesStockItemList();
-		dnNo = controller.getDebitNoteNo();
+		dnNo = controller.getDebitNoteNoEmp(userInfoBean.getUserId());
 		goDownList = new ArrayList<>();
 		goDownList = controller.getAllGoDownList();
 		return SUCCESS;
@@ -62,15 +62,14 @@ public class TMEmpDebitNoteMgmtAction extends BaseActionSupport implements Servl
 
 	public String createDebitNote() {
 		GameLobbyController controller = new GameLobbyController();
-		if (controller.createTransactionDebitNote(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
-				amount, Qty,rate,narration)) {
+		if (controller.createEmpTransactionDeditNote(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
+				amount, Qty,rate,narration,userInfoBean.getUserId(),userInfoBean.getParentUserId(),totalAmt)) {
 			//if (controller.updateTransactionPartyBalance(partyAcc, currBalance))
-				if (controller.updateOrCreateStockSale(salesStockItems, goDown, Qty, unit,hiddenBatchNumber,hiddenMfgDate,hiddenExpDate,hiddenExpAlert,hiddenExpAlertDate)) // st_rm_item_qty_godown update
+				//if (controller.updateOrCreateStockSale(salesStockItems, goDown, Qty, unit,hiddenBatchNumber,hiddenMfgDate,hiddenExpDate,hiddenExpAlert,hiddenExpAlertDate)) // st_rm_item_qty_godown update
 					return SUCCESS;
 			}
 		else
 			return ERROR;
-		return ERROR;
 	}
 
 	public HttpServletRequest getServletRequest() {
@@ -279,6 +278,14 @@ public class TMEmpDebitNoteMgmtAction extends BaseActionSupport implements Servl
 
 	public void setHiddenExpAlertDate(String hiddenExpAlertDate) {
 		this.hiddenExpAlertDate = hiddenExpAlertDate;
+	}
+
+	public String getTotalAmt() {
+		return totalAmt;
+	}
+
+	public void setTotalAmt(String totalAmt) {
+		this.totalAmt = totalAmt;
 	}
 	
 }

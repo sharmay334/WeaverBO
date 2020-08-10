@@ -77,18 +77,57 @@ function getSelectedRoleValue(roleId, roleName) {
  * actionParam='userName='+userName;
  * _ajaxCallDiv(actionName,actionParam,'result'); } return false; }
  */
-function enableStockCatBoxesGroup(){
+function enableStockCatBoxesGroup() {
 	var continue_button = document.getElementById('submitButton');
 	var edit_button = document.getElementById('editButton');
 	// alert(document.getElementById('submitButton'));
 	continue_button.style.display = 'block';
 	edit_button.style.display = 'none';
 	document.getElementById('stockName').readOnly = false;
-	
+
 	document.getElementById('stockName').style.backgroundColor = "#F9FCCD";
 }
-function enableStockBoxesGroup(){
-	
+function enableBoxesVoucher() {
+	var continue_button = document.getElementById('submitButton');
+	var edit_button = document.getElementById('editButton');
+	// alert(document.getElementById('submitButton'));
+	continue_button.style.display = 'block';
+	edit_button.style.display = 'none';
+	document.getElementById('voucherType').disabled = false;
+	document.getElementById('voucherType').style.backgroundColor = "#F9FCCD";
+	document.getElementById('voucherNumbering').disabled = false;
+	document.getElementById('voucherNumbering').style.backgroundColor = "#F9FCCD";
+	document.getElementById('effctvDateOfVchr').disabled = false;
+	document.getElementById('effctvDateOfVchr').style.backgroundColor = "#F9FCCD";
+	document.getElementById('narrationAllowed').disabled = false;
+	document.getElementById('narrationAllowed').style.backgroundColor = "#F9FCCD";
+	document.getElementById('voucherName').readOnly = false;
+	document.getElementById('voucherName').style.backgroundColor = "#F9FCCD";
+
+}
+
+function enableStockBoxesItem(){
+	var continue_button = document.getElementById('submitButton');
+	var edit_button = document.getElementById('editButton');
+	// alert(document.getElementById('submitButton'));
+	continue_button.style.display = 'block';
+	edit_button.style.display = 'none';
+	document.getElementById('underGroup').readOnly = false;
+	document.getElementById('underGroup').style.backgroundColor = "#F9FCCD";
+	document.getElementById('underCatagory').readOnly = false;
+	document.getElementById('underCatagory').style.backgroundColor = "#F9FCCD";
+	document.getElementById('isUnit').readOnly = false;
+	document.getElementById('isUnit').style.backgroundColor = "#F9FCCD";
+	document.getElementById('gstApplicable').readOnly = false;
+	document.getElementById('gstApplicable').style.backgroundColor = "#F9FCCD";
+	document.getElementById('isStandard').readOnly = false;
+	document.getElementById('isStandard').style.backgroundColor = "#F9FCCD";
+	document.getElementById('itemRate').readOnly = false;
+	document.getElementById('itemRate').style.backgroundColor = "#F9FCCD";
+
+}
+function enableStockBoxesGroup() {
+
 	var continue_button = document.getElementById('submitButton');
 	var edit_button = document.getElementById('editButton');
 	// alert(document.getElementById('submitButton'));
@@ -97,12 +136,12 @@ function enableStockBoxesGroup(){
 	document.getElementById('stockName').readOnly = false;
 	document.getElementById('qtyCheck').readOnly = false;
 	document.getElementById('gstDetCheck').readOnly = false;
-	
+
 	document.getElementById('qtyCheck').style.backgroundColor = "#F9FCCD";
 	document.getElementById('stockName').style.backgroundColor = "#F9FCCD";
 	document.getElementById('gstDetCheck').style.backgroundColor = "#F9FCCD";
 }
-function enableBoxesGroup(){
+function enableBoxesGroup() {
 	var continue_button = document.getElementById('submitButton');
 	var edit_button = document.getElementById('editButton');
 	// alert(document.getElementById('submitButton'));
@@ -112,11 +151,36 @@ function enableBoxesGroup(){
 	document.getElementById('blncForRep').readOnly = false;
 	document.getElementById('forCalc').readOnly = false;
 	document.getElementById('purInvoice').readOnly = false;
-	
+
 	document.getElementById('subLedger').style.backgroundColor = "#F9FCCD";
 	document.getElementById('blncForRep').style.backgroundColor = "#F9FCCD";
 	document.getElementById('forCalc').style.backgroundColor = "#F9FCCD";
 	document.getElementById('purInvoice').style.backgroundColor = "#F9FCCD";
+
+}
+
+function enableLedgerBoxes(){
+	
+	var continue_button = document.getElementById('submitButton');
+	var edit_button = document.getElementById('editButton');
+	// alert(document.getElementById('submitButton'));
+	continue_button.style.display = 'block';
+	edit_button.style.display = 'none';
+	document.getElementById('creditPeriod').readOnly = false;
+	document.getElementById('credit_limit').readOnly = false;
+	document.getElementById('openingDate').readOnly = false;
+	document.getElementById('openingBalance').readOnly = false;
+
+
+	document.getElementById('ledgerName').style.backgroundColor = "#F9FCCD";
+	document.getElementById('ledgerUnder').style.backgroundColor = "#F9FCCD";
+	document.getElementById('creditPeriod').style.backgroundColor = "#F9FCCD";
+	document.getElementById('credit_limit').style.backgroundColor = "#F9FCCD";
+	document.getElementById('openingDate').style.backgroundColor = "#F9FCCD";
+	document.getElementById('openingBalance').style.backgroundColor = "#F9FCCD";
+	document.getElementById('balanceType').style.backgroundColor = "#F9FCCD";
+	document.getElementById('underEmp').style.backgroundColor = "#F9FCCD";
+
 	
 }
 function enableBoxesCompany() {
@@ -143,7 +207,7 @@ function enableBoxesCompany() {
 	document.getElementById('license').readOnly = false;
 	document.getElementById('panNo').readOnly = false;
 	document.getElementById('gstNo').readOnly = false;
-	
+
 	document.getElementById('email').style.backgroundColor = "#F9FCCD";
 	document.getElementById('currentAddress').style.backgroundColor = "#F9FCCD";
 	document.getElementById('country').style.backgroundColor = "#F9FCCD";
@@ -183,6 +247,32 @@ function enableBoxes() {
 	document.getElementById('email').style.backgroundColor = "#F9FCCD";
 	document.getElementById('lastnameedit').style.backgroundColor = "#F9FCCD";
 
+}
+function enableBoxesAttendanceUser() {
+
+	var continue_button = document.getElementById('submitButton');
+	var edit_button = document.getElementById('editButton');
+	// alert(document.getElementById('submitButton'));
+	continue_button.style.display = 'block';
+	edit_button.style.display = 'none';
+	document.getElementById('phoneNbr').readOnly = false;
+	document.getElementById('firstName').readOnly = false;
+	document.getElementById('gender').readOnly = false;
+	document.getElementById('aadharNumber').readOnly = false;
+	document.getElementById('panNumber').readOnly = false;
+	document.getElementById('bloodGroup').readOnly = false;
+	document.getElementById('leaves').readOnly = false;
+	document.getElementById('authAmount').readOnly = false;
+	
+	document.getElementById('phoneNbr').style.backgroundColor = "#F9FCCD";
+	document.getElementById('firstName').style.backgroundColor = "#F9FCCD";
+	document.getElementById('gender').style.backgroundColor = "#F9FCCD";
+	document.getElementById('aadharNumber').style.backgroundColor = "#F9FCCD";
+	document.getElementById('panNumber').style.backgroundColor = "#F9FCCD";
+	document.getElementById('bloodGroup').style.backgroundColor = "#F9FCCD";
+	document.getElementById('leaves').style.backgroundColor = "#F9FCCD";
+	document.getElementById('authAmount').style.backgroundColor = "#F9FCCD";
+	
 }
 function resetPasswordBO(url, email) {
 	alert("hi");

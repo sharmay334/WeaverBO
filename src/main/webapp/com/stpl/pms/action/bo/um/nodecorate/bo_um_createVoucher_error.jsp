@@ -32,7 +32,7 @@
 			</div>
 			<div class="innerBox">
 				<div class="alert error_msg">
-					<span class="alert_close"></span><strong>Error Creating Voucher. </strong> <s:actionerror theme="simple"/>
+					<span class="alert_close"></span><strong>Error Creating Voucher. Already Exists! Please Delete Old.</strong> <s:actionerror theme="simple"/>
 				</div>
 			</div>
 		</div>

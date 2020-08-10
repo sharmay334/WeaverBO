@@ -39,45 +39,43 @@ public class TMEmpSalesMgmtAction extends BaseActionSupport implements ServletRe
 	private String unit;
 	private String goDown;
 	private String narration;
-	
+	private String totalAmt;
 	private String hiddenBatchNumber;
 	private String hiddenMfgDate;
 	private String hiddenExpDate;
 	private String hiddenExpAlert;
 	private String hiddenExpAlertDate;
-	
+
 	public void getUnits() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		String unit = controller.getUnitByItemName(var);
-		servletResponse.getWriter().write(""+unit);
-		return ;
+		servletResponse.getWriter().write("" + unit);
+		return;
 	}
+
 	public String loadSalesPage() {
 		GameLobbyController controller = new GameLobbyController();
 		particularsList = new ArrayList<String>();
 		salesStockItemList = new ArrayList<>();
-		particularsList = controller.getaccountListForTxnPayment("");
+		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
 		partyAccName = new ArrayList<>();
-		partyAccName = controller.getaccountListForTxnPayment("");
+		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
 		employeeUnderList = controller.getEmployeeNamesList();
-		salesAccountList = controller.getaccountListForTxnPayment("sales acc");
+		salesAccountList = controller.getaccountListForTxnPayment("sales acc", getUserInfoBean().getUserId());
 		salesStockItemList = controller.getSalesStockItemList();
-		setSalesNo(controller.getSalesNo());
+		salesNo = controller.getEmpSaleNo(userInfoBean.getUserId());
 		goDownList = new ArrayList<>();
 		goDownList = controller.getAllGoDownList();
 		return SUCCESS;
 	}
 
-	public String createSales() {
+	public void createSales() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		if (controller.createTransactionSales(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
-				amount, Qty,rate,narration)) {
-			//if (controller.updateTransactionPartyBalance(partyAcc, currBalance))
-				if (controller.updateOrCreateStockSale(salesStockItems, goDown, Qty, unit,hiddenBatchNumber,hiddenMfgDate,hiddenExpDate,hiddenExpAlert,hiddenExpAlertDate)) // st_rm_item_qty_godown update
-					return SUCCESS;
-		}else
-			return ERROR;
-		return ERROR;
+		if (controller.createTransactionSalesEmp(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
+				amount, Qty, rate, narration, userInfoBean.getUserId(), userInfoBean.getParentUserId(),totalAmt)) {
+			servletResponse.getWriter().write("success");
+		} else
+			servletResponse.getWriter().write("error");
 	}
 
 	public HttpServletRequest getServletRequest() {
@@ -223,60 +221,85 @@ public class TMEmpSalesMgmtAction extends BaseActionSupport implements ServletRe
 	public void setVar(String var) {
 		this.var = var;
 	}
+
 	public String getCurrBalance() {
 		return currBalance;
 	}
+
 	public void setCurrBalance(String currBalance) {
 		this.currBalance = currBalance;
 	}
+
 	public String getUnit() {
 		return unit;
 	}
+
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
+
 	public String getGoDown() {
 		return goDown;
 	}
+
 	public void setGoDown(String goDown) {
 		this.goDown = goDown;
 	}
+
 	public List<String> getGoDownList() {
 		return goDownList;
 	}
+
 	public void setGoDownList(List<String> goDownList) {
 		this.goDownList = goDownList;
 	}
+
 	public String getHiddenBatchNumber() {
 		return hiddenBatchNumber;
 	}
+
 	public void setHiddenBatchNumber(String hiddenBatchNumber) {
 		this.hiddenBatchNumber = hiddenBatchNumber;
 	}
+
 	public String getHiddenMfgDate() {
 		return hiddenMfgDate;
 	}
+
 	public void setHiddenMfgDate(String hiddenMfgDate) {
 		this.hiddenMfgDate = hiddenMfgDate;
 	}
+
 	public String getHiddenExpDate() {
 		return hiddenExpDate;
 	}
+
 	public void setHiddenExpDate(String hiddenExpDate) {
 		this.hiddenExpDate = hiddenExpDate;
 	}
+
 	public String getHiddenExpAlert() {
 		return hiddenExpAlert;
 	}
+
 	public void setHiddenExpAlert(String hiddenExpAlert) {
 		this.hiddenExpAlert = hiddenExpAlert;
 	}
+
 	public String getHiddenExpAlertDate() {
 		return hiddenExpAlertDate;
 	}
+
 	public void setHiddenExpAlertDate(String hiddenExpAlertDate) {
 		this.hiddenExpAlertDate = hiddenExpAlertDate;
 	}
-	
-}
 
+	public String getTotalAmt() {
+		return totalAmt;
+	}
+
+	public void setTotalAmt(String totalAmt) {
+		this.totalAmt = totalAmt;
+	}
+
+}

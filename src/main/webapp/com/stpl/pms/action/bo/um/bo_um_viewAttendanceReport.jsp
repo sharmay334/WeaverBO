@@ -133,5 +133,6 @@
 		</s:form>
 	</div>
 	<div id="searchResult"></div>
+	<div id="searchResult1"></div>
 </body>
 </html>

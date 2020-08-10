@@ -62,7 +62,7 @@
 			$("#creditDayDuringVoucher_div").css("display", "none");
 		}
 			
-		
+		interest_details_div
 	} */
 	function get_account_interset_calculation() {
 		$("#use_for_payroll_div").css("display", "none");
@@ -71,6 +71,9 @@
 		$("#balance_billbybill_div").css("display", "none");
 		$("#defCreditPeriod_div").css("display", "none");
 		$("#creditDayDuringVoucher_div").css("display", "none");
+		
+		
+		
 		if (document.getElementById('groupUnder').value == "Bank Account") {
 
 			$("#account_interset_calculation").css("display", "block");
@@ -85,6 +88,7 @@
 			$("#tax_reg_detail_div").css("display", "block");
 			$("#bank_configuration").css("display", "none");
 			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Suspense account") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
@@ -92,6 +96,7 @@
 			$("#tax_reg_detail_div").css("display", "block");
 			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Bank occ a/c") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "block");
@@ -115,6 +120,7 @@
 			$("#invtry_values_affect").css("display", "none");
 			$("#bank_configuration").css("display", "none");
 			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Branch/Division") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
@@ -123,6 +129,7 @@
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Capital account") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
@@ -131,6 +138,7 @@
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Deposit(assets)") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
@@ -139,6 +147,7 @@
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Investment") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
@@ -147,6 +156,7 @@
 			$("#bank_configuration").css("display", "none");
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Misc. expense(assets)") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
@@ -155,6 +165,7 @@
 			$("#invtry_values_affect").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#pan_It_Number_div").css("display", "block");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Reserves & surplus") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
@@ -163,6 +174,7 @@
 			$("#invtry_values_affect").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#pan_It_Number_div").css("display", "block");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Retained earning") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
@@ -171,6 +183,7 @@
 			$("#invtry_values_affect").css("display", "block");
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Current assets") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
@@ -180,6 +193,7 @@
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#use_for_payroll_div").css("display", "block");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Current liabilities") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
@@ -189,6 +203,7 @@
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#use_for_payroll_div").css("display", "block");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Loans & advances(assets)") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
@@ -216,6 +231,7 @@
 			$("#pan_It_Number_div").css("display", "block");
 			$("#od_oc_LimitBankAcc").css("display", "none");
 			$("#use_for_payroll_div").css("display", "block");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Unsecured Loans") {
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
@@ -244,7 +260,9 @@
 			$("#specify_credit_limit_div").css("display", "block");
 			$("#defCreditPeriod_div").css("display", "block");
 			$("#creditDayDuringVoucher_div").css("display", "block");
+			$("#interest_details_div").css("display", "block");
 		} else if (document.getElementById('groupUnder').value == "Sundry debtors") {
+			
 			$("#account_interset_calculation").css("display", "block");
 			$("#bank_acc_details_div").css("display", "none");
 			$("#tax_reg_detail_div").css("display", "block");
@@ -256,6 +274,8 @@
 			$("#specify_credit_limit_div").css("display", "block");
 			$("#defCreditPeriod_div").css("display", "block");
 			$("#creditDayDuringVoucher_div").css("display", "block");
+			$("#interest_details_div").css("display", "block");
+
 		} else {
 			$("#account_interset_calculation").css("display", "none");
 			$("#bank_acc_details_div").css("display", "none");
@@ -494,7 +514,20 @@
 								<h4>Interset Parameter</h4>
 							</div>
 							<div class="innerbox">
+							<div class="FormMainBox">
 
+									<div class="labelDiv">
+										<label> Calculate Txn By Txn </label>
+									</div>
+									<div class="InputDiv">
+									<s:select name="txnByTxnInterest" value="Yes"
+													list="{'Yes','No'}"
+													cssClass="select1" theme="myTheme"></s:select>
+
+
+									</div>
+								</div>
+								
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
@@ -507,7 +540,7 @@
 											theme="myTheme"></s:select>
 									</div>
 								</div>
-
+								<s:iterator begin="1" end="3">
 								<div class="FormSectionMenu" id="subdocform_ic">
 									<div class="greyStrip">
 										<h4>Include transaction date for interest calculation:</h4>
@@ -541,11 +574,11 @@
 										<div class="FormMainBox">
 
 											<div class="labelDiv">
-												<label> Rate </label>
+												<label> Rate %</label>
 											</div>
 											<div class="InputDiv">
-												<ss:textfield maxlength="100" name="rate" id="accHolder"
-													theme="myTheme" style="width:30%"></ss:textfield>
+												<ss:textfield maxlength="30" name="rate" id="accHolder"
+													theme="myTheme" cssStyle="width:50%"></ss:textfield>
 
 											</div>
 										</div>
@@ -557,7 +590,7 @@
 											<div class="InputDiv">
 												<s:select name="ratePer" headerKey="-1"
 													headerValue="Select Any One"
-													list="{'30-Day Month','356-Day Year','Calendar Month','Calendar Year'}"
+													list="{'Calendar Month','Calendar Year'}"
 													cssClass="select1" theme="myTheme"></s:select>
 
 											</div>
@@ -571,15 +604,74 @@
 											<div class="InputDiv">
 												<s:select name="rateOn" headerKey="-1"
 													headerValue="Select Any One"
-													list="{'All Balances','Credit Balances Only','Debit Balances Only'}"
+													list="{'Credit Balances Only','Debit Balances Only'}"
 													cssClass="select1" theme="myTheme"></s:select>
 
 											</div>
 										</div>
+									<div class="FormMainBox">
+
+									<div class="labelDiv">
+										<label>Applicability </label>
+									</div>
+									<div class="InputDiv">
+										<s:select name="intersetCalculationApplicability" value="Always"
+													list="{'Always','Past Due Date'}"
+													cssClass="select1" theme="myTheme"></s:select> 
+										
+									</div>
+								</div>
+								<div class="FormMainBox">
+
+									<div class="labelDiv">
+										<label>By </label>
+									</div>
+									<div class="InputDiv">
+										<ss:textfield maxlength="20" name="intersetCalculationApplicabilityDays"
+											id="intersetCalculationApplicabilityDays" theme="myTheme" cssStyle="width:50%"></ss:textfield> days
+
+									</div>
+								</div>
+								<div class="FormMainBox">
+
+									<div class="labelDiv">
+										<label>Grace Period </label>
+									</div>
+									<div class="InputDiv">
+										<ss:textfield maxlength="20" name="intersetCalculationApplicabilityGracePeriod"
+											id="intersetCalculationApplicabilityGracePeriod" theme="myTheme" cssStyle="width:50%"></ss:textfield> days
+
+									</div>
+								</div>
+								<div class="FormMainBox" style="display:none;"> 
+
+									<div class="labelDiv">
+										<label>Calculate From </label>
+									</div>
+									<div class="InputDiv">
+										<s:select name="intersetCalculationFrom" value="Date of Applicability"
+													list="{'Due Date of invoice/Ref','Eff. Date of Transaction'}"
+													cssClass="select1" theme="myTheme"></s:select>
+										
+
+									</div>
+								</div>
+								<div class="FormMainBox">
+
+									<div class="labelDiv">
+										<label>Security Amount </label>
+									</div>
+									<div class="InputDiv">
+										<ss:textfield maxlength="20" name="intersetCalculationSecurityAmt"
+											id="intersetCalculationSecurityAmt" theme="myTheme" cssStyle="width:50%"></ss:textfield>
+										
 
 									</div>
 								</div>
 
+									</div>
+								</div>
+								</s:iterator>
 							</div>
 						</div>
 					</div>
@@ -587,11 +679,11 @@
 					<!-- end -->
 
 
+					
+					
 					<!-- end -->
 
-
-
-
+					
 
 					<div id="bank_acc_details_div" style="display: none;">
 						<div class="FormSectionMenu" id="bank_acc_details_div_acc">
@@ -863,7 +955,7 @@
 										name="openingDate" placeholder="Date" cssClass="dateField"
 										id="openingDate" readonly="true" theme="myTheme"></ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield maxlength="40"
-								name="openingBalance" pattern="^[0-9]*$" id="openingBalance"
+								name="openingBalance" pattern="^[0-9.]*$" id="openingBalance"
 								theme="myTheme"></ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap"><s:select name="Cr_Dr"
 										id="Cr_Dr" list="{'Cr','Dr'}" cssClass="select1" theme="myTheme"

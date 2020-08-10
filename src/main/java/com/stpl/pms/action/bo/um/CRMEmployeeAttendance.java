@@ -2,12 +2,15 @@ package com.stpl.pms.action.bo.um;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
@@ -15,6 +18,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.javabeans.VisitFormBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
 public class CRMEmployeeAttendance extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
@@ -36,6 +40,9 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 	private String selfiePictureContentType;
 	private String selfiePictureFileName;
 	private String travellingModeVia;
+	private String attendaceDate;
+	private String resultType;
+	private VisitFormBean visitFormBean;
 
 	public HttpServletRequest getServletRequest() {
 		return servletRequest;
@@ -55,59 +62,113 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 
 	public String markAttendance() throws IOException {
 		employeeUserName = getUserInfoBean().getUserId();
-		LocalDate date = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalTime time = LocalTime.now();
-        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("hh:mm:ss a");
-        String currentTimeAMPM[] = time.format(pattern).split(" ");
+		Date today = new Date();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat df1 = new SimpleDateFormat("hh:mm:ss a");
+		df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+		df1.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+		String IST = df.format(today);
+		String AMPM = df1.format(today);
+		String currentTimeAMPM[] = AMPM.split(" ");
 		String filePath = "";
-		String finalPath="";
+		String finalPath = "";
 		if (attendanceType.equals("PI") || attendanceType.equals("PO")) {
 			filePath = ServletActionContext.getServletContext().getRealPath("/");
 			filePath = filePath.substring(0, filePath.lastIndexOf("default/"));
 			File file = new File(filePath + "attendance/" + employeeUserName);
 			if (file.mkdir()) {
-				File file1 = new File(filePath + "attendance/" + employeeUserName + "/" + date.format(formatter));
+				File file1 = new File(filePath + "attendance/" + employeeUserName + "/" + IST);
 				if (file1.mkdir()) {
-					filePath = filePath.concat("attendance/" + employeeUserName + "/" + date.format(formatter));
-					odoMeterPictureFileName = "odo_"+date.format(formatter) + "_"+currentTimeAMPM[1]+"_" + odoMeterPictureFileName;
-					selfiePictureFileName = "selfie_"+date.format(formatter) + "_"+currentTimeAMPM[1]+"_" + selfiePictureFileName;
-					File fileToCreate = new File(filePath, odoMeterPictureFileName);
-					FileUtils.copyFile(odoMeterPicture, fileToCreate);// copying source file to new file
+					filePath = filePath.concat("attendance/" + employeeUserName + "/" + IST);
+					odoMeterPictureFileName = "odo_" + IST + "_" + currentTimeAMPM[1] + "_" + odoMeterPictureFileName;
+					selfiePictureFileName = "selfie_" + IST + "_" + currentTimeAMPM[1] + "_" + selfiePictureFileName;
+					File fileToCreate = null;
+					if (workType.equalsIgnoreCase("Field_work")) {
+						fileToCreate = new File(filePath, odoMeterPictureFileName);
+						FileUtils.copyFile(odoMeterPicture, fileToCreate);// copying source file to new file
+					}
 					File fileToCreateSelfie = new File(filePath, selfiePictureFileName);
 					FileUtils.copyFile(selfiePicture, fileToCreateSelfie);// copying source file to new file
-					finalPath  = filePath;
+					finalPath = filePath;
 				} else if (file1.exists()) {
-					filePath = filePath.concat("attendance/" + employeeUserName + "/" + date.format(formatter));
-					odoMeterPictureFileName = "odo_"+date.format(formatter) + "_"+currentTimeAMPM[1]+"_" + odoMeterPictureFileName;
-					selfiePictureFileName = "selfie_"+date.format(formatter) + "_"+currentTimeAMPM[1]+"_" + selfiePictureFileName;
-					File fileToCreate = new File(filePath, odoMeterPictureFileName);
-					FileUtils.copyFile(odoMeterPicture, fileToCreate);// copying source file to new file
+					filePath = filePath.concat("attendance/" + employeeUserName + "/" + IST);
+					if (workType.equalsIgnoreCase("Field_work")) {
+						odoMeterPictureFileName = "odo_" + IST + "_" + currentTimeAMPM[1] + "_"
+								+ odoMeterPictureFileName;
+					}
+					selfiePictureFileName = "selfie_" + IST + "_" + currentTimeAMPM[1] + "_" + selfiePictureFileName;
+					if (workType.equalsIgnoreCase("Field_work")) {
+						File fileToCreate = new File(filePath, odoMeterPictureFileName);
+						FileUtils.copyFile(odoMeterPicture, fileToCreate);// copying source file to new file
+					}
 					File fileToCreateSelfie = new File(filePath, selfiePictureFileName);
 					FileUtils.copyFile(selfiePicture, fileToCreateSelfie);// copying source file to new file
-					finalPath  = filePath;
+					finalPath = filePath;
 				}
 			} else if (file.exists()) {
-				filePath = filePath.concat("attendance/" + employeeUserName + "/" + date.format(formatter));
-				odoMeterPictureFileName = "odo_"+date.format(formatter) + "_"+currentTimeAMPM[1]+"_" + odoMeterPictureFileName;
-				selfiePictureFileName = "selfie_"+date.format(formatter) + "_"+currentTimeAMPM[1]+"_" + selfiePictureFileName;
-				File fileToCreate = new File(filePath, odoMeterPictureFileName);
-				FileUtils.copyFile(odoMeterPicture, fileToCreate);// copying source file to new file
+				filePath = filePath.concat("attendance/" + employeeUserName + "/" + IST);
+				if (workType.equalsIgnoreCase("Field_work")) {
+					odoMeterPictureFileName = "odo_" + IST + "_" + currentTimeAMPM[1] + "_" + odoMeterPictureFileName;
+				}
+				selfiePictureFileName = "selfie_" + IST + "_" + currentTimeAMPM[1] + "_" + selfiePictureFileName;
+				if (workType.equalsIgnoreCase("Field_work")) {
+					File fileToCreate = new File(filePath, odoMeterPictureFileName);
+					FileUtils.copyFile(odoMeterPicture, fileToCreate);// copying source file to new file
+				}
 				File fileToCreateSelfie = new File(filePath, selfiePictureFileName);
 				FileUtils.copyFile(selfiePicture, fileToCreateSelfie);// copying source file to new file
-				finalPath  = filePath;
+				finalPath = filePath;
 			}
 
 		}
-		String filePathStructureOdometer = finalPath + "/" + date.format(formatter) + "_"+"_"+currentTimeAMPM[1] + odoMeterPictureFileName;
-		String filePathStructureSelfie = finalPath + "/" + date.format(formatter) + "_" +"_"+currentTimeAMPM[1]+ selfiePictureFileName;
+		String filePathStructureOdometer = finalPath + "/" + odoMeterPictureFileName;
+		String filePathStructureSelfie = finalPath + "/" + selfiePictureFileName;
 
 		GameLobbyController controller = new GameLobbyController();
 		if (controller.markAttendance(employeeUserName, attendanceType, workType, workArea, travellingMode,
-				filePathStructureOdometer,filePathStructureSelfie, odometer_reading, leave_reason,travellingModeVia))
+				filePathStructureOdometer, filePathStructureSelfie, odometer_reading, leave_reason, travellingModeVia,
+				visitFormBean)) {
+			if (attendanceType.equals("PI"))
+				resultType = "Your Present Marked Successfully!!!";
+			else if (attendanceType.equals("PO"))
+				resultType = "HAHA!!! Your Day Over Marked Successfully!!!";
+			else if (attendanceType.equals("L"))
+				resultType = "Your Leave Marked Successfully!!!";
+			else if (attendanceType.equals("W"))
+				resultType = "Your Week Off Marked Successfully!!!";
 			return SUCCESS;
+		}
+
 		else
 			return ERROR;
+	}
+	
+	public void getuserName() throws IOException {
+			servletResponse.getWriter().write(""+getUserInfoBean().getUserName());
+		return;
+		
+	}
+
+	public void getPictureReport() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		String response = controller.getEmployeePictureReport(employeeUserName, attendaceDate);
+		String filePath = ServletActionContext.getServletContext().getRealPath("/");
+		String[] responseArr = response.split(";");
+		String finalUrl = "";
+		for (int i = 0; i < responseArr.length; i++) {
+			String temp = "";
+			temp = "/WeaverBO" + responseArr[i];
+			finalUrl = finalUrl + temp + ";";
+			if (!responseArr[i].equalsIgnoreCase("no")) {
+				Path src = Paths.get(responseArr[i]);
+				Path dest = Paths.get(filePath);
+				File file = new File(dest.toFile(), responseArr[i]);
+				FileUtils.copyFile(src.toFile(), file);
+			}
+
+		}
+		servletResponse.getWriter().write("" + finalUrl);
+		return;
 	}
 
 	public String getAttendanceType() {
@@ -220,6 +281,30 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 
 	public void setTravellingModeVia(String travellingModeVia) {
 		this.travellingModeVia = travellingModeVia;
+	}
+
+	public String getAttendaceDate() {
+		return attendaceDate;
+	}
+
+	public void setAttendaceDate(String attendaceDate) {
+		this.attendaceDate = attendaceDate;
+	}
+
+	public String getResultType() {
+		return resultType;
+	}
+
+	public void setResultType(String resultType) {
+		this.resultType = resultType;
+	}
+
+	public VisitFormBean getVisitFormBean() {
+		return visitFormBean;
+	}
+
+	public void setVisitFormBean(VisitFormBean visitFormBean) {
+		this.visitFormBean = visitFormBean;
 	}
 
 }

@@ -75,11 +75,95 @@
 <link rel="stylesheet" href="/WeaverBO/js/jQuery/1.11.3/jquery-ui.css">
 <script>
 var CurrentBalance = 0;
-var totalTax = 0;
+var totalTax = ["0","0","0","0","0","0","0","0","0","0","0"];
 var current_working_table_row_id = 0;
+var old_crdr ="";
 var item_name_val = 0;
 var goDownGlobal;
 var itemNameGlobal;
+var creditLimit = -1;
+var limitPopup = false;
+var periodResult = false;
+
+function promptSave(){
+	var frm = $('#searchUserFrm');
+	if(limitPopup==false){
+		checkForLimitPeriod();
+		setTimeout(function(){
+			}, 2000);
+		if(periodResult==false){
+			swal({
+				  title: "Are you sure?",
+				  text: "Once Saved, you will not be able to undo the entry!",
+				  icon: "warning",
+				  buttons: true,
+				  dangerMode: true,
+				})
+				.then((willDelete) => {
+				  if (willDelete) {
+					  $.ajax({
+					        type: frm.attr('method'),
+					        url: frm.attr('action'),
+					        data: frm.serialize(),
+					        success: function (data) {
+					        	if(data=="success"){
+					        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
+					        		setTimeout(function(){
+					        			   window.location.reload(1);
+					        			}, 1000);
+					        	}
+					        	else{
+					        		swal("Some Error Occured!");
+					        	}
+					            
+					        },
+					        error: function (data) {
+					        	swal("Server Error Occured!");
+					        },
+					    });
+					  
+				  } else {
+				    swal("Please Refresh The Page!");
+				  }
+				});
+		}
+	}
+	else{
+		swal("Credit Limit Amount "+creditLimit+" Exceeded...Please Pay below amount!");
+	}
+		
+    
+    
+}
+function checkForLimitPeriod(){
+	var partyAccName = document.getElementById('partyAcc').value;
+	var myurl = "<%=basePath%>";
+	myurl += "/com/stpl/pms/action/bo/um/bo_um_chech_period_limit_purchase.action?partyName="
+			+partyAccName+"&paymentDate="+document.getElementById('paymentDate').value;
+	$.ajax({
+		type : "GET",
+		url : myurl,
+		success : function(itr) {
+			if(itr=='skip')
+				periodResult = false;
+			else{
+				periodResult = true;
+				var arr = itr.split(";");
+				var msg ="";
+				for(var i=0;i<arr.length;i++){
+					msg=msg+arr[i]+"\n";
+				}
+				swal("Following Bills are pending..Please Pay First Before New Sale!"+"\n"+msg);
+					
+			}
+			
+		},
+
+		error : function(itr) {
+
+		}
+	});
+}
 function showtdfornewNo(){
 	$("#batchTh").css("display", "none");
 	$("#batchTd").css("display", "none");
@@ -120,13 +204,14 @@ function showtdfornewNo(){
 }
 $(document).ready(function() {
 	$("#mfg").datetimepicker({
-		dateFormat : 'mm/dd/yy',
+		dateFormat : 'yy-mm-dd',
 		showSecond : false,
 		showMinute : false,
 		showHour : false,
 		changeYear : true,
 		changeMonth : true,
-		minDate : '01/01/1930',
+		startDate: '1980-01-01',
+		minDate : '1930-01-01',
 		onSelect : function(selectedDate) {
 			if (selectedDate != "") {
 				$("#mfg").datepicker("option", "minDate", selectedDate);
@@ -134,20 +219,43 @@ $(document).ready(function() {
 				var date = new Date().getDate();
 				$(function() {
 					$("#mfg").datepicker({
-						dateFormat : 'dd-mm-yy'
+						dateFormat : 'yy-mm-dd'
 					}).datepicker("setDate", date);
 				});
 			}
 		}
 	});
-$("#reminderDate").datetimepicker({
-	dateFormat : 'mm/dd/yy',
+$("#paymentDate").datetimepicker({
+	dateFormat : 'yy-mm-dd',
 	showSecond : false,
 	showMinute : false,
 	showHour : false,
 	changeYear : true,
 	changeMonth : true,
-	minDate : '01/01/1930',
+	startDate: '1980-01-01',
+	minDate : '1930-01-01',
+	onSelect : function(selectedDate) {
+		if (selectedDate != "") {
+			$("#paymentDate").datepicker("option", "minDate", selectedDate);
+		} else {
+			var date = new Date().getDate();
+			$(function() {
+				$("#paymentDate").datepicker({
+					dateFormat : 'yy-mm-dd'
+				}).datepicker("setDate", date);
+			});
+		}
+	}
+});
+$("#reminderDate").datetimepicker({
+	dateFormat : 'yy-mm-dd',
+	showSecond : false,
+	showMinute : false,
+	showHour : false,
+	changeYear : true,
+	changeMonth : true,
+	startDate: '1980-01-01',
+	minDate : '1930-01-01',
 	onSelect : function(selectedDate) {
 		if (selectedDate != "") {
 			$("#reminderDate").datepicker("option", "minDate", selectedDate);
@@ -155,20 +263,21 @@ $("#reminderDate").datetimepicker({
 			var date = new Date().getDate();
 			$(function() {
 				$("#reminderDate").datepicker({
-					dateFormat : 'dd-mm-yy'
+					dateFormat : 'yy-mm-dd'
 				}).datepicker("setDate", date);
 			});
 		}
 	}
 });
 	$("#exp").datetimepicker({
-		dateFormat : 'mm/dd/yy',
+		dateFormat : 'yy-mm-dd',
 		showSecond : false,
 		showMinute : false,
 		showHour : false,
 		changeYear : true,
 		changeMonth : true,
-		minDate : '01/01/1930',
+		startDate: '1980-01-01',
+		minDate : '1930-01-01',
 		onSelect : function(selectedDate) {
 			if (selectedDate != "") {
 				$("#exp").datepicker("option", "minDate", selectedDate);
@@ -176,7 +285,7 @@ $("#reminderDate").datetimepicker({
 				var date = new Date().getDate();
 				$(function() {
 					$("#exp").datepicker({
-						dateFormat : 'dd-mm-yy'
+						dateFormat : 'yy-mm-dd'
 					}).datepicker("setDate", date);
 				});
 			}
@@ -185,6 +294,71 @@ $("#reminderDate").datetimepicker({
 	
 });
 	function getTaxes(id){
+		var idNum = id.match(/\d/g);
+		var itemName = document.getElementById('salesStockItems'+idNum).value;
+		var myurl = "<%=basePath%>";
+		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_tax.action?itemName="
+				+ itemName;
+		$.ajax({
+			type : "GET",
+			async: false,
+			url : myurl,
+			success : function(itr) {
+				if(itr!="none"){
+					var res = itr.split(";");
+					var original = document.getElementById('amount'+idNum).value;
+					document.getElementById('igstpercent').innerHTML = res[0]+"%";
+					document.getElementById('igst').value = (Number(document.getElementById('amount'+idNum).value)*Number(res[0]))/100;
+					document.getElementById('cgstpercent').innerHTML = res[1]+"%";
+					document.getElementById('cgst').value = (Number(document.getElementById('amount'+idNum).value)*Number(res[1]))/100;
+					document.getElementById('sgstpercent').innerHTML = res[2]+"%";
+					document.getElementById('sgst').value = (Number(document.getElementById('amount'+idNum).value)*Number(res[2]))/100;
+					totalTax[idNum] = document.getElementById('igst').value;
+				}
+				else{
+					document.getElementById('igstpercent').innerHTML = "0%";
+					document.getElementById('igst').value="0";
+					document.getElementById('cgstpercent').innerHTML = "0%";
+					document.getElementById('cgst').value="0";
+					document.getElementById('sgstpercent').innerHTML = "0%";
+					document.getElementById('sgst').value="0";
+					totalTax[idNum] = document.getElementById('igst').value;
+				}
+			},
+
+			error : function(itr) {
+
+			}
+		});
+		
+	}
+	function callForMoreRow(id) {
+		var res = id.match(/\d/g);
+		if (document.getElementById('salesStockItems' + res).value != "-1") {
+			
+			getUnitByItem(id);
+			getItemRateIfStandardCheck(id);
+			//getTotalQty(id);
+			getTaxes(id);
+			document.getElementById('rate'+res).readOnly = false;
+			document.getElementById('Qty'+res).readOnly = false;
+			//adjustTotalAmount(id);
+					
+		}
+		else{
+			document.getElementById('Qty'+res).value = '0';
+			document.getElementById('rate'+res).value = '0';
+			document.getElementById('amount'+res).value = '0';
+			document.getElementById('unit'+res).value = '';
+			document.getElementById('rate'+res).readOnly = true;
+			document.getElementById('Qty'+res).readOnly = true;
+			getTaxes1(id,'adjust');
+			
+		}
+
+	}
+	
+	function getTaxes1(id,val){
 		var idNum = id.match(/\d/g);
 		current_working_table_row_id = idNum;
 		var itemName = document.getElementById('salesStockItems'+idNum).value;
@@ -204,7 +378,7 @@ $("#reminderDate").datetimepicker({
 					document.getElementById('cgst').value = (Number(document.getElementById('amount'+idNum).value)*Number(res[1]))/100;
 					document.getElementById('sgstpercent').innerHTML = res[2]+"%";
 					document.getElementById('sgst').value = (Number(document.getElementById('amount'+idNum).value)*Number(res[2]))/100;
-					totalTax = 	document.getElementById('igst').value;
+					totalTax[idNum] = document.getElementById('igst').value;
 				}
 				else{
 					document.getElementById('igstpercent').innerHTML = "0%";
@@ -213,8 +387,9 @@ $("#reminderDate").datetimepicker({
 					document.getElementById('cgst').value="0";
 					document.getElementById('sgstpercent').innerHTML = "0%";
 					document.getElementById('sgst').value="0";
-					
+					totalTax[idNum] = document.getElementById('igst').value;
 				}
+				adjustTotalAmount(id);
 			},
 
 			error : function(itr) {
@@ -223,52 +398,6 @@ $("#reminderDate").datetimepicker({
 		});
 		
 	}
-	function callForMoreRow(id) {
-		getUnitByItem(id);
-		getTotalQty(id);
-		adjustTotalAmount(id);
-		getTaxes(id);
-		var rowCount = countTotalRows();
-		if (document.getElementById('salesStockItems' + rowCount).value != "-1") {
-			item_name_val = document.getElementById('salesStockItems' + rowCount).value;
-			var row = document.getElementById("rowId" + rowCount); // find row to copy
-			var table = document.getElementById("payTransactionTable"); // find table to append to
-			var clone = row.cloneNode(true); // copy children too
-			rowCount += 1;
-			clone.id = "rowId" + rowCount; // change id or other attributes/contents
-			table.appendChild(clone); // add new row to end of table
-			var oInput = document.getElementById("rowId" + rowCount);
-			var e = oInput.childNodes[9].childNodes[1];
-			var f = oInput.childNodes[1].childNodes[1];
-			var g = oInput.childNodes[11].childNodes[1];
-			var h = oInput.childNodes[15].childNodes[1];
-			var i = oInput.childNodes[13].childNodes[1];
-			var j = oInput.childNodes[3].childNodes[1];
-			var k = oInput.childNodes[5].childNodes[1];
-			var l = oInput.childNodes[17].childNodes[1];
-			var m = oInput.childNodes[19].childNodes[1];
-			var n = oInput.childNodes[21].childNodes[1];
-			var o = oInput.childNodes[23].childNodes[1];
-			var p = oInput.childNodes[25].childNodes[1];
-			var q = oInput.childNodes[7].childNodes[1];
-			e.id = "Qty" + rowCount;
-			f.id = "salesStockItems" + rowCount;
-			g.id = "rate" + rowCount;
-			h.id = "amount" + rowCount;
-			i.id = "unit"+rowCount;
-			j.id = "totalQty"+rowCount;
-			k.id = "goDown"+rowCount;
-			l.id = "hiddenBatchNumber"+rowCount;
-			m.id = "hiddenMfgDate"+rowCount;
-			n.id = "hiddenExpDate"+rowCount;
-			o.id = "hiddenExpAlert"+rowCount;
-			p.id = "hiddenExpAlertDate"+rowCount;
-			q.id = "godownQty"+rowCount;
-		}
-		
-	}
-	
-
 	function callForSweetAlertPopUp(id){
 		
 		 document.getElementById("myForm").style.display = "block";
@@ -385,20 +514,64 @@ $("#reminderDate").datetimepicker({
 		});
 	}
 	function adjustTotalAmount(id) {
-		var finalAmount = CurrentBalance;
+		var finalAmount = 0;
+		var oldCurrBlnc = Number(CurrentBalance);
 		var rowCnt = countTotalRows();
 		for (var i = 1; i <= rowCnt; i++) {
 			if (document.getElementById('salesStockItems' + i).value != "-1")
 				finalAmount = Number(finalAmount)
 						+ Number(document.getElementById('amount' + i).value);
 		}
-		document.getElementById('totalAmt').value = (Number(CurrentBalance)-finalAmount)*(-1)+Number(totalTax);
-		if(finalAmount+Number(totalTax)>0){
-			document.getElementById('currBalance').value = finalAmount+Number(totalTax);
+		var taxAmt =0;
+		for(var j=0;j<totalTax.length;j++){
+			taxAmt = Number(taxAmt)+Number(totalTax[j]);
+			
 		}
-		if(finalAmount+Number(totalTax)<0){
-			document.getElementById('currBalance').value = finalAmount+Number(totalTax);
+		document.getElementById('totalAmt').value = Number(finalAmount)+Number(taxAmt);
+		var blnc_type = old_crdr;
+		if(blnc_type=='Dr'){
+			var curBlnc = Number(document.getElementById('totalAmt').value) - Number(CurrentBalance);
+			if(curBlnc<0)
+			curBlnc = curBlnc * (-1);
+		document.getElementById('currBalance').value = curBlnc;
+		if(Number(oldCurrBlnc) < Number(document.getElementById('totalAmt').value)){
+			document.getElementById('hcrdr').value='Cr'
+				document.getElementById('crdr').innerHTML='Cr'
 		}
+		else{
+			document.getElementById('hcrdr').value='Dr'
+				document.getElementById('crdr').innerHTML='Dr'
+		}
+		}
+		else{
+			var curBlnc = Number(document.getElementById('totalAmt').value) + Number(CurrentBalance);
+			document.getElementById('currBalance').value = curBlnc;
+		}
+		var limitchk = Number(document.getElementById('currBalance').value);
+		if(creditLimit!='Not Specified' && Number(creditLimit)!=-1 && document.getElementById('hcrdr').value=='Cr' && (Number(document.getElementById('currBalance').value)>creditLimit || limitchk>creditLimit) ){
+			limitPopup = true;
+		}
+		else{
+			limitPopup = false;
+		}
+	}
+	function getItemRateIfStandardCheck(id) {
+		var myurl = "<%=basePath%>";
+		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_sales_item_rate.action?itemName="
+				+ document.getElementById(id).value;
+		var res = id.match(/\d/g);
+		$.ajax({
+			type : "GET",
+			url : myurl,
+			success : function(itr) {
+				
+				document.getElementById('rate' + res).value = itr;
+			},
+
+			error : function(itr) {
+
+			}
+		});
 	}
 	function calAmount(id) {
 		
@@ -407,6 +580,7 @@ $("#reminderDate").datetimepicker({
 		var rate = document.getElementById('rate' + res).value;
 		document.getElementById('amount' + res).value = qty * rate;
 		getTaxes(id);
+		adjustTotalAmount(id);
 	}
 	function getCurrentBalance(id) {
 		var myurl = "<%=basePath%>";
@@ -420,14 +594,19 @@ $("#reminderDate").datetimepicker({
 				var arr = itr.split(","); 
 				document.getElementById('currBalance').value = arr[0];
 				document.getElementById('crdr').innerHTML = arr[1];
-				CurrentBalance = itr;
+				document.getElementById('hcrdr').value = arr[1];
+				CurrentBalance = arr[0];
+				old_crdr = arr[1];
 				getCreditLimit(id);
+				$("#payTransactionTable").css("display", "block");
 			},
+
 			error : function(itr) {
 
 			}
 		});
 	}
+	
 	function getCreditLimit(id){
 		var myurl = "<%=basePath%>";
 		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_credit_limit.action?partyAcc="
@@ -437,7 +616,17 @@ $("#reminderDate").datetimepicker({
 			type : "GET",
 			url : myurl,
 			success : function(itr) {
-				document.getElementById('creditLimit').value = itr;
+				if(itr=="-1")
+				document.getElementById('creditLimit').value = 'Not Specified';
+				else if(itr!="Not Specified"){
+					creditLimit = Number(itr);
+					document.getElementById('creditLimit').value = itr;
+				}
+				else{
+					document.getElementById('creditLimit').value = 'Not Specified';
+				}
+					
+				
 			},
 			error : function(itr) {
 
@@ -467,7 +656,7 @@ $("#reminderDate").datetimepicker({
 		</div>
 		<s:form
 			action="/com/stpl/pms/action/bo/um/bo_um_BoEmppurchase_create.action"
-			id="searchUserFrm" theme="simple" target="searchDiv">
+			id="searchUserFrm" theme="simple" enctype="multipart/form-data" method="POST" target="searchDiv">
 			<div class="innerBox">
 
 				<s:if test="%{userInfoBean.getUserType().equalsIgnoreCase('BO')}">
@@ -475,7 +664,7 @@ $("#reminderDate").datetimepicker({
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
-							<label> <b><font color='red'>Purchase No.</font></b>
+							<label> <b><font color='red'>Purchase Order No.</font></b>
 							</label>
 						</div>
 						<div class="InputDiv">
@@ -485,26 +674,19 @@ $("#reminderDate").datetimepicker({
 						</div>
 					</div>
 					<div class="clearFRM"></div>
+					
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
-							<label> <b><font color='red'>Order No.</font></b>
-							</label>
+							<label>Date</label><em class="Req">*</em>
 						</div>
 						<div class="InputDiv">
-							<s:textfield id="orderNo" name="orderNo" value="" theme="myTheme"
-								readonly="true" cssStyle="width:10%" />
-						</div>
-					</div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> <b><font color='red'>Reference No.:</font></b>
-							</label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield id="referenceNo" name="referenceNo" theme="myTheme"
-								cssStyle="width:10%" />
+							<s:textfield id="paymentDate" name="paymentDate" placeholder="Date" cssClass="dateField" theme="myTheme" readonly="true" applyscript="true" cssStyle="width:50%" />
+						<div id="paymentDate_error" class="fieldError">
+								<s:fielderror>
+									<s:param>paymentDate</s:param>
+								</s:fielderror>
+							</div>
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -515,14 +697,12 @@ $("#reminderDate").datetimepicker({
 						</div>
 						<div class="InputDiv">
 							<s:select name="partyAcc" headerKey="none" id="partyAcc"
-								headerValue="--Please Select--" list="partyAccName"
-								cssClass="select1" theme="myTheme"
-								onchange="getCurrentBalance(this.id)" />
+								headerValue="--Please Select--" onchange="getCurrentBalance(this.id)" list="partyAccName"
+								cssClass="select1" theme="myTheme"/>
 						</div>
 					</div>
 					<div class="clearFRM"></div>
-
-					<div class="FormMainBox">
+					<%-- <div class="FormMainBox">
 
 						<div class="labelDiv">
 							<label> Assign Employee </label>
@@ -551,9 +731,9 @@ $("#reminderDate").datetimepicker({
 						</div>
 
 
-					</div>
+					</div> --%>
 
-					<div class="clearFRM"></div>
+					<%-- <div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -565,7 +745,8 @@ $("#reminderDate").datetimepicker({
 								cssClass="select1" theme="myTheme" />
 						</div>
 					</div>
-					<div class="clearFRM"></div>
+					<div class="clearFRM"></div> --%>
+					 <div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -574,10 +755,11 @@ $("#reminderDate").datetimepicker({
 						<div class="InputDiv">
 							<s:textfield name="currBalance" id="currBalance" value="0"
 								theme="myTheme" readonly="true" cssStyle="width:20%" />
-							<span id="crdr"></span>
+								<span id="crdr"></span>
+								<s:hidden name="hcrdr" id="hcrdr"></s:hidden>
 						</div>
-					</div>
-					<div class="clearFRM"></div>
+					</div> 
+					 <div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -589,27 +771,75 @@ $("#reminderDate").datetimepicker({
 						</div>
 					</div>
 					<div class="clearFRM"></div>
-					<br />
+					<%-- <div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Dispatch Doc No. </label>
+						</div>
+						<div class="InputDiv">
+							<s:textfield name="ddn" id="ddn"
+								theme="myTheme" cssStyle="width:50%" />
+						</div>
+					</div>
 					<div class="clearFRM"></div>
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Transport Name </label>
+						</div>
+						<div class="InputDiv">
+							<s:textfield name="tn" id="tn"
+								theme="myTheme" cssStyle="width:50%" />
+						</div>
+					</div>
+					<div class="clearFRM"></div>
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Destination </label>
+						</div>
+						<div class="InputDiv">
+							<s:textfield name="des" id="des" 
+								theme="myTheme" cssStyle="width:50%" />
+						</div>
+					</div>
+					<div class="clearFRM"></div>
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Bill-T No.</label>
+						</div>
+						<div class="InputDiv">
+							<s:textfield name="billt" id="billt" 
+								theme="myTheme"  cssStyle="width:50%" />
+						</div>
+					</div>
+					<div class="clearFRM"></div>
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Vehical No. </label>
+						</div>
+						<div class="InputDiv">
+							<s:textfield name="vn" id="vn"
+								theme="myTheme" cssStyle="width:50%" />
+						</div>
+					</div>
+					<div class="clearFRM"></div>
+					<br />
+					<div class="clearFRM"></div> --%>
 
 					<table width="100%" cellspacing="0" align="center"
-						id="payTransactionTable" class="transactionTable">
+						id="payTransactionTable" class="transactionTable" style="display:none">
 						<thead>
 							<tr>
 								<th style="text-align: center;" nowrap="nowrap">Name of
 									item</th>
-								<th style="text-align: center;" nowrap="nowrap">Total Qty.</th>
-								<th style="text-align: center;" nowrap="nowrap">GoDown</th>
-								<th style="text-align: center;" nowrap="nowrap">Available</th>
-								<th style="text-align: center;" nowrap="nowrap">Billed Qty.</th>
+								<th style="text-align: center;display:none" nowrap="nowrap">Total Qty.</th>
+								 <th style="text-align: center;" nowrap="nowrap">Billed Qty.</th>
 								<th style="text-align: center;" nowrap="nowrap">Rate</th>
 								<th style="text-align: center;" nowrap="nowrap">unit</th>
 								<th style="text-align: center;" nowrap="nowrap">Amount</th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -619,53 +849,375 @@ $("#reminderDate").datetimepicker({
 										headerKey="-1" headerValue="End Of List"
 										name="salesStockItems" id="salesStockItems1"
 										list="salesStockItemList" cssClass="select1" theme="myTheme"
-										cssStyle="width:120px;" onchange="callForMoreRow(this.id)" /></td>
-								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="totalQty" readOnly="true" value="0"
-										id="totalQty1" theme="myTheme" readOnly="true"
+										cssStyle="width:120px;" onchange="callForMoreRow(this.id)"/></td>
+								<td style="text-align: center;display:none" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="totalQty" readOnly="true" value="0" id="totalQty1"
+										theme="myTheme" readOnly="true"
 										cssStyle="width:50%">
 									</ss:textfield></td>
-								<td style="text-align: center;" nowrap="nowrap"><s:select
-										headerKey="-1" headerValue="Please Select" name="goDown"
-										id="goDown1" onchange="showGodownQty(this.id)"
-										list="goDownList" cssClass="select1" theme="myTheme"
-										cssStyle="width:100px;" /></td>
+								
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="godownQty" readOnly="true" value="0"
-										id="godownQty1" theme="myTheme" cssStyle="width:50%">
+										maxlength="30" name="Qty" readOnly="true" readOnly="true" onfocusout="calAmount(this.id)"   value="0" id="Qty1" theme="myTheme"
+										pattern="^[0-9]*$" cssStyle="width:50%">
 									</ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="Qty" value="0" id="Qty1" theme="myTheme"
-										pattern="^[0-9]*$" onchange="adjustTotalAmount(this.id)"
-										oninput="calAmount(this.id)" cssStyle="width:50%">
+										maxlength="30" name="rate"  readOnly="true"  readOnly="true" onfocusout="calAmount(this.id)"    value="0" id="rate1"
+										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%">
 									</ss:textfield></td>
-								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="rate" value="0" id="rate1"
-										theme="myTheme" pattern="^[0-9]*$"
-										onchange="adjustTotalAmount(this.id)"
-										oninput="calAmount(this.id)" cssStyle="width:50%">
-									</ss:textfield></td>
-								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="unit" value="" id="unit1" theme="myTheme"
-										readOnly="true" cssStyle="width:40%">
-									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap">
+									<ss:textfield
+										maxlength="30" name="unit" value="" id="unit1"
+										theme="myTheme" readOnly="true" cssStyle="width:40%">
+									</ss:textfield>
+									</td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="amount" value="0" id="amount1"
 										theme="myTheme" readOnly="true" pattern="^[0-9]*$"
 										cssStyle="width:50%">
 									</ss:textfield></td>
-									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenBatchNumber" id="hiddenBatchNumber1"></s:hidden>
-									</td>
-									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenMfgDate" id="hiddenMfgDate1"></s:hidden></td>
-									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenExpDate" id="hiddenExpDate1"></s:hidden></td>
-									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenExpAlert" id="hiddenExpAlert1"></s:hidden></td>
-									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenExpAlertDate" id="hiddenExpAlertDate1"></s:hidden></td>
+									
+
 							</tr>
+							
+							<!-- row 2 -->
+							
+							<tr id="rowId2">
+								<td style="text-align: center;" nowrap="nowrap"><s:select
+										headerKey="-1" headerValue="End Of List"
+										name="salesStockItems" id="salesStockItems2"
+										list="salesStockItemList" cssClass="select1" onchange="callForMoreRow(this.id)" theme="myTheme"
+										cssStyle="width:120px;"/></td>
+								<td style="text-align: center;display:none" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="totalQty" readOnly="true" value="0" id="totalQty2"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+								
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="Qty" readOnly="true"   readOnly="true" onfocusout="calAmount(this.id)"   value="0" id="Qty2" theme="myTheme"
+										pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="rate"  readOnly="true"   onfocusout="calAmount(this.id)"   value="0" id="rate2"
+										theme="myTheme"  readOnly="true" pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap">
+									<ss:textfield
+										maxlength="30" name="unit" value="" id="unit2"
+										theme="myTheme" readOnly="true" cssStyle="width:40%">
+									</ss:textfield>
+									</td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="amount" value="0" id="amount2"
+										theme="myTheme" readOnly="true" pattern="^[0-9]*$"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+
+							</tr>
+							<!-- end row 2 -->
+							
+							<!-- row 3 -->
+							<tr id="rowId3">
+								<td style="text-align: center;" nowrap="nowrap"><s:select
+										headerKey="-1" headerValue="End Of List"
+										name="salesStockItems" id="salesStockItems3"
+										list="salesStockItemList" onchange="callForMoreRow(this.id)" cssClass="select1" theme="myTheme"
+										cssStyle="width:120px;"/></td>
+								<td style="text-align: center;display:none" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="totalQty" readOnly="true" value="0" id="totalQty3"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+								
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="Qty" readOnly="true"   readOnly="true" onfocusout="calAmount(this.id)"   value="0" id="Qty3" theme="myTheme"
+										pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="rate"  readOnly="true"    readOnly="true" onfocusout="calAmount(this.id)"   value="0" id="rate3"
+										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap">
+									<ss:textfield
+										maxlength="30" name="unit" value="" id="unit3"
+										theme="myTheme" readOnly="true" cssStyle="width:40%">
+									</ss:textfield>
+									</td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="amount" value="0" id="amount3"
+										theme="myTheme" readOnly="true" pattern="^[0-9]*$"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+									
+
+							</tr>
+							<!-- end row 3 -->
+							
+							<!-- row 4 -->
+							<tr id="rowId4">
+								<td style="text-align: center;" nowrap="nowrap"><s:select
+										headerKey="-1" headerValue="End Of List"
+										name="salesStockItems" id="salesStockItems4"
+										list="salesStockItemList" onchange="callForMoreRow(this.id)" cssClass="select1" theme="myTheme"
+										cssStyle="width:120px;"/></td>
+								<td style="text-align: center;display:none" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="totalQty" readOnly="true" value="0" id="totalQty4"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+								
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="Qty" readOnly="true"  onfocusout="calAmount(this.id)"   value="0" id="Qty4" theme="myTheme"
+										pattern="^[0-9.]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="rate"  readOnly="true"   onfocusout="calAmount(this.id)"   value="0" id="rate4"
+										theme="myTheme" pattern="^[0-9.]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap">
+									<ss:textfield
+										maxlength="30" name="unit" value="" id="unit4"
+										theme="myTheme" readOnly="true" cssStyle="width:40%">
+									</ss:textfield>
+									</td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="amount" value="0" id="amount4"
+										theme="myTheme" readOnly="true" pattern="^[0-9.]*$"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+									<td style="text-align: center;display:none;" nowrap="nowrap">
+								
+
+							</tr>
+							<!-- end row 4 -->
+							
+						
+							<!-- row 5 -->
+							
+							<tr id="rowId5">
+								<td style="text-align: center;" nowrap="nowrap"><s:select
+										headerKey="-1" headerValue="End Of List"
+										name="salesStockItems" id="salesStockItems5"
+										list="salesStockItemList" onchange="callForMoreRow(this.id)" cssClass="select1" theme="myTheme"
+										cssStyle="width:120px;"/></td>
+								<td style="text-align: center;display:none" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="totalQty" readOnly="true" value="0" id="totalQty1"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+								
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="Qty" readOnly="true" onfocusout="calAmount(this.id)"   value="0" id="Qty5" theme="myTheme"
+										pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="rate"  readOnly="true"   onfocusout="calAmount(this.id)"   value="0" id="rate5"
+										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap">
+									<ss:textfield
+										maxlength="30" name="unit" value="" id="unit5"
+										theme="myTheme" readOnly="true" cssStyle="width:40%">
+									</ss:textfield>
+									</td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="amount" value="0" id="amount5"
+										theme="myTheme" readOnly="true" pattern="^[0-9]*$"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+									
+
+							</tr>
+							<!-- end row 5 -->
+							
+							<!-- row 6 -->
+							
+							<tr id="rowId6">
+								<td style="text-align: center;" nowrap="nowrap"><s:select
+										headerKey="-1" headerValue="End Of List"
+										name="salesStockItems" id="salesStockItems6"
+										list="salesStockItemList" onchange="callForMoreRow(this.id)" cssClass="select1" theme="myTheme"
+										cssStyle="width:120px;"/></td>
+								<td style="text-align: center;display:none" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="totalQty" readOnly="true" value="0" id="totalQty6"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+								
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="Qty" readOnly="true" value="0"  onfocusout="calAmount(this.id)"   id="Qty6" theme="myTheme"
+										pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="rate"  readOnly="true"  value="0"  onfocusout="calAmount(this.id)"   id="rate6"
+										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap">
+									<ss:textfield
+										maxlength="30" name="unit" value="" id="unit6"
+										theme="myTheme" readOnly="true" cssStyle="width:40%">
+									</ss:textfield>
+									</td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="amount" value="0" id="amount6"
+										theme="myTheme" readOnly="true" pattern="^[0-9]*$"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+									
+
+							</tr>
+							<!-- end row 6 -->
+							
+							
+							<!-- row 7 -->
+							
+							<tr id="rowId7">
+								<td style="text-align: center;" nowrap="nowrap"><s:select
+										headerKey="-1" headerValue="End Of List"
+										name="salesStockItems" onchange="callForMoreRow(this.id)" id="salesStockItems7"
+										list="salesStockItemList" cssClass="select1" theme="myTheme"
+										cssStyle="width:120px;"/></td>
+								<td style="text-align: center;display:none" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="totalQty" readOnly="true" value="0" id="totalQty7"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+								
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="Qty" readOnly="true"  onfocusout="calAmount(this.id)"   value="0" id="Qty7" theme="myTheme"
+										pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="rate"  readOnly="true"   onfocusout="calAmount(this.id)"   value="0" id="rate7"
+										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap">
+									<ss:textfield
+										maxlength="30" name="unit" value="" id="unit7"
+										theme="myTheme" readOnly="true" cssStyle="width:40%">
+									</ss:textfield>
+									</td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="amount" value="0" id="amount7"
+										theme="myTheme" readOnly="true" pattern="^[0-9]*$"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+									
+
+							</tr>
+							<!-- end row 7 -->
+							
+							<!-- row 8 -->
+							
+							<tr id="rowId8">
+								<td style="text-align: center;" nowrap="nowrap"><s:select
+										headerKey="-1" headerValue="End Of List"
+										name="salesStockItems" onchange="callForMoreRow(this.id)" id="salesStockItems8"
+										list="salesStockItemList" cssClass="select1" theme="myTheme"
+										cssStyle="width:120px;"/></td>
+								<td style="text-align: center;display:none" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="totalQty" readOnly="true" value="0" id="totalQty8"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+								
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="Qty" readOnly="true"  onfocusout="calAmount(this.id)"   value="0" id="Qty8" theme="myTheme"
+										pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="rate"  readOnly="true"   onfocusout="calAmount(this.id)"   value="0" id="rate8"
+										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap">
+									<ss:textfield
+										maxlength="30" name="unit" value="" id="unit8"
+										theme="myTheme" readOnly="true" cssStyle="width:40%">
+									</ss:textfield>
+									</td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="amount" value="0" id="amount8"
+										theme="myTheme" readOnly="true" pattern="^[0-9]*$"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+									
+							</tr>
+							<!-- end row 8 -->
+							
+							<!-- row 9 -->
+							
+							<tr id="rowId9">
+								<td style="text-align: center;" nowrap="nowrap"><s:select
+										headerKey="-1" headerValue="End Of List"
+										name="salesStockItems" onchange="callForMoreRow(this.id)" id="salesStockItems9"
+										list="salesStockItemList" cssClass="select1" theme="myTheme"
+										cssStyle="width:120px;"/></td>
+								<td style="text-align: center;display:none" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="totalQty" readOnly="true" value="0" id="totalQty9"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+								
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="Qty" readOnly="true" value="0"  onfocusout="calAmount(this.id)"   id="Qty9" theme="myTheme"
+										pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="rate"  readOnly="true"  value="0"  onfocusout="calAmount(this.id)"   id="rate9"
+										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap">
+									<ss:textfield
+										maxlength="30" name="unit" value="" id="unit9"
+										theme="myTheme" readOnly="true" cssStyle="width:40%">
+									</ss:textfield>
+									</td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="amount" value="0" id="amount9"
+										theme="myTheme" readOnly="true" pattern="^[0-9]*$"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+											</tr>
+							<!-- end row 9 -->
+							
+							<!-- row 10 -->
+							
+							<tr id="rowId10">
+								<td style="text-align: center;" nowrap="nowrap"><s:select
+										headerKey="-1" headerValue="End Of List"
+										name="salesStockItems" id="salesStockItems10"
+										list="salesStockItemList" onchange="callForMoreRow(this.id)" cssClass="select1" theme="myTheme"
+										cssStyle="width:120px;"/></td>
+								<td style="text-align: center;display:none" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="totalQty" readOnly="true" value="0" id="totalQty10"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+								
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="Qty" readOnly="true" value="0"  onfocusout="calAmount(this.id)"   id="Qty10" theme="myTheme"
+										pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="rate"  readOnly="true"   onfocusout="calAmount(this.id)"   value="0" id="rate10"
+										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap">
+									<ss:textfield
+										maxlength="30" name="unit" value="" id="unit10"
+										theme="myTheme" readOnly="true" cssStyle="width:40%">
+									</ss:textfield>
+									</td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="amount" value="0" id="amount10"
+										theme="myTheme" readOnly="true" pattern="^[0-9]*$"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+								
+							</tr>
+							<!-- end row 10 -->
+							
+							
 
 
 						</tbody>
@@ -726,11 +1278,21 @@ $("#reminderDate").datetimepicker({
 							<label> Narration </label>
 						</div>
 						<div class="InputDiv">
-							<s:textfield name="narration" cssClass="InpTextBoxBg"
+							<s:textfield name="narration" value="purchase" cssClass="InpTextBoxBg"
 								id="narration" theme="simple" title="Enter Narration"></s:textfield>
 						</div>
 					</div>
+					<div class="clearFRM"></div>
+				<div class="FormMainBox">
+					<div class="labelDiv">
+						<label> Upload Document </label>
+					</div>
+					<div class="InputDivHalf">
 					
+					<s:file label="upload" id="docPicture" name="docPicture" cssClass="textfield" theme="myTheme"></s:file>
+						</div>
+
+				</div>
 					
 					
 				</s:if>
@@ -738,11 +1300,13 @@ $("#reminderDate").datetimepicker({
 			</div>
 			<div class="box_footer" align="right">
 				
-				<input type="submit" value='Create' align="left"
-					style="margin-left: 0px" class="button" />
+				<!-- <input type="submit" value='Create' align="left"
+					style="margin-left: 0px" class="button" /> -->
+					<button type="button" align="left"
+					style="margin-left: 0px" class="button" onclick="promptSave()">Create Request</button>
 			</div>
 		</s:form>
-			<div class="form-popup" id="myForm">
+			<%-- <div class="form-popup" id="myForm">
 						<div class="form-container">
 							<table width="100%" cellspacing="0" align="center"
 								id="payTransactionTable" class="transactionTable">
@@ -796,7 +1360,7 @@ $("#reminderDate").datetimepicker({
 								</tbody>
 							</table>
 						</div>
-					</div>		
+					</div>		 --%>
 	</div>
 	<div id="searchDiv"></div>
 	<br />
