@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
+import com.stpl.pms.commonJavabeans.LedgerSecondStepBean;
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.javabeans.LedgerBankAccount;
 import com.stpl.pms.javabeans.LedgerBean;
@@ -53,11 +54,14 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 	private String intersetCalculationApplicabilityGracePeriod;
 	private String employeeUnder;
 	private String intersetCalculationSecurityAmt;
+	private String security;
 	// ledger opening blnc
 
 	private String openingDate;
 	private String openingBalance;
 	private String Cr_Dr;
+	private LedgerSecondStepBean ledgerSecondStepBean;
+	private String resultType;
 
 	@Override
 	public String execute() throws Exception {
@@ -115,14 +119,31 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 				ledgerBankAccount, blcBillByBill, defCreditPeriod, creditDayDuringVoucher, specifyCreditLimit,
 				employeeUnder, txnByTxnInterest, intesestBasedOn, foramtAdded, foramtDeduct, rate, ratePer, rateOn,
 				intersetCalculationApplicability, intersetCalculationApplicabilityDays, intersetCalculationFrom,
-				intersetCalculationApplicabilityGracePeriod, intersetCalculationSecurityAmt)) {
-			if (gameLobbyController.InitialBalace(openingDate, openingBalance, Cr_Dr, ledgerName, groupUnder))
-						return SUCCESS;
-					else
-						return ERROR;
+				intersetCalculationApplicabilityGracePeriod, intersetCalculationSecurityAmt, security)) {
+			int id = gameLobbyController.InitialBalace(openingDate, openingBalance, Cr_Dr, ledgerName, groupUnder);
+			if (id > 0) {
+				ledger_id = String.valueOf(id);
+				return SUCCESS;
+			}
+
+			else
+				return ERROR;
 
 		} else
 			return ERROR;
+	}
+
+	public String completeSecondStep() {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.ledgerSecondStepInsert(ledgerSecondStepBean)) {
+			resultType = "Your Ledger Created Successfully!!!";
+			return SUCCESS;
+		} else {
+			resultType = "ERROR! Your Ledger Second Form details is Not Inserted!!!";
+			return ERROR;
+
+		}
+
 	}
 
 	public String deleteLedger() {
@@ -418,6 +439,30 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 
 	public void setIntersetCalculationSecurityAmt(String intersetCalculationSecurityAmt) {
 		this.intersetCalculationSecurityAmt = intersetCalculationSecurityAmt;
+	}
+
+	public LedgerSecondStepBean getLedgerSecondStepBean() {
+		return ledgerSecondStepBean;
+	}
+
+	public void setLedgerSecondStepBean(LedgerSecondStepBean ledgerSecondStepBean) {
+		this.ledgerSecondStepBean = ledgerSecondStepBean;
+	}
+
+	public String getResultType() {
+		return resultType;
+	}
+
+	public void setResultType(String resultType) {
+		this.resultType = resultType;
+	}
+
+	public String getSecurity() {
+		return security;
+	}
+
+	public void setSecurity(String security) {
+		this.security = security;
 	}
 
 }

@@ -86,8 +86,27 @@ var itemNameGlobal;
 var creditLimit = -1;
 var limitPopup = false;
 var periodResult = false;
+
+function checkDocUpload(){
+	
+	var doc = document.getElementById('docPicture').value;
+	if(doc!=""){
+		promptSave();
+	}
+	else{
+		
+		swal("Please upload document first!");
+	}
+	
+}
 function promptSave(){
 	var frm = $('#searchUserFrm');
+	let photo = document.getElementById("docPicture").files[0];
+	let formData = new FormData();
+	formData.append("docPicture", photo);
+	var myurl = "<%=basePath%>";
+	myurl += "/com/stpl/pms/action/bo/um/upload_sales_order_document.action?salesNo="+document.getElementById('salesNo').value;
+	
 		if(limitPopup==false){
 			checkForLimitPeriod();
 			setTimeout(function(){
@@ -109,9 +128,26 @@ function promptSave(){
 						        success: function (data) {
 						        	if(data=="success"){
 						        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
-						        		setTimeout(function(){
+						        		$.ajax({
+									        type: 'POST',
+									        url: myurl,
+									        data: formData,
+									        cache : false,
+											contentType : false,
+											processData : false,
+									        success: function (data) {
+									        	
+									            
+									        },
+									        error: function (data) {
+									        	
+									        },
+									    });
+
+							        	setTimeout(function(){
 						        			   window.location.reload(1);
 						        			}, 1000);
+						        		
 						        	}
 						        	else{
 						        		swal("Some Error Occured!");
@@ -142,6 +178,18 @@ function promptSave(){
     
     
 }
+function validateFile(fileName, id) {
+	var file = fileName.value;
+	var ext = file.substring(file.length, file.length - 3);
+	if (file != "") {
+		if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "doc"
+				&& ext != "docx" && ext != "pdf") {
+			document.getElementById(id).value = "";
+			alert('only image,pdf or doc file is allowed!');
+		}
+	}
+
+}
 function checkForLimitPeriod(){
 	var partyAccName = document.getElementById('partyAcc').value;
 	var myurl = "<%=basePath%>";
@@ -149,6 +197,7 @@ function checkForLimitPeriod(){
 			+partyAccName+"&paymentDate="+document.getElementById('paymentDate').value;
 	$.ajax({
 		type : "GET",
+		async:false,
 		url : myurl,
 		success : function(itr) {
 			if(itr=='skip')
@@ -631,6 +680,7 @@ function showBatchesPopup(id){
 					else{
 						document.getElementById('creditLimit').value = 'Not Specified';
 					}
+				getSecurityAmt(id);
 			},
 			error : function(itr) {
 
@@ -658,6 +708,25 @@ function showBatchesPopup(id){
 			$("#consigneeDiv").css("display", "block");
 		}
 		
+	}
+	function getSecurityAmt(id){
+		var myurl = "<%=basePath%>";
+		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_security_balance.action?partyAcc="
+				+ document.getElementById(id).value;
+		var res = id.match(/\d/g);
+		$.ajax({
+			type : "GET",
+			url : myurl,
+			success : function(itr) {
+				document.getElementById('secuityAmt').value = itr;
+				
+				
+			},
+
+			error : function(itr) {
+
+			}
+		});
 	}
 </script>
 </head>
@@ -692,8 +761,7 @@ function showBatchesPopup(id){
 						</div>
 					</div>
 					
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
+					<div class="FormMainBox" style="display:none;">
 
 						<div class="labelDiv">
 							<label>Date</label><em class="Req">*</em>
@@ -707,7 +775,6 @@ function showBatchesPopup(id){
 							</div>
 						</div>
 					</div>
-					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -721,7 +788,6 @@ function showBatchesPopup(id){
 					</div>
 					
 					
-						<div class="clearFRM"></div>
 						<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -733,7 +799,6 @@ function showBatchesPopup(id){
 								cssClass="select1" theme="myTheme" onchange="checkConsignee(this.value)"/>
 						</div>
 					</div>
-					<div class="clearFRM"></div>
 					<div id="consigneeDiv" style="display:none;">
 					
 					<table width="100%" cellspacing="0" align="center"
@@ -753,27 +818,27 @@ function showBatchesPopup(id){
 								
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="50" name="Dname"
-										theme="myTheme" readOnly="true"
+										theme="myTheme" 
 										cssStyle="width:90%">
 									</ss:textfield></td>
 									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="50" name="propName"
-										theme="myTheme" readOnly="true"
+										theme="myTheme" 
 										cssStyle="width:90%">
 									</ss:textfield></td>
 									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="contact"
-										theme="myTheme" readOnly="true"
+										theme="myTheme"
 										cssStyle="width:80%">
 									</ss:textfield></td>
 									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="100" name="address"
-										theme="myTheme" readOnly="true"
+										theme="myTheme"
 										cssStyle="width:100%">
 									</ss:textfield></td>
 									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="50" name="gstnNo" readOnly="true"
-										theme="myTheme" readOnly="true"
+										maxlength="50" name="gstnNo" 
+										theme="myTheme"
 										cssStyle="width:90%">
 									</ss:textfield></td>
 									
@@ -787,30 +852,41 @@ function showBatchesPopup(id){
 					</table>
 					</div>
 					<div class="clearFRM"></div>
-						<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Current Balance </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="currBalance" id="currBalance" value="0"
-								theme="myTheme" readonly="true" cssStyle="width:20%" />
+						<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Current Balance</th>
+								<th style="text-align: center;" nowrap="nowrap">Security Amount</th>
+								<th style="text-align: center;" nowrap="nowrap">Credit Limit</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="currBalance" id="currBalance" value="0"
+								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
 								<span id="crdr"></span>
 								<s:hidden name="hcrdr" id="hcrdr"></s:hidden>
-						</div>
-					</div> 
-						<div class="clearFRM"></div>
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="secuityAmt" id="secuityAmt" value="0"
+								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="creditLimit" id="creditLimit" value="0"
+								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
+								</td>
 					
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Credit Limit </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="creditLimit" id="creditLimit" value="0"
-								theme="myTheme" readonly="true" cssStyle="width:20%" />
-						</div>
-					</div>
+							</tr>
+					
+						</tbody>
+					</table>
+					
 					<br />
 					<div class="clearFRM"></div>
 
@@ -883,8 +959,8 @@ function showBatchesPopup(id){
 										pattern="^[0-9]*$" cssStyle="width:50%">
 									</ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="rate"  readOnly="true"   onfocusout="calAmount(this.id)"   value="0" id="rate2"
-										theme="myTheme"  readOnly="true" pattern="^[0-9]*$" cssStyle="width:50%">
+										maxlength="30" name="rate"  readOnly="true" onfocusout="calAmount(this.id)"   value="0" id="rate2"
+										theme="myTheme" readOnly="true" pattern="^[0-9]*$" cssStyle="width:50%">
 									</ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap">
 									<ss:textfield
@@ -1207,7 +1283,6 @@ function showBatchesPopup(id){
 
 						</tbody>
 					</table>
-					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -1219,7 +1294,6 @@ function showBatchesPopup(id){
 								readOnly="true" theme="simple" style="width:30%;"></s:textfield>
 						</div>
 					</div>
-					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -1231,7 +1305,6 @@ function showBatchesPopup(id){
 								readOnly="true" theme="simple" style="width:30%;"></s:textfield>
 						</div>
 					</div>
-					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -1243,7 +1316,6 @@ function showBatchesPopup(id){
 								readOnly="true" theme="simple" style="width:30%;"></s:textfield>
 						</div>
 					</div>
-					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -1255,7 +1327,6 @@ function showBatchesPopup(id){
 								readOnly="true" theme="simple" style="width:30%"></s:textfield>
 						</div>
 					</div>
-					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -1266,14 +1337,13 @@ function showBatchesPopup(id){
 								id="narration" theme="simple" title="Enter Narration"></s:textfield>
 						</div>
 					</div>
-				<div class="clearFRM"></div>
 				<div class="FormMainBox">
 					<div class="labelDiv">
-						<label> Upload Document </label>
+						<label> Upload Document </label><em class="Req">*</em>
 					</div>
 					<div class="InputDivHalf">
 					
-					<s:file label="upload" id="docPicture" name="docPicture" cssClass="textfield" theme="myTheme"></s:file>
+					<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPicture" name="docPicture" cssClass="textfield" theme="myTheme"></s:file>
 						</div>
 
 				</div>
@@ -1287,7 +1357,7 @@ function showBatchesPopup(id){
 					 --%>
 			<!-- 	<input type="submit" id="saleBtn" value='Create' align="left"
 					style="margin-left: 0px" class="button" /> -->
-				<button type="button" id="saleBtn" align="left" style="margin-left: 0px" class="button" onclick="promptSave()">Save</button>
+				<button type="button" id="saleBtn" align="left" style="margin-left: 0px" class="button" onclick="checkDocUpload()">Save</button>
 			</div>
 		</s:form>
 		<%-- <div class="form-popup" id="myForm">

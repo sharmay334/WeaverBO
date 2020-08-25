@@ -24,6 +24,7 @@
 							showMinute : false,
 							showHour : false,
 							changeYear : true,
+							changeDate :true,
 							changeMonth : true,
 							minDate : '01-01-1930',
 							onSelect : function(selectedDate) {
@@ -40,6 +41,31 @@
 								}
 							}
 						});
+			
+			$("#intersetStartDate").datetimepicker(
+					{
+						dateFormat : 'dd-mm-yy',
+						showSecond : false,
+						showMinute : false,
+						showHour : false,
+						changeYear : true,
+						changeMonth : true,
+						changeDate :true,
+						minDate : '01-01-1930',
+						onSelect : function(selectedDate) {
+							if (selectedDate != "") {
+								$("#intersetStartDate").datepicker("option",
+										"minDate", selectedDate);
+							} else {
+								var date = new Date().getDate();
+								$(function() {
+									$("#intersetStartDate").datepicker({
+										dateFormat : 'dd-mm-yy'
+									}).datepicker("setDate", date);
+								});
+							}
+						}
+					});
 
 			});
 	</script>
@@ -195,7 +221,7 @@
 				<div class="FormMainBox">
 
 					<div class="labelDiv">
-						<label>Opening Balance</label>
+						<label>Current Balance</label>
 					</div>
 					<div class="InputDiv">
 						<ss:textfield name="ledgerCustomBean.openingBalance" value="%{ledgerCustomBean.openingBalance}" id="openingBalance"
@@ -207,11 +233,64 @@
 				<div class="FormMainBox">
 
 					<div class="labelDiv">
-						<label>Balance Type</label>
+						<label>Current Balance Type</label>
 					</div>
 					<div class="InputDiv">
 						<s:select name="ledgerCustomBean.balanceType" value="%{ledgerCustomBean.balanceType}"
 								id="balanceType" list="{'Cr','Dr'}" cssClass="select1" theme="myTheme"></s:select>
+					
+					</div>
+
+				</div>
+				
+				
+				
+				
+				<div class="FormMainBox">
+
+					<div class="labelDiv">
+						<label>Opening Balance</label>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield name="ledgerCustomBean.oBalance" value="%{ledgerCustomBean.oBalance}"
+							theme="myTheme" pattern="^[0-9.]*$"></ss:textfield>
+					</div>
+
+				</div>
+				<div class="clearFRM"></div>
+				<div class="FormMainBox">
+
+					<div class="labelDiv">
+						<label>Opening Balance Type</label>
+					</div>
+					<div class="InputDiv">
+						<s:select name="ledgerCustomBean.oBalanceType" value="%{ledgerCustomBean.oBalanceType}"
+								 list="{'Cr','Dr'}" cssClass="select1" theme="myTheme"></s:select>
+					
+					</div>
+
+				</div>
+				<div class="clearFRM"></div>
+				<div class="FormMainBox">
+
+					<div class="labelDiv">
+						<label>Security Amount</label>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield name="ledgerCustomBean.secAmount" value="%{ledgerCustomBean.secAmount}"
+							theme="myTheme" pattern="^[0-9.]*$"></ss:textfield>
+					
+					</div>
+
+				</div>
+				<div class="FormMainBox">
+
+					<div class="labelDiv">
+						<label>Security Amount Interest Start Date</label>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield name="ledgerCustomBean.intersetStartDate" value="%{ledgerCustomBean.intersetStartDate}" placeholder="Date" cssClass="dateField"
+										id="intersetStartDate" readonly="true" theme="myTheme"></ss:textfield>
 					
 					</div>
 

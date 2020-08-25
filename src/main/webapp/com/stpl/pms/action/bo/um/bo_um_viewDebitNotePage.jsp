@@ -498,6 +498,25 @@ function showBatchesPopup(id){
 		document.getElementById('totalAmt').value = finalAmount+Number(totalTax);
 		document.getElementById('currBalance').value = Number(CurrentBalance)-(finalAmount+Number(totalTax));
 	}
+	function getSecurityAmt(id){
+		var myurl = "<%=basePath%>";
+		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_security_balance.action?partyAcc="
+				+ document.getElementById(id).value;
+		var res = id.match(/\d/g);
+		$.ajax({
+			type : "GET",
+			url : myurl,
+			success : function(itr) {
+				document.getElementById('secuityAmt').value = itr;
+				
+				
+			},
+
+			error : function(itr) {
+
+			}
+		});
+	}
 	function calAmount(id) {
 		
 		var res = id.match(/\d/g);
@@ -542,6 +561,7 @@ function showBatchesPopup(id){
 
 			}
 		});
+		getSecurityAmt(id);
 	}
 	function showhideEmployee(data){
 		$("#showEmployeeDiv").css("display", "none");
@@ -677,85 +697,103 @@ function showBatchesPopup(id){
 						</div>
 					</div>
 					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Current Balance </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="currBalance" id="currBalance" value="0"
-								theme="myTheme" readonly="true" cssStyle="width:20%" />
+					<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Current Balance</th>
+								<th style="text-align: center;" nowrap="nowrap">Security Amount</th>
+								<th style="text-align: center;" nowrap="nowrap">Credit Limit</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="currBalance" id="currBalance" value="0"
+								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
 								<span id="crdr"></span>
-						</div>
-					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
+								<s:hidden name="hcrdr" id="hcrdr"></s:hidden>
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="secuityAmt" id="secuityAmt" value="0"
+								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="creditLimit" id="creditLimit" value="0"
+								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
+								</td>
 
-						<div class="labelDiv">
-							<label> Credit Limit </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="creditLimit" id="creditLimit" value="0"
-								theme="myTheme" readonly="true" cssStyle="width:20%" />
-							
-						</div>
-					</div>
+							</tr>
+						</tbody>
+					</table>
 					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Dispatch Doc No. </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="ddn" id="ddn"
+					<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Dispatch Doc No</th>
+								<th style="text-align: center;" nowrap="nowrap">Transport Name</th>
+								<th style="text-align: center;" nowrap="nowrap">Destination</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="ddn" id="ddn"
 								theme="myTheme" cssStyle="width:50%" />
-						</div>
-					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Transport Name </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="tn" id="tn"
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="tn" id="tn"
 								theme="myTheme" cssStyle="width:50%" />
-						</div>
-					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Destination </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="des" id="des" 
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="des" id="des" 
 								theme="myTheme" cssStyle="width:50%" />
-						</div>
-					</div>
+								</td>
+									
+							</tr>
+						</tbody>
+					</table>
 					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Bill-T No.</label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="billt" id="billt" 
+					<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Bill-T No.</th>
+								<th style="text-align: center;" nowrap="nowrap">Vehical No.</th>
+								<th style="text-align: center;" nowrap="nowrap">Transport Freight</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="billt" id="billt" 
 								theme="myTheme"  cssStyle="width:50%" />
-						</div>
-					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Vehical No. </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="vn" id="vn"
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="vn" id="vn"
 								theme="myTheme" cssStyle="width:50%" />
-						</div>
-					</div>
-					<div class="clearFRM"></div>
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="transportFreight" id="transportFreight"
+								theme="myTheme" value="0" cssStyle="width:50%" />
+								</td>
+									
+							</tr>
+						</tbody>
+					</table>
 					<br />
 					<div class="clearFRM"></div>
 

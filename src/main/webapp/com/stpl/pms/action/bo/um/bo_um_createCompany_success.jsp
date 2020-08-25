@@ -4,12 +4,12 @@
 <div class="FormSection">
 	<div class="greyStrip">
 		<h4>
-			Company Created
+			Success
 		</h4>
 	</div>
 	<div class="innerBox">
 	<div class="alert saved_msg"><span class="alert_close"></span><strong><s:text name="global.um.msg3"></s:text>: </strong>
-	Company Created Successfully.</div>
+	Data Upload Successfully.</div>
          </div>          
               </div>
 	

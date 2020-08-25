@@ -1,5 +1,6 @@
 package com.stpl.pms.action.bo.um;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,9 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
+import com.stpl.pms.commonJavabeans.ReceiptBean;
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.javabeans.ItemBean;
 import com.stpl.pms.javabeans.VoucherBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
+import com.stpl.pms.utility.SendSMS;
 
 public class TMReceiptMgmtAction extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
 	private HttpServletRequest servletRequest;
@@ -50,13 +54,62 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 	private String activeVoucherNumber;
 	private String txn_dd_chq_no;
 	private String txn_bnkNm;
+	private String ccrdrH;
+	private String status;	
+	private File docPicture;
+	private String docPictureContentType;
+	private String docPictureFileName;
 
+	private List<ReceiptBean> receiptBeans;
+	public String loadEmpReceiptOrder() {
+		GameLobbyController controller = new GameLobbyController();
+		//accountList = new ArrayList<String>();
+		//particularsList = new ArrayList<String>();
+		//accountList = controller.getaccountListForTxnPayment("accList", getUserInfoBean().getUserId());
+		//particularsList = controller.getaccountListForTxnPayment("particulars", getUserInfoBean().getUserId());
+		//employeeUnderList = controller.getEmployeeNamesList();
+		//receiptNo = controller.getReceiptNo();
+		//bankNameList = new ArrayList<String>();
+	//	bankNameList = controller.getBankNameList();
+		receiptBeans = new ArrayList<ReceiptBean>();
+		ReceiptBean bean = null;
+		String str = controller.fetchEmpReceiptData(0, rcptId);
+		String[] resArr = str.split("\\|");
+		String[] particularsArr = resArr[3].split(",");
+		account = resArr[2];
+		int id = 1;
+		for (int i = 0; i < particularsArr.length; i++) {
+
+			if (resArr[3].split(",")[i].trim().equals("none")) {
+
+			} else {
+
+				bean = new ReceiptBean();
+				bean.setParticulars(resArr[3].split(",")[i].trim());
+				bean.setAmount(resArr[4].split(",")[i].trim());
+				bean.setBank_name(resArr[6].split(",")[i].trim());
+				bean.setTxnType(resArr[5].split(",")[i].trim());
+				bean.setRowId(id);
+				receiptBeans.add(bean);
+				id++;
+			}
+			
+		}
+		amount = resArr[4].split(",")[0];
+		particulars = resArr[3].split(",")[0];
+		totalAmt = resArr[8].trim();
+		status = resArr[9].trim();
+		paymentDate = resArr[10].toString();
+		txnType = resArr[5].split(",")[0];
+		bankName = resArr[6].split(",")[0];
+		return SUCCESS;
+	}
 	public String loadReceiptPage() {
 		GameLobbyController controller = new GameLobbyController();
 		accountList = new ArrayList<String>();
 		particularsList = new ArrayList<String>();
-		accountList = controller.getaccountListForTxnPayment("accList", getUserInfoBean().getUserId());
-		particularsList = controller.getaccountListForTxnPayment("particulars", getUserInfoBean().getUserId());
+		accountList = controller.getaccountListForTxnPayment("accList", 1);
+		particularsList = controller.getaccountListForTxnPayment("particulars", 1);
 		employeeUnderList = controller.getEmployeeNamesList();
 		receiptNo = controller.getReceiptNo();
 		bankNameList = new ArrayList<String>();
@@ -113,51 +166,155 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 		receiptNo = controller.getReceiptNo();
 		bankNameList = new ArrayList<String>();
 		bankNameList = controller.getBankNameList();
+		receiptBeans = new ArrayList<ReceiptBean>();
+		ReceiptBean bean = null;
 		String str = controller.fetchEmpReceiptData(0, rcptId);
 		String[] resArr = str.split("\\|");
+		String[] particularsArr = resArr[3].split(",");
 		account = resArr[2];
+		int id = 1;
+		for (int i = 0; i < particularsArr.length; i++) {
+
+			if (resArr[3].split(",")[i].trim().equals("none")) {
+
+			} else {
+
+				bean = new ReceiptBean();
+				bean.setParticulars(resArr[3].split(",")[i].trim());
+				bean.setAmount(resArr[4].split(",")[i].trim());
+				bean.setBank_name(resArr[6].split(",")[i].trim());
+				bean.setTxnType(resArr[5].split(",")[i].trim());
+				bean.setRowId(id);
+				receiptBeans.add(bean);
+				id++;
+			}
+			
+		}
 		amount = resArr[4].split(",")[0];
 		particulars = resArr[3].split(",")[0];
-		totalAmt = resArr[4].split(",")[0];
+		totalAmt = resArr[8].trim();
+		status = resArr[9].trim();
+		paymentDate = resArr[10].toString();
 		txnType = resArr[5].split(",")[0];
 		bankName = resArr[6].split(",")[0];
+		docPictureFileName = resArr[11].toString();
+		String checkIsVoucherActive = controller.getActiveVoucher("receipt");
+		if (checkIsVoucherActive.equalsIgnoreCase("duplicate")) {
+			return ERROR;
+		}
 
+		else {
+			voucherBean = controller.getVoucherNumbering("Receipt", checkIsVoucherActive);
+			if (checkIsVoucherActive.equalsIgnoreCase("not found"))
+				activeVoucherNumber = "0";
+			else
+				activeVoucherNumber = checkIsVoucherActive;
+			if (voucherBean == null)
+				receiptNoVoucher = String.valueOf(controller.getReceiptNo());
+			else {
+
+				if (voucherBean.getVoucherNumbering().equals("Manual")) {
+					receiptNoVoucher = String.valueOf(controller.getReceiptNo());
+				} else {
+					if (voucherBean.getAdvanceNumbering().equals("Yes")) {
+						int getMaxNumber = controller.getReceiptVoucherNumber(activeVoucherNumber);
+						if (getMaxNumber == 0) {
+							receiptNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix()
+									+ String.format("%0" + Integer.valueOf(voucherBean.getDecimalNumber()) + "d",
+											Integer.valueOf(voucherBean.getStartingNumber()));
+						} else {
+							getMaxNumber++;
+							receiptNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix() + String
+									.format("%0" + Integer.valueOf(voucherBean.getDecimalNumber()) + "d", getMaxNumber);
+							;
+
+						}
+					} else {
+						receiptNoVoucher = String.valueOf(controller.getReceiptNo());
+					}
+
+				}
+
+			}
+		}
 		return SUCCESS;
 
 	}
 
+	private void sendSmsAlert() {
+		GameLobbyController controller = new GameLobbyController();
+		String getPropName = controller.getPropName(particulars.split(",")[0].trim());
+		String mobile = controller.getPropContact(particulars.split(",")[0].trim());
+		String getUnderEmpName = controller.getUnderEmpName(particulars.split(",")[0].trim());
+		String getEmpMobile = controller.getUnderEmpMobile(particulars.split(",")[0].trim());
+		String sms = "Dear " + getPropName + ",Prop " + particulars.split(",")[0].trim() + ". Your Bill No-"
+				+ receiptNoVoucher + " of AMT " + totalAmt + " " + " Dated " + paymentDate
+				+ " has been generated. Your closing balance is " + currentblnc.split(",")[0] + " "
+				+ hcrdr.split(",")[0] + ". Thank you for choosing us. Regards JAMIDARA SEEDS CORPORATION (Karnataka)";
+		String smsEmp = "Dear " + getUnderEmpName + ", Your party " + getPropName + ",Prop "
+				+ particulars.split(",")[0].trim() + " Bill No-" + receiptNoVoucher + " of AMT " + totalAmt + " "
+				+ " Dated " + paymentDate + " has been generated. His closing balance is " + currentblnc.split(",")[0]
+				+ " " + hcrdr.split(",")[0]
+				+ ". Thank you for choosing us. Regards JAMIDARA SEEDS CORPORATION (Karnataka)";
+		if (mobile != null && !mobile.isEmpty()) {
+			SendSMS sendSMS = new SendSMS();
+			sendSMS.setMobileNo("91" + mobile);
+			sendSMS.setMsg(sms);
+			Thread thread = new Thread(sendSMS);
+			thread.setDaemon(true);
+			thread.start();
+		}
+
+		if (getEmpMobile != null && !getEmpMobile.isEmpty()) {
+			SendSMS sendSMS1 = new SendSMS();
+			sendSMS1.setMobileNo("91" + getEmpMobile);
+			sendSMS1.setMsg(smsEmp);
+			Thread thread1 = new Thread(sendSMS1);
+			thread1.setDaemon(true);
+			thread1.start();
+		}
+	}
+
 	public void createReceipt() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		if(activeVoucherNumber.equals("0")) {
+		if (activeVoucherNumber.equals("0")) {
 			if (controller.createTransactionReceipt(account, employeeUnder, currBalance, particulars, amount, bankName,
 					txnType, narration, currentblnc, hiddenTypeOfRef, hiddenBillWiseName, hiddenAmnt, hiddenBilId,
-					receiptNoVoucher, txn_dd_chq_no, txn_bnkNm, activeVoucherNumber, paymentDate)) {
-				if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr))
+					receiptNoVoucher, txn_dd_chq_no, txn_bnkNm, activeVoucherNumber, paymentDate, ccrdrH)) {
+				if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr)) {
+					if (controller.allowAlert(particulars.split(",")[0].trim(), "SMS"))
+						sendSmsAlert();
 					servletResponse.getWriter().write("success");
+				}
+
 			} else
 				servletResponse.getWriter().write("error");
-		}
-		else {
+		} else {
 			voucherBean = controller.getVoucherNumbering("Receipt", activeVoucherNumber);
-			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(),paymentDate+" 00:00");
-			if(voucherDate==true) {
+			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(), paymentDate + " 00:00");
+			boolean voucherDate1 = compareTwoDate( paymentDate + " 00:00",voucherBean.getStartDate());
+			if (voucherDate == true || voucherDate1==true) {
 				servletResponse.getWriter().write("date");
-			}
-			else {
-				if (controller.createTransactionReceipt(account, employeeUnder, currBalance, particulars, amount, bankName,
-						txnType, narration, currentblnc, hiddenTypeOfRef, hiddenBillWiseName, hiddenAmnt, hiddenBilId,
-						receiptNoVoucher, txn_dd_chq_no, txn_bnkNm, activeVoucherNumber, paymentDate)) {
-					if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr))
+			} else {
+				if (controller.createTransactionReceipt(account, employeeUnder, currBalance, particulars, amount,
+						bankName, txnType, narration, currentblnc, hiddenTypeOfRef, hiddenBillWiseName, hiddenAmnt,
+						hiddenBilId, receiptNoVoucher, txn_dd_chq_no, txn_bnkNm, activeVoucherNumber, paymentDate,ccrdrH)) {
+					if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr)) {
+
+						if (controller.allowAlert(particulars.split(",")[0].trim(), "SMS"))
+							sendSmsAlert();
 						servletResponse.getWriter().write("success");
+					}
+
 				} else
 					servletResponse.getWriter().write("error");
 			}
 		}
-		
+
 		return;
 	}
 
-	private boolean compareTwoDate(String endDate, String currentDate){
+	private boolean compareTwoDate(String endDate, String currentDate) {
 		// TODO Auto-generated method stub
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy h:m");
@@ -165,12 +322,12 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 				return true;
 			}
 
-			
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
+
 	public HttpServletRequest getServletRequest() {
 		return servletRequest;
 	}
@@ -409,6 +566,44 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 
 	public void setTxn_bnkNm(String txn_bnkNm) {
 		this.txn_bnkNm = txn_bnkNm;
+	}
+
+	public String getCcrdrH() {
+		return ccrdrH;
+	}
+
+	public void setCcrdrH(String ccrdrH) {
+		this.ccrdrH = ccrdrH;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public List<ReceiptBean> getReceiptBeans() {
+		return receiptBeans;
+	}
+	public void setReceiptBeans(List<ReceiptBean> receiptBeans) {
+		this.receiptBeans = receiptBeans;
+	}
+	public File getDocPicture() {
+		return docPicture;
+	}
+	public void setDocPicture(File docPicture) {
+		this.docPicture = docPicture;
+	}
+	public String getDocPictureContentType() {
+		return docPictureContentType;
+	}
+	public void setDocPictureContentType(String docPictureContentType) {
+		this.docPictureContentType = docPictureContentType;
+	}
+	public String getDocPictureFileName() {
+		return docPictureFileName;
+	}
+	public void setDocPictureFileName(String docPictureFileName) {
+		this.docPictureFileName = docPictureFileName;
 	}
 
 }

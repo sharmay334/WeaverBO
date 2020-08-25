@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.javabeans.VoucherBean;
@@ -106,11 +108,11 @@ public class TMDebitNoteMgmtAction extends BaseActionSupport implements ServletR
 		GameLobbyController controller = new GameLobbyController();
 		particularsList = new ArrayList<String>();
 		salesStockItemList = new ArrayList<>();
-		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		particularsList = controller.getaccountListForTxnPayment("", 1);
 		partyAccName = new ArrayList<>();
-		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		partyAccName = controller.getaccountListForTxnPayment("", 1);
 		employeeUnderList = controller.getEmployeeNamesList();
-		salesAccountList = controller.getaccountListForTxnPayment("purchase acc", getUserInfoBean().getUserId());
+		salesAccountList = controller.getaccountListForTxnPayment("purchase acc", 1);
 		salesStockItemList = controller.getSalesStockItemList();
 		dnNo = controller.getDebitNoteNo();
 		goDownList = new ArrayList<>();
@@ -141,14 +143,20 @@ public class TMDebitNoteMgmtAction extends BaseActionSupport implements ServletR
 		return SUCCESS;
 	}
 
+	@SuppressWarnings("null")
 	public void createDebitNote() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
+		Transaction transaction = null;
+		Session session = null;
 		if (controller.createTransactionDebitNote(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
 				amount, Qty, rate, narration, dnNoVoucher)) {
 			if (controller.updateTransactionPartyBalance(partyAcc, currBalance, hcrdr))
 				if (controller.updateOrCreateStockSale(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-						hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate,""))
+						hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate,"")) {
+					transaction.commit();
 					servletResponse.getWriter().write("success");
+				}
+					
 		} else
 			servletResponse.getWriter().write("success");
 		return;

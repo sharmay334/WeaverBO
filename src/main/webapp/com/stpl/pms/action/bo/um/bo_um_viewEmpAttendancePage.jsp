@@ -501,8 +501,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
 						</div>
 
 				</div>
-				<div class="clearFRM"></div>
+				
 				<div class="FormMainBox" id="visit_div" style="display:none;">
+				<div class="clearFRM"></div>
 					<div class="labelDiv">
 						<label> Number of visit </label>
 					</div>
@@ -514,7 +515,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 						</div>
 
 				</div>
-				<div class="clearFRM"></div>
 				<div class="FormMainBox" id="selfie_div">
 					<div class="labelDiv">
 						<label> Selfie Picture </label><em class="Req">*</em>
@@ -804,6 +804,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			
 		</s:form>
 	</div>
-	<div id="searchResult" class="FormSection"></div>
+	<div id="searchResult"></div>
 	</body>
 </html>

@@ -41,8 +41,8 @@ public class TMContraMgmtAction extends BaseActionSupport implements ServletRequ
 		GameLobbyController controller = new GameLobbyController();
 		accountList = new ArrayList<String>();
 		particularsList = new ArrayList<String>();
-		accountList = controller.getaccountListForTxnPayment("accList", getUserInfoBean().getUserId());
-		particularsList = controller.getaccountListForTxnPayment("accList", getUserInfoBean().getUserId());
+		accountList = controller.getaccountListForTxnPayment("accList", 1);
+		particularsList = controller.getaccountListForTxnPayment("accList", 1);
 		employeeUnderList = controller.getEmployeeNamesList();
 		contraNo = controller.getContraNo();
 		bankNameList = new ArrayList<String>();

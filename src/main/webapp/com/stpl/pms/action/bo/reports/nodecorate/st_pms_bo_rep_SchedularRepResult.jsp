@@ -17,6 +17,12 @@
 <meta http-equiv="expires" content="0">
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
+<script src="/WeaverBO/js/sweetalert.min.js"></script>
+<script type="text/javascript"
+	src="/WeaverBO/js/jQuery/1.11.3/jquery-ui.min.js">
+      </script>
+<link rel="stylesheet" href="/WeaverBO/js/jQuery/1.11.3/jquery-ui.css">
+
 <style>
 body {font-family: Arial, Helvetica, sans-serif;}
 
@@ -60,87 +66,58 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 </style>
 <script>
-function closeMe(){
-	
-		document.getElementById("myModal").style.display = "none";
-			
-}
-function getReport(empId,date){
-	var frm = $('#searchUserFrm2');
-
-	 $.ajax({
-	        type: frm.attr('method'),
-	        url: frm.attr('action')+'?empId='+empId+'&attendanceDate='+date,
-	        async:false,
-	        data: frm.serialize(),
-	        success: function (data) {
-	            document.getElementById('searchResult1').innerHTML = data;
-	        },
-	        error: function (data) {
-	        	 document.getElementById('searchResult1').innerHTML = data;
-	        },
-	    });
-	
-}
-function callPictureReport(empId,attDate){
-	empIdArr = empId.split("-");
+function stopAlert(alertType,partyId,voucherNo,billId){
 	var myurl = "<%=basePath%>";
-	myurl += "com/stpl/pms/action/bo/um/bo_um_emp_picture_report.action?employeeUserName="
-			+ empIdArr[1]+"&attendaceDate="+attDate;
+	var status="STOP";
+	myurl += "com/stpl/pms/action/bo/um/bo_um_ledger_alert_status.action?alertType="
+		+ alertType+"&partyId="+partyId+"&voucherNo="+voucherNo+"&status="+status+"&billId="+billId;
 	$.ajax({
 		type : "GET",
 		url : myurl,
 		success : function(itr) {
-			itrArr = itr.split(";");
-			var list1 = document.getElementById("one");
-			var list2 = document.getElementById("two");
-			var list3 = document.getElementById("three");
-			var list4 = document.getElementById("four");
-				if(typeof(list1.childNodes[0])!="undefined")
-				list1.removeChild(list1.childNodes[0]);
-				if(typeof(list2.childNodes[0])!="undefined")
-					list2.removeChild(list2.childNodes[0]);
-				if(typeof(list3.childNodes[0])!="undefined")
-					list3.removeChild(list3.childNodes[0]);
-				if(typeof(list4.childNodes[0])!="undefined")
-					list4.removeChild(list4.childNodes[0]);
-					
+			if(itr=="success"){
+				swal("Your "+alertType+" Alert STOPPED SUCCESSFULLY!");
+				setTimeout(function(){
+     			   window.location.reload(1);
+     			}, 2000);
+			}
+			else{
+				swal("Failed to update status!");
 				
-			  var x = document.createElement("IMG");
-				  x.setAttribute("src", itrArr[0]);
-				  x.setAttribute("width", "228");
-				  x.setAttribute("height", "228");
-				  x.setAttribute("alt", "Employee Img");
-				  document.getElementById('one').appendChild(x);
-			
-				  var xx = document.createElement("IMG");
-				  xx.setAttribute("src", itrArr[1]);
-				  xx.setAttribute("width", "228");
-				  xx.setAttribute("height", "228");
-				  xx.setAttribute("alt", "Employee Img");
-				  document.getElementById('two').appendChild(xx);
-			
-				  var y = document.createElement("IMG");
-				  y.setAttribute("src", itrArr[2]);
-				  y.setAttribute("width", "228");
-				  y.setAttribute("height", "228");
-				  y.setAttribute("alt", "Employee Img");
-				  document.getElementById('three').appendChild(y);
-			
-				  var yy = document.createElement("IMG");
-				  yy.setAttribute("src", itrArr[3]);
-				  yy.setAttribute("width", "228");
-				  yy.setAttribute("height", "228");
-				  yy.setAttribute("alt", "Employee Img");
-				  document.getElementById('four').appendChild(yy);
-			
-			 
-			document.getElementById("myModal").style.display = "block";
+			}
 		},
 		error : function(itr) {
 
 		}
 	});
+	
+}
+function startAlert(alertType,partyId,voucherNo,billId){
+	var myurl = "<%=basePath%>";
+	var status="START";
+	myurl += "com/stpl/pms/action/bo/um/bo_um_ledger_alert_status.action?alertType="
+		+ alertType+"&partyId="+partyId+"&voucherNo="+voucherNo+"&status="+status+"&billId="+billId;
+	$.ajax({
+		type : "GET",
+		url : myurl,
+		success : function(itr) {
+			if(itr=="success"){
+				swal("Your "+alertType+" Alert STARTED SUCCESSFULLY!");
+				setTimeout(function(){
+     			   window.location.reload(1);
+     			}, 2000);
+			}
+			else{
+				swal("Failed to update status!");
+				
+			}
+
+		},
+		error : function(itr) {
+
+		}
+	});
+	
 }
 	$(document).ready(function() {
 		// fromAndToDate();
@@ -163,9 +140,9 @@ function callPictureReport(empId,attDate){
 	<div class="clear2"></div>
 	<div class="FormSection">
 		<s:if
-			test="%{attendanceMapResult!=null && attendanceMapResult.size()>0}">
+			test="%{reportData!=null && reportData.size()>0}">
 			<div class="greyStrip">
-				<h4 style="float: left">Employee Attendance Report</h4>
+				<h4 style="float: left">Schedular Report</h4>
 				<h4 class="dateData" style="text-align: right"></h4>
 			</div>
 			<div class="dataTbl_top">
@@ -178,81 +155,121 @@ function callPictureReport(empId,attDate){
 					cellpadding="4" border="0" align="center" class="payTransaction">
 					<thead>
 						<tr>
-							<th width="5%" valign="middle" id="th_0" is_link="false"
-								style="text-align: center;">Employee Id</th>
+							<th width="5%" valign="middle" id="th_0" 
+								style="text-align: center;">Ledger Name</th>
 							<th width="5%" valign="middle" style="text-align: center;"
-								id="th_1">Attendance Date</th>
+								id="th_1">Bill Id</th>
 							<th width="5%" valign="middle" style="text-align: center;"
-								id="th_2">Attendance Mark</th>
+								id="th_2">Bill Voucher Id</th>
 							<th width="5%" valign="middle" style="text-align: center;"
-								id="th_2">Present In</th>
+								id="th_2">Bill Amount</th>
 							<th width="5%" valign="middle" style="text-align: center;"
-								id="th_2">Present Out</th>	
+								id="th_2">Bill Date</th>	
 								<th width="5%" valign="middle" style="text-align: center;"
-								id="th_2">Working Hour</th>	
+								id="th_2">Bill Used</th>	
 							<th width="5%" valign="middle" style="text-align: center;"
-								id="th_3">Work Type</th>
+								id="th_3">Type Of Ref</th>
 							<th width="5%" valign="middle" style="text-align: center;"
-								id="th_3">Work Area</th>
+								id="th_3">Interest Amount</th>
 							<th width="5%" valign="middle" style="text-align: center;"
-								id="th_3">Travelling Mode</th>
+								id="th_3">Security Amt</th>
 							<th width="5%" valign="middle" style="text-align: center;"
-								id="th_3">Odometer Reading In</th>
+								id="th_3">Last Schedular Date</th>
 							<th width="5%" valign="middle" style="text-align: center;"
-								id="th_3">Odometer Reading Out</th>
+								id="th_3">SMS Alert</th>
 							<th width="5%" valign="middle" style="text-align: center;"
-								id="th_3">Total Reading</th> 
-							<th width="5%" valign="middle" style="text-align: center;" is_link="false"
-								id="th_3">Visit Report</th>	
+								id="th_3">Mail Alert</th> 
+							<!-- <th width="5%" valign="middle" style="text-align: center;" 
+								id="th_3">Interest Schedular</th>	 -->
+							<th width="5%" valign="middle" style="text-align: center;"
+								id="th_3">SMS</th>	
+							<th width="5%" valign="middle" style="text-align: center;"
+								id="th_3">MAIL</th>	
+							<!-- <th width="5%" valign="middle" style="text-align: center;"
+								id="th_3">Tax Schedular</th> -->				
+								
 						</tr>
 					</thead>
 					<tbody>
-						<s:iterator value="attendanceMapResult" var="resultMapVar">
+						<s:iterator value="reportData" var="resultMapVar">
 							<s:set var="attendanceMap" value="#resultMapVar.value" />
 							<tr>
 
 								<td width="5%" valign="middle" style="text-align: center;">
-									<a href="javascript:;" onclick="callPictureReport('<s:property value="#attendanceMap.empId" />','<s:property value="#attendanceMap.attendanceDate" />')"><s:property value="#attendanceMap.empId" /></a>
-									<s:hidden value="%{#attendanceMap.empId}"></s:hidden>
+								<s:property value="#attendanceMap.ledgerName" />
+								
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-									<s:property value="#attendanceMap.attendanceDate" />
-									<s:hidden  value="%{#attendanceMap.attendanceDate}"></s:hidden>
+									<s:property value="#attendanceMap.billId" />
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-										<b> <s:property value="#attendanceMap.attendaceMark" /> </b> 
+										<b> <s:property value="#attendanceMap.billVoucherNo" /> </b> 
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-										<b> <s:property value="#attendanceMap.presentIn" /> </b> 
+										<b> <s:property value="#attendanceMap.billAmount" /> </b> 
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-										<b> <s:property value="#attendanceMap.presentout" /> </b> 
+										<b> <s:property value="#attendanceMap.billDate" /> </b> 
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-										<b> <s:property value="#attendanceMap.workingHour" /> </b> 
+										<b> <s:property value="#attendanceMap.billUsed" /> </b> 
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-									<s:property value="#attendanceMap.workType" />
+									<s:property value="#attendanceMap.typeOfRef" />
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-									<s:property value="#attendanceMap.workArea" />
+									<s:property value="#attendanceMap.billTaxAmount" />
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-									<s:property value="#attendanceMap.travellingMode" />
+									<s:property value="#attendanceMap.securityAmt" />
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-									<s:property value="#attendanceMap.odometerReadingIn" />
+									<s:property value="#attendanceMap.lastSchedularDate" />
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-									<s:property value="#attendanceMap.odometerReadingOut" />
+									<s:property value="#attendanceMap.smsAlert" />
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-									<s:property value="#attendanceMap.totalReading" />
+									<s:property value="#attendanceMap.mailAlert" />
 								</td>
+								<%-- <td width="5%" valign="middle" style="text-align: center;">
+									<s:property value="#attendanceMap.taxSchedular" />
+								</td> --%>
+								<s:if test="%{#attendanceMap.smsAlert=='YES'}">
 								<td width="5%" valign="middle" style="text-align: center;">
-								<button type="button" class="button" onclick="getReport('<s:property value="#attendanceMap.empId" />','<s:property value="#attendanceMap.attendanceDate" />')">GET</button>
+								<button type="button" class="button" onclick="stopAlert('SMS','<s:property value="#attendanceMap.ledgerId"/>','<s:property value="#attendanceMap.billVoucherNo"/>','<s:property value="#attendanceMap.billId" />')">STOP</button>
+								</td>
+								</s:if>
+								<s:else>
+								<td width="5%" valign="middle" style="text-align: center;">
+								<button type="button" class="button" onclick="startAlert('SMS','<s:property value="#attendanceMap.ledgerId"/>','<s:property value="#attendanceMap.billVoucherNo"/>','<s:property value="#attendanceMap.billId" />')">START</button>
 								</td>
 								
+								</s:else>
+								
+								<s:if test="%{#attendanceMap.mailAlert=='YES'}">
+								<td width="5%" valign="middle" style="text-align: center;">
+								<button type="button" class="button" onclick="stopAlert('MAIL','<s:property value="#attendanceMap.ledgerId"/>','<s:property value="#attendanceMap.billVoucherNo"/>','<s:property value="#attendanceMap.billId" />')">STOP</button>
+								</td>
+								</s:if>
+								<s:else>
+								<td width="5%" valign="middle" style="text-align: center;">
+								<button type="button" class="button" onclick="startAlert('MAIL','<s:property value="#attendanceMap.ledgerId"/>','<s:property value="#attendanceMap.billVoucherNo"/>','<s:property value="#attendanceMap.billId" />')">START</button>
+								</td>
+								
+								</s:else>
+								
+								<%-- <s:if test="%{#attendanceMap.taxSchedular=='YES'}">
+								<td width="5%" valign="middle" style="text-align: center;">
+								<button type="button" class="button" onclick="stopAlert('SCHEDULE','<s:property value="#attendanceMap.ledgerId"/>','<s:property value="#attendanceMap.billVoucherNo"/>','<s:property value="#attendanceMap.billId" />')">STOP</button>
+								</td>
+								</s:if>
+								<s:else>
+								<td width="5%" valign="middle" style="text-align: center;">
+								<button type="button" class="button" onclick="startAlert('SCHEDULE','<s:property value="#attendanceMap.ledgerId"/>','<s:property value="#attendanceMap.billVoucherNo"/>','<s:property value="#attendanceMap.billId" />')">START</button>
+								</td> 
+								</s:else>--%>
+									
 
 							</tr>
 						</s:iterator>

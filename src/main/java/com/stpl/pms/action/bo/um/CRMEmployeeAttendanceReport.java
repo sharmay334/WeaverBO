@@ -12,6 +12,7 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 import org.drools.core.command.runtime.GetIdCommand;
 
 import com.stpl.pms.commonJavabeans.AttendanceBean;
+import com.stpl.pms.commonJavabeans.ExpenseBean;
 import com.stpl.pms.commonJavabeans.VisitBean;
 import com.stpl.pms.controller.commonMethods.CommonMethodController;
 import com.stpl.pms.controller.gl.GameLobbyController;
@@ -32,6 +33,7 @@ public class CRMEmployeeAttendanceReport extends BaseActionSupport
 	private String empId;
 	private String attendanceDate;
 	private Map<String,VisitBean> visitMapResult;
+	private Map<String,ExpenseBean> expenseMapResult;
 	
 	@Override
 	public String execute() throws Exception {
@@ -52,6 +54,12 @@ public class CRMEmployeeAttendanceReport extends BaseActionSupport
 		int empId = controller.getUserIdByName(employeeName);
 		int companyId = controller.getCompanyIdByName(companyName);
 		attendanceMapResult = controller.getAttendanceReport(empId,companyId,fromDate,toDate,employeeName,companyName);
+		return SUCCESS;
+	}
+	public String getExpenseReport() {
+		GameLobbyController controller = new GameLobbyController();
+		Integer empId = controller.getUserIdByName(employeeName);
+		expenseMapResult = controller.getExpenseReport(empId,fromDate,toDate);
 		return SUCCESS;
 	}
 	public HttpServletRequest getServletRequest() {
@@ -142,6 +150,14 @@ public class CRMEmployeeAttendanceReport extends BaseActionSupport
 
 	public void setVisitMapResult(Map<String,VisitBean> visitMapResult) {
 		this.visitMapResult = visitMapResult;
+	}
+
+	public Map<String,ExpenseBean> getExpenseMapResult() {
+		return expenseMapResult;
+	}
+
+	public void setExpenseMapResult(Map<String,ExpenseBean> expenseMapResult) {
+		this.expenseMapResult = expenseMapResult;
 	}
 
 }

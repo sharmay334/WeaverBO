@@ -1,19 +1,26 @@
 package com.stpl.pms.action.bo.um;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
-public class TMEmpReceiptMgmtAction  extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
+public class TMEmpReceiptMgmtAction extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
 	private HttpServletRequest servletRequest;
 	private HttpServletResponse servletResponse;
 	private List<String> accountList;
@@ -21,10 +28,7 @@ public class TMEmpReceiptMgmtAction  extends BaseActionSupport implements Servle
 	private List<String> employeeUnderList;
 	private int receiptNo;
 	private List<String> bankNameList;
-
-
 	// create payment fields
-
 	private String account;
 	private String employeeUnder;
 	private String currBalance;
@@ -33,15 +37,54 @@ public class TMEmpReceiptMgmtAction  extends BaseActionSupport implements Servle
 	private String bankName;
 	private String txnType;
 	private String narration;
+	private String totalAmt;
+	private File docPicture;
+	private String docPictureContentType;
+	private String docPictureFileName;
+
+	public void uploadDocument() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		boolean flag = false;
+		Date today = new Date();
+		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+		df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+		String date = df.format(today);
+		String filePath = ServletActionContext.getServletContext().getRealPath("/");
+		filePath = filePath.substring(0, filePath.lastIndexOf("default/"));
+		File file = new File(filePath + "receiptOrder/" + getUserInfoBean().getUserId());
+		if (file.mkdir()) {
+			docPictureFileName = receiptNo + "_" + date + "_" + docPictureFileName;
+			filePath = filePath.concat("receiptOrder/" + getUserInfoBean().getUserId());
+			File fileToCreate = new File(filePath, docPictureFileName);
+			FileUtils.copyFile(docPicture, fileToCreate);// copying source file to new file
+			flag = true;
+		} else {
+			docPictureFileName = receiptNo + "_" + date + "_" + docPictureFileName;
+			filePath = filePath.concat("receiptOrder/" + getUserInfoBean().getUserId());
+			File fileToCreate = new File(filePath, docPictureFileName);
+			FileUtils.copyFile(docPicture, fileToCreate);// copying source file to new file
+			flag = true;
+
+		}
+		if (flag == true) {
+			String fileFullPath = filePath + "/" + docPictureFileName;
+			controller.setDocumentPathReceipt(receiptNo, fileFullPath, getUserInfoBean().getUserId());
+
+			servletResponse.getWriter().write("success");
+
+		} else
+			servletResponse.getWriter().write("failed");
+
+		return;
+
+	}
 
 	public String loadReceiptPage() {
 		GameLobbyController controller = new GameLobbyController();
 		accountList = new ArrayList<String>();
 		particularsList = new ArrayList<String>();
 		accountList = controller.getaccountListForTxnPayment("accList", getUserInfoBean().getUserId());
-		accountList.add("Cash");
 		particularsList = controller.getaccountListForTxnPayment("particulars", getUserInfoBean().getUserId());
-		particularsList.add("Cash");
 		employeeUnderList = controller.getEmployeeNamesList();
 		receiptNo = controller.getReceiptNoEmp(userInfoBean.getUserId());
 		bankNameList = new ArrayList<String>();
@@ -51,9 +94,9 @@ public class TMEmpReceiptMgmtAction  extends BaseActionSupport implements Servle
 
 	public void createReceipt() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		
+
 		if (controller.createTransactionReceiptEmp(account, particulars, amount, bankName, txnType, narration,
-				userInfoBean.getUserId(), userInfoBean.getParentUserId()))
+				userInfoBean.getUserId(), userInfoBean.getParentUserId(), totalAmt))
 			servletResponse.getWriter().write("success");
 		else
 			servletResponse.getWriter().write("error");
@@ -178,4 +221,37 @@ public class TMEmpReceiptMgmtAction  extends BaseActionSupport implements Servle
 	public void setBankNameList(List<String> bankNameList) {
 		this.bankNameList = bankNameList;
 	}
+
+	public File getDocPicture() {
+		return docPicture;
+	}
+
+	public void setDocPicture(File docPicture) {
+		this.docPicture = docPicture;
+	}
+
+	public String getDocPictureContentType() {
+		return docPictureContentType;
+	}
+
+	public void setDocPictureContentType(String docPictureContentType) {
+		this.docPictureContentType = docPictureContentType;
+	}
+
+	public String getDocPictureFileName() {
+		return docPictureFileName;
+	}
+
+	public void setDocPictureFileName(String docPictureFileName) {
+		this.docPictureFileName = docPictureFileName;
+	}
+
+	public String getTotalAmt() {
+		return totalAmt;
+	}
+
+	public void setTotalAmt(String totalAmt) {
+		this.totalAmt = totalAmt;
+	}
+
 }

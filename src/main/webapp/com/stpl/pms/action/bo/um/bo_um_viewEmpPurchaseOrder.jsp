@@ -58,28 +58,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
   cursor: pointer;
 }
 
-.modal1 {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal1-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
 
 .form-popup {
 	display: none;
@@ -152,26 +130,17 @@ var limitPopup = false;
 var periodResult = false;
 var totalTax = ["0","0","0","0","0","0","0","0","0","0","0"];
 
-function checkGodownSelect(){
-	var rowCnt = countTotalRows();
-	var tcount = 0 ;
-	for(var i=1;i<=rowCnt;i++){
-		var godownValue = document.getElementById('goDown'+i).value;
-		if(godownValue!="-1"){
-			tcount++;
-		}
-	}
-	if(tcount!=rowCnt){
-		swal("Error! Please Select Godown for items first!");
-	}
-	else{
-		checkForOrderStatus();
-	}
-	
-}
 function checkForOrderStatus(){
 	var frm = $('#searchUserFrm');
-	
+	swal({
+		  title: "Are you sure?",
+		  text: "Once Saved, you will not be able to undo the entry!",
+		  icon: "warning",
+		  buttons: true,
+		  dangerMode: true,
+		})
+		.then((willDelete) => {
+		  if (willDelete) {
 			  $.ajax({
 			        type: 'POST',
 			        async: false,
@@ -197,21 +166,18 @@ function checkForOrderStatus(){
 			        },
 			    });
 			  
+		  } else {
+		    swal("Please Refresh The Page!");
+		   
+		  }
+		});
 }
 function promptSave(){
 	var frm = $('#searchUserFrm');
-	let photo = document.getElementById("docPictureDD").files[0];
-	let photo1 = document.getElementById("docPictureTB").files[0];
-	let formData = new FormData();
-	if(photo!=undefined)
-	formData.append("docPictureDD", photo);
-	if(photo1!=undefined)
-	formData.append("docPictureTB", photo1);
-	var myurl = "<%=basePath%>";
-	myurl += "/com/stpl/pms/action/bo/um/upload_sales_txn_document.action?salesNoVoucher="+document.getElementById('salesNoVoucher').value+"&activeVoucherNumber="+document.getElementById('activeVoucherNumber').value;
-	
 		if(limitPopup==false){
 			checkForLimitPeriod();
+			setTimeout(function(){
+ 			}, 2000);
 			if(periodResult==false){
 				swal({
 					  title: "Are you sure?",
@@ -225,31 +191,13 @@ function promptSave(){
 						  $.ajax({
 						        type: frm.attr('method'),
 						        url: frm.attr('action'),
-						        async:false,
 						        data: frm.serialize(),
 						        success: function (data) {
 						        	if(data=="success"){
 						        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
-						        		
-						        		$.ajax({
-									        type: 'POST',
-									        url: myurl,
-									        data: formData,
-									        cache : false,
-											contentType : false,
-											processData : false,
-									        success: function (data) {
-									        	
-									            
-									        },
-									        error: function (data) {
-									        	
-									        },
-									    });
 						        		setTimeout(function(){
 						        			   window.location.reload(1);
 						        			}, 1000);
-						        		
 						        	}
 						        	else{
 						        		swal("Some Error Occured!");
@@ -328,7 +276,6 @@ function checkForLimitPeriod(){
 	$.ajax({
 		type : "GET",
 		url : myurl,
-		async:false,
 		success : function(itr) {
 			if(itr=='skip')
 				periodResult = false;
@@ -375,15 +322,14 @@ $(document).ready(function() {
 		}
 	});
 	$("#paymentDate").datetimepicker({
-		dateFormat : 'dd-mm-yy',
+		dateFormat : 'yy-mm-dd',
 		showSecond : false,
 		showMinute : false,
 		showHour : false,
-		changeDate : true,
 		changeYear : true,
 		changeMonth : true,
-		startDate: '01-01-1980',
-		minDate : '01-01-1980',
+		startDate: '1980-01-01',
+		minDate : '1930-01-01',
 		onSelect : function(selectedDate) {
 			if (selectedDate != "") {
 				$("#paymentDate").datepicker("option", "minDate", selectedDate);
@@ -391,7 +337,7 @@ $(document).ready(function() {
 				var date = new Date().getDate();
 				$(function() {
 					$("#paymentDate").datepicker({
-						dateFormat : 'dd-mm-yy'
+						dateFormat : 'yy-mm-dd'
 					}).datepicker("setDate", date);
 				});
 			}
@@ -626,7 +572,6 @@ function showBatchesPopup(id){
 			var arr = itr.split(",");
 			var myoption;
 			for(var i=0;i<arr.length;i++){
-				if(!arr[i].includes("New Number"))
 				myoption+="<option>" +arr[i] + "</option>";
 			}
 			document.getElementById("batchList").innerHTML = myoption;
@@ -725,33 +670,6 @@ function getItemRateIfStandardCheck(id) {
 		
 		
 	}
-	function checkForBatchApplicable(id){
-		var res = id.match(/\d/g);
-		var myurl = "<%=basePath%>";
-		var itemName = document.getElementById('salesStockItems'+res).value;
-		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_batch_applicable.action?itemName="+itemName;
-	$.ajax({
-		type : "GET",
-		url : myurl,
-		async:false,
-		success : function(itr) {
-			if(itr=="Yes"){
-				document.getElementById('hiddenBatchApplicable'+res).value="Yes";
-				showBatchesPopup(id);
-				callForSweetAlertPopUp(id);
-			}
-			else{
-				
-				document.getElementById('hiddenBatchApplicable'+res).value="No";
-			}
-			
-		},
-
-		error : function(itr) {
-
-		}
-	});
-	}
 	function showGodownQty(id){
 		
 		var myurl = "<%=basePath%>";
@@ -767,8 +685,8 @@ function getItemRateIfStandardCheck(id) {
 			success : function(itr) {
 				
 				document.getElementById('godownQty' + res).value = itr;
-				checkForBatchApplicable(id);
-				
+				showBatchesPopup(id);
+				callForSweetAlertPopUp(id);
 			},
 
 			error : function(itr) {
@@ -927,30 +845,8 @@ function getUnitByItem(id) {
 						document.getElementById('creditLimit').value = 'Not Specified';
 					}
 				
-				getUnitByItem1(id,'val');
-				getTotalQty1(id,'val');
 				reflectCurrentBalance();
-				getSecurityAmt(id);
 			},
-			error : function(itr) {
-
-			}
-		});
-	}
-	function getSecurityAmt(id){
-		var myurl = "<%=basePath%>";
-		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_security_balance.action?partyAcc="
-				+ document.getElementById(id).value;
-		var res = id.match(/\d/g);
-		$.ajax({
-			type : "GET",
-			url : myurl,
-			success : function(itr) {
-				document.getElementById('secuityAmt').value = itr;
-				
-				
-			},
-
 			error : function(itr) {
 
 			}
@@ -983,15 +879,8 @@ function getUnitByItem(id) {
 
 		}
 		
-		var limitchk = Number(document.getElementById('currBalance').value);
-		if(creditLimit!='Not Specified' && Number(creditLimit)!=-1 && limitchk>creditLimit){
-			limitPopup = true;
-		}
-		else{
-			limitPopup = false;
-		}
 		
-		getTaxes1('id','val');
+		//getTaxes1('id','val');
 	}
 	function calAmount(id) {
 		var res = id.match(/\d/g);
@@ -1016,57 +905,12 @@ function getUnitByItem(id) {
 		}
 		
 	}
-	function validateFile(fileName, id) {
-		var file = fileName.value;
-		var ext = file.substring(file.length, file.length - 3);
-		if (file != "") {
-			if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "doc"
-					&& ext != "docx" && ext != "pdf") {
-				document.getElementById(id).value = "";
-				alert('only image,pdf or doc file is allowed!');
-			}
-		}
-
-	}
-	function callPictureReport(src){
-		var myurl = "<%=basePath%>";
-		myurl += "com/stpl/pms/action/bo/um/bo_um_emp_picture.action?docPath="
-				+ src;
-		$.ajax({
-			type : "GET",
-			url : myurl,
-			success : function(itr) {
-				
-				var list1 = document.getElementById("one");
-					if(typeof(list1.childNodes[0])!="undefined")
-					list1.removeChild(list1.childNodes[0]);
-						
-					
-				  var x = document.createElement("IMG");
-					  x.setAttribute("src", itr);
-					  x.setAttribute("width", "500");
-					  x.setAttribute("height", "600");
-					  x.setAttribute("alt", "Doc Img");
-					  document.getElementById('one').appendChild(x);
-				
-				
-				 
-				document.getElementById("myModal").style.display = "block";
-			},
-			error : function(itr) {
-
-			}
-		});
-	}
-	function closeMe(){
-		document.getElementById("myModal").style.display = "none";
-	}
 </script>
 </head>
 <body>
 	<div class="clear2"></div>
 	<h2>
-		Sales
+		View Employee Purchase Order
 		<s:if test="%{userInfoBean.getUserType().equalsIgnoreCase('BO')}"></s:if>
 	</h2>
 
@@ -1074,7 +918,7 @@ function getUnitByItem(id) {
 	<div class="FormSection">
 
 		<div class="greyStrip">
-			<h4>Sales</h4>
+			<h4>Purchase</h4>
 		</div>
 		<s:form action="/com/stpl/pms/action/bo/um/bo_um_Bosale_create.action"
 			id="searchUserFrm" theme="simple" method="POST" target="searchDiv">
@@ -1082,21 +926,6 @@ function getUnitByItem(id) {
 
 				<s:if test="%{userInfoBean.getUserType().equalsIgnoreCase('BO')}">
 
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> <b><font color='red'>Sales No.</font></b>
-							</label>
-						</div>
-						<div class="InputDiv">
-								<s:textfield id="salesNoVoucher" name="salesNoVoucher" value="%{salesNoVoucher}"
-								theme="myTheme" cssStyle="width:30%" />
-							<s:textfield id="salesNo" name="salesNo" value="%{salesNo}"
-								theme="myTheme" readonly="true" cssStyle="width:10%;display:none" />
-							<s:textfield id="activeVoucherNumber" name="activeVoucherNumber" value="%{activeVoucherNumber}"
-								theme="myTheme" readonly="true" cssStyle="width:10%;display:none" />	
-						</div>
-					</div>
 					
 					<div class="FormMainBox">
 
@@ -1112,30 +941,26 @@ function getUnitByItem(id) {
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
-							<label> <b><font color='red'>Reference No.:</font></b>
+							<label> <b><font color='red'>Order Status.</font></b>
 							</label>
 						</div>
 						<div class="InputDiv">
-							<s:textfield id="referenceNo" name="referenceNo" theme="myTheme"
-								cssStyle="width:10%" />
+							<s:textfield value="%{status}"
+								theme="myTheme" readonly="true" cssStyle="width:10%" />
 						</div>
 					</div>
-					
+					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
-							<label>Date</label><em class="Req">*</em>
+							<label>Date</label>
 						</div>
 						<div class="InputDiv">
-							<s:textfield id="paymentDate" name="paymentDate" value="%{paymentDate}" placeholder="Date" cssClass="dateField" theme="myTheme" readonly="true" applyscript="true" cssStyle="width:50%" />
-						<div id="paymentDate_error" class="fieldError">
-								<s:fielderror>
-									<s:param>paymentDate</s:param>
-								</s:fielderror>
-							</div>
+							<s:textfield value="%{paymentDate}"placeholder="Date" cssClass="dateField" theme="myTheme" readonly="true" cssStyle="width:50%" />
+						
 						</div>
 					</div>
-					
+					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -1143,24 +968,14 @@ function getUnitByItem(id) {
 						</div>
 						<div class="InputDiv">
 							<ss:textfield
-										maxlength="100" name="partyAcc" id="partyAcc" value="%{partyAccNameSO}"
+										maxlength="50" id="partyAcc" value="%{partyAccNamePO}"
 										theme="myTheme" readOnly="true"
-										cssStyle="width:90%"/>	
+										cssStyle="width:90%">
+									</ss:textfield>	
 						</div>
 					</div>
-					
-						<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Is Consignee </label>
-						</div>
-						<div class="InputDiv">
-							<s:select name="consignee" headerKey="none" value="%{consignee}" id="consignee"
-								headerValue="--Please Select--" list="{'No','Yes'}"
-								cssClass="select1" theme="myTheme" onchange="checkConsignee(this.value)"/>
-						</div>
-					</div>
-					
+						
+					<div class="clearFRM"></div>
 					<div id="consigneeDiv" style="display:none;">
 					
 					<table width="100%" cellspacing="0" align="center"
@@ -1179,27 +994,27 @@ function getUnitByItem(id) {
 					<tr>
 								
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="50" name="Dname" value="%{Dname}"
+										maxlength="50" value="%{Dname}"
 										theme="myTheme" readOnly="true"
 										cssStyle="width:90%">
 									</ss:textfield></td>
 									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="50" name="propName" value="%{propName}"
+										maxlength="50" value="%{propName}"
 										theme="myTheme" readOnly="true"
 										cssStyle="width:90%">
 									</ss:textfield></td>
 									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="contact" value="%{contact}"
+										maxlength="30" value="%{contact}"
 										theme="myTheme" readOnly="true"
 										cssStyle="width:80%">
 									</ss:textfield></td>
 									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="100" name="address" value="%{address}"
+										maxlength="100" value="%{address}"
 										theme="myTheme" readOnly="true"
 										cssStyle="width:100%">
 									</ss:textfield></td>
 									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="50" name="gstnNo" readOnly="true" value="%{gstnNo}"
+										maxlength="50" value="%{gstnNo}" readOnly="true"
 										theme="myTheme" readOnly="true"
 										cssStyle="width:90%">
 									</ss:textfield></td>
@@ -1215,154 +1030,32 @@ function getUnitByItem(id) {
 					</div>
 					
 					
-					<table width="100%" cellspacing="0" align="center"
-					class="transactionTable">
-						<thead>
-							<tr>
-								<th style="text-align: center;" nowrap="nowrap">Current Balance</th>
-								<th style="text-align: center;" nowrap="nowrap">Security Amount</th>
-								<th style="text-align: center;" nowrap="nowrap">Credit Limit</th>
-							</tr>
-						</thead>
-						<tbody>
-					
-					<tr>
-								
-								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="currBalance" id="currBalance" value="0"
-								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Current Balance </label>
+						</div>
+						<div class="InputDiv">
+							<s:textfield name="currBalance" id="currBalance" value="0"
+								theme="myTheme" readonly="true" cssStyle="width:20%" />
 								<span id="crdr"></span>
 								<s:hidden name="hcrdr" id="hcrdr"></s:hidden>
-								</td>
-								
-								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="secuityAmt" id="secuityAmt" value="0"
-								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
-								</td>
-								
-								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="creditLimit" id="creditLimit" value="0"
-								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
-								</td>
-					
-							</tr>
-					
-						</tbody>
-					</table>
-					<table width="100%" cellspacing="0" align="center"
-					class="transactionTable">
-						<thead>
-							<tr>
-								<th style="text-align: center;" nowrap="nowrap">Dispatch Doc No</th>
-								<th style="text-align: center;" nowrap="nowrap">Transport Name</th>
-								<th style="text-align: center;" nowrap="nowrap">Destination</th>
-							</tr>
-						</thead>
-						<tbody>
-					
-					<tr>
-								
-								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="ddn" id="ddn"
-								theme="myTheme" cssStyle="width:40%" />
-					<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPictureTB" name="docPictureTB" cssClass="textfield" theme="myTheme"></s:file>
-								
-								</td>
-								
-								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="tn" id="tn"
-								theme="myTheme" cssStyle="width:50%" />
-								</td>
-								
-								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="des" id="des" 
-								theme="myTheme" cssStyle="width:50%" />
-								</td>
-									
-							</tr>
-					
-						</tbody>
-					</table>
-					
-					
-					
-					
-					<table width="100%" cellspacing="0" align="center"
-					class="transactionTable">
-						<thead>
-							<tr>
-								<th style="text-align: center;" nowrap="nowrap">Bill-T No.</th>
-								<th style="text-align: center;" nowrap="nowrap">Vehical No.</th>
-								<th style="text-align: center;" nowrap="nowrap">Transport Freight</th>
-							</tr>
-						</thead>
-						<tbody>
-					
-					<tr>
-								
-								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="billt" id="billt" 
-								theme="myTheme"  cssStyle="width:40%" />
-			<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPictureDD" name="docPictureDD" cssClass="textfield" theme="myTheme"></s:file>
-								
-								</td>
-								
-								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="vn" id="vn"
-								theme="myTheme" cssStyle="width:50%" />
-								</td>
-								
-								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="transportFreight" id="transportFreight"
-								theme="myTheme" pattern="^[0-9.]*$" value="0" cssStyle="width:50%" />
-								</td>
-									
-							</tr>
-
-						</tbody>
-					</table>
+						</div>
+					</div>
+					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
-							<label> Assign Employee </label>
+							<label> Credit Limit </label>
 						</div>
 						<div class="InputDiv">
-							<s:select name="isEmployee" headerKey="-1" id="isEmployee"
-								headerValue="--Please Select--"
-								list="{'Applicable','Not Applicable'}"
-								onchange="showhideEmployee(this.value)" cssClass="select1"
-								theme="myTheme" />
-						</div>
-					</div>
-					<div id="showEmployeeDiv" style="display: none;">
-						
-
-						<div class="FormMainBox">
-
-							<div class="labelDiv">
-								<label> Employee Under </label>
-							</div>
-							<div class="InputDiv">
-								<s:select name="employeeUnder" headerKey="none"
-									id="employeeUnder" headerValue="--Please Select--"
-									list="employeeUnderList" cssClass="select1" theme="myTheme" />
-							</div>
+							<s:textfield name="creditLimit" id="creditLimit" value="0"
+								theme="myTheme" readonly="true" cssStyle="width:20%" />
 						</div>
 					</div>
 					
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label>Sales Ledger</label>
-						</div>
-						<div class="InputDiv">
-							<s:select name="salesAccount" headerKey="none" id="salesAccount"
-								headerValue="--Please Select--" list="salesAccountList"
-								cssClass="select1" theme="myTheme" />
-						</div>
-					</div>
 					<br />
-					
+					<div class="clearFRM"></div>
 
 					<table width="100%" cellspacing="0" align="center"
 						id="payTransactionTable" class="transactionTable">
@@ -1370,57 +1063,31 @@ function getUnitByItem(id) {
 							<tr>
 								<th style="text-align: center;" nowrap="nowrap">Name of
 									item</th>
-								<th style="text-align: center;" nowrap="nowrap">Total Qty.</th>
-								<th style="text-align: center;" nowrap="nowrap">GoDown</th>
-								<th style="text-align: center;" nowrap="nowrap">Available</th>
 								<th style="text-align: center;" nowrap="nowrap">Billed Qty.</th>
 								<th style="text-align: center;" nowrap="nowrap">Rate</th>
 								<th style="text-align: center;" nowrap="nowrap">unit</th>
 								<th style="text-align: center;" nowrap="nowrap">Amount</th>
-								<th style="text-align: center;" nowrap="nowrap">IGST</th>
-									<th style="text-align: center;" nowrap="nowrap">Tax Amount</th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
 							</tr>
 						</thead>
 						<tbody>
 					<s:iterator value="itemBeans" var="data">
 					<tr id="rowId<s:property value="#data.rowId"/>">
 								<td style="text-align: center;" nowrap="nowrap">
-										<ss:textfield
-										maxlength="30" name="salesStockItems" readOnly="true" value="%{#data.itemName}" id="%{'salesStockItems' + #data.rowId}"
-										theme="myTheme" readOnly="true"
-										cssStyle="width:120px">
-									</ss:textfield>
-										
-										</td>
-								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="totalQty" readOnly="true" value="0" id="%{'totalQty' + #data.rowId}"
-										theme="myTheme" readOnly="true"
+								<ss:textfield
+										maxlength="30" name="Qty" value="%{#data.itemName}" id="%{'salesStockItems' + #data.rowId}" theme="myTheme"
+										pattern="^[0-9.]*$" readonly="true" 
 										cssStyle="width:50%">
-									</ss:textfield></td>
-									<td style="text-align: center;" nowrap="nowrap"><s:select
-										headerKey="-1" headerValue="Please Select"
-										name="goDown" id="%{'goDown' + #data.rowId}" onchange="showGodownQty(this.id)"
-										list="goDownList" cssClass="select1" theme="myTheme"
-										cssStyle="width:100px;" /></td>
-									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="godownQty" readOnly="true" value="0" id="%{'godownQty' + #data.rowId}" theme="myTheme"
-										 cssStyle="width:50%">
-									</ss:textfield></td>
+									</ss:textfield>
+								</td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="Qty" value="%{#data.itemQty}" id="%{'Qty' + #data.rowId}" theme="myTheme"
-										pattern="^[0-9.]*$" readOnly="true"
-										onfocusout="calAmount(this.id)" cssStyle="width:50%">
+										pattern="^[0-9.]*$" readonly="true" 
+										cssStyle="width:50%">
 									</ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="rate" value="%{#data.itemRate}" id="%{'rate' + #data.rowId}"
-										theme="myTheme" pattern="^[0-9.]*$" readOnly="true"
-										onfocusout="calAmount(this.id)" cssStyle="width:50%">
+										theme="myTheme" pattern="^[0-9.]*$" readonly="true" 
+										cssStyle="width:50%">
 									</ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap">
 									<ss:textfield
@@ -1433,29 +1100,7 @@ function getUnitByItem(id) {
 										theme="myTheme" readOnly="true"
 										cssStyle="width:50%">
 									</ss:textfield></td>
-									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="igstItem" value="0" id="%{'igstItem' + #data.rowId}"
-										theme="myTheme" readOnly="true"
-										cssStyle="width:50%">
-									</ss:textfield></td>
-									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="igstItemAmt" value="0" id="%{'igstItemAmt' + #data.rowId}"
-										theme="myTheme" readOnly="true"
-										cssStyle="width:50%">
-									</ss:textfield></td>
-									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenBatchNumber" id="%{'hiddenBatchNumber' + #data.rowId}"></s:hidden>
-									</td>
-									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenMfgDate" id="%{'hiddenMfgDate' + #data.rowId}"></s:hidden></td>
-									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenExpDate" id="%{'hiddenExpDate' + #data.rowId}"></s:hidden></td>
-									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenExpAlert" id="%{'hiddenExpAlert' + #data.rowId}"></s:hidden></td>
-									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenExpAlertDate" id="%{'hiddenExpAlertDate' + #data.rowId}"></s:hidden></td>
-									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenBatchApplicable" id="%{'hiddenBatchApplicable' + #data.rowId}"></s:hidden></td>
+									
 							</tr>
 					</s:iterator>
 							
@@ -1464,42 +1109,8 @@ function getUnitByItem(id) {
 						</tbody>
 					</table>
 					
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> IGST (<span id="igstpercent"></span>)
-							</label>
-						</div>
-						<div class="InputDiv" align="right">
-							<s:textfield name="igst" cssClass="InpTextBoxBg" id="igst"
-								readOnly="true" theme="simple" style="width:30%;"></s:textfield>
-						</div>
-					</div>
 					
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> CGST (<span id="cgstpercent"></span>)
-							</label>
-						</div>
-						<div class="InputDiv" align="right">
-							<s:textfield name="cgst" cssClass="InpTextBoxBg" id="cgst"
-								readOnly="true" theme="simple" style="width:30%;"></s:textfield>
-						</div>
-					</div>
-					
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> SGST (<span id="sgstpercent"></span>)
-							</label>
-						</div>
-						<div class="InputDiv" align="right">
-							<s:textfield name="sgst" cssClass="InpTextBoxBg" id="sgst"
-								readOnly="true" theme="simple" style="width:30%;"></s:textfield>
-						</div>
-					</div>
-					
+					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -1511,7 +1122,7 @@ function getUnitByItem(id) {
 								readOnly="true" theme="simple" style="width:30%"></s:textfield>
 						</div>
 					</div>
-					
+					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -1525,14 +1136,13 @@ function getUnitByItem(id) {
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
-							<label> Order Document </label>
+							<label> Reject Reason </label>
 						</div>
 						<div class="InputDiv">
-	<a href="javascript:;" onclick="callPictureReport('<s:property value="docPictureFileName" />')">VIEW DOCUMENT</a>
-						
+							<s:textfield name="narration" value="no reason yet" cssClass="InpTextBoxBg"
+								id="narration" theme="simple" title="Enter Narration"></s:textfield>
 						</div>
 					</div>
-
 
 				</s:if>
 
@@ -1543,112 +1153,12 @@ function getUnitByItem(id) {
 					 --%>
 			<!-- 	<input type="submit" id="saleBtn" value='Create' align="left"
 					style="margin-left: 0px" class="button" /> -->
-				<button type="button" id="saleBtn" align="left" style="margin-left: 0px" class="button" onclick="checkGodownSelect()">Accept</button>
-				<button type="button" id="saleBtn" align="left" style="margin-left: 0px" class="button" onclick="promptReject()">Reject</button>
 				
 			</div>
 		</s:form>
 		
-		<div id="myForm" class="modal">
-
-  <!-- Modal content -->
-  			<div class="modal-content">
- 			   <button id="closeme" type="button" class="close" onclick="closeDialogue()">&times;</button>
- 			  <div id="bill_by_bill">
-						<div class="FormSectionMenu" id="bill_by_bill_div_acc">
-							<div class="greyStrip">
-								<h4>Godown</h4>
-							</div>
-							<table width="100%" cellspacing="0" align="center"
-						id="payTransactionTableBillWise" class="transactionTable">
-						<thead>
-							<tr>
-								<th style="text-align: center;" nowrap="nowrap">Batch No.</th>
-								<th style="text-align:center;display:none;" nowrap="nowrap" id="batchTh">Number</th>
-								<th style="text-align:center;display:none;" nowrap="nowrap" id="QtyTh">Qty</th>
-								<th style="text-align: center;" nowrap="nowrap">Mfg Dt.</th>
-								<th style="text-align: center;" nowrap="nowrap">Expiry
-											Dt.</th>
-								<th style="text-align: center;" nowrap="nowrap">Remind Expiry</th>
-								<th style="text-align: center;" nowrap="nowrap">Remind Date</th>
-								
-						
-							</tr>
-						</thead>
-						<tbody>
-
-							<tr>
-								<td style="text-align: center;" nowrap="nowrap">
-										
-										<select	name="batchList" id="batchList" onchange="showtdfornewNo()">
-										
-										</select>		
-												</td>
-										<td  id="batchTd" style="text-align: center;display:none;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="batchNewNo" value="0" id="batchNewNo"
-										theme="myTheme" cssStyle="width:50%">
-									</ss:textfield></td>
-									
-									<td id="QtyTd" style="text-align: center;display:none;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="BatchQty" value="0" id="BatchQty"
-										theme="myTheme" cssStyle="width:50%">
-									</ss:textfield></td>
-										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-												name="mfg" cssStyle="width:40%" placeholder="Date" cssClass="dateField"
-												id="mfg" readonly="true" theme="myTheme"></ss:textfield></td>
-										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-												name="exp" cssStyle="width:40%" placeholder="Date" cssClass="dateField"
-												id="exp" readonly="true" theme="myTheme"></ss:textfield></td>
-										<td style="text-align: center;" nowrap="nowrap"><s:select
-												name="expAlert" id="expAlert"
-												list="{'No','Yes'}" cssClass="select1" theme="myTheme"
-												cssStyle="width:120px;"/></td>
-										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-												name="reminderDate" cssStyle="width:40%" placeholder="Date" cssClass="dateField"
-												id="reminderDate" readonly="true" theme="myTheme"></ss:textfield></td>
-										
-							</tr>
-
-
-						</tbody>
-					</table>
-						</div>
-					</div>
- 			 </div>
-
-		</div>
 		
-		<div id="myModal" class="modal1">
-
-  <!-- Modal content -->
-  			<div class="modal-content1">
- 			   <button id="closeme" type="button" class="close" onclick="closeMe()">&times;</button>
- 			  <div id="bill_bybill">
-						<div class="FormSectionMenu">
-							<div class="greyStrip">
-								<h4>Document :<b></h4>
-							</div>
-							<table width="100%" cellspacing="0" align="center">
-						<thead>
-							<tr>
-								<th style="text-align: center;" nowrap="nowrap">Document </th>
-							</tr>
-						</thead>
-						<tbody>
-
-							<tr>
-								<td style="text-align: center;" nowrap="nowrap"><div id="one"></div></td>
-								
-							</tr>
-
-
-						</tbody>
-					</table>
-						</div>
-					</div>
- 			 </div>
-
-			</div>
+		
 		<%-- <div class="form-popup" id="myForm">
 						<div class="form-container">
 							<table width="100%" cellspacing="0" align="center"
@@ -1709,11 +1219,8 @@ function getUnitByItem(id) {
 	<br />
 	<br />
 	<script>
-if(document.getElementById('partyAcc').value!='none'){
 	getCurrentBalance('partyAcc');
-	checkConsignee(document.getElementById('consignee').value)
-}
-
+	getUnitByItem1("","");
 	
 </script>
 </body>

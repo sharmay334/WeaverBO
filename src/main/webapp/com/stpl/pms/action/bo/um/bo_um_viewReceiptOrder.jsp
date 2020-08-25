@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+x`<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="ss" uri="/extended-struts2-tags"%>
 <%@include file="/com/stpl/pms/action/bo/common/baseUrl.jsp"%>
@@ -168,14 +168,15 @@ if (event.target == modal) {
 
 $(document).ready(function() {
 	$("#paymentDate").datetimepicker({
-		dateFormat : 'yy-mm-dd',
+		dateFormat : 'dd-mm-yy',
 		showSecond : false,
 		showMinute : false,
 		showHour : false,
 		changeYear : true,
 		changeMonth : true,
-		startDate: '1980-01-01',
-		minDate : '1930-01-01',
+		changeDate : true,
+		startDate: '01-01-1980',
+		minDate : '01-01-1980',
 		onSelect : function(selectedDate) {
 			if (selectedDate != "") {
 				$("#paymentDate").datepicker("option", "minDate", selectedDate);
@@ -183,7 +184,7 @@ $(document).ready(function() {
 				var date = new Date().getDate();
 				$(function() {
 					$("#paymentDate").datepicker({
-						dateFormat : 'yy-mm-dd'
+						dateFormat : 'dd-mm-yy'
 					}).datepicker("setDate", date);
 				});
 			}
@@ -576,8 +577,12 @@ $(document).ready(function() {
 							</label>
 						</div>
 						<div class="InputDiv">
+							<s:textfield id="receiptNoVoucher" name="receiptNoVoucher" value="%{receiptNoVoucher}"
+								theme="myTheme" cssStyle="width:50%" />
 							<s:textfield id="receiptNo" name="receiptNo" value="%{receiptNo}"
-								theme="myTheme" readonly="true" cssStyle="width:10%" />
+								theme="myTheme" readonly="true" cssStyle="width:2%;display:none" />
+							<s:textfield id="activeVoucherNumber" name="activeVoucherNumber" value="%{activeVoucherNumber}"
+								theme="myTheme" readonly="true" cssStyle="width:2%;display:none" />	
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -588,7 +593,7 @@ $(document).ready(function() {
 							</label>
 						</div>
 						<div class="InputDiv">
-							<s:textfield id="orderNo" name="orderNo" value="%{orderNo}"
+							<s:textfield id="orderNo" name="orderNo" value="%{rcptId}"
 								theme="myTheme" readonly="true" cssStyle="width:10%" />
 						</div>
 					</div>
@@ -599,7 +604,7 @@ $(document).ready(function() {
 							<label>Date</label><em class="Req">*</em>
 						</div>
 						<div class="InputDiv">
-							<s:textfield id="paymentDate" name="paymentDate" placeholder="Date" cssClass="dateField" theme="myTheme" readonly="true" applyscript="true" cssStyle="width:50%" />
+							<s:textfield id="paymentDate" value="%{paymentDate}" name="paymentDate" placeholder="Date" cssClass="dateField" theme="myTheme" readonly="true" applyscript="true" cssStyle="width:50%" />
 						<div id="paymentDate_error" class="fieldError">
 								<s:fielderror>
 									<s:param>paymentDate</s:param>
@@ -663,36 +668,40 @@ $(document).ready(function() {
 							</tr>
 						</thead>
 						<tbody>
-
-							<tr id="rowId1">
+						<s:iterator value="receiptBeans" var="data">
+							<tr id="rowId<s:property value="#data.rowId"/>">
 								<td style="text-align: center;" nowrap="nowrap"><s:select
-										name="particulars" headerKey="none" id="particularsList1"
+										name="particulars" headerKey="none" id="%{'particularsList'+ #data.rowId}"
 										headerValue="End Of List" list="particularsList"
-										cssClass="select1" theme="myTheme" value="%{particulars}"
+										cssClass="select1" theme="myTheme" value="%{#data.particulars}"
 										onchange="callForMoreRow(this.id)" cssStyle="width:150px;" /></td>
+										
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="100" name="currentblnc" value="0" id="currentblnc1"
+										maxlength="100" name="currentblnc" value="0" id="%{'currentblnc'+ #data.rowId}"
 										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%" readOnly="true">
 									</ss:textfield><span id="ccrdr1"></span></td>
+									
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="amount" value="0" id="amount1"
-										theme="myTheme" value="%{amount}" pattern="^[0-9]*$" cssStyle="width:50%"
+										maxlength="30" name="amount" value="0" id="%{'amount'+ #data.rowId}"
+										theme="myTheme" value="%{#data.amount}" pattern="^[0-9]*$" cssStyle="width:50%"
 										onchange="revertCurrBalance(this.id)">
 									</ss:textfield></td>
+									
 								<td style="text-align: center;" nowrap="nowrap"><s:select
-										name="txnType" headerKey="none" id="txnType1"
-										headerValue="Please select" value="%{txnType}"
+										name="txnType" headerKey="none" id="%{'txnType'+ #data.rowId}"
+										headerValue="Please select" value="%{#data.txnType}"
 										list="{'Cash','Cheque/DD','e-Fund Transfer','Others'}"
 										cssClass="select1" theme="myTheme" cssStyle="width:150px;" /></td>
+										
 								<td style="text-align: center;" nowrap="nowrap"><s:select
-										name="bankName" headerKey="none" id="bankName1"
-										headerValue="Select Bank" list="accountList" value="%{bankName}"
+										name="bankName" headerKey="none" id="%{'bankName'+ #data.rowId}"
+										headerValue="Select Bank" list="accountList" value="%{#data.bank_name}"
 										cssClass="select1" theme="myTheme" cssStyle="width:150px;" /></td>
 										
 								
 							</tr>
 
-
+						</s:iterator>
 						</tbody>
 					</table>
 					<div class="clearFRM"></div>

@@ -1,13 +1,20 @@
 package com.stpl.pms.action.bo.um;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.joda.time.LocalDateTime;
@@ -46,8 +53,8 @@ public class TMEmpPurchaseMgmtAction extends BaseActionSupport implements Servle
 	private String totalQty;
 	private String unit;
 	private String availableQtyInGodown;
-	//batch number variable hower effect
-	
+	// batch number variable hower effect
+
 	private String hiddenBatchNumber;
 	private String hiddenMfgDate;
 	private String hiddenExpDate;
@@ -57,9 +64,17 @@ public class TMEmpPurchaseMgmtAction extends BaseActionSupport implements Servle
 	private String totalAmt;
 	private String hcrdr;
 	private String partyName;
-	
-	
-	
+
+	private File docPicture;
+	private String docPictureContentType;
+	private String docPictureFileName;
+	private String consignee;
+	private String Dname;
+	private String propName;
+	private String contact;
+	private String address;
+	private String gstnNo;
+
 	public String loadPurchasePage() {
 		GameLobbyController controller = new GameLobbyController();
 		particularsList = new ArrayList<String>();
@@ -79,14 +94,50 @@ public class TMEmpPurchaseMgmtAction extends BaseActionSupport implements Servle
 	public void createPurchase() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		if (controller.createEmpTransactionPurchase(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
-				amount, Qty, rate, narration,userInfoBean.getUserId(),userInfoBean.getParentUserId(),totalAmt)) {
+				amount, Qty, rate, narration, userInfoBean.getUserId(), userInfoBean.getParentUserId(), totalAmt,consignee, Dname, propName, contact, address, gstnNo)) {
 			servletResponse.getWriter().write("success");
 
-		}
-		else {
+		} else {
 			servletResponse.getWriter().write("error");
 		}
 		return;
+	}
+
+	public void uploadDocument() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		boolean flag = false;
+		Date today = new Date();
+		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+		df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+		String date = df.format(today);
+		String filePath = ServletActionContext.getServletContext().getRealPath("/");
+		filePath = filePath.substring(0, filePath.lastIndexOf("default/"));
+		File file = new File(filePath + "purchaseOrder/" + getUserInfoBean().getUserId());
+		if (file.mkdir()) {
+			docPictureFileName = purchaseNo + "_" + date + "_" + docPictureFileName;
+			filePath = filePath.concat("purchaseOrder/" + getUserInfoBean().getUserId());
+			File fileToCreate = new File(filePath, docPictureFileName);
+			FileUtils.copyFile(docPicture, fileToCreate);// copying source file to new file
+			flag = true;
+		} else {
+			docPictureFileName = purchaseNo + "_" + date + "_" + docPictureFileName;
+			filePath = filePath.concat("purchaseOrder/" + getUserInfoBean().getUserId());
+			File fileToCreate = new File(filePath, docPictureFileName);
+			FileUtils.copyFile(docPicture, fileToCreate);// copying source file to new file
+			flag = true;
+
+		}
+		if (flag == true) {
+			String fileFullPath = filePath + "/" + docPictureFileName;
+			controller.setDocumentPathPurchase(purchaseNo, fileFullPath, getUserInfoBean().getUserId());
+
+			servletResponse.getWriter().write("success");
+
+		} else
+			servletResponse.getWriter().write("failed");
+
+		return;
+
 	}
 
 	public HttpServletRequest getServletRequest() {
@@ -328,29 +379,109 @@ public class TMEmpPurchaseMgmtAction extends BaseActionSupport implements Servle
 	public void setBatchLists(List<String> batchLists) {
 		this.batchLists = batchLists;
 	}
+
 	public String getPaymentDate() {
 		return paymentDate;
 	}
+
 	public void setPaymentDate(String paymentDate) {
 		this.paymentDate = paymentDate;
 	}
+
 	public String getTotalAmt() {
 		return totalAmt;
 	}
+
 	public void setTotalAmt(String totalAmt) {
 		this.totalAmt = totalAmt;
 	}
+
 	public String getHcrdr() {
 		return hcrdr;
 	}
+
 	public void setHcrdr(String hcrdr) {
 		this.hcrdr = hcrdr;
 	}
+
 	public String getPartyName() {
 		return partyName;
 	}
+
 	public void setPartyName(String partyName) {
 		this.partyName = partyName;
+	}
+
+	public File getDocPicture() {
+		return docPicture;
+	}
+
+	public void setDocPicture(File docPicture) {
+		this.docPicture = docPicture;
+	}
+
+	public String getDocPictureContentType() {
+		return docPictureContentType;
+	}
+
+	public void setDocPictureContentType(String docPictureContentType) {
+		this.docPictureContentType = docPictureContentType;
+	}
+
+	public String getDocPictureFileName() {
+		return docPictureFileName;
+	}
+
+	public void setDocPictureFileName(String docPictureFileName) {
+		this.docPictureFileName = docPictureFileName;
+	}
+
+	public String getConsignee() {
+		return consignee;
+	}
+
+	public void setConsignee(String consignee) {
+		this.consignee = consignee;
+	}
+
+	public String getDname() {
+		return Dname;
+	}
+
+	public void setDname(String dname) {
+		Dname = dname;
+	}
+
+	public String getPropName() {
+		return propName;
+	}
+
+	public void setPropName(String propName) {
+		this.propName = propName;
+	}
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getGstnNo() {
+		return gstnNo;
+	}
+
+	public void setGstnNo(String gstnNo) {
+		this.gstnNo = gstnNo;
 	}
 
 }

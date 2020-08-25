@@ -656,13 +656,26 @@
 
 									</div>
 								</div>
+								<div class="FormMainBox"> 
+
+									<div class="labelDiv">
+										<label>Security</label>
+									</div>
+									<div class="InputDiv">
+										<s:select name="security"
+													list="{'No','Yes'}"
+													cssClass="select1" theme="myTheme"></s:select>
+										
+
+									</div>
+								</div>
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
 										<label>Security Amount </label>
 									</div>
 									<div class="InputDiv">
-										<ss:textfield maxlength="20" name="intersetCalculationSecurityAmt"
+										<ss:textfield maxlength="20" value="0" name="intersetCalculationSecurityAmt"
 											id="intersetCalculationSecurityAmt" theme="myTheme" cssStyle="width:50%"></ss:textfield>
 										
 
@@ -944,7 +957,7 @@
 						<thead>
 							<tr>
 								<th style="text-align: center;" nowrap="nowrap">Date</th>
-								<th style="text-align: center;" nowrap="nowrap">Opening Balance</th>
+								<th style="text-align: center;" nowrap="nowrap">Current Balance</th>
 								<th style="text-align: center;" nowrap="nowrap">CR/DR</th>
 							</tr>
 						</thead>

@@ -50,6 +50,14 @@
 		<script type="text/javascript" src="<%=path%>/js/commonfunctions.js?v=<%=version%>"></script>
 		<script type="text/javascript" src="<%=path%>/js/datatable/jquery.dataTables.js?v=<%=version%>"></script>
 		
+<!--<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"> </script>-->
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"> </script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"> </script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"> </script>
+		
 		<script type="text/javascript">		
 			var projectName="<%=path%>";
 			var serverDateStr = '<s:property value="%{@com.stpl.pms.utility.Utility@getServerDate(0,0,0,\"dd/MM/yy HH:mm:ss\")}" />';
@@ -117,6 +125,27 @@
 				
 			}
 			
+			function showSalesOrderEmp(so_id){
+				
+				var myurl = "<%=path%>";
+				var myurlRedirect = "<%=path%>";
+				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_sale_order_emp.action?SOId="+so_id;
+				window.location.href = myurlRedirect;
+			}
+			function showPurchaseOrderEmp(po_id){
+				
+				var myurl = "<%=path%>";
+				var myurlRedirect = "<%=path%>";
+				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_purchase_order_emp.action?POId="+po_id;
+				window.location.href = myurlRedirect;
+			}
+			function showReceiptOrderEmp(ro_id){
+				
+				var myurl = "<%=path%>";
+				var myurlRedirect = "<%=path%>";
+				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_receipt_order_emp.action?rcptId="+ro_id;
+				window.location.href = myurlRedirect;
+			}
 			function goToCN(cn_id){
 				
 				var myurl = "<%=path%>";
@@ -310,22 +339,22 @@
 				 setInterval(fetchdataAlert,60000);
 				});
 				$(document).ready(function(){
-					 setInterval(fetchdataAlertPO,60000);
+					 setInterval(fetchdataAlertPO,300000);
 					});
 				$(document).ready(function(){
-					 setInterval(fetchdataAlertSO,60000);
+					 setInterval(fetchdataAlertSO,360000);
 					});
 				$(document).ready(function(){
-					 setInterval(fetchdataAlertCN,60000);
+					 setInterval(fetchdataAlertCN,370000);
 					});
 				$(document).ready(function(){
-					 setInterval(fetchdataAlertDN,60000);
+					 setInterval(fetchdataAlertDN,380000);
 					});
 				$(document).ready(function(){
-					 setInterval(fetchdataAlertPMT,60000);
+					 setInterval(fetchdataAlertPMT,390000);
 					});
 				$(document).ready(function(){
-					 setInterval(fetchdataAlertRCPT,60000);
+					 setInterval(fetchdataAlertRCPT,400000);
 					});
 				fetchdataAlert();
 				fetchdataAlertPO();

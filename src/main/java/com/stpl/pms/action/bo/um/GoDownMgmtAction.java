@@ -27,8 +27,6 @@ public class GoDownMgmtAction extends BaseActionSupport implements ServletReques
 	public String execute() throws Exception {
 		// TODO Auto-generated method stub
 		goDownUnderList = new ArrayList<String>();
-		goDownUnderList.add("Primary");
-		goDownUnderList.add("Main Location");
 		GameLobbyController controller = new GameLobbyController();
 		goDownUnderList.addAll(controller.getAllGoDownList());
 		return SUCCESS;

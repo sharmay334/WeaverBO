@@ -59,14 +59,31 @@
 			<interceptor-ref name="actions"></interceptor-ref>
 			<result name="success">/com/stpl/pms/action/bo/um/bo_um_attendance_success.jsp
 			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/bo_um_attendance_success.jsp
+			</result>
+		</action>
+		<action name="bo_um_createLedgerstepLast"
+			class="com.stpl.pms.action.bo.um.LedgerMgmtAction"
+			method="completeSecondStep">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_attendance_success.jsp
+			</result>
 			<result name="error">/com/stpl/pms/action/bo/um/bo_um_attendance_error.jsp
 			</result>
 		</action>
+
 		<action name="bo_um_emp_picture_report"
 			class="com.stpl.pms.action.bo.um.CRMEmployeeAttendance"
 			method="getPictureReport">
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
+		<action name="bo_um_emp_picture"
+			class="com.stpl.pms.action.bo.um.CRMEmployeeAttendance"
+			method="getPicture">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
 		<action name="bo_um_generate_attendanceReport"
 			class="com.stpl.pms.action.bo.um.CRMEmployeeAttendanceReport">
 			<interceptor-ref name="customStack"></interceptor-ref>
@@ -83,8 +100,8 @@
 				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchReportAttendanceResult.jsp
 			</result>
 		</action>
-		
-			<action name="st_pms_bo_rep_searchReportAttendanceVisit"
+
+		<action name="st_pms_bo_rep_searchReportAttendanceVisit"
 			class="com.stpl.pms.action.bo.um.CRMEmployeeAttendanceReport"
 			method="getAttendanceReportVisit">
 			<interceptor-ref name="customStack"></interceptor-ref>
@@ -174,6 +191,23 @@
 			<interceptor-ref name="actions"></interceptor-ref>
 			<result name="success">
 				/com/stpl/pms/action/bo/um/bo_um_addBoSubUser_SuccessEmployee.jsp
+			</result>
+		</action>
+		<action name="bo_um_employeeOtherExpenses"
+			class="com.stpl.pms.action.bo.um.HRMgmtAction"
+			method="loadEmpExpensPage">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_employee_expenses.jsp
+			</result>
+		</action>
+		<action name="bo_um_createExpenses"
+			class="com.stpl.pms.action.bo.um.HRMgmtAction" method="uploadExpense">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_createCompany_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/bo_um_createCompany_error.jsp
 			</result>
 		</action>
 
@@ -600,7 +634,7 @@
 			method="changeStatusVoucher">
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
-		
+
 		<!-- Accounting management actions only -->
 		<action name="bo_um_createGroup"
 			class="com.stpl.pms.action.bo.um.AccountMgmtAction"
@@ -1279,6 +1313,14 @@
 			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewReceiptOrder.jsp
 			</result>
 		</action>
+		<action name="bo_um_tm_receipt_order_emp"
+			class="com.stpl.pms.action.bo.um.TMReceiptMgmtAction"
+			method="loadEmpReceiptOrder">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewEmpReceiptOrder.jsp
+			</result>
+		</action>
 		<action name="bo_um_Boreceipt_create"
 			class="com.stpl.pms.action.bo.um.TMReceiptMgmtAction"
 			method="createReceipt">
@@ -1371,6 +1413,14 @@
 			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewSalesOrder.jsp
 			</result>
 		</action>
+		<action name="bo_um_tm_sale_order_emp"
+			class="com.stpl.pms.action.bo.um.TMSalesMgmtAction"
+			method="loadEmpSaleOrder">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewEmpSalesOrder.jsp
+			</result>
+		</action>
 		<action name="bo_um_Bosale_create"
 			class="com.stpl.pms.action.bo.um.TMSalesMgmtAction"
 			method="createSales">
@@ -1432,6 +1482,14 @@
 			<interceptor-ref name="customStack"></interceptor-ref>
 			<interceptor-ref name="actions"></interceptor-ref>
 			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewPurchaseOrder.jsp
+			</result>
+		</action>
+		<action name="bo_um_tm_purchase_order_emp"
+			class="com.stpl.pms.action.bo.um.TMPurchaseMgmtAction"
+			method="loadEmpPurchaseOrder">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewEmpPurchaseOrder.jsp
 			</result>
 		</action>
 		<action name="bo_um_Bopurchase_create"
@@ -1572,8 +1630,48 @@
 			method="getAlternateUnits">
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
+		<action name="bo_um_tm_get_security_balance"
+			class="com.stpl.pms.action.bo.um.TMSalesMgmtAction"
+			method="getSecurity">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
 
 		<!-- end of transaction management -->
+
+		<action name="bo_um_sch_alrt_report"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="loadPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewSchedularRepPage.jsp
+			</result>
+		</action>
+		<action name="bo_um_deductInterest"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="loadPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_viewDuductInterestRepPage.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_adjustInterestshow"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="showReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/nodecorate/bo_um_viewDuductInterestRepPageResult.jsp
+			</result>
+		</action>
+
+		<action name="st_pms_bo_rep_Schedularshow"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="showReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_SchedularRepResult.jsp
+			</result>
+		</action>
+
 
 		<!-- employee registration -->
 		<action name="bo_um_addEmployee"
@@ -1588,6 +1686,28 @@
 			method="getCurrentBalance">
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
+		<action name="bo_um_bill_alert_set_status"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="changeAlertDueBills">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_um_ledger_interest_status"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="checkForInterestSchedular">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_um_ledger_interest_change_status"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="ChangeInterestSchedular">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
+		<action name="bo_um_ledger_alert_status"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="changeStatusAlert">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
 		<action name="bo_um_tm_get_credit_limit"
 			class="com.stpl.pms.action.bo.um.TMPurchaseMgmtAction"
 			method="getCreditLimit">
@@ -1638,10 +1758,35 @@
 			method="getIsBatchApplicable">
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
-
+		<action name="bo_um_tm_get_interest_amt"
+			class="com.stpl.pms.action.bo.um.TMPurchaseMgmtAction"
+			method="getInterestAmount">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
 		<action name="bo_um_tm_get_availableBatches"
 			class="com.stpl.pms.action.bo.um.TMPurchaseMgmtAction"
 			method="getAvailableBatches">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
+		<action name="upload_sales_order_document"
+			class="com.stpl.pms.action.bo.um.TMEmpSalesMgmtAction"
+			method="uploadDocument">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="upload_receipt_order_document"
+			class="com.stpl.pms.action.bo.um.TMEmpReceiptMgmtAction"
+			method="uploadDocument">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="upload_sales_txn_document"
+			class="com.stpl.pms.action.bo.um.TMSalesMgmtAction"
+			method="uploadDocument">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="upload_purchase_order_document"
+			class="com.stpl.pms.action.bo.um.TMEmpPurchaseMgmtAction"
+			method="uploadDocument">
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
 		<action name="bo_um_tm_get_username"
@@ -1679,6 +1824,28 @@
 			method="getPartyBills">
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
+		<action name="bo_um_bill_deduct_interest"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="deductInterest">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
+		<action name="bo_um_bill_delete"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="deleteWholeBill">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_um_bill_detail_delete"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="deleteSingleBill">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_um_run_overDueBillSchedular"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="runOverDueBill">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
 		<!-- HR attendance actions -->
 
 		<action name="bo_um_attendance"
@@ -1740,6 +1907,68 @@
 		</action>
 		<!-- End of HR -->
 
+		<action name="bo_um_billOverDueReminder"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="loadPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadBillOverDueReminder.jsp
+			</result>
+		</action>
+		<action name="st_pms_bo_rep_BillReminderReportshow"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="showReportOverDueBill">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_overDueBillRepResult.jsp
+			</result>
+		</action>
+		<action name="bo_um_partyTxnReport"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="loadPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadPartyTxnReportPage.jsp
+			</result>
+		</action>
+		<action name="bo_um_partyTxnReportResult"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="getPartyTxnReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/nodecorate/bo_um_loadPartyTxnReportPageResult.jsp
+			</result>
+		</action>
 
+		<action name="st_pms_bo_rep_txn_details"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="getPartyTxnReportDetail">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/bo_um_loadPartyTxnReportPageResultDetails.jsp
+			</result>
+		</action>
+		
+		
+		<action name="bo_um_getExpenseReport"
+			class="com.stpl.pms.action.bo.um.CRMEmployeeAttendanceReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadExpenseReportPage.jsp
+			</result>
+		</action>
+		
+		<action name="st_pms_bo_rep_searchReportExpense"
+			class="com.stpl.pms.action.bo.um.CRMEmployeeAttendanceReport"
+			method="getExpenseReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/nodecorate/bo_um_loadExpenseReportPageResult.jsp
+			</result>
+		</action>
 	</package>
 </struts>

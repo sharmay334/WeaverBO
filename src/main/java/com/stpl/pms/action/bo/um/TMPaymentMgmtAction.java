@@ -48,15 +48,15 @@ public final class TMPaymentMgmtAction extends BaseActionSupport implements Serv
 	private String activeVoucherNumber;
 	private String paymentNoVoucher;
 	private VoucherBean voucherBean;
-
+	private String isSale;
 	private String pmtId;
 
 	public String loadPaymentPage() {
 		GameLobbyController controller = new GameLobbyController();
 		accountList = new ArrayList<String>();
 		particularsList = new ArrayList<String>();
-		accountList = controller.getaccountListForTxnPayment("accList", getUserInfoBean().getUserId());
-		particularsList = controller.getaccountListForTxnPayment("payment", getUserInfoBean().getUserId());
+		accountList = controller.getaccountListForTxnPayment("accList", 1);
+		particularsList = controller.getaccountListForTxnPayment("payment", 1);
 		employeeUnderList = controller.getEmployeeNamesList();
 		paymentNo = controller.getPaymentNo();
 		String checkIsVoucherActive = controller.getActiveVoucher("payment");
@@ -149,7 +149,8 @@ public final class TMPaymentMgmtAction extends BaseActionSupport implements Serv
 			
 			voucherBean = controller.getVoucherNumbering("payment", activeVoucherNumber);
 			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(),paymentDate+" 00:00");
-			if(voucherDate==true) {
+			boolean voucherDate1 = compareTwoDate(paymentDate+" 00:00",voucherBean.getStartDate());
+			if(voucherDate==true || voucherDate1==true) {
 				servletResponse.getWriter().write("date");
 			}
 			else {
@@ -178,7 +179,7 @@ public final class TMPaymentMgmtAction extends BaseActionSupport implements Serv
 
 	public void getNewBillNo() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		String newBillNo = controller.getNewBillNo(partyAcc, typeOfRef);
+		String newBillNo = controller.getNewBillNo(partyAcc, typeOfRef,isSale);
 		servletResponse.getWriter().write("" + newBillNo);
 
 		return;
@@ -430,6 +431,14 @@ public final class TMPaymentMgmtAction extends BaseActionSupport implements Serv
 
 	public void setVoucherBean(VoucherBean voucherBean) {
 		this.voucherBean = voucherBean;
+	}
+
+	public String getIsSale() {
+		return isSale;
+	}
+
+	public void setIsSale(String isSale) {
+		this.isSale = isSale;
 	}
 
 }

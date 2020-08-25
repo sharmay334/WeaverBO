@@ -130,6 +130,7 @@ var limitPopup = false;
 var periodResult = false;
 var totalTax = ["0","0","0","0","0","0","0"];
 
+
 function checkForOrderStatus(){
 	var frm = $('#searchUserFrm');
 	swal({
@@ -174,10 +175,20 @@ function checkForOrderStatus(){
 }
 function promptSave(){
 	var frm = $('#searchUserFrm');
+	let photo = document.getElementById("docPictureDD").files[0];
+	let photo1 = document.getElementById("docPictureTB").files[0];
+	let formData = new FormData();
+	if(photo!=undefined)
+		formData.append("docPictureDD", photo);
+		if(photo1!=undefined)
+		formData.append("docPictureTB", photo1);
+		
+	var myurl = "<%=basePath%>";
+	myurl += "/com/stpl/pms/action/bo/um/upload_sales_txn_document.action?salesNoVoucher="+document.getElementById('salesNoVoucher').value+"&activeVoucherNumber="+document.getElementById('activeVoucherNumber').value;
+	
 		if(limitPopup==false){
 			checkForLimitPeriod();
-			setTimeout(function(){
- 			}, 2000);
+			
 			if(periodResult==false){
 				swal({
 					  title: "Are you sure?",
@@ -196,13 +207,29 @@ function promptSave(){
 						        success: function (data) {
 						        	if(data=="success"){
 						        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
+						        		$.ajax({
+									        type: 'POST',
+									        url: myurl,
+									        data: formData,
+									        cache : false,
+											contentType : false,
+											processData : false,
+									        success: function (data) {
+									        	
+									            
+									        },
+									        error: function (data) {
+									        	
+									        },
+									    });
+						        	
 						        		setTimeout(function(){
 						        			   window.location.reload(1);
 						        			}, 1000);
 						        		
 						        	}
 						        	else if(data=="date"){
-						        		swal("Error! Sale date is greater than voucher end date.");
+						        		swal("Error! Sale date is greater or less than voucher end date.");
 						        		setTimeout(function(){
 						        			   window.location.reload(1);
 						        			}, 1000);
@@ -281,6 +308,26 @@ function promptReject(){
 			
     
     
+}
+
+function getSecurityAmt(id){
+	var myurl = "<%=basePath%>";
+	myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_security_balance.action?partyAcc="
+			+ document.getElementById(id).value;
+	var res = id.match(/\d/g);
+	$.ajax({
+		type : "GET",
+		url : myurl,
+		success : function(itr) {
+			document.getElementById('secuityAmt').value = itr;
+			
+			
+		},
+
+		error : function(itr) {
+
+		}
+	});
 }
 function checkForLimitPeriod(){
 	var partyAccName = document.getElementById('partyAcc').value;
@@ -717,7 +764,6 @@ function getItemRateIfStandardCheck(id) {
 		var myurl = "<%=basePath%>";
 		var itemName = document.getElementById('salesStockItems'+res).value;
 		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_batch_applicable.action?itemName="+itemName;
-	var res = id.match(/\d/g);
 	$.ajax({
 		type : "GET",
 		url : myurl,
@@ -956,7 +1002,7 @@ function getUnitByItem(id) {
 					else{
 						document.getElementById('creditLimit').value = 'Not Specified';
 					}
-				
+				getSecurityAmt(id);
 				/* getUnitByItem1(id,'val');
 				
 				getTotalQty1(id,'val');
@@ -1027,6 +1073,18 @@ function getUnitByItem(id) {
 		}
 		
 	}
+	function validateFile(fileName, id) {
+		var file = fileName.value;
+		var ext = file.substring(file.length, file.length - 3);
+		if (file != "") {
+			if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "doc"
+					&& ext != "docx" && ext != "pdf") {
+				document.getElementById(id).value = "";
+				alert('only image,pdf or doc file is allowed!');
+			}
+		}
+
+	}
 </script>
 </head>
 <body>
@@ -1064,7 +1122,7 @@ function getUnitByItem(id) {
 						</div>
 					</div>
 					<div class="clearFRM"></div>
-					<div class="FormMainBox">
+					<div class="FormMainBox" style="display:none">
 
 						<div class="labelDiv">
 							<label> <b><font color='red'>Order No.</font></b>
@@ -1219,95 +1277,118 @@ function getUnitByItem(id) {
 						</div>
 					</div>
 					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Current Balance </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="currBalance" id="currBalance" value="0"
-								theme="myTheme" readonly="true" cssStyle="width:20%" />
+					
+					<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Current Balance</th>
+								<th style="text-align: center;" nowrap="nowrap">Security Amount</th>
+								<th style="text-align: center;" nowrap="nowrap">Credit Limit</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="currBalance" id="currBalance" value="0"
+								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
 								<span id="crdr"></span>
 								<s:hidden name="hcrdr" id="hcrdr"></s:hidden>
-						</div>
-					</div>
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="secuityAmt" id="secuityAmt" value="0"
+								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="creditLimit" id="creditLimit" value="0"
+								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
+								</td>
+					
+							</tr>
+					
+						</tbody>
+					</table>
+					
 					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Credit Limit </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="creditLimit" id="creditLimit" value="0"
-								theme="myTheme" readonly="true" cssStyle="width:20%" />
-						</div>
-					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Dispatch Doc No. </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="ddn" id="ddn"
+					
+					<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Dispatch Doc No</th>
+								<th style="text-align: center;" nowrap="nowrap">Transport Name</th>
+								<th style="text-align: center;" nowrap="nowrap">Destination</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="ddn" id="ddn"
+								theme="myTheme" cssStyle="width:40%" />
+					<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPictureTB" name="docPictureTB" cssClass="textfield" theme="myTheme"></s:file>
+								
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="tn" id="tn"
 								theme="myTheme" cssStyle="width:50%" />
-						</div>
-					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Transport Name </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="tn" id="tn"
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="des" id="des" 
 								theme="myTheme" cssStyle="width:50%" />
-						</div>
-					</div>
+								</td>
+									
+							</tr>
+					
+						</tbody>
+					</table>
+					
+					
 					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Destination </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="des" id="des" 
+					
+					<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Bill-T No.</th>
+								<th style="text-align: center;" nowrap="nowrap">Vehical No.</th>
+								<th style="text-align: center;" nowrap="nowrap">Transport Freight</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="billt" id="billt" 
+								theme="myTheme"  cssStyle="width:40%" />
+			<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPictureDD" name="docPictureDD" cssClass="textfield" theme="myTheme"></s:file>
+								
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="vn" id="vn"
 								theme="myTheme" cssStyle="width:50%" />
-						</div>
-					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Bill-T No.</label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="billt" id="billt" 
-								theme="myTheme"  cssStyle="width:50%" />
-						</div>
-					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Vehical No. </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="vn" id="vn"
-								theme="myTheme" cssStyle="width:50%" />
-						</div>
-					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Transport freight </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="transportFreight" id="transportFreight"
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="transportFreight" id="transportFreight"
 								theme="myTheme" value="0" cssStyle="width:50%" />
-						</div>
-					</div>
+								</td>
+									
+							</tr>
+
+						</tbody>
+					</table>
+					
+					
 					<br />
 					<div class="clearFRM"></div>
 
@@ -1544,12 +1625,14 @@ function getUnitByItem(id) {
 										
 										</select>		
 												</td>
-										<td  id="batchTd" style="text-align: center;display:none;" nowrap="nowrap"><ss:textfield
+										<td  id="batchTd" style="text-align: center;display:none;" nowrap="nowrap">
+										<ss:textfield
 										maxlength="30" name="batchNewNo" value="0" id="batchNewNo"
 										theme="myTheme" cssStyle="width:50%">
 									</ss:textfield></td>
 									
-									<td id="QtyTd" style="text-align: center;display:none;" nowrap="nowrap"><ss:textfield
+									<td id="QtyTd" style="text-align:center;display:none;" nowrap="nowrap">
+									<ss:textfield
 										maxlength="30" name="BatchQty" value="0" id="BatchQty"
 										theme="myTheme" cssStyle="width:50%">
 									</ss:textfield></td>

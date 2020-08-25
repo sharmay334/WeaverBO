@@ -455,6 +455,25 @@ function closeDialogue(){
 			$("#showEmployeeDiv").css("display", "block");
 		}
 	}
+	function validateFile(fileName, id) {
+		var file = fileName.value;
+		var ext = file.substring(file.length, file.length - 3);
+		if (file != "") {
+			if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "doc"
+					&& ext != "docx" && ext != "pdf") {
+				document.getElementById(id).value = "";
+				alert('only image,pdf or doc file is allowed!');
+			}
+		}
+
+	}
+	function checkConsignee(val){
+		$("#consigneeDiv").css("display", "none");
+		if(val=="Yes"){
+			$("#consigneeDiv").css("display", "block");
+		}
+		
+	}
 </script>
 </head>
 <body>
@@ -523,7 +542,113 @@ function closeDialogue(){
 								list="partyAccName" onchange="getCurrentBalance(this.id)" cssClass="select1" theme="myTheme" />
 						</div>
 					</div>
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Current Balance </label>
+						</div>
+						<div class="InputDiv">
+							<s:textfield name="currBalance" id="currBalance" value="0"
+								theme="myTheme" readonly="true" cssStyle="width:20%" />
+								<span id="crdr"></span>
+						</div>
+					</div> 
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Is Consignee </label>
+						</div>
+						<div class="InputDiv">
+							<s:select name="consignee" headerKey="none" id="consignee"
+								headerValue="--Please Select--" list="{'No','Yes'}"
+								cssClass="select1" theme="myTheme" onchange="checkConsignee(this.value)"/>
+						</div>
+					</div>
+					<div id="consigneeDiv" style="display:none;">
+					
+					<table width="100%" cellspacing="0" align="center"
+						id="payTransactionTable1" class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Dealer Name</th>
+								<th style="text-align: center;" nowrap="nowrap">Prop Name</th>
+								<th style="text-align: center;" nowrap="nowrap">Contact</th>
+								<th style="text-align: center;" nowrap="nowrap">Address</th>
+								<th style="text-align: center;" nowrap="nowrap">GSTN No</th>	
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="50" name="Dname"
+										theme="myTheme" 
+										cssStyle="width:90%">
+									</ss:textfield></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="50" name="propName"
+										theme="myTheme" 
+										cssStyle="width:90%">
+									</ss:textfield></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="contact"
+										theme="myTheme"
+										cssStyle="width:80%">
+									</ss:textfield></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="100" name="address"
+										theme="myTheme"
+										cssStyle="width:100%">
+									</ss:textfield></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="50" name="gstnNo" 
+										theme="myTheme"
+										cssStyle="width:90%">
+									</ss:textfield></td>
+									
+
+							</tr>
+					
+							
+
+
+						</tbody>
+					</table>
+					</div>
 					<div class="clearFRM"></div>
+				<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Transport Name</th>
+								<th style="text-align: center;" nowrap="nowrap">Transport Bill-T</th>
+								<th style="text-align: center;" nowrap="nowrap">Dispatch Doc</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="tn" id="tn"
+								theme="myTheme" cssStyle="width:50%" />
+								</td>
+								<td style="text-align: center;" nowrap="nowrap">
+					
+					<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPictureTB" name="docPictureTB" cssClass="textfield" theme="myTheme"></s:file>
+
+								</td>
+								<td style="text-align: center;" nowrap="nowrap">
+					
+					<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPictureDD" name="docPictureDD" cssClass="textfield" theme="myTheme"></s:file>
+
+								</td>
+								
+									
+							</tr>
+						</tbody>
+					</table>
 
 					<%-- <div class="FormMainBox">
 
@@ -562,17 +687,7 @@ function closeDialogue(){
 								list="salesAccountList" cssClass="select1" theme="myTheme" />
 						</div>
 					</div> --%>
-					 <div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Current Balance </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="currBalance" id="currBalance" value="0"
-								theme="myTheme" readonly="true" cssStyle="width:20%" />
-								<span id="crdr"></span>
-						</div>
-					</div> 
+					 
 					<%-- <div class="clearFRM"></div>
 					<div class="FormMainBox">
 

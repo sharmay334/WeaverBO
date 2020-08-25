@@ -20,6 +20,7 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.javabeans.VisitFormBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
+import com.stpl.pms.utility.SendSMS;
 
 public class CRMEmployeeAttendance extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
 
@@ -43,7 +44,9 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 	private String attendaceDate;
 	private String resultType;
 	private VisitFormBean visitFormBean;
-
+	private String docPath;
+	
+	
 	public HttpServletRequest getServletRequest() {
 		return servletRequest;
 	}
@@ -123,15 +126,35 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 		}
 		String filePathStructureOdometer = finalPath + "/" + odoMeterPictureFileName;
 		String filePathStructureSelfie = finalPath + "/" + selfiePictureFileName;
-
+		if(workType.equalsIgnoreCase("Office_setting"))
+			filePathStructureOdometer = filePathStructureSelfie;
 		GameLobbyController controller = new GameLobbyController();
 		if (controller.markAttendance(employeeUserName, attendanceType, workType, workArea, travellingMode,
 				filePathStructureOdometer, filePathStructureSelfie, odometer_reading, leave_reason, travellingModeVia,
 				visitFormBean)) {
-			if (attendanceType.equals("PI"))
+			if (attendanceType.equals("PI")) {
 				resultType = "Your Present Marked Successfully!!!";
-			else if (attendanceType.equals("PO"))
+				String mobile = "91"+controller.getMobileNoByEmpId(getUserInfoBean().getUserId());
+				String sms = "Dear "+getUserInfoBean().getUserName()+". Your Present on "+IST+" "+AMPM+" has been marked successfully!! Have a Nice Day. Regards JAMIDARA SEEDS CORPORATION (Karnataka)" ;
+				SendSMS sendSMS = new SendSMS();
+				sendSMS.setMobileNo(mobile);
+				sendSMS.setMsg(sms);
+				Thread thread = new Thread(sendSMS);
+				thread.setDaemon(true);
+				thread.start();	
+				
+				}
+			else if (attendanceType.equals("PO")) {
 				resultType = "HAHA!!! Your Day Over Marked Successfully!!!";
+				String mobile = "91"+controller.getMobileNoByEmpId(getUserInfoBean().getUserId());
+				String sms = "Dear "+getUserInfoBean().getUserName()+". Your day over on "+IST+" "+AMPM+" has been marked successfully!! Have a Nice Day. Regards JAMIDARA SEEDS CORPORATION (Karnataka)" ;
+				SendSMS sendSMS = new SendSMS();
+				sendSMS.setMobileNo(mobile);
+				sendSMS.setMsg(sms);
+				Thread thread = new Thread(sendSMS);
+				thread.setDaemon(true);
+				thread.start();	
+			}
 			else if (attendanceType.equals("L"))
 				resultType = "Your Leave Marked Successfully!!!";
 			else if (attendanceType.equals("W"))
@@ -148,7 +171,21 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 		return;
 		
 	}
+	public void getPicture() throws IOException {
+		String filePath = ServletActionContext.getServletContext().getRealPath("/");
+		String finalUrl = "";
+			String temp = "";
+			temp = "/WeaverBO" +docPath;
+			finalUrl =  temp;
+				Path src = Paths.get(docPath);
+				Path dest = Paths.get(filePath);
+				File file = new File(dest.toFile(), docPath);
+				FileUtils.copyFile(src.toFile(), file);
 
+		
+		servletResponse.getWriter().write("" + finalUrl);
+		return;
+	}
 	public void getPictureReport() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		String response = controller.getEmployeePictureReport(employeeUserName, attendaceDate);
@@ -305,6 +342,14 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 
 	public void setVisitFormBean(VisitFormBean visitFormBean) {
 		this.visitFormBean = visitFormBean;
+	}
+
+	public String getDocPath() {
+		return docPath;
+	}
+
+	public void setDocPath(String docPath) {
+		this.docPath = docPath;
 	}
 
 }

@@ -1,12 +1,19 @@
 package com.stpl.pms.action.bo.um;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
@@ -45,6 +52,15 @@ public class TMEmpSalesMgmtAction extends BaseActionSupport implements ServletRe
 	private String hiddenExpDate;
 	private String hiddenExpAlert;
 	private String hiddenExpAlertDate;
+	private File docPicture;
+	private String docPictureContentType;
+	private String docPictureFileName;
+	private String consignee;
+	private String Dname;
+	private String propName;
+	private String contact;
+	private String address;
+	private String gstnNo;
 
 	public void getUnits() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
@@ -52,6 +68,46 @@ public class TMEmpSalesMgmtAction extends BaseActionSupport implements ServletRe
 		servletResponse.getWriter().write("" + unit);
 		return;
 	}
+
+	public void uploadDocument() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		boolean flag = false;
+		Date today = new Date();
+		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+		df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+		String date = df.format(today);
+		String filePath = ServletActionContext.getServletContext().getRealPath("/");
+		filePath = filePath.substring(0, filePath.lastIndexOf("default/"));
+		File file = new File(filePath + "salesOrder/" + getUserInfoBean().getUserId());
+		if (file.mkdir()) {
+			docPictureFileName = salesNo + "_" + date + "_" + docPictureFileName;
+			filePath = filePath.concat("salesOrder/" + getUserInfoBean().getUserId());
+			File fileToCreate = new File(filePath, docPictureFileName);
+			FileUtils.copyFile(docPicture, fileToCreate);// copying source file to new file
+			flag = true;
+		} else {
+			docPictureFileName = salesNo + "_" + date + "_" + docPictureFileName;
+			filePath = filePath.concat("salesOrder/" + getUserInfoBean().getUserId());
+			File fileToCreate = new File(filePath, docPictureFileName);
+			FileUtils.copyFile(docPicture, fileToCreate);// copying source file to new file
+			flag = true;
+
+		}
+		if (flag == true) {
+			String fileFullPath = filePath+"/"+docPictureFileName;
+			controller.setDocumentPath(salesNo,fileFullPath,getUserInfoBean().getUserId());
+			
+			servletResponse.getWriter().write("success");
+		
+		}
+		else
+			servletResponse.getWriter().write("failed");
+
+		return;
+
+	}
+	
+	
 
 	public String loadSalesPage() {
 		GameLobbyController controller = new GameLobbyController();
@@ -72,7 +128,8 @@ public class TMEmpSalesMgmtAction extends BaseActionSupport implements ServletRe
 	public void createSales() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		if (controller.createTransactionSalesEmp(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
-				amount, Qty, rate, narration, userInfoBean.getUserId(), userInfoBean.getParentUserId(),totalAmt)) {
+				amount, Qty, rate, narration, userInfoBean.getUserId(), userInfoBean.getParentUserId(), totalAmt,
+				consignee, Dname, propName, contact, address, gstnNo)) {
 			servletResponse.getWriter().write("success");
 		} else
 			servletResponse.getWriter().write("error");
@@ -300,6 +357,78 @@ public class TMEmpSalesMgmtAction extends BaseActionSupport implements ServletRe
 
 	public void setTotalAmt(String totalAmt) {
 		this.totalAmt = totalAmt;
+	}
+
+	public File getDocPicture() {
+		return docPicture;
+	}
+
+	public void setDocPicture(File docPicture) {
+		this.docPicture = docPicture;
+	}
+
+	public String getDocPictureContentType() {
+		return docPictureContentType;
+	}
+
+	public void setDocPictureContentType(String docPictureContentType) {
+		this.docPictureContentType = docPictureContentType;
+	}
+
+	public String getDocPictureFileName() {
+		return docPictureFileName;
+	}
+
+	public void setDocPictureFileName(String docPictureFileName) {
+		this.docPictureFileName = docPictureFileName;
+	}
+
+	public String getConsignee() {
+		return consignee;
+	}
+
+	public void setConsignee(String consignee) {
+		this.consignee = consignee;
+	}
+
+	public String getDname() {
+		return Dname;
+	}
+
+	public void setDname(String dname) {
+		Dname = dname;
+	}
+
+	public String getPropName() {
+		return propName;
+	}
+
+	public void setPropName(String propName) {
+		this.propName = propName;
+	}
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getGstnNo() {
+		return gstnNo;
+	}
+
+	public void setGstnNo(String gstnNo) {
+		this.gstnNo = gstnNo;
 	}
 
 }

@@ -10,7 +10,7 @@
 <html>
 <head>
 
-<title>Payment</title>
+<title>Receipt</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
@@ -48,7 +48,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 .close {
   color: #aaaaaa;
   float: right;
-  font-size: 15px;
+  font-size: 28px;
   font-weight: bold;
 }
 
@@ -66,9 +66,51 @@ body {font-family: Arial, Helvetica, sans-serif;}
 <link rel="stylesheet" href="/WeaverBO/js/jQuery/1.11.3/jquery-ui.css">
 
 <script>
+
+var modal = document.getElementById("myModal");
+var currentId = 0;
+var activerow=0;
+var BillWiseActiveRow=0;
+//Get the button that opens the modal
+
+//Get the <span> element that closes the modal
+
+//When the user clicks the button, open the modal 
+
+
+//When the user clicks on <span> (x), close the modal
+function validateFile(fileName, id) {
+	var file = fileName.value;
+	var ext = file.substring(file.length, file.length - 3);
+	if (file != "") {
+		if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "doc"
+				&& ext != "docx" && ext != "pdf") {
+			document.getElementById(id).value = "";
+			alert('only image,pdf or doc file is allowed!');
+		}
+	}
+
+}
+function checkDocUpload(){
+	
+	var doc = document.getElementById('docPicture').value;
+	if(doc!=""){
+		promptSave();
+	}
+	else{
+		
+		swal("Please upload document first!");
+	}
+	
+}
 function promptSave(){
 	var frm = $('#searchUserFrm');
-
+	let photo = document.getElementById("docPicture").files[0];
+	let formData = new FormData();
+	formData.append("docPicture", photo);
+	var myurl = "<%=basePath%>";
+	myurl += "/com/stpl/pms/action/bo/um/upload_receipt_order_document.action?receiptNo="+document.getElementById('receiptNo').value;
+	
 		swal({
 		  title: "Are you sure?",
 		  text: "Once Saved, you will not be able to undo the entry!",
@@ -85,23 +127,29 @@ function promptSave(){
 			        success: function (data) {
 			        	if(data=="success"){
 			        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
-			        		setTimeout(function(){
-			        			   window.location.reload(1);
-			        			}, 1000);
-			        	}
-			        	else if(data=="date"){
-			        		swal("Error! Payment date is greater than voucher end date.");
+			        		$.ajax({
+						        type: 'POST',
+						        url: myurl,
+						        data: formData,
+						        cache : false,
+								contentType : false,
+								processData : false,
+						        success: function (data) {
+						        	
+						            
+						        },
+						        error: function (data) {
+						        	
+						        },
+						    });
+			        		
 			        		setTimeout(function(){
 			        			   window.location.reload(1);
 			        			}, 1000);
 			        	}
 			        	else{
-			        		swal("Error! Entry is not correct!");
-			        		setTimeout(function(){
-			        			   window.location.reload(1);
-			        			}, 1000);
+			        		swal("Some Error Occured!");
 			        	}
-			        	
 			            
 			        },
 			        error: function (data) {
@@ -116,22 +164,6 @@ function promptSave(){
     
     
 }
-
-
-
-var modal = document.getElementById("myModal");
-var currentId = 0;
-var activerow=0;
-var BillWiseActiveRow=0;
-var old_cr_dr="";
-//Get the button that opens the modal
-
-//Get the <span> element that closes the modal
-
-//When the user clicks the button, open the modal 
-
-
-//When the user clicks on <span> (x), close the modal
 function closeMe(){
 	
 	var rowCountBillWise = countTotalRowsBillWise();
@@ -177,29 +209,28 @@ if (event.target == modal) {
 var CurrentBalance = 0;
 
 $(document).ready(function() {
-	$("#paymentDate").datetimepicker(
-			{
-				dateFormat : 'dd-mm-yy',
-				showSecond : false,
-				showMinute : false,
-				showHour : false,
-				changeYear : true,
-				changeMonth : true,
-				minDate : '01-01-1930',
-				onSelect : function(selectedDate) {
-					if (selectedDate != "") {
-						$("#paymentDate").datepicker("option",
-								"minDate", selectedDate);
-					} else {
-						var date = new Date().getDate();
-						$(function() {
-							$("#paymentDate").datepicker({
-								dateFormat : 'dd-mm-yy'
-							}).datepicker("setDate", date);
-						});
-					}
-				}
-			});
+	$("#paymentDate").datetimepicker({
+		dateFormat : 'dd-mm-yy',
+		showSecond : false,
+		showMinute : false,
+		showHour : false,
+		changeYear : true,
+		changeMonth : true,
+		startDate: '01-01-1980',
+		minDate : '01-01-1980',
+		onSelect : function(selectedDate) {
+			if (selectedDate != "") {
+				$("#paymentDate").datepicker("option", "minDate", selectedDate);
+			} else {
+				var date = new Date().getDate();
+				$(function() {
+					$("#paymentDate").datepicker({
+						dateFormat : 'dd-mm-yy'
+					}).datepicker("setDate", date);
+				});
+			}
+		}
+	});
 	});
 	function callForMoreBillRow(id){
 		var res = id.match(/\d/g);
@@ -214,20 +245,20 @@ $(document).ready(function() {
 		if(type=="On Account"){
 			callToGetAdvance(id,'On Account');
 		}
-		if(type=="New Ref"){
-			callToGetAdvance(id,'New Ref');
-		}
+		
 	}
 		
 	function callToGetAgstRef(id,tor){
 		var myurl = "<%=basePath%>";
 		var res = id.match(/\d/g);
-		var particular = document.getElementById('particularsList'+activerow).value;
+		var rowCount = countTotalRows();
+		var idd = Number(rowCount)-1;
+		var particular = document.getElementById('particularsList'+idd).value;
 		var rowCountBillWise = countTotalRowsBillWise();
 
-		var amt = document.getElementById('amount'+activerow).value;
+		var amt = document.getElementById('amount'+idd).value;
 		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_bill_agst_ref_id.action?partyAcc="
-				+ particular+"&typeOfRef="+tor+"&suffix=";
+				+ particular+"&typeOfRef="+tor+"&suffix=_sale";
 		
 		$.ajax({
 			type : "GET",
@@ -235,25 +266,8 @@ $(document).ready(function() {
 			success : function(itr) {
 				var arr = itr.split(",");
 				var optionArr = arr[0].split(";");
-				var optionArrSub = optionArr[0].split(" ");
-				var datearr = optionArrSub[1].split("-");
-				var conversionDate = datearr[2]+"-"+datearr[1]+"-"+datearr[0];
-				var d = new Date(conversionDate);
-				d.setDate(d.getDate() + Number(arr[1]));
-				limit_days = Number(arr[1]);
-				var dd = d.getDate();
-			    var mm = d.getMonth()+1;
-			    var y = d.getFullYear();
-			    var _dt = dd+"-"+mm+"-"+y+" ( "+arr[1]+" days)" ;
-			    document.getElementById('dueDate'+res).value = _dt;
-			    
-			    if(Number(optionArrSub[2])>Number(amt) || Number(optionArrSub[2])==Number(amt))
-					document.getElementById('billAmt'+res).value = Number(amt);
-					else
-						document.getElementById('billAmt'+res).value = optionArrSub[2];
-
-			    
-			    
+				document.getElementById('dueDate'+res).value = arr[1];
+				document.getElementById('billAmt'+res).value = amt;
 				if(rowCountBillWise>1){
 					var finalAmt = 0;
 				for(var i=1;i<rowCountBillWise;i++){
@@ -270,17 +284,16 @@ $(document).ready(function() {
 				document.getElementById("pendingBills"+res).style.display = "block";
 				var tearr = document.getElementById("pendingBills"+res).value;
 				var tarr = tearr.split(" ");
-				document.getElementById("hiddenBilId"+res).value =tarr[0];
+				document.getElementById("hiddenBilId"+activerow).value =tarr[0];
 				if(tarr[3]=='Dr'){
-					document.getElementById("ModelDrCr"+res).value  = 'Cr'
+					document.getElementById("ModelDrCr"+activerow).value  = 'Cr'
 				}
 				if(tarr[3]=='Cr'){
-					document.getElementById("ModelDrCr"+res).value  = 'Dr'
+					document.getElementById("ModelDrCr"+activerow).value  = 'Dr'
 				}
-				if(document.getElementById("ModelDrCr"+res).value=='Cr'){
+				if(document.getElementById("ModelDrCr"+activerow).value=='Cr'){
 					callForBillWiseRow(id);
 				}
-				getInterestAmount(res,particular,tarr[0]);
 			},
 
 			error : function(itr) {
@@ -329,11 +342,39 @@ $(document).ready(function() {
 		
 	}
 	function callForMoreRow(id) {
-		var res = id.match(/\d/g);
 		showCurrentParticularsBalance(id);
 		var rowCount = countTotalRows();
-		activerow = res;
+		if (document.getElementById('particularsList' + rowCount).value != "none") {
+			var row = document.getElementById("rowId" + rowCount); // find row to copy
+			var table = document.getElementById("payTransactionTable"); // find table to append to
+			var clone = row.cloneNode(true); // copy children too
+			rowCount += 1;
+			clone.id = "rowId" + rowCount; // change id or other attributes/contents
+			table.appendChild(clone); // add new row to end of table
+			var oInput = document.getElementById("rowId" + rowCount);
+			var e = oInput.childNodes[5].childNodes[1];
+			var f = oInput.childNodes[1].childNodes[1];
+			var g = oInput.childNodes[7].childNodes[1];
+			var h = oInput.childNodes[9].childNodes[1];
+			var i = oInput.childNodes[3].childNodes[1];
+			var j = oInput.childNodes[3].childNodes[3];
+			e.id = "amount" + rowCount;
+			f.id = "particularsList" + rowCount;
+			g.id = "txnType" + rowCount;
+			h.id = "bankName" + rowCount;
+			i.id = "currentblnc"+rowCount;
+			j.id = "ccrdr"+rowCount;
+				
+		}
 		
+		if (document.getElementById(id).value == "-1") {
+			var res = id.substring(15, str.length);
+			var amt = document.getElementById('currBalance').value;
+			amt = Number(amt)
+					- Number(document.getElementById('amount' + res).value);
+			if (!isNaN(amt))
+				document.getElementById('currBalance').value = amt;
+		}
 
 	}
 	
@@ -352,31 +393,25 @@ $(document).ready(function() {
 		var d = oInput.childNodes[5].childNodes[1];
 		var e = oInput.childNodes[7].childNodes[1];
 		var f = oInput.childNodes[9].childNodes[1];
-		var k = oInput.childNodes[11].childNodes[1];
-		var l = oInput.childNodes[13].childNodes[1];
-		var m = oInput.childNodes[15].childNodes[1];
-		var n = oInput.childNodes[17].childNodes[1];
-		var o = oInput.childNodes[19].childNodes[1];
-		var p = oInput.childNodes[21].childNodes[1];
-		var q = oInput.childNodes[23].childNodes[1];
-		var r = oInput.childNodes[25].childNodes[1];
-		var s = oInput.childNodes[27].childNodes[1];
-		
+		var k = oInput.childNodes[10].childNodes[1];
+		var l = oInput.childNodes[12].childNodes[1];
+		var m = oInput.childNodes[14].childNodes[1];
+		var n = oInput.childNodes[16].childNodes[1];
+		var o = oInput.childNodes[18].childNodes[1];
+		var p = oInput.childNodes[20].childNodes[1];
+
 		a.id = "typeofRef"+rowCount;
 		b.id = "pendingBillt"+rowCount;
 		c.id = "pendingBills"+rowCount;
 		d.id = "dueDate"+rowCount;
 		e.id = "billAmt"+rowCount;
-		f.id = "taxAmount"+rowCount;
-		k.id = "ModelDrCr"+rowCount;
-		l.id = "hiddenTypeOfRef"+rowCount;
-		m.id = "hiddenBillWiseName"+rowCount;
-		n.id = "hiddenDueDate"+rowCount;
-		o.id = "hiddenAmnt"+rowCount;
-		p.id = "hiddencrdr"+rowCount;
-		q.id = "hiddenBilId"+rowCount;
-		r.id = "deleteRow"+rowCount;
-		s.id = "addRow"+rowCount;
+		f.id = "ModelDrCr"+rowCount;
+		k.id = "hiddenTypeOfRef"+rowCount;
+		l.id = "hiddenBillWiseName"+rowCount;
+		m.id = "hiddenDueDate"+rowCount;
+		n.id = "hiddenAmnt"+rowCount;
+		o.id = "hiddencrdr"+rowCount;
+		p.id = "hiddenBilId"+rowCount;
 
 		document.getElementById('typeofRef'+rowCount).value = 'On Account';
 		callToGetAdvance('typeofRef'+rowCount,'On Account');
@@ -395,24 +430,30 @@ $(document).ready(function() {
 		return rowCount;
 	}
 	function showCurrentParticularsBalance(id){
+		var rowCount = countTotalRows();
+		var myurl1 = "<%=basePath%>";
+		for(var i=1;i<=rowCount;i++){
+			myurl = myurl1+"/com/stpl/pms/action/bo/um/bo_um_tm_get_current_balance.action?partyAcc="
+			+ document.getElementById('particularsList'+i).value;
+	$.ajax({
+		type : "GET",
+		url : myurl,
+		async:false,
+		success : function(itr) {
+			var arr = itr.split(",");
+			document.getElementById('currentblnc'+i).value = arr[0];
+			document.getElementById('ccrdr'+i).innerHTML = arr[1];
+		},
+
+		error : function(itr) {
+
+		}
+	});
+			
+			
+			
+		}
 		
-		var myurl = "<%=basePath%>";
-		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_current_balance.action?partyAcc="
-				+ document.getElementById(id).value;
-		var res = id.match(/\d/g);
-		$.ajax({
-			type : "GET",
-			url : myurl,
-			success : function(itr) {
-				var arr = itr.split(",");
-				document.getElementById('currentblnc'+res).value = arr[0];
-				document.getElementById('ccrdr'+res).innerHTML = arr[1];
-			},
-
-			error : function(itr) {
-
-			}
-		});
 	}
 	function checkForBillByBill(particulars){
 		var res = particulars.match(/\d/g);
@@ -431,6 +472,7 @@ $(document).ready(function() {
 					var blnc = Number(document.getElementById('currentblnc'+res).value);
 					blnc = blnc - Number(document.getElementById('amount'+res).value);
 					document.getElementById('currentblnc'+res).value = blnc;
+					
 				}
 				else{
 					 document.getElementById("myModal").style.display = "none";
@@ -469,34 +511,17 @@ $(document).ready(function() {
 		var chk = id.substring(6, id.length);
 		if (document.getElementById('particularsList' + chk).value != "none") {
 			var rc = countTotalRows();
-			var amt = 0;
+			document.getElementById('currBalance').value = '0';
+			var amt = document.getElementById('currBalance').value;
 			for (var i = 1; i <= rc; i++) {
 				if (document.getElementById('amount' + i).value != "0") {
 					amt = Number(amt)
 							+ Number(document.getElementById('amount' + i).value);
 					if (!isNaN(amt))
-						if(old_cr_dr=='Cr'){
-							document.getElementById('currBalance').value = Number(CurrentBalance)+amt;
-							document.getElementById('hcrdr').value = 'Cr';
-							document.getElementById('crdr').innerHTML = 'Cr';
-						}
-						
-						else{
-							var tempAmt = Number(CurrentBalance)-amt;
-							if(tempAmt<0){
-								tempAmt = tempAmt * (-1);
-								document.getElementById('currBalance').value = 	tempAmt;
-								document.getElementById('hcrdr').value = 'Cr';
-								document.getElementById('crdr').innerHTML = 'Cr';
-							}
-							else{
-								document.getElementById('currBalance').value = 	tempAmt;
-								document.getElementById('hcrdr').value = 'Dr';
-								document.getElementById('crdr').innerHTML = 'Dr';
-							}
-							
-						}
-						
+						if(document.getElementById('hcrdr').value=='Cr')
+						document.getElementById('currBalance').value = Number(CurrentBalance)-amt;
+						else
+						document.getElementById('currBalance').value = Number(CurrentBalance)+amt;	
 				}
 			}
 
@@ -519,7 +544,6 @@ $(document).ready(function() {
 				document.getElementById('crdr').innerHTML = arr[1];
 				document.getElementById('hcrdr').value = arr[1];
 				CurrentBalance = arr[0];
-				old_cr_dr =  arr[1];
 			},
 
 			error : function(itr) {
@@ -528,26 +552,14 @@ $(document).ready(function() {
 		});
 	}
 	function callHiddenBillId(id){
-		var res = id.match(/\d/g);
 		var val = document.getElementById(id).value;
 		var arr= val.split(" ");
-		var datearr = arr[1].split("-");
-		var conversionDate = datearr[2]+"-"+datearr[1]+"-"+datearr[0];
-		var d = new Date(conversionDate);
-		d.setDate(d.getDate() + Number(limit_days));
-
-		 var dd = d.getDate();
-		    var mm = d.getMonth()+1;
-		    var y = d.getFullYear();
-		 var _dt = dd+"-"+mm+"-"+y+" ( "+limit_days+" days)" ;
-		 document.getElementById('dueDate'+res).value = _dt;
-		document.getElementById('hiddenBilId'+res).value = arr[0];
-		document.getElementById('ModelDrCr'+res).value = arr[3];
-		getInterestAmount(res,document.getElementById('particularsList'+activerow).value,arr[0]);
+		document.getElementById('hiddenBilId'+activerow).value = arr[0];
+		document.getElementById('ModelDrCr'+activerow).value = arr[3];
 		if(arr[3]=='Cr')
-			document.getElementById('ModelDrCr'+res).value = 'Dr';
+			document.getElementById('ModelDrCr'+activerow).value = 'Dr';
 		if(arr[3]=='Dr')
-			document.getElementById('ModelDrCr'+res).value = 'Cr';
+			document.getElementById('ModelDrCr'+activerow).value = 'Cr';
 		callForBillWiseRow(id);
 	}
 	function callForBillWiseRow(id){
@@ -567,84 +579,17 @@ $(document).ready(function() {
 		if(tamt<0){
 			tamt = tamt * (-1);
 		}
-		if(tamt!=document.getElementById('amount'+row).value){
+		if(tamt!=document.getElementById('amount'+activerow).value){
 			callformorebillwiserow(id);
 		}
 		
-	}
-	function deleteBillRow(id){
-		var idNum = id.match(/\d/g);
-		$('table#payTransactionTableBillWise tr#BillrowId'+idNum).remove();
-
-	}
-	function AddBillRow(id){
-		var idNum = id.match(/\d/g);
-		var rowCount = countTotalRowsBillWise();
-		var row = document.getElementById("BillrowId" + rowCount); 
-		var table = document.getElementById("payTransactionTableBillWise");
-		var clone = row.cloneNode(true);
-		rowCount += 1;
-		clone.id = "BillrowId" + rowCount; // change id or other attributes/contents
-		table.appendChild(clone); // add new row to end of table
-		var oInput = document.getElementById("BillrowId" + rowCount);
-		var a = oInput.childNodes[1].childNodes[1];
-		var b = oInput.childNodes[3].childNodes[1];
-		var c = oInput.childNodes[3].childNodes[3];
-		var d = oInput.childNodes[5].childNodes[1];
-		var e = oInput.childNodes[7].childNodes[1];
-		var f = oInput.childNodes[9].childNodes[1];
-		var k = oInput.childNodes[11].childNodes[1];
-		var l = oInput.childNodes[13].childNodes[1];
-		var m = oInput.childNodes[15].childNodes[1];
-		var n = oInput.childNodes[17].childNodes[1];
-		var o = oInput.childNodes[19].childNodes[1];
-		var p = oInput.childNodes[21].childNodes[1];
-		var q = oInput.childNodes[23].childNodes[1];
-		var r = oInput.childNodes[25].childNodes[1];
-		var s = oInput.childNodes[27].childNodes[1];
-		
-		a.id = "typeofRef"+rowCount;
-		b.id = "pendingBillt"+rowCount;
-		c.id = "pendingBills"+rowCount;
-		d.id = "dueDate"+rowCount;
-		e.id = "billAmt"+rowCount;
-		f.id = "taxAmount"+rowCount;
-		k.id = "ModelDrCr"+rowCount;
-		l.id = "hiddenTypeOfRef"+rowCount;
-		m.id = "hiddenBillWiseName"+rowCount;
-		n.id = "hiddenDueDate"+rowCount;
-		o.id = "hiddenAmnt"+rowCount;
-		p.id = "hiddencrdr"+rowCount;
-		q.id = "hiddenBilId"+rowCount;
-		r.id = "deleteRow"+rowCount;
-		s.id = "addRow"+rowCount;
-
-		document.getElementById('typeofRef'+rowCount).value = 'On Account';
-		callToGetAdvance('typeofRef'+rowCount,'On Account');
-	}
-function getInterestAmount(rw,partyName,voucherNo){
-		
-		var myurl = "<%=basePath%>";
-		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_interest_amt.action?partyAcc="
-			+ partyName+"&suffix=_purchase&referenceNo="+voucherNo;
-		$.ajax({
-			type : "GET",
-			url : myurl,
-			success : function(itr) {
-				document.getElementById("taxAmount"+rw).value = itr;
-			},
-
-			error : function(itr) {
-
-			}
-		});
 	}
 </script>
 </head>
 <body>
 	<div class="clear2"></div>
 	<h2>
-		Payment
+		Receipt
 		<s:if test="%{userInfoBean.getUserType().equalsIgnoreCase('BO')}"></s:if>
 	</h2>
 
@@ -652,11 +597,11 @@ function getInterestAmount(rw,partyName,voucherNo){
 	<div class="FormSection">
 
 		<div class="greyStrip">
-			<h4>Payment</h4>
+			<h4>Receipt</h4>
 		</div>
 		<s:form
-			action="/com/stpl/pms/action/bo/um/bo_um_Bopayment_create.action"
-			id="searchUserFrm" theme="simple" method="POST" target="searchDiv">
+			action="/com/stpl/pms/action/bo/um/bo_um_BoEmpreceipt_create.action"
+			id="searchUserFrm" theme="simple" enctype="multipart/form-data" method="POST" target="searchDiv">
 			<div class="innerBox">
 
 				<s:if test="%{userInfoBean.getUserType().equalsIgnoreCase('BO')}">
@@ -664,32 +609,22 @@ function getInterestAmount(rw,partyName,voucherNo){
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
-							<label> <b><font color='red'>Payment No.</font></b>
+							<label> <b><font color='red'>Receipt Order No.</font></b>
 							</label>
 						</div>
 						<div class="InputDiv">
-								<s:textfield id="paymentNoVoucher" name="paymentNoVoucher" value="%{paymentNoVoucher}"
-								theme="myTheme" cssStyle="width:60%" />
-							<s:textfield id="paymentNo" name="paymentNo" value="%{paymentNo}"
-								theme="myTheme" readonly="true" cssStyle="width:2%;display:none" />
-							<s:textfield id="activeVoucherNumber" name="activeVoucherNumber" value="%{activeVoucherNumber}"
-								theme="myTheme" readonly="true" cssStyle="width:2%;display:none" />	
-				
+							<s:textfield id="receiptNo" name="receiptNo" value="%{rcptId}"
+								theme="myTheme" readonly="true" cssStyle="width:10%" />
 						</div>
 					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
+					<div class="FormMainBox" style="display:none;">
 
 						<div class="labelDiv">
 							<label>Date</label><em class="Req">*</em>
 						</div>
 						<div class="InputDiv">
-							<s:textfield id="paymentDate" name="paymentDate" placeholder="Date" cssClass="dateField" theme="myTheme" readonly="true" applyscript="true" cssStyle="width:50%" />
-						<div id="paymentDate_error" class="fieldError">
-								<s:fielderror>
-									<s:param>paymentDate</s:param>
-								</s:fielderror>
-							</div>
+							<s:textfield name="paymentDate" value="%{paymentDate}" placeholder="Date" cssClass="dateField" theme="myTheme" readonly="true" applyscript="true" cssStyle="width:50%" />
+						
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -700,12 +635,23 @@ function getInterestAmount(rw,partyName,voucherNo){
 							<label> Account </label>
 						</div>
 						<div class="InputDiv">
-							<s:select name="account" headerKey="none" id="account" value="%{account}"
-								headerValue="Select Account" list="accountList"
-								cssClass="select1" theme="myTheme" onchange="getCurrentBalance(this.id)"/>
+						<s:textfield id="account" name="account" value="%{account}"
+								theme="myTheme" readonly="true" cssStyle="width:90%" />
+								
 						</div>
 					</div>
-					<div class="clearFRM"></div>
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Status </label>
+						</div>
+						<div class="InputDiv">
+						<s:textfield id="status" name="status" value="%{status}"
+								theme="myTheme" readonly="true" cssStyle="width:90%" />
+								
+						</div>
+					</div>	
+					<%-- <div class="clearFRM"></div>
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -727,10 +673,10 @@ function getInterestAmount(rw,partyName,voucherNo){
 							<s:textfield name="currBalance" id="currBalance" value="0"
 								theme="myTheme" readonly="true" cssStyle="width:20%" />
 								<span id="crdr"></span>
-								<s:hidden name="hcrdr" id="hcrdr"></s:hidden>
+								<s:hidden id="hcrdr"></s:hidden>
 						</div>
 					</div>
-					<div class="clearFRM"></div>
+					<div class="clearFRM"></div> --%>
 					<br />
 					<div class="clearFRM"></div>
 
@@ -738,65 +684,55 @@ function getInterestAmount(rw,partyName,voucherNo){
 						id="payTransactionTable" class="transactionTable">
 						<thead>
 							<tr>
-					<tr>
 								<th style="text-align: center;" nowrap="nowrap">Particulars</th>
 								<th style="text-align: center;" nowrap="nowrap">Current Balance</th>
 								<th style="text-align: center;" nowrap="nowrap">Amount</th>
 								<th style="text-align: center;" nowrap="nowrap">Transaction
 									Type</th>
-								<th style="text-align: center;" nowrap="nowrap">Txn/Cheque/DD No.</th>
-								<th style="text-align: center;" nowrap="nowrap">Bank name</th>
-									
 								<th style="text-align: center;" nowrap="nowrap">Bank Name</th>
 									
-							</tr>					
 							</tr>
 						</thead>
 						<tbody>
-						<s:iterator begin="1" end="5" status="data">
-							<tr id="rowId<s:property value="#data.count"/>">
-								<td style="text-align: center;" nowrap="nowrap"><s:select
-										name="particulars" headerKey="none" id="%{'particularsList' + #data.count}"
-										headerValue="End Of List" list="particularsList"
-										cssClass="select1" theme="myTheme" value="%{particulars}"
-										cssStyle="width:150px;" onchange="callForMoreRow(this.id)"/></td>
+							<s:iterator value="receiptBeans" var="data">
+							<tr id="rowId<s:property value="#data.rowId"/>">
+								<td style="text-align: center;" nowrap="nowrap">
+								<ss:textfield
+										maxlength="100" name="particulars" value="%{#data.Particulars}" id="%{'particularsList' + #data.rowId}" theme="myTheme"
+										 readonly="true" 
+										cssStyle="width:70%">
+									</ss:textfield>
+								
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="100" name="currentblnc" value="0" id="%{'currentblnc' + #data.count}"
-										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%" readOnly="true">
-									</ss:textfield><span id="ccrdr<s:property value="#data.count"/>"></span>
-									<s:hidden name="ccrdrH" id="%{'ccrdrH' + #data.count}"></s:hidden>
-									</td>
+										maxlength="100" name="currentblnc" value="0" id="%{'currentblnc' + #data.rowId}"
+										theme="myTheme" pattern="^[0-9.]*$" cssStyle="width:50%" readOnly="true">
+									</ss:textfield><span id="ccrdr<s:property value="#data.rowId"/>"></span></td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="amount" value="0" id="%{'amount' + #data.count}"
-										theme="myTheme" value="%{amount}" pattern="^[0-9]*$" cssStyle="width:90%"
-										onchange="revertCurrBalance(this.id)">
+										maxlength="30" name="amount" value="%{#data.amount}" id="%{'amount' + #data.rowId}"
+										theme="myTheme" pattern="^[0-9.]*$" cssStyle="width:50%">
 									</ss:textfield></td>
-								<td style="text-align: center;" nowrap="nowrap"><s:select
-										name="txnType" headerKey="none" id="%{'txnType' + #data.count}"
-										headerValue="Please select" value="%{txnType}"
-										list="{'Cash','Cheque/DD','e-Fund Transfer','Others'}"
-										cssClass="select1" theme="myTheme" cssStyle="width:150px;" /></td>
-								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="100" name="txn_dd_chq_no" id="%{'no' + #data.count}"
-										theme="myTheme" cssStyle="width:80%">
-									</ss:textfield>	
-								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="100" name="txn_bnkNm" id="%{'bnkNm' + #data.count}"
-										theme="myTheme" cssStyle="width:80%" >
-									</ss:textfield>	
-									
-										
-								<td style="text-align: center;" nowrap="nowrap"><s:select
-										name="bankName" headerKey="none" id="%{'bankName' + #data.count}"
-										headerValue="Select Bank" list="accountList" value="%{bankName}"
-										cssClass="select1" theme="myTheme" cssStyle="width:150px;" /></td>
-										
+								<td style="text-align: center;" nowrap="nowrap">
+								
+								<ss:textfield
+										maxlength="100" name="txnType" value="%{#data.txnType}" id="%{'txnType' + #data.rowId}" theme="myTheme"
+										 readonly="true" 
+										cssStyle="width:70%">
+									</ss:textfield>
+								</td>
+								<td style="text-align: center;" nowrap="nowrap">
+								
+								<ss:textfield
+										maxlength="100" name="bankName" value="%{#data.bank_name}" id="%{'bankName' + #data.rowId}" theme="myTheme"
+										readonly="true" 
+										cssStyle="width:70%">
+									</ss:textfield>
+								
 								
 							</tr>
 
-
-			</s:iterator>
+</s:iterator>
 						</tbody>
+					
 					</table>
 					<div class="clearFRM"></div>
 					<div class="FormMainBox">
@@ -806,38 +742,49 @@ function getInterestAmount(rw,partyName,voucherNo){
 						</div>
 						<div class="InputDiv">
 							<s:textfield name="totalAmt" cssClass="InpTextBoxBg"
-								id="totalAmt" value="%{totalAmt}" readOnly="true" theme="simple"></s:textfield>
+								id="totalAmt" readOnly="true" theme="simple"></s:textfield>
 						</div>
 					</div>
 					
-					<div class="clearFRM"></div>
+
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
 							<label> Narration </label>
 						</div>
 						<div class="InputDiv">
-							<s:textfield name="narration" cssClass="InpTextBoxBg"
+							<s:textfield name="narration" readOnly="true" value="receipt" cssClass="InpTextBoxBg"
 								id="narration" theme="simple" title="Enter Narration"></s:textfield>
 						</div>
 					</div>
+				<div class="FormMainBox">
 
+						<div class="labelDiv">
+							<label> Reject Reason </label>
+						</div>
+						<div class="InputDiv">
+							<s:textfield name="rejReas" readOnly="true" value="no reason yet" cssClass="InpTextBoxBg"
+								id="rejReas" theme="simple" ></s:textfield>
+						</div>
+					</div>
+				
 
 				</s:if>
 
 			</div>
 			<div class="box_footer" align="right">
-			<!-- 	 <s:submit value="Save" align="left" cssStyle="margin-left:0px"
-						cssClass="button" theme="simple"></s:submit> -->
-					 
-				<button type="button" align="left" cssStyle="margin-left:0px"
-						class="button" theme="simple" onclick="promptSave()">Save</button>
+				<%-- <s:submit value="Search" align="left" cssStyle="margin-left:0px"
+						cssClass="button" theme="simple"></s:submit>
+					 --%>
+				<!-- <input type="submit" value='Create' align="left"
+					style="margin-left: 0px" class="button" /> -->
+					
 			</div>
 			<div id="myModal" class="modal">
 
   <!-- Modal content -->
   			<div class="modal-content">
- 			    <button id="closeme" type="button" class="close" onclick="closeMe()">SAVE</button>
+ 			   <button id="closeme" type="button" class="close" onclick="closeMe()">&times;</button>
  			  <div id="bill_by_bill">
 						<div class="FormSectionMenu" id="bill_by_bill_div_acc">
 							<div class="greyStrip">
@@ -849,9 +796,8 @@ function getInterestAmount(rw,partyName,voucherNo){
 							<tr>
 								<th style="text-align: center;" nowrap="nowrap">Type of Ref</th>
 								<th style="text-align: center;" nowrap="nowrap">Name</th>
-								<th style="text-align: center;" nowrap="nowrap">Due Date (limit)</th>
+								<th style="text-align: center;" nowrap="nowrap">Due Date limit</th>
 								<th style="text-align: center;" nowrap="nowrap">Amount</th>
-								<th style="text-align: center;" nowrap="nowrap">Interest</th>
 								<th style="text-align: center;" nowrap="nowrap">Dr/Cr</th>
 								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
 								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
@@ -859,17 +805,14 @@ function getInterestAmount(rw,partyName,voucherNo){
 								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
 								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
 								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;" nowrap="nowrap">Delete</th>
-								<th style="text-align: center;" nowrap="nowrap">Add</th>
-										
-									
+						
 							</tr>
 						</thead>
 						<tbody>
 
 							<tr id="BillrowId1">
 								<td style="text-align: center;" nowrap="nowrap"><s:select
-										name="typeofRef" id="typeofRef1" list="{'Advance','Agst Ref','New Ref','On Account'}"
+										name="typeofRef" id="typeofRef1" headerKey="-1" headerValue="-Please Select-" list="{'Advance','Agst Ref','On Account'}"
 										cssClass="select1" theme="myTheme"
 										onchange="callForMoreBillRow(this.id)" cssStyle="width:50%;" /></td>
 								<td style="text-align: center;" nowrap="nowrap">
@@ -890,16 +833,10 @@ function getInterestAmount(rw,partyName,voucherNo){
 										maxlength="30" name="billAmt" id="billAmt1" theme="myTheme"
 										cssStyle="width:40%" onchange="callForBillWiseRow(this.id)"/></td>
 								<td style="text-align: center;" nowrap="nowrap">
-									<ss:textfield
-										maxlength="30" readOnly="true" name="taxAmount" value="0" id="taxAmount1" theme="myTheme"
-										cssStyle="width:80%">
-									</ss:textfield></td>
-								<td style="text-align: center;" nowrap="nowrap">
 								<ss:textfield
 										maxlength="30" readOnly="true" name="ModelDrCr" id="ModelDrCr1" theme="myTheme"
 										cssStyle="width:60%">
 								</ss:textfield>
-								</td>
 								<td style="text-align: center;display:none;" nowrap="nowrap">
 									<s:hidden name="hiddenTypeOfRef" id="hiddenTypeOfRef1"></s:hidden>
 								</td>
@@ -918,12 +855,6 @@ function getInterestAmount(rw,partyName,voucherNo){
 								<td style="text-align: center;display:none;" nowrap="nowrap">
 									<s:hidden name="hiddenBilId" id="hiddenBilId1"></s:hidden>
 								</td>	
-								<td style="text-align: center;" nowrap="nowrap">
-									  <button id="deleteRow1" name="deleteRow" type="button" class="close1" onclick="deleteBillRow(this.id)">&#10006;</button>
-								</td>
-								<td style="text-align: center;" nowrap="nowrap">
-									  <button id="addRow1" name="addRow" type="button" class="close1" onclick="AddBillRow(this.id)">&#10010;</button>
-								</td>	
 							</tr>
 
 
@@ -940,16 +871,8 @@ function getInterestAmount(rw,partyName,voucherNo){
 		
 	</div>
 	<div id="searchDiv"></div>
-	<br />
-	<br />
 	<script>
-if(document.getElementById('account').value!='none'){
-	getCurrentBalance('account');
-}
-if(document.getElementById('particularsList1').value!='-1'){	
-	showCurrentParticularsBalance('particularsList1');
-}
-	
-</script>
+	showCurrentParticularsBalance('id');
+	</script>
 </body>
 </html>

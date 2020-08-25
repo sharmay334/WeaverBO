@@ -73,6 +73,7 @@ var activerow=0;
 var BillWiseActiveRow=0;
 var old_cr_dr = "";
 var limit_days = 0;
+var old_hcrdr="";
 //Get the button that opens the modal
 
 //Get the <span> element that closes the modal
@@ -240,30 +241,31 @@ $(document).ready(function() {
 		var d = oInput.childNodes[5].childNodes[1];
 		var e = oInput.childNodes[7].childNodes[1];
 		var f = oInput.childNodes[9].childNodes[1];
-		var k = oInput.childNodes[10].childNodes[1];
-		var l = oInput.childNodes[12].childNodes[1];
-		var m = oInput.childNodes[14].childNodes[1];
-		var n = oInput.childNodes[16].childNodes[1];
-		var o = oInput.childNodes[18].childNodes[1];
-		var p = oInput.childNodes[20].childNodes[1];
-		var q = oInput.childNodes[22].childNodes[1];
-		var r = oInput.childNodes[24].childNodes[1];
+		var k = oInput.childNodes[11].childNodes[1];
+		var l = oInput.childNodes[13].childNodes[1];
+		var m = oInput.childNodes[15].childNodes[1];
+		var n = oInput.childNodes[17].childNodes[1];
+		var o = oInput.childNodes[19].childNodes[1];
+		var p = oInput.childNodes[21].childNodes[1];
+		var q = oInput.childNodes[23].childNodes[1];
+		var r = oInput.childNodes[25].childNodes[1];
+		var s = oInput.childNodes[27].childNodes[1];
 		
-
 		a.id = "typeofRef"+rowCount;
 		b.id = "pendingBillt"+rowCount;
 		c.id = "pendingBills"+rowCount;
 		d.id = "dueDate"+rowCount;
 		e.id = "billAmt"+rowCount;
-		f.id = "ModelDrCr"+rowCount;
-		k.id = "hiddenTypeOfRef"+rowCount;
-		l.id = "hiddenBillWiseName"+rowCount;
-		m.id = "hiddenDueDate"+rowCount;
-		n.id = "hiddenAmnt"+rowCount;
-		o.id = "hiddencrdr"+rowCount;
-		p.id = "hiddenBilId"+rowCount;
-		q.id = "deleteRow"+rowCount;
-		r.id = "addRow"+rowCount;
+		f.id = "taxAmount"+rowCount;
+		k.id = "ModelDrCr"+rowCount;
+		l.id = "hiddenTypeOfRef"+rowCount;
+		m.id = "hiddenBillWiseName"+rowCount;
+		n.id = "hiddenDueDate"+rowCount;
+		o.id = "hiddenAmnt"+rowCount;
+		p.id = "hiddencrdr"+rowCount;
+		q.id = "hiddenBilId"+rowCount;
+		r.id = "deleteRow"+rowCount;
+		s.id = "addRow"+rowCount;
 
 		document.getElementById('typeofRef'+rowCount).value = 'On Account';
 		callToGetAdvance('typeofRef'+rowCount,'On Account');
@@ -330,6 +332,7 @@ $(document).ready(function() {
 				if(document.getElementById("ModelDrCr"+res).value=='Cr'){
 					callForBillWiseRow(id);
 				}
+				getInterestAmount(res,particular,tarr[0]);
 			},
 
 			error : function(itr) {
@@ -338,6 +341,23 @@ $(document).ready(function() {
 		});
 		
 	}
+	function getInterestAmount(rw,partyName,voucherNo){
+		
+		var myurl = "<%=basePath%>";
+		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_interest_amt.action?partyAcc="
+			+ partyName+"&suffix=_sale&referenceNo="+voucherNo;
+		$.ajax({
+			type : "GET",
+			url : myurl,
+			success : function(itr) {
+				document.getElementById("taxAmount"+rw).value = itr;
+			},
+
+			error : function(itr) {
+
+			}
+		});
+	}
 	function callToGetAdvance(id,tor){
 		var myurl = "<%=basePath%>";
 		var res = id.match(/\d/g);
@@ -345,7 +365,7 @@ $(document).ready(function() {
 		var rowCountBillWise = countTotalRowsBillWise();
 		var amt = document.getElementById('amount'+activerow).value;
 		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_bill_ref_id.action?partyAcc="
-				+ particular+"&typeOfRef="+tor;
+				+ particular+"&typeOfRef="+tor+"&isSale='Yes'";
 		
 		$.ajax({
 			type : "GET",
@@ -397,31 +417,32 @@ $(document).ready(function() {
 		var d = oInput.childNodes[5].childNodes[1];
 		var e = oInput.childNodes[7].childNodes[1];
 		var f = oInput.childNodes[9].childNodes[1];
-		var k = oInput.childNodes[10].childNodes[1];
-		var l = oInput.childNodes[12].childNodes[1];
-		var m = oInput.childNodes[14].childNodes[1];
-		var n = oInput.childNodes[16].childNodes[1];
-		var o = oInput.childNodes[18].childNodes[1];
-		var p = oInput.childNodes[20].childNodes[1];
-		var q = oInput.childNodes[22].childNodes[1];
-		var r = oInput.childNodes[24].childNodes[1];
-		
+		var k = oInput.childNodes[11].childNodes[1];
+		var l = oInput.childNodes[13].childNodes[1];
+		var m = oInput.childNodes[15].childNodes[1];
+		var n = oInput.childNodes[17].childNodes[1];
+		var o = oInput.childNodes[19].childNodes[1];
+		var p = oInput.childNodes[21].childNodes[1];
+		var q = oInput.childNodes[23].childNodes[1];
+		var r = oInput.childNodes[25].childNodes[1];
+		var s = oInput.childNodes[27].childNodes[1];
 		
 		a.id = "typeofRef"+rowCount;
 		b.id = "pendingBillt"+rowCount;
 		c.id = "pendingBills"+rowCount;
 		d.id = "dueDate"+rowCount;
 		e.id = "billAmt"+rowCount;
-		f.id = "ModelDrCr"+rowCount;
-		k.id = "hiddenTypeOfRef"+rowCount;
-		l.id = "hiddenBillWiseName"+rowCount;
-		m.id = "hiddenDueDate"+rowCount;
-		n.id = "hiddenAmnt"+rowCount;
-		o.id = "hiddencrdr"+rowCount;
-		p.id = "hiddenBilId"+rowCount;
-		q.id = "deleteRow"+rowCount;
-		r.id = "addRow"+rowCount;
-
+		f.id = "taxAmount"+rowCount;
+		k.id = "ModelDrCr"+rowCount;
+		l.id = "hiddenTypeOfRef"+rowCount;
+		m.id = "hiddenBillWiseName"+rowCount;
+		n.id = "hiddenDueDate"+rowCount;
+		o.id = "hiddenAmnt"+rowCount;
+		p.id = "hiddencrdr"+rowCount;
+		q.id = "hiddenBilId"+rowCount;
+		r.id = "deleteRow"+rowCount;
+		s.id = "addRow"+rowCount;
+		
 		document.getElementById('typeofRef'+rowCount).value = 'On Account';
 		callToGetAdvance('typeofRef'+rowCount,'On Account');
 		
@@ -452,6 +473,7 @@ $(document).ready(function() {
 				document.getElementById('currentblnc'+res).value = arr[0];
 				document.getElementById('ccrdr'+res).innerHTML = arr[1];
 				document.getElementById('ccrdrH'+res).value = arr[1];
+				old_hcrdr = arr[1];
 			},
 
 			error : function(itr) {
@@ -474,21 +496,24 @@ $(document).ready(function() {
 					currentId = res;
 					 document.getElementById("myModal").style.display = "block";
 					var blnc = Number(document.getElementById('currentblnc'+res).value);
-					var blncType= document.getElementById('ccrdrH'+res).value;
+					var blncType= old_hcrdr;
 					if(blncType=="Dr"){
 						blnc = blnc - Number(document.getElementById('amount'+res).value);
 						if(Number(blnc)<0){
 							blnc = blnc * (-1);
 							document.getElementById('ccrdr'+res).innerHTML = "Cr";
+							document.getElementById('ccrdrH'+res).value = "Cr";
 							
 						}
 						else{
 							document.getElementById('ccrdr'+res).innerHTML = "Dr";
+							document.getElementById('ccrdrH'+res).value = "Dr";
 						}
 					}
 					else{
 						blnc = blnc + Number(document.getElementById('amount'+res).value);
 						document.getElementById('ccrdr'+res).innerHTML = "Cr";
+						document.getElementById('ccrdrH'+res).value = "Cr";
 					}
 					document.getElementById('currentblnc'+res).value = blnc;
 					
@@ -497,21 +522,23 @@ $(document).ready(function() {
 					currentId = res;
 					 document.getElementById("myModal").style.display = "none";
 					 var blnc = Number(document.getElementById('currentblnc'+res).value);
-						var blncType= document.getElementById('ccrdrH'+res).value;
+						var blncType= old_hcrdr;
 						if(blncType=="Dr"){
 							blnc = blnc - Number(document.getElementById('amount'+res).value);
 							if(Number(blnc)<0){
 								blnc = blnc * (-1);
 								document.getElementById('ccrdr'+res).innerHTML = "Cr";
-								
+								document.getElementById('ccrdrH'+res).value = "Cr";
 							}
 							else{
 								document.getElementById('ccrdr'+res).innerHTML = "Dr";
+								document.getElementById('ccrdrH'+res).value = "Dr";
 							}
 						}
 						else{
 							blnc = blnc + Number(document.getElementById('amount'+res).value);
 							document.getElementById('ccrdr'+res).innerHTML = "Cr";
+							document.getElementById('ccrdrH'+res).value = "Cr";
 						}
 						document.getElementById('currentblnc'+res).value = blnc;
 
@@ -617,7 +644,7 @@ $(document).ready(function() {
 		var conversionDate = datearr[2]+"-"+datearr[1]+"-"+datearr[0];
 		var d = new Date(conversionDate);
 		d.setDate(d.getDate() + Number(limit_days));
-
+		
 		 var dd = d.getDate();
 		    var mm = d.getMonth()+1;
 		    var y = d.getFullYear();
@@ -625,6 +652,8 @@ $(document).ready(function() {
 		 document.getElementById('dueDate'+res).value = _dt;
 		document.getElementById('hiddenBilId'+res).value = arr[0];
 		document.getElementById('ModelDrCr'+res).value = arr[3];
+		
+		getInterestAmount(res,document.getElementById('particularsList'+activerow).value,arr[0]);
 		if(arr[3]=='Cr')
 			document.getElementById('ModelDrCr'+res).value = 'Dr';
 		if(arr[3]=='Dr')
@@ -752,7 +781,6 @@ $(document).ready(function() {
 								<s:hidden name="hcrdr" id="hcrdr"></s:hidden>
 						</div>
 					</div>
-					<div class="clearFRM"></div>
 					<br />
 					<div class="clearFRM"></div>
 
@@ -872,6 +900,7 @@ $(document).ready(function() {
 								<th style="text-align: center;" nowrap="nowrap">Name</th>
 								<th style="text-align: center;" nowrap="nowrap">Due Date (limit)</th>
 								<th style="text-align: center;" nowrap="nowrap">Amount</th>
+								<th style="text-align: center;" nowrap="nowrap">Interest</th>
 								<th style="text-align: center;" nowrap="nowrap">Dr/Cr</th>
 								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
 								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
@@ -909,11 +938,18 @@ $(document).ready(function() {
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="billAmt" id="billAmt1" theme="myTheme"
 										cssStyle="width:40%" onchange="callForBillWiseRow(this.id)"/></td>
+										
 								<td style="text-align: center;" nowrap="nowrap">
+									<ss:textfield
+										maxlength="30" readOnly="true" name="taxAmount" value="0" id="taxAmount1" theme="myTheme"
+										cssStyle="width:80%">
+									</ss:textfield></td>
+							<td style="text-align: center;" nowrap="nowrap">
 								<ss:textfield
 										maxlength="30" readOnly="true" name="ModelDrCr" id="ModelDrCr1" theme="myTheme"
 										cssStyle="width:60%">
 								</ss:textfield>
+								</td>
 								<td style="text-align: center;display:none;" nowrap="nowrap">
 									<s:hidden name="hiddenTypeOfRef" id="hiddenTypeOfRef1"></s:hidden>
 								</td>

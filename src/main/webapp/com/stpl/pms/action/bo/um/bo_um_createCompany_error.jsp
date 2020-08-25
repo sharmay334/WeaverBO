@@ -11,7 +11,7 @@
 	<head>
 		<base href="<%=basePath%>">
 
-		<title>Error creating company</title>
+		<title>Error </title>
 
 		<meta http-equiv="pragma" content="no-cache">
 		<meta http-equiv="cache-control" content="no-cache">
@@ -27,12 +27,12 @@
 		<div class="FormSection">
 			<div class="greyStrip">
 				<h4>
-					Error Creating Company!
+					Error !
 				</h4>
 			</div>
 			<div class="innerBox">
 				<div class="alert error_msg">
-					<span class="alert_close"></span><strong><s:text name="global.um.msg9"></s:text>: </strong> <s:actionerror theme="simple"/>
+					<span class="alert_close"></span><strong>Error:Uploading Data( Same date not allowed!) </strong> <s:actionerror theme="simple"/>
 				</div>
 			</div>
 		</div>

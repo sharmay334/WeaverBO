@@ -79,10 +79,38 @@ var BillWiseActiveRow=0;
 
 
 //When the user clicks on <span> (x), close the modal
+function validateFile(fileName, id) {
+	var file = fileName.value;
+	var ext = file.substring(file.length, file.length - 3);
+	if (file != "") {
+		if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "doc"
+				&& ext != "docx" && ext != "pdf") {
+			document.getElementById(id).value = "";
+			alert('only image,pdf or doc file is allowed!');
+		}
+	}
 
+}
+function checkDocUpload(){
+	
+	var doc = document.getElementById('docPicture').value;
+	if(doc!=""){
+		promptSave();
+	}
+	else{
+		
+		swal("Please upload document first!");
+	}
+	
+}
 function promptSave(){
 	var frm = $('#searchUserFrm');
-
+	let photo = document.getElementById("docPicture").files[0];
+	let formData = new FormData();
+	formData.append("docPicture", photo);
+	var myurl = "<%=basePath%>";
+	myurl += "/com/stpl/pms/action/bo/um/upload_receipt_order_document.action?receiptNo="+document.getElementById('receiptNo').value;
+	
 		swal({
 		  title: "Are you sure?",
 		  text: "Once Saved, you will not be able to undo the entry!",
@@ -99,6 +127,22 @@ function promptSave(){
 			        success: function (data) {
 			        	if(data=="success"){
 			        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
+			        		$.ajax({
+						        type: 'POST',
+						        url: myurl,
+						        data: formData,
+						        cache : false,
+								contentType : false,
+								processData : false,
+						        success: function (data) {
+						        	
+						            
+						        },
+						        error: function (data) {
+						        	
+						        },
+						    });
+			        		
 			        		setTimeout(function(){
 			        			   window.location.reload(1);
 			        			}, 1000);
@@ -166,14 +210,14 @@ var CurrentBalance = 0;
 
 $(document).ready(function() {
 	$("#paymentDate").datetimepicker({
-		dateFormat : 'yy-mm-dd',
+		dateFormat : 'dd-mm-yy',
 		showSecond : false,
 		showMinute : false,
 		showHour : false,
 		changeYear : true,
 		changeMonth : true,
-		startDate: '1980-01-01',
-		minDate : '1930-01-01',
+		startDate: '01-01-1980',
+		minDate : '01-01-1980',
 		onSelect : function(selectedDate) {
 			if (selectedDate != "") {
 				$("#paymentDate").datepicker("option", "minDate", selectedDate);
@@ -181,7 +225,7 @@ $(document).ready(function() {
 				var date = new Date().getDate();
 				$(function() {
 					$("#paymentDate").datepicker({
-						dateFormat : 'yy-mm-dd'
+						dateFormat : 'dd-mm-yy'
 					}).datepicker("setDate", date);
 				});
 			}
@@ -567,8 +611,7 @@ $(document).ready(function() {
 								theme="myTheme" readonly="true" cssStyle="width:10%" />
 						</div>
 					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
+					<div class="FormMainBox" style="display:none;">
 
 						<div class="labelDiv">
 							<label>Date</label><em class="Req">*</em>
@@ -700,7 +743,7 @@ $(document).ready(function() {
 					</div>
 					<div class="InputDivHalf">
 					
-					<s:file label="upload" id="docPicture" name="docPicture" cssClass="textfield" theme="myTheme"></s:file>
+					<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPicture" name="docPicture" cssClass="textfield" theme="myTheme"></s:file>
 						</div>
 
 				</div>
@@ -715,7 +758,7 @@ $(document).ready(function() {
 				<!-- <input type="submit" value='Create' align="left"
 					style="margin-left: 0px" class="button" /> -->
 					<button type="button" align="left"
-					style="margin-left: 0px" class="button" onclick="promptSave()">Save</button>
+					style="margin-left: 0px" class="button" onclick="checkDocUpload()">Save</button>
 			</div>
 			<div id="myModal" class="modal">
 

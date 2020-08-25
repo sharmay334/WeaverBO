@@ -1,6 +1,7 @@
 package com.stpl.pms.action.bo.um;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +19,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
 import com.stpl.pms.commonJavabeans.EmployeeBean;
+import com.stpl.pms.commonJavabeans.EmployeeExpenseBean;
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.controller.rm.RoleMgmtController;
 import com.stpl.pms.controller.um.UserMgmtController;
@@ -58,7 +60,7 @@ public class HRMgmtAction extends BaseActionSupport {
 	private String weekDay;
 	private String department;
 	private String role;
-	private String region;	
+	private String region;
 	private String country;
 	private String branch;
 	private String doj;
@@ -93,6 +95,234 @@ public class HRMgmtAction extends BaseActionSupport {
 	private List<String> departmentList;
 	private List<String> approverList;
 	private List<String> attendanceTimeList;
+	private EmployeeExpenseBean employeeExpenseBean;
+
+	public String loadEmpExpensPage() {
+		return SUCCESS;
+	}
+
+	public String uploadExpense() throws IOException {
+
+		GameLobbyController controller = new GameLobbyController();
+		employeeExpenseBean.setEmpId(getUserInfoBean().getUserId());
+		String filePath = "";
+		filePath = ServletActionContext.getServletContext().getRealPath("/");
+		filePath = filePath.substring(0, filePath.lastIndexOf("default/"));
+		File file = new File(filePath + "expenses/" + employeeExpenseBean.getEmpId());
+		if (!employeeExpenseBean.getExpenseDate1().isEmpty() && !employeeExpenseBean.getAmount1().isEmpty()
+				&& !employeeExpenseBean.getPicture1FileName().isEmpty()) {
+			if (file.mkdir()) {
+
+				String suffix[] = employeeExpenseBean.getExpenseDate1().split(" ");
+				File file1 = new File(filePath + "expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+				if (file1.mkdir()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture1FileName(
+							"hotel_" + suffix[0] + "_" + employeeExpenseBean.getPicture1FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture1FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture1(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture1FileName(filePath+"/"+employeeExpenseBean.getPicture1FileName()); // file
+				} else if (file1.exists()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture1FileName(
+							"hotel_" + suffix[0] + "_" + employeeExpenseBean.getPicture1FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture1FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture1(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture1FileName(filePath+"/"+employeeExpenseBean.getPicture1FileName());
+
+				}
+			} else if (file.exists()) {
+				String suffix[] = employeeExpenseBean.getExpenseDate1().split(" ");
+				File file1 = new File(filePath + "expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+				if (file1.mkdir()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture1FileName(
+							"hotel_" + suffix[0] + "_" + employeeExpenseBean.getPicture1FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture1FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture1(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture1FileName(filePath+"/"+employeeExpenseBean.getPicture1FileName()); // file
+				} else if (file1.exists()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture1FileName(
+							"hotel_" + suffix[0] + "_" + employeeExpenseBean.getPicture1FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture1FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture1(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture1FileName(filePath+"/"+employeeExpenseBean.getPicture1FileName());
+
+				}
+
+			}
+
+		}
+
+		filePath = "";
+		filePath = ServletActionContext.getServletContext().getRealPath("/");
+		filePath = filePath.substring(0, filePath.lastIndexOf("default/"));
+		if (!employeeExpenseBean.getExpenseDate2().isEmpty() && !employeeExpenseBean.getAmount2().isEmpty()
+				&& !employeeExpenseBean.getPicture2FileName().isEmpty()) {
+			if (file.mkdir()) {
+
+				String suffix[] = employeeExpenseBean.getExpenseDate2().split(" ");
+				File file1 = new File(filePath + "expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+				if (file1.mkdir()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture2FileName(
+							"bus_train_toll_" + suffix[0] + "_" + employeeExpenseBean.getPicture2FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture2FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture2(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture2FileName(filePath+"/"+employeeExpenseBean.getPicture2FileName()); // file
+				} else if (file1.exists()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture2FileName(
+							"bus_train_toll_" + suffix[0] + "_" + employeeExpenseBean.getPicture2FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture2FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture2(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture2FileName(filePath+"/"+employeeExpenseBean.getPicture2FileName());
+
+				}
+			} else if (file.exists()) {
+				String suffix[] = employeeExpenseBean.getExpenseDate2().split(" ");
+				File file1 = new File(filePath + "expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+				if (file1.mkdir()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture2FileName(
+							"bus_train_toll_" + suffix[0] + "_" + employeeExpenseBean.getPicture2FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture2FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture2(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture2FileName(filePath+"/"+employeeExpenseBean.getPicture2FileName()); // file
+				} else if (file1.exists()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture2FileName(
+							"bus_train_toll_" + suffix[0] + "_" + employeeExpenseBean.getPicture2FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture2FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture2(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture2FileName(filePath+"/"+employeeExpenseBean.getPicture2FileName());
+
+				}
+
+			}
+
+		}
+		filePath = "";
+		filePath = ServletActionContext.getServletContext().getRealPath("/");
+		filePath = filePath.substring(0, filePath.lastIndexOf("default/"));
+
+		if (!employeeExpenseBean.getExpenseDate3().isEmpty() && !employeeExpenseBean.getAmount3().isEmpty()
+				&& !employeeExpenseBean.getPicture3FileName().isEmpty()) {
+			if (file.mkdir()) {
+
+				String suffix[] = employeeExpenseBean.getExpenseDate3().split(" ");
+				File file1 = new File(filePath + "expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+				if (file1.mkdir()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture3FileName(
+							"pet_deisel_" + suffix[0] + "_" + employeeExpenseBean.getPicture3FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture3FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture3(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture3FileName(filePath+"/"+employeeExpenseBean.getPicture3FileName()); // file
+				} else if (file1.exists()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture3FileName(
+							"pet_deisel_" + suffix[0] + "_" + employeeExpenseBean.getPicture3FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture3FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture3(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture3FileName(filePath+"/"+employeeExpenseBean.getPicture3FileName());
+
+				}
+			} else if (file.exists()) {
+				String suffix[] = employeeExpenseBean.getExpenseDate3().split(" ");
+				File file1 = new File(filePath + "expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+				if (file1.mkdir()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture3FileName(
+							"pet_deisel_" + suffix[0] + "_" + employeeExpenseBean.getPicture3FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture3FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture3(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture3FileName(filePath+"/"+employeeExpenseBean.getPicture3FileName()); // file
+				} else if (file1.exists()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture3FileName(
+							"pet_deisel_" + suffix[0] + "_" + employeeExpenseBean.getPicture3FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture3FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture3(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture3FileName(filePath+"/"+employeeExpenseBean.getPicture3FileName());
+
+				}
+
+			}
+
+		}
+		filePath = "";
+		filePath = ServletActionContext.getServletContext().getRealPath("/");
+		filePath = filePath.substring(0, filePath.lastIndexOf("default/"));
+
+		if (!employeeExpenseBean.getExpenseDate4().isEmpty() && !employeeExpenseBean.getAmount4().isEmpty()
+				&& !employeeExpenseBean.getPicture4FileName().isEmpty()) {
+			if (file.mkdir()) {
+
+				String suffix[] = employeeExpenseBean.getExpenseDate4().split(" ");
+				File file1 = new File(filePath + "expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+				if (file1.mkdir()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture4FileName(
+							"other_" + suffix[0] + "_" + employeeExpenseBean.getPicture4FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture4FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture4(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture4FileName(filePath+"/"+employeeExpenseBean.getPicture4FileName()); // file
+				} else if (file1.exists()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture4FileName(
+							"other_" + suffix[0] + "_" + employeeExpenseBean.getPicture4FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture4FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture4(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture4FileName(filePath+"/"+employeeExpenseBean.getPicture4FileName());
+
+				}
+			} else if (file.exists()) {
+				String suffix[] = employeeExpenseBean.getExpenseDate4().split(" ");
+				File file1 = new File(filePath + "expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+				if (file1.mkdir()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture4FileName(
+							"other_" + suffix[0] + "_" + employeeExpenseBean.getPicture4FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture4FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture4(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture4FileName(filePath+"/"+employeeExpenseBean.getPicture4FileName()); // file
+				} else if (file1.exists()) {
+					filePath = filePath.concat("expenses/" + employeeExpenseBean.getEmpId() + "/" + suffix[0]);
+					employeeExpenseBean.setPicture4FileName(
+							"other_" + suffix[0] + "_" + employeeExpenseBean.getPicture4FileName());
+					File fileToCreate = null;
+					fileToCreate = new File(filePath, employeeExpenseBean.getPicture4FileName());
+					FileUtils.copyFile(employeeExpenseBean.getPicture4(), fileToCreate);// copying source file to new
+					employeeExpenseBean.setPicture4FileName(filePath+"/"+employeeExpenseBean.getPicture4FileName());
+
+				}
+
+			}
+
+		}
+		if (controller.insertOrUpdateExpenses(employeeExpenseBean))
+			return SUCCESS;
+		else
+			return ERROR;
+	}
+
 	public String newSubUserReg() {
 		HttpSession session = getRequest().getSession();
 		int orgId = userInfoBean.getUserId();
@@ -222,56 +452,55 @@ public class HRMgmtAction extends BaseActionSupport {
 			String path = ServletActionContext.getServletContext().getRealPath(File.separator);
 			path = path.substring(0, path.lastIndexOf("default/"));
 			path = path.concat(File.separator + "documents" + File.separator + empUserName + File.separator);
-				
+
 			String photo_docFilePath = path.concat("photoDoc");
 			File photo_docFileToCreate = new File(photo_docFilePath, "photoDoc");
 			FileUtils.copyFile(photoDoc, photo_docFileToCreate);// copying source file to new file
-			
+
 			String addressDocFilePath = path.concat("addressDoc");
 			File addressDocFileToCreate = new File(addressDocFilePath, "addressDoc");
-			if(addressDoc!=null)
-			FileUtils.copyFile(addressDoc, addressDocFileToCreate);// copying source file to new file
+			if (addressDoc != null)
+				FileUtils.copyFile(addressDoc, addressDocFileToCreate);// copying source file to new file
 
-			
 			String oldSalarySlipFilePath = path.concat("oldSalarySlip");
 			File oldSalarySlipFileToCreate = new File(oldSalarySlipFilePath, "oldSalarySlip");
-			if(oldSalarySlip!=null)
-			FileUtils.copyFile(oldSalarySlip, oldSalarySlipFileToCreate);// copying source file to new file
+			if (oldSalarySlip != null)
+				FileUtils.copyFile(oldSalarySlip, oldSalarySlipFileToCreate);// copying source file to new file
 
 			String expCertificateFilePath = path.concat("expCertificate");
 			File expCertificateFileToCreate = new File(expCertificateFilePath, "expCertificate");
-			if(expCertificate!=null)
-			FileUtils.copyFile(expCertificate, expCertificateFileToCreate);// copying source file to new file
+			if (expCertificate != null)
+				FileUtils.copyFile(expCertificate, expCertificateFileToCreate);// copying source file to new file
 
 			String eduCertificateFilePath = path.concat("eduCertificate");
 			File eduCertificateFileToCreate = new File(eduCertificateFilePath, "eduCertificate");
-			if(eduCertificate!=null)
-			FileUtils.copyFile(eduCertificate, eduCertificateFileToCreate);// copying source file to new file
+			if (eduCertificate != null)
+				FileUtils.copyFile(eduCertificate, eduCertificateFileToCreate);// copying source file to new file
 
 			String panDocFilePath = path.concat("panDoc");
 			File panDocFileToCreate = new File(panDocFilePath, "panDoc");
-			if(panDoc!=null)
-			FileUtils.copyFile(panDoc, panDocFileToCreate);// copying source file to new file
+			if (panDoc != null)
+				FileUtils.copyFile(panDoc, panDocFileToCreate);// copying source file to new file
 
 			String aadharDocFilePath = path.concat("aadharDoc");
 			File aadharDocFileToCreate = new File(aadharDocFilePath, "aadharDoc");
-			if(aadharDoc!=null)
-			FileUtils.copyFile(aadharDoc, aadharDocFileToCreate);// copying source file to new file
+			if (aadharDoc != null)
+				FileUtils.copyFile(aadharDoc, aadharDocFileToCreate);// copying source file to new file
 
 			String voterDocFilePath = path.concat("voterDoc");
 			File voterDocFileToCreate = new File(voterDocFilePath, "voterDoc");
-			if(voterDoc!=null)
-			FileUtils.copyFile(voterDoc, voterDocFileToCreate);// copying source file to new file
+			if (voterDoc != null)
+				FileUtils.copyFile(voterDoc, voterDocFileToCreate);// copying source file to new file
 
 			String drivingDocFilePath = path.concat("drivingDoc");
 			File drivingDocFileToCreate = new File(drivingDocFilePath, "drivingDoc");
-			if(drivingDoc!=null)
-			FileUtils.copyFile(drivingDoc, drivingDocFileToCreate);// copying source file to new file
+			if (drivingDoc != null)
+				FileUtils.copyFile(drivingDoc, drivingDocFileToCreate);// copying source file to new file
 
 			String passbookDocFilePath = path.concat("passbookDoc");
 			File passbookDocFileToCreate = new File(passbookDocFilePath, "passbookDoc");
-			if(passbookDoc!=null)
-			FileUtils.copyFile(passbookDoc, passbookDocFileToCreate);// copying source file to new file
+			if (passbookDoc != null)
+				FileUtils.copyFile(passbookDoc, passbookDocFileToCreate);// copying source file to new file
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -869,5 +1098,13 @@ public class HRMgmtAction extends BaseActionSupport {
 	public void setAuthAmount(String authAmount) {
 		this.authAmount = authAmount;
 	}
-	
+
+	public EmployeeExpenseBean getEmployeeExpenseBean() {
+		return employeeExpenseBean;
+	}
+
+	public void setEmployeeExpenseBean(EmployeeExpenseBean employeeExpenseBean) {
+		this.employeeExpenseBean = employeeExpenseBean;
+	}
+
 }

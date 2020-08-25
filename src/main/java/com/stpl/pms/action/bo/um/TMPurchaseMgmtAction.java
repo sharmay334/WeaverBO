@@ -1,10 +1,13 @@
 package com.stpl.pms.action.bo.um;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -80,6 +83,12 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 	private String billt;
 	private String vn;
 	private String transportFreight;
+	private String suffix;
+	private File docPicture;
+	private String docPictureContentType;
+	private String docPictureFileName;
+	private String status;
+
 
 	public void getCurrentBalance() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
@@ -94,6 +103,13 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 		servletResponse.getWriter().write("" + response);
 		return;
 
+	}
+
+	public void getInterestAmount() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		String response = controller.getInterestAmount(partyAcc, suffix, referenceNo);
+		servletResponse.getWriter().write("" + response);
+		return;
 	}
 
 	public void getIsBatchApplicable() throws IOException {
@@ -111,15 +127,22 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 		int partyId = controller.findLedgerIdByName(partyName);
 		int creditPeriod = controller.getCreditPeriod(partyId);
 		if (creditPeriod != -1) {
-			
+
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			Calendar c = Calendar.getInstance();
 			TimeZone tz = TimeZone.getTimeZone("Asia/Kolkata");
 			c.setTimeZone(tz);
-		
+
 			try {
-				// Setting the date to the given date
+				if (paymentDate != null && !paymentDate.isEmpty())
 				c.setTime(sdf.parse(paymentDate));
+				else {
+					Date today = new Date();
+					DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+					df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+					String date = df.format(today);
+					c.setTime(sdf.parse(date));
+				}
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -128,8 +151,7 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 			c.add(Calendar.DAY_OF_MONTH, -creditPeriod);
 			// Date after adding the days to the given date
 			String dateBeforePeriod = sdf.format(c.getTime());
-			
-			
+
 			List<String> billDetailsMap = controller.getBillDetails(partyId, "", dateBeforePeriod);
 			String result = "";
 			if (billDetailsMap != null && !billDetailsMap.isEmpty()) {
@@ -200,11 +222,11 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 		GameLobbyController controller = new GameLobbyController();
 		particularsList = new ArrayList<String>();
 		salesStockItemList = new ArrayList<>();
-		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		particularsList = controller.getaccountListForTxnPayment("", 1);
 		partyAccName = new ArrayList<>();
-		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		partyAccName = controller.getaccountListForTxnPayment("", 1);
 		employeeUnderList = controller.getEmployeeNamesList();
-		salesAccountList = controller.getaccountListForTxnPayment("purchase acc", getUserInfoBean().getUserId());
+		salesAccountList = controller.getaccountListForTxnPayment("purchase acc", 1);
 		salesStockItemList = controller.getSalesStockItemList();
 		purchaseNo = controller.getPurchaseNo();
 		goDownList = new ArrayList<>();
@@ -251,17 +273,64 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 		}
 
 	}
+	public String loadEmpPurchaseOrder() {
+		GameLobbyController controller = new GameLobbyController();
+		String str = controller.fetchEmpPOData(0, POId);
+		String[] resArr = str.split("\\|");
+		orderNo = resArr[0].trim();
+		String[] itemArr = resArr[3].split(",");
+		ItemBean bean = null;
+		itemBeans = new ArrayList<ItemBean>();
+		int id = 1;
+		for (int i = 0; i < itemArr.length; i++) {
 
+			if (resArr[3].split(",")[i].trim().equals("-1")) {
+
+			} else {
+
+				bean = new ItemBean();
+				bean.setRowId(String.valueOf(id));
+				bean.setItemName(resArr[3].split(",")[i].trim());
+				bean.setItemQty(resArr[4].split(",")[i].trim());
+				bean.setItemRate(resArr[5].split(",")[i].trim());
+				bean.setItemAmount(resArr[6].split(",")[i].trim());
+				itemBeans.add(bean);
+				id++;
+			}
+		}
+		partyAccNamePO = resArr[1].trim();
+		totalAmt = resArr[8].trim();
+		narration = resArr[7].trim();
+		status = resArr[9].trim();
+		Dname = resArr[10].trim();
+		propName = resArr[11].trim();
+		contact = resArr[12].trim();
+		address = resArr[13].trim();
+		gstnNo = resArr[14].trim();
+		paymentDate = resArr[15].trim();
+		docPictureFileName = resArr[16].trim();
+		
+		particularsList = new ArrayList<String>();
+		salesStockItemList = new ArrayList<>();
+		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		partyAccName = new ArrayList<>();
+		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		employeeUnderList = controller.getEmployeeNamesList();
+		salesAccountList = controller.getaccountListForTxnPayment("purchase acc", getUserInfoBean().getUserId());
+		salesStockItemList = controller.getSalesStockItemList();
+		return SUCCESS;
+	}
 	public String loadPurchasePageAlert() {
 
 		GameLobbyController controller = new GameLobbyController();
 		String str = controller.fetchEmpPOData(0, POId);
 		String[] resArr = str.split("\\|");
 		orderNo = resArr[0].trim();
+		String[] itemArr = resArr[3].split(",");
 		ItemBean bean = null;
 		itemBeans = new ArrayList<ItemBean>();
 		int id = 1;
-		for (int i = 0; i < resArr.length; i++) {
+		for (int i = 0; i < itemArr.length; i++) {
 
 			if (resArr[3].split(",")[i].trim().equals("-1")) {
 
@@ -323,7 +392,7 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 			if (controller.createTransactionPurchase(referenceNo, employeeUnder, partyAcc, salesAccount,
 					salesStockItems, amount, Qty, rate, narration, purchaseNoVoucher, consignee, Dname, propName,
 					contact, address, gstnNo, ddn, tn, des, billt, vn, transportFreight, paymentDate,
-					activeVoucherNumber)) {
+					activeVoucherNumber,totalAmt,goDown,hiddenBatchNumber)) {
 				if (controller.updateTransactionPartyBalance(partyAcc, currBalance, hcrdr)) {
 					if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
 							hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) // st_rm_item_qty_godown
@@ -349,18 +418,20 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 		} else {
 			voucherBean = controller.getVoucherNumbering("purchase", activeVoucherNumber);
 			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(), paymentDate + " 00:00");
-			if (voucherDate == true) {
+			boolean voucherDate1 = compareTwoDate( paymentDate + " 00:00",voucherBean.getStartDate());
+			if (voucherDate == true || voucherDate1==true) {
 				servletResponse.getWriter().write("date");
 			} else {
 				if (controller.createTransactionPurchase(referenceNo, employeeUnder, partyAcc, salesAccount,
 						salesStockItems, amount, Qty, rate, narration, purchaseNoVoucher, consignee, Dname, propName,
 						contact, address, gstnNo, ddn, tn, des, billt, vn, transportFreight, paymentDate,
-						activeVoucherNumber)) {
+						activeVoucherNumber,totalAmt,goDown,hiddenBatchNumber)) {
 					if (controller.updateTransactionPartyBalance(partyAcc, currBalance, hcrdr)) {
 						if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
 								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) // st_rm_item_qty_godown
 																									// update
-							if (controller.insertNewBill(paymentDate, "Agst Ref", partyAcc, totalAmt,purchaseNoVoucher)) {
+							if (controller.insertNewBill(paymentDate, "Agst Ref", partyAcc, totalAmt,
+									purchaseNoVoucher)) {
 								if (orderNo != null && !orderNo.isEmpty()) {
 									if (controller.changeStatusSuccessPurchase(Integer.valueOf(orderNo),
 											userInfoBean.getUserId()))
@@ -844,6 +915,46 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 
 	public void setTransportFreight(String transportFreight) {
 		this.transportFreight = transportFreight;
+	}
+
+	public String getSuffix() {
+		return suffix;
+	}
+
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+	}
+
+	public File getDocPicture() {
+		return docPicture;
+	}
+
+	public void setDocPicture(File docPicture) {
+		this.docPicture = docPicture;
+	}
+
+	public String getDocPictureContentType() {
+		return docPictureContentType;
+	}
+
+	public void setDocPictureContentType(String docPictureContentType) {
+		this.docPictureContentType = docPictureContentType;
+	}
+
+	public String getDocPictureFileName() {
+		return docPictureFileName;
+	}
+
+	public void setDocPictureFileName(String docPictureFileName) {
+		this.docPictureFileName = docPictureFileName;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

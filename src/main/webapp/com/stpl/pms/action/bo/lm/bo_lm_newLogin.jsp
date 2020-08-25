@@ -49,6 +49,7 @@ function isFilled() {
 	document.getElementById('password').value=MD5(MD5(document.getElementById('password').value)+document.getElementsByName('loginToken')[0].value);
 	return true;
 }
+
 </script>
 </head>
 <body onload="initialFocus()" >
@@ -126,15 +127,15 @@ function isFilled() {
 					<footer class="card-footer text-center" style="background-color: #e0e0e0; border: 1px solid #BBBBBB; border-top: none;">
 						<small class="text-muted"><s:text name="global.login.copyright" /></small>
 					</footer>	
-
+					
 
 				</div>
-
+			
 
 			</div>
 		</div>
+		
 	</div>
-
 
 </body>
 </html>

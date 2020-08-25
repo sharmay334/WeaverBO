@@ -15,6 +15,7 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.javabeans.VoucherBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
+import com.stpl.pms.utility.SendSMS;
 
 public class TMCreditNoteMgmtAction extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
 	private HttpServletRequest servletRequest;
@@ -73,11 +74,11 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 		GameLobbyController controller = new GameLobbyController();
 		particularsList = new ArrayList<String>();
 		salesStockItemList = new ArrayList<>();
-		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		particularsList = controller.getaccountListForTxnPayment("", 1);
 		partyAccName = new ArrayList<>();
-		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		partyAccName = controller.getaccountListForTxnPayment("", 1);
 		employeeUnderList = controller.getEmployeeNamesList();
-		salesAccountList = controller.getaccountListForTxnPayment("sales acc", getUserInfoBean().getUserId());
+		salesAccountList = controller.getaccountListForTxnPayment("sales acc", 1);
 		salesStockItemList = controller.getSalesStockItemList();
 		cnNo = controller.getCreditNoteNo();
 		goDownList = new ArrayList<>();
@@ -192,62 +193,113 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 
 	public void createCreditNote() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		if(activeVoucherNumber.equals("0")) {
-			if (controller.createTransactionCreditNote(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
-					amount, Qty, rate, narration, cnNoVoucher, paymentDate, ddn, tn, des, billt, transportFreight, vn,
-					activeVoucherNumber)) {
+		if (activeVoucherNumber.equals("0")) {
+			if (controller.createTransactionCreditNote(referenceNo, employeeUnder, partyAcc, salesAccount,
+					salesStockItems, amount, Qty, rate, narration, cnNoVoucher, paymentDate, ddn, tn, des, billt,
+					transportFreight, vn, activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber)) {
 				if (hiddenAmnt == null && hiddenAmnt.isEmpty()) {
 					if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr))
 						if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate))
+								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) {
+
+							if (controller.allowAlert(partyAcc, "SMS"))
+								sendSmsAlert();
 							servletResponse.getWriter().write("success");
+						}
+
 				} else {
-					if (controller.adjustSaleBill(hiddenAmnt, hiddenBilId, hiddenTypeOfRef, partyAcc))
+					if (controller.adjustSaleBill(hiddenAmnt, hiddenBilId, hiddenTypeOfRef, partyAcc, cnNoVoucher))
 						if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr))
 							if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-									hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate))
+									hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) {
+								if (controller.allowAlert(partyAcc, "SMS"))
+									sendSmsAlert();
 								servletResponse.getWriter().write("success");
+							}
+
 				}
 
 			}
 
 			else
 				servletResponse.getWriter().write("error");
-			
-		}
-		else {
-			
+
+		} else {
+
 			voucherBean = controller.getVoucherNumbering("credit note", activeVoucherNumber);
-			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(),paymentDate+" 00:00");
-			if(voucherDate==true) {
+			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(), paymentDate + " 00:00");
+			boolean voucherDate1 = compareTwoDate(paymentDate + " 00:00", voucherBean.getStartDate());
+			if (voucherDate == true || voucherDate1 == true) {
 				servletResponse.getWriter().write("date");
-			}
-			else {
-				if (controller.createTransactionCreditNote(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
-						amount, Qty, rate, narration, cnNoVoucher, paymentDate, ddn, tn, des, billt, transportFreight, vn,
-						activeVoucherNumber)) {
+			} else {
+				if (controller.createTransactionCreditNote(referenceNo, employeeUnder, partyAcc, salesAccount,
+						salesStockItems, amount, Qty, rate, narration, cnNoVoucher, paymentDate, ddn, tn, des, billt,
+						transportFreight, vn, activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber)) {
 					if (hiddenAmnt == null && hiddenAmnt.isEmpty()) {
 						if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr))
 							if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-									hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate))
+									hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) {
+
+								if (controller.allowAlert(partyAcc, "SMS"))
+									sendSmsAlert();
 								servletResponse.getWriter().write("success");
+							}
+
 					} else {
-						if (controller.adjustSaleBill(hiddenAmnt, hiddenBilId, hiddenTypeOfRef, partyAcc))
+						if (controller.adjustSaleBill(hiddenAmnt, hiddenBilId, hiddenTypeOfRef, partyAcc, cnNoVoucher))
 							if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr))
-								if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-										hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate))
+								if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit,
+										hiddenBatchNumber, hiddenMfgDate, hiddenExpDate, hiddenExpAlert,
+										hiddenExpAlertDate)) {
+									if (controller.allowAlert(partyAcc, "SMS"))
+										sendSmsAlert();
 									servletResponse.getWriter().write("success");
+								}
+
 					}
 
 				}
 
 				else
 					servletResponse.getWriter().write("error");
-				
+
 			}
 		}
-		
+
 		return;
+	}
+
+	private void sendSmsAlert() {
+		GameLobbyController controller = new GameLobbyController();
+		String getPropName = controller.getPropName(partyAcc);
+		String mobile = controller.getPropContact(partyAcc);
+		String getUnderEmpName = controller.getUnderEmpName(partyAcc);
+		String getEmpMobile = controller.getUnderEmpMobile(partyAcc);
+		String sms = "Dear " + getPropName + ",Prop " + partyAcc + ". Your Sales Return Bill No-" + cnNoVoucher
+				+ " of AMT " + totalAmt + " " + " Dated " + paymentDate
+				+ " has been generated. Your closing balance is " + currBalance + " " + hcrdr
+				+ ". Thank you for choosing us. Regards JAMIDARA SEEDS CORPORATION (Karnataka)";
+		String smsEmp = "Dear " + getUnderEmpName + ", Your party " + getPropName + ",Prop " + partyAcc
+				+ " Sales Return Bill No-" + cnNoVoucher + " of AMT " + totalAmt + " " + " Dated " + paymentDate
+				+ " has been generated. His closing balance is " + currBalance + " " + hcrdr
+				+ ". Thank you for choosing us. Regards JAMIDARA SEEDS CORPORATION (Karnataka)";
+		if (mobile != null && !mobile.isEmpty()) {
+			SendSMS sendSMS = new SendSMS();
+			sendSMS.setMobileNo("91" + mobile);
+			sendSMS.setMsg(sms);
+			Thread thread = new Thread(sendSMS);
+			thread.setDaemon(true);
+			thread.start();
+		}
+
+		if (getEmpMobile != null && !getEmpMobile.isEmpty()) {
+			SendSMS sendSMS1 = new SendSMS();
+			sendSMS1.setMobileNo("91" + getEmpMobile);
+			sendSMS1.setMsg(smsEmp);
+			Thread thread1 = new Thread(sendSMS1);
+			thread1.setDaemon(true);
+			thread1.start();
+		}
 	}
 
 	public HttpServletRequest getServletRequest() {

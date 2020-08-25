@@ -44,7 +44,7 @@ public class TMJournalMgmtAction extends BaseActionSupport implements ServletReq
 		GameLobbyController controller = new GameLobbyController();
 		employeeUnderList = controller.getEmployeeNamesList();
 		particularsList = new ArrayList<String>();
-		particularsList = controller.getaccountListForTxnPayment("particulars", getUserInfoBean().getUserId());
+		particularsList = controller.getaccountListForTxnPayment("particulars", 1);
 		journalNo = controller.getJournalNo();
 
 		String checkIsVoucherActive = controller.getActiveVoucher("journal");
@@ -136,7 +136,8 @@ public class TMJournalMgmtAction extends BaseActionSupport implements ServletReq
 			
 			voucherBean = controller.getVoucherNumbering("journal", activeVoucherNumber);
 			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(),paymentDate+" 00:00");
-			if(voucherDate==true) {
+			boolean voucherDate1 = compareTwoDate(paymentDate+" 00:00",voucherBean.getStartDate());
+			if(voucherDate==true || voucherDate1==true) {
 				servletResponse.getWriter().write("date");
 			}
 			else {

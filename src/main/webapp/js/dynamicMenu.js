@@ -46,7 +46,7 @@ function _buidActionPath(relatedTo,service) {
 								return projectName +"/com/stpl/pms/action/bo/cms/";// +service+"/action/cmsMgmt/";
 							}else {
 								if (relatedTo == "REPORTS") {
-									return projectName +"/com/stpl/pms/action/bo/reports/";// +service+"/action/reportMgmt/";
+									return projectName +"/com/stpl/pms/action/bo/um/";// +service+"/action/reportMgmt/";
 								}
 								else {
 									if (relatedTo == "DOMAIN_MGT") {
