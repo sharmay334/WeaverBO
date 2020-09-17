@@ -62,18 +62,24 @@ body {font-family: Arial, Helvetica, sans-serif;}
 <script>
 
 	$(document).ready(function() {
-		// fromAndToDate();
-		$('#waitDiv').hide();
-		$('#searchButton').show();
-		$('#searchButton').attr("disabled", false);
-		
-		bonusTable1 = $('#payTransactionTable1').dataTable({
-			"scrollX" : true,
-			"sPaginationType" : "full_numbers"
+
+		$('#payTransactionTable1').DataTable({
+			 "scrollX": true,
+			lengthMenu: [
+		        [ 10, 25, 50, -1 ],
+		        [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+		    ],
+			dom: 'Bfrtip',
+	      buttons: [
+	          'excel',
+	          'csv',
+	          'copy',
+	          'pageLength'
+	      ]
+			
 			
 		});
 	});
-//	$('#payTransactionTable').DataTable();
 
 </script>
 </head>

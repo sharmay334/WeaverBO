@@ -11,6 +11,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<script src="/WeaverBO/js/sweetalert.min.js"></script>
+<script type="text/javascript"
+	src="/WeaverBO/js/jQuery/1.11.3/jquery-ui.min.js">
+      </script>
+<link rel="stylesheet" href="/WeaverBO/js/jQuery/1.11.3/jquery-ui.css">
+
 <title>Ledger Info</title>
 <SCRIPT type="text/javascript"
 	src="<%=path%>/com/stpl/pms/action/bo/um/js/um.js"></SCRIPT>
@@ -30,7 +36,7 @@
 							onSelect : function(selectedDate) {
 								if (selectedDate != "") {
 									$("#openingDate").datepicker("option",
-											"minDate", selectedDate);
+											"setDate", selectedDate);
 								} else {
 									var date = new Date().getDate();
 									$(function() {
@@ -55,7 +61,7 @@
 						onSelect : function(selectedDate) {
 							if (selectedDate != "") {
 								$("#intersetStartDate").datepicker("option",
-										"minDate", selectedDate);
+										"setDate", selectedDate);
 							} else {
 								var date = new Date().getDate();
 								$(function() {
@@ -294,6 +300,57 @@
 					
 					</div>
 
+				</div>
+				
+				<div class="FormMainBox">
+					<div class="labelDiv">
+						<label>Responsible Person Address </label>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield maxlength="100" name="ledgerCustomBean.resPerAddr" value="%{ledgerCustomBean.resPerAddr}" id="resPerAddr" theme="myTheme"
+							></ss:textfield>
+						
+					</div>
+				 </div>
+					<div class="FormMainBox">
+					<div class="labelDiv">
+						<label>Firm Address </label>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield maxlength="100" name="ledgerCustomBean.address" value="%{ledgerCustomBean.address}" id="address" theme="myTheme"
+							></ss:textfield>
+						
+					</div>
+				</div>
+				<div class="FormMainBox">
+					<div class="labelDiv">
+						<label>District </label>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield maxlength="100" name="ledgerCustomBean.district" value="%{ledgerCustomBean.district}" id="district" theme="myTheme"
+							></ss:textfield>
+						
+					</div>
+				</div>
+				<div class="FormMainBox">
+					<div class="labelDiv">
+						<label>Tehsil </label>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield maxlength="100" name="ledgerCustomBean.tehsil" value="%{ledgerCustomBean.tehsil}" id="tehsil" theme="myTheme"
+							></ss:textfield>
+						
+					</div>
+				</div>
+				<div class="FormMainBox">
+					<div class="labelDiv">
+						<label>Pincode </label>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield maxlength="100" name="ledgerCustomBean.pincode" value="%{ledgerCustomBean.pincode}" id="pincode" theme="myTheme"
+							></ss:textfield>
+						
+					</div>
 				</div>
 				
 				

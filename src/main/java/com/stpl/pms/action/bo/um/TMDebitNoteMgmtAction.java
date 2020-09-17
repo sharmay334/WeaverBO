@@ -150,9 +150,9 @@ public class TMDebitNoteMgmtAction extends BaseActionSupport implements ServletR
 		Session session = null;
 		if (controller.createTransactionDebitNote(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
 				amount, Qty, rate, narration, dnNoVoucher)) {
-			if (controller.updateTransactionPartyBalance(partyAcc, currBalance, hcrdr))
+			if (controller.updateTransactionPartyBalance(partyAcc, currBalance, hcrdr,null,null))
 				if (controller.updateOrCreateStockSale(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-						hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate,"")) {
+						hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate,"",null,null)) {
 					transaction.commit();
 					servletResponse.getWriter().write("success");
 				}

@@ -36,7 +36,6 @@ public class TMAttendanceAction extends BaseActionSupport implements ServletRequ
 		userName = getUserInfoBean().getUserName();
 		underledgersList = new ArrayList<String>();
 		underledgersList = controller.getLedgerNames(getUserInfoBean().getUserId());
-		
 		return SUCCESS;
 	}
 

@@ -1,11 +1,19 @@
 package com.stpl.pms.action.bo.um;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
@@ -37,12 +45,95 @@ public class TMEmpCreditNoteMgmtAction extends BaseActionSupport implements Serv
 	private String goDown;
 	private String unit;
 	private String totalAmt;
-	
+
 	private String hiddenBatchNumber;
 	private String hiddenMfgDate;
 	private String hiddenExpDate;
 	private String hiddenExpAlert;
 	private String hiddenExpAlertDate;
+
+	private File docPictureDD;
+	private String docPictureDDContentType;
+	private String docPictureDDFileName;
+
+	private File docPictureTB;
+	private String docPictureTBContentType;
+	private String docPictureTBFileName;
+
+	private String consignee;
+	private String Dname;
+	private String propName;
+	private String contact;
+	private String address;
+	private String gstnNo;
+	private String tn;
+	private String txnType;
+
+	public void uploadDocument() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		boolean flag = false;
+		Date today = new Date();
+		String fName="";
+		if(txnType!=null && txnType.equalsIgnoreCase("creditNote"))
+			fName="creditNote";
+		else
+			fName="creditNoteOrder";
+		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+		df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+		String date = df.format(today);
+		String filePath = ServletActionContext.getServletContext().getRealPath("/");
+		filePath = filePath.substring(0, filePath.lastIndexOf("default/"));
+		File file = new File(filePath+ fName+ "/" + getUserInfoBean().getUserId());
+		if (file.mkdir()) {
+			filePath = filePath.concat(fName+"/" + getUserInfoBean().getUserId());
+
+			if (docPictureDDFileName != null && !docPictureDDFileName.isEmpty()) {
+				docPictureDDFileName = cnNo + "_" + date + "_dd_" + docPictureDDFileName;
+				File fileToCreateDD = new File(filePath, docPictureDDFileName);
+				FileUtils.copyFile(docPictureDD, fileToCreateDD);// copying source file to new file
+				flag = true;
+
+			}
+			if (docPictureTBFileName != null && !docPictureTBFileName.isEmpty()) {
+				docPictureTBFileName = cnNo + "_" + date + "_billT_" + docPictureTBFileName;
+
+				File fileToCreateTB = new File(filePath, docPictureTBFileName);
+				FileUtils.copyFile(docPictureTB, fileToCreateTB);// copying source file to new file
+				flag = true;
+			}
+		} else {
+			filePath = filePath.concat(fName+"/" + getUserInfoBean().getUserId());
+
+			if (docPictureDDFileName != null && !docPictureDDFileName.isEmpty()) {
+				docPictureDDFileName = cnNo + "_" + date + "_dd_" + docPictureDDFileName;
+				File fileToCreateDD = new File(filePath, docPictureDDFileName);
+				FileUtils.copyFile(docPictureDD, fileToCreateDD);// copying source file to new file
+				flag = true;
+
+			}
+			if (docPictureTBFileName != null && !docPictureTBFileName.isEmpty()) {
+				docPictureTBFileName = cnNo + "_" + date + "_billT_" + docPictureTBFileName;
+
+				File fileToCreateTB = new File(filePath, docPictureTBFileName);
+				FileUtils.copyFile(docPictureTB, fileToCreateTB);// copying source file to new file
+				flag = true;
+			}
+
+		}
+		if (flag == true) {
+			String fileFullPathDD = filePath + "/" + docPictureDDFileName;
+			String fileFullPathTB = filePath + "/" + docPictureTBFileName;
+
+			controller.setDocumentPathCreditNote(cnNo, fileFullPathDD, fileFullPathTB, getUserInfoBean().getUserId(),txnType);
+
+			servletResponse.getWriter().write("success");
+
+		} else
+			servletResponse.getWriter().write("failed");
+
+		return;
+
+	}
 
 	public String loadCreditNotePage() {
 		GameLobbyController controller = new GameLobbyController();
@@ -60,17 +151,17 @@ public class TMEmpCreditNoteMgmtAction extends BaseActionSupport implements Serv
 		return SUCCESS;
 	}
 
-	public String createCreditNote() {
+	public void createCreditNote() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		if (controller.createEmpTransactionCreditNote(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
-				amount, Qty, rate, narration,userInfoBean.getUserId(),userInfoBean.getParentUserId(),totalAmt)) {
-			//if (controller.updateTransactionPartyBalance(partyAcc, currBalance))
-				//if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit,hiddenBatchNumber,hiddenMfgDate,hiddenExpDate,hiddenExpAlert,hiddenExpAlertDate)) // st_rm_item_qty_godown update
-					return SUCCESS;
+		if (controller.createEmpTransactionCreditNote(referenceNo, employeeUnder, partyAcc, salesAccount,
+				salesStockItems, amount, Qty, rate, narration, userInfoBean.getUserId(), userInfoBean.getParentUserId(),
+				totalAmt, consignee, Dname, propName, contact, address, gstnNo, tn)) {
+			servletResponse.getWriter().write("success");
 		}
-			
+
 		else
-			return ERROR;
+			servletResponse.getWriter().write("error");
+		return;
 	}
 
 	public HttpServletRequest getServletRequest() {
@@ -288,5 +379,117 @@ public class TMEmpCreditNoteMgmtAction extends BaseActionSupport implements Serv
 	public void setTotalAmt(String totalAmt) {
 		this.totalAmt = totalAmt;
 	}
-	
+
+	public File getDocPictureDD() {
+		return docPictureDD;
+	}
+
+	public void setDocPictureDD(File docPictureDD) {
+		this.docPictureDD = docPictureDD;
+	}
+
+	public String getDocPictureDDContentType() {
+		return docPictureDDContentType;
+	}
+
+	public void setDocPictureDDContentType(String docPictureDDContentType) {
+		this.docPictureDDContentType = docPictureDDContentType;
+	}
+
+	public String getDocPictureDDFileName() {
+		return docPictureDDFileName;
+	}
+
+	public void setDocPictureDDFileName(String docPictureDDFileName) {
+		this.docPictureDDFileName = docPictureDDFileName;
+	}
+
+	public File getDocPictureTB() {
+		return docPictureTB;
+	}
+
+	public void setDocPictureTB(File docPictureTB) {
+		this.docPictureTB = docPictureTB;
+	}
+
+	public String getDocPictureTBContentType() {
+		return docPictureTBContentType;
+	}
+
+	public void setDocPictureTBContentType(String docPictureTBContentType) {
+		this.docPictureTBContentType = docPictureTBContentType;
+	}
+
+	public String getDocPictureTBFileName() {
+		return docPictureTBFileName;
+	}
+
+	public void setDocPictureTBFileName(String docPictureTBFileName) {
+		this.docPictureTBFileName = docPictureTBFileName;
+	}
+
+	public String getConsignee() {
+		return consignee;
+	}
+
+	public void setConsignee(String consignee) {
+		this.consignee = consignee;
+	}
+
+	public String getDname() {
+		return Dname;
+	}
+
+	public void setDname(String dname) {
+		Dname = dname;
+	}
+
+	public String getPropName() {
+		return propName;
+	}
+
+	public void setPropName(String propName) {
+		this.propName = propName;
+	}
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getGstnNo() {
+		return gstnNo;
+	}
+
+	public void setGstnNo(String gstnNo) {
+		this.gstnNo = gstnNo;
+	}
+
+	public String getTn() {
+		return tn;
+	}
+
+	public void setTn(String tn) {
+		this.tn = tn;
+	}
+
+	public String getTxnType() {
+		return txnType;
+	}
+
+	public void setTxnType(String txnType) {
+		this.txnType = txnType;
+	}
+
 }

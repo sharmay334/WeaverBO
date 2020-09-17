@@ -75,13 +75,27 @@ function closeDialogue(){
 }
 
 function setAlert(partyId,voucherNo,billId){
-	
 	GpartyId = partyId;
 	GvoucherNo = voucherNo;
 	GbillId = billId;
-	document.getElementById('remindBefDay').value="0";
-	document.getElementById('remindAftDay').value="0";
-	document.getElementById('remindInterval').value="0";
+	
+	var myurl = "<%=basePath%>";
+	myurl += "com/stpl/pms/action/bo/um/bo_um_bill_alert_show_old_rem_data.action?partyId="+GpartyId+"&voucherNo="+voucherNo;
+	$.ajax({
+		type : "GET",
+		url : myurl,
+		success : function(itr) {
+			var data = itr.split(";");
+			document.getElementById('remindBefDay').value=data[0];
+			document.getElementById('remindAftDay').value=data[1];
+			document.getElementById('remindInterval').value=data[2];
+					
+
+		},
+		error : function(itr) {
+
+		}
+	});
 	document.getElementById("myForm").style.display = "block";
 }
 function SaveInformation(){

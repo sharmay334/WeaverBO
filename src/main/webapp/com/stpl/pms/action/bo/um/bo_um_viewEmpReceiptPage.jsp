@@ -71,14 +71,8 @@ var modal = document.getElementById("myModal");
 var currentId = 0;
 var activerow=0;
 var BillWiseActiveRow=0;
-//Get the button that opens the modal
-
-//Get the <span> element that closes the modal
-
-//When the user clicks the button, open the modal 
 
 
-//When the user clicks on <span> (x), close the modal
 function validateFile(fileName, id) {
 	var file = fileName.value;
 	var ext = file.substring(file.length, file.length - 3);
@@ -123,6 +117,7 @@ function promptSave(){
 			  $.ajax({
 			        type: frm.attr('method'),
 			        url: frm.attr('action'),
+			        async:false,
 			        data: frm.serialize(),
 			        success: function (data) {
 			        	if(data=="success"){
@@ -132,6 +127,7 @@ function promptSave(){
 						        url: myurl,
 						        data: formData,
 						        cache : false,
+						        async:false,
 								contentType : false,
 								processData : false,
 						        success: function (data) {

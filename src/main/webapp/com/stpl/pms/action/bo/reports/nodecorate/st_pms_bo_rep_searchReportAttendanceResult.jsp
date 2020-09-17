@@ -17,6 +17,11 @@
 <meta http-equiv="expires" content="0">
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
+<script src="/WeaverBO/js/sweetalert.min.js"></script>
+<link rel="stylesheet" href="/WeaverBO/js/jQuery/1.11.3/jquery-ui.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+
 <style>
 body {font-family: Arial, Helvetica, sans-serif;}
 
@@ -74,7 +79,29 @@ function getReport(empId,date){
 	        async:false,
 	        data: frm.serialize(),
 	        success: function (data) {
-	            document.getElementById('searchResult1').innerHTML = data;
+	        	 $("#searchResult1").html(data);
+	        	 $(document).ready(function() {
+
+	        			$('#payTransactionTable1').DataTable({
+	        				 "destroy": true,
+	        				 "scrollX": true,
+	        				lengthMenu: [
+	        			        [ 10, 25, 50, -1 ],
+	        			        [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+	        			    ],
+	        				dom: 'Bfrtip',
+	        		      buttons: [
+	        		          'excel',
+	        		          'csv',
+	        		          'pdf',
+	        		          'copy',
+	        		          'pageLength'
+	        		      ]
+	        				
+	        				
+	        			});
+	        		});
+	        //    document.getElementById('searchResult1').innerHTML = data;
 	        },
 	        error: function (data) {
 	        	 document.getElementById('searchResult1').innerHTML = data;
@@ -148,9 +175,21 @@ function callPictureReport(empId,attDate){
 		$('#searchButton').show();
 		$('#searchButton').attr("disabled", false);
 		
-		bonusTable = $('#payTransactionTable').dataTable({
-			"scrollX" : true,
-			"sPaginationType" : "full_numbers"
+		$('#payTransactionTable').DataTable({
+			 "scrollX": true,
+			lengthMenu: [
+		        [ 10, 25, 50, -1 ],
+		        [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+		    ],
+			dom: 'Bfrtip',
+	        buttons: [
+	            'excel',
+	            'csv',
+	            'pdf',
+	            'copy',
+	            'pageLength'
+	        ]
+			
 			
 		});
 	});
@@ -202,6 +241,8 @@ function callPictureReport(empId,attDate){
 								id="th_3">Odometer Reading Out</th>
 							<th width="5%" valign="middle" style="text-align: center;"
 								id="th_3">Total Reading</th> 
+							<th width="5%" valign="middle" style="text-align: center;"
+								id="th_3">Visit Target</th> 	
 							<th width="5%" valign="middle" style="text-align: center;" is_link="false"
 								id="th_3">Visit Report</th>	
 						</tr>
@@ -248,6 +289,9 @@ function callPictureReport(empId,attDate){
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
 									<s:property value="#attendanceMap.totalReading" />
+								</td>
+								<td width="5%" valign="middle" style="text-align: center;">
+									<s:property value="#attendanceMap.visitLocation" />
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
 								<button type="button" class="button" onclick="getReport('<s:property value="#attendanceMap.empId" />','<s:property value="#attendanceMap.attendanceDate" />')">GET</button>

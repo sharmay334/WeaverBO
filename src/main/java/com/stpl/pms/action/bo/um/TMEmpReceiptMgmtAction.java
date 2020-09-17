@@ -45,22 +45,27 @@ public class TMEmpReceiptMgmtAction extends BaseActionSupport implements Servlet
 	public void uploadDocument() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		boolean flag = false;
+		String fName="";
+		if(txnType!=null && txnType.equals("receipt"))
+			fName="receipt";
+		else
+			fName="receiptOrder";
 		Date today = new Date();
 		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 		df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
 		String date = df.format(today);
 		String filePath = ServletActionContext.getServletContext().getRealPath("/");
 		filePath = filePath.substring(0, filePath.lastIndexOf("default/"));
-		File file = new File(filePath + "receiptOrder/" + getUserInfoBean().getUserId());
+		File file = new File(filePath +fName+ "/" + getUserInfoBean().getUserId());
 		if (file.mkdir()) {
 			docPictureFileName = receiptNo + "_" + date + "_" + docPictureFileName;
-			filePath = filePath.concat("receiptOrder/" + getUserInfoBean().getUserId());
+			filePath = filePath.concat(fName+"/" + getUserInfoBean().getUserId());
 			File fileToCreate = new File(filePath, docPictureFileName);
 			FileUtils.copyFile(docPicture, fileToCreate);// copying source file to new file
 			flag = true;
 		} else {
 			docPictureFileName = receiptNo + "_" + date + "_" + docPictureFileName;
-			filePath = filePath.concat("receiptOrder/" + getUserInfoBean().getUserId());
+			filePath = filePath.concat(fName+"/" + getUserInfoBean().getUserId());
 			File fileToCreate = new File(filePath, docPictureFileName);
 			FileUtils.copyFile(docPicture, fileToCreate);// copying source file to new file
 			flag = true;
@@ -68,7 +73,7 @@ public class TMEmpReceiptMgmtAction extends BaseActionSupport implements Servlet
 		}
 		if (flag == true) {
 			String fileFullPath = filePath + "/" + docPictureFileName;
-			controller.setDocumentPathReceipt(receiptNo, fileFullPath, getUserInfoBean().getUserId());
+			controller.setDocumentPathReceipt(receiptNo, fileFullPath, getUserInfoBean().getUserId(),txnType);
 
 			servletResponse.getWriter().write("success");
 

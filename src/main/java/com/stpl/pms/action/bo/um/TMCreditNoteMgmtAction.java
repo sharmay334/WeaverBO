@@ -1,5 +1,6 @@
 package com.stpl.pms.action.bo.um;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,8 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.hibernate.factory.HibernateSessionFactory;
+import com.stpl.pms.javabeans.ItemBean;
 import com.stpl.pms.javabeans.VoucherBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 import com.stpl.pms.utility.SendSMS;
@@ -29,7 +34,7 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 	private List<String> salesStockItemList;
 	private String cnNoVoucher;
 	// create payment fields
-
+	private String partyOldBalance;
 	private String referenceNo;
 	private String employeeUnder;
 	private String partyAcc;
@@ -62,14 +67,27 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 	private String typeOfRef;
 	private String hiddenTypeOfRef;
 	private String hiddenBillWiseName;
-
+	private List<ItemBean> itemBeans;
 	private String ddn;
 	private String tn;
 	private String des;
 	private String billt;
 	private String transportFreight;
 	private String vn;
+	private String status;
+	private String consignee;
+	private String Dname;
+	private String propName;
+	private String contact;
+	private String address;
+	private String gstnNo;
+	private File docPictureDD;
+	private String docPictureDDContentType;
+	private String docPictureDDFileName;
 
+	private File docPictureTB;
+	private String docPictureTBContentType;
+	private String docPictureTBFileName;
 	public String loadCreditNotePage() {
 		GameLobbyController controller = new GameLobbyController();
 		particularsList = new ArrayList<String>();
@@ -193,25 +211,35 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 
 	public void createCreditNote() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
+		Transaction transaction = null;
+		Session session = HibernateSessionFactory.getSession();
+		transaction = session.beginTransaction();
 		if (activeVoucherNumber.equals("0")) {
-			if (controller.createTransactionCreditNote(referenceNo, employeeUnder, partyAcc, salesAccount,
+			if (controller.createTransactionCreditNote(partyOldBalance, employeeUnder, partyAcc, salesAccount,
 					salesStockItems, amount, Qty, rate, narration, cnNoVoucher, paymentDate, ddn, tn, des, billt,
-					transportFreight, vn, activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber)) {
+					transportFreight, vn, activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber, session,
+					transaction)) {
 				if (hiddenAmnt == null && hiddenAmnt.isEmpty()) {
-					if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr))
+					if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr, session,
+							transaction))
 						if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) {
-
+								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, session,
+								transaction)) {
+							transaction.commit();
 							if (controller.allowAlert(partyAcc, "SMS"))
 								sendSmsAlert();
 							servletResponse.getWriter().write("success");
 						}
 
 				} else {
-					if (controller.adjustSaleBill(hiddenAmnt, hiddenBilId, hiddenTypeOfRef, partyAcc, cnNoVoucher))
-						if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr))
+					if (controller.adjustSaleBill(hiddenAmnt, hiddenBilId, hiddenTypeOfRef, partyAcc, cnNoVoucher,
+							session, transaction))
+						if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr,
+								session, transaction))
 							if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-									hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) {
+									hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, session,
+									transaction)) {
+								transaction.commit();
 								if (controller.allowAlert(partyAcc, "SMS"))
 									sendSmsAlert();
 								servletResponse.getWriter().write("success");
@@ -232,25 +260,31 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 			if (voucherDate == true || voucherDate1 == true) {
 				servletResponse.getWriter().write("date");
 			} else {
-				if (controller.createTransactionCreditNote(referenceNo, employeeUnder, partyAcc, salesAccount,
+				if (controller.createTransactionCreditNote(partyOldBalance, employeeUnder, partyAcc, salesAccount,
 						salesStockItems, amount, Qty, rate, narration, cnNoVoucher, paymentDate, ddn, tn, des, billt,
-						transportFreight, vn, activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber)) {
+						transportFreight, vn, activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber, session,
+						transaction)) {
 					if (hiddenAmnt == null && hiddenAmnt.isEmpty()) {
-						if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr))
+						if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr,
+								session, transaction))
 							if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-									hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) {
-
+									hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, session,
+									transaction)) {
+								transaction.commit();
 								if (controller.allowAlert(partyAcc, "SMS"))
 									sendSmsAlert();
 								servletResponse.getWriter().write("success");
 							}
 
 					} else {
-						if (controller.adjustSaleBill(hiddenAmnt, hiddenBilId, hiddenTypeOfRef, partyAcc, cnNoVoucher))
-							if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr))
+						if (controller.adjustSaleBill(hiddenAmnt, hiddenBilId, hiddenTypeOfRef, partyAcc, cnNoVoucher,
+								session, transaction))
+							if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr,
+									session, transaction))
 								if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit,
 										hiddenBatchNumber, hiddenMfgDate, hiddenExpDate, hiddenExpAlert,
-										hiddenExpAlertDate)) {
+										hiddenExpAlertDate, session, transaction)) {
+									transaction.commit();
 									if (controller.allowAlert(partyAcc, "SMS"))
 										sendSmsAlert();
 									servletResponse.getWriter().write("success");
@@ -300,6 +334,51 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 			thread1.setDaemon(true);
 			thread1.start();
 		}
+	}
+
+	public String loadEmpCreditNoteOrder() {
+
+		GameLobbyController controller = new GameLobbyController();
+		String str = controller.fetchEmpCNData(0, CNId);
+		String[] resArr = str.split("\\|");
+		orderNo = resArr[0].trim();
+		ItemBean bean = null;
+		String[] itemArr = resArr[3].split(",");
+		itemBeans = new ArrayList<ItemBean>();
+		int id = 1;
+		for (int i = 0; i < itemArr.length; i++) {
+
+			if (resArr[3].split(",")[i].trim().equals("-1")) {
+
+			} else {
+
+				bean = new ItemBean();
+				bean.setRowId(String.valueOf(id));
+				bean.setItemName(resArr[3].split(",")[i].trim());
+				bean.setItemQty(resArr[4].split(",")[i].trim());
+				bean.setItemRate(resArr[5].split(",")[i].trim());
+				bean.setItemAmount(resArr[6].split(",")[i].trim());
+				itemBeans.add(bean);
+				id++;
+			}
+		}
+		partyAccNameSO = resArr[1].trim();
+		totalAmt = resArr[8].trim();
+		narration = resArr[7].trim();
+		status = resArr[11].trim();
+		paymentDate = resArr[10].trim();
+		//docPictureFileName = resArr[16].trim();
+		particularsList = new ArrayList<String>();
+		salesStockItemList = new ArrayList<>();
+		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		partyAccName = new ArrayList<>();
+		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		employeeUnderList = controller.getEmployeeNamesList();
+		salesAccountList = controller.getaccountListForTxnPayment("sales acc", getUserInfoBean().getUserId());
+		salesStockItemList = controller.getSalesStockItemList();
+
+		return SUCCESS;
+
 	}
 
 	public HttpServletRequest getServletRequest() {
@@ -676,6 +755,126 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 
 	public void setVn(String vn) {
 		this.vn = vn;
+	}
+
+	public String getPartyOldBalance() {
+		return partyOldBalance;
+	}
+
+	public void setPartyOldBalance(String partyOldBalance) {
+		this.partyOldBalance = partyOldBalance;
+	}
+
+	public List<ItemBean> getItemBeans() {
+		return itemBeans;
+	}
+
+	public void setItemBeans(List<ItemBean> itemBeans) {
+		this.itemBeans = itemBeans;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getConsignee() {
+		return consignee;
+	}
+
+	public void setConsignee(String consignee) {
+		this.consignee = consignee;
+	}
+
+	public String getDname() {
+		return Dname;
+	}
+
+	public void setDname(String dname) {
+		Dname = dname;
+	}
+
+	public String getPropName() {
+		return propName;
+	}
+
+	public void setPropName(String propName) {
+		this.propName = propName;
+	}
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getGstnNo() {
+		return gstnNo;
+	}
+
+	public void setGstnNo(String gstnNo) {
+		this.gstnNo = gstnNo;
+	}
+
+	public File getDocPictureDD() {
+		return docPictureDD;
+	}
+
+	public void setDocPictureDD(File docPictureDD) {
+		this.docPictureDD = docPictureDD;
+	}
+
+	public String getDocPictureDDContentType() {
+		return docPictureDDContentType;
+	}
+
+	public void setDocPictureDDContentType(String docPictureDDContentType) {
+		this.docPictureDDContentType = docPictureDDContentType;
+	}
+
+	public String getDocPictureDDFileName() {
+		return docPictureDDFileName;
+	}
+
+	public void setDocPictureDDFileName(String docPictureDDFileName) {
+		this.docPictureDDFileName = docPictureDDFileName;
+	}
+
+	public File getDocPictureTB() {
+		return docPictureTB;
+	}
+
+	public void setDocPictureTB(File docPictureTB) {
+		this.docPictureTB = docPictureTB;
+	}
+
+	public String getDocPictureTBContentType() {
+		return docPictureTBContentType;
+	}
+
+	public void setDocPictureTBContentType(String docPictureTBContentType) {
+		this.docPictureTBContentType = docPictureTBContentType;
+	}
+
+	public String getDocPictureTBFileName() {
+		return docPictureTBFileName;
+	}
+
+	public void setDocPictureTBFileName(String docPictureTBFileName) {
+		this.docPictureTBFileName = docPictureTBFileName;
 	}
 
 }

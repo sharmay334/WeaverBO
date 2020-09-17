@@ -18,45 +18,46 @@
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
 <style>
-body {font-family: Arial, Helvetica, sans-serif;}
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
 
 /* The Modal (background) */
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* Modal Content */
 .modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+	background-color: #fefefe;
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
 }
 
 /* The Close Button */
 .close {
-  color: #aaaaaa;
-  float: right;
-  font-size: 15px;
-  font-weight: bold;
+	color: #aaaaaa;
+	float: right;
+	font-size: 15px;
+	font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
+.close:hover, .close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
 }
 </style>
 <script src="/WeaverBO/js/sweetalert.min.js"></script>
@@ -69,6 +70,14 @@ body {font-family: Arial, Helvetica, sans-serif;}
 function promptSave(){
 	var frm = $('#searchUserFrm');
 
+	let photo = document.getElementById("docPicture").files[0];
+	let formData = new FormData();
+	formData.append("docPicture", photo);
+	var myurl = "<%=basePath%>";
+	myurl += "/com/stpl/pms/action/bo/um/upload_payment_order_document.action?paymentNo="+document.getElementById('paymentNo').value+"&txnType=payment";
+	
+	
+	
 		swal({
 		  title: "Are you sure?",
 		  text: "Once Saved, you will not be able to undo the entry!",
@@ -85,9 +94,27 @@ function promptSave(){
 			        success: function (data) {
 			        	if(data=="success"){
 			        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
-			        		setTimeout(function(){
-			        			   window.location.reload(1);
-			        			}, 1000);
+			        		$.ajax({
+						        type: 'POST',
+						        url: myurl,
+						        async:false,
+						        data: formData,
+						        cache : false,
+								contentType : false,
+								processData : false,
+						        success: function (data) {
+						        	setTimeout(function(){
+					        			   window.location.reload(1);
+					        			}, 1000);
+						            
+						        },
+						        error: function (data) {
+						        	setTimeout(function(){
+					        			   window.location.reload(1);
+					        			}, 1000);
+						        },
+						    });
+			        		
 			        	}
 			        	else if(data=="date"){
 			        		swal("Error! Payment date is greater than voucher end date.");
@@ -124,6 +151,7 @@ var currentId = 0;
 var activerow=0;
 var BillWiseActiveRow=0;
 var old_cr_dr="";
+var old_hcrdr="";
 //Get the button that opens the modal
 
 //Get the <span> element that closes the modal
@@ -407,6 +435,9 @@ $(document).ready(function() {
 				var arr = itr.split(",");
 				document.getElementById('currentblnc'+res).value = arr[0];
 				document.getElementById('ccrdr'+res).innerHTML = arr[1];
+				document.getElementById('ccrdrH'+res).value = arr[1];
+				document.getElementById('particularsOldBal'+res).value = arr[0]+" "+arr[1];
+				old_hcrdr = arr[1];
 			},
 
 			error : function(itr) {
@@ -424,18 +455,56 @@ $(document).ready(function() {
 			url : myurl,
 			success : function(itr) {
 				if(itr=="true"){
-					
-					document.getElementById('biller_name').innerHTML = particular;
-					currentId = res;
-					 document.getElementById("myModal").style.display = "block";
-					var blnc = Number(document.getElementById('currentblnc'+res).value);
+				document.getElementById('biller_name').innerHTML = particular;
+				currentId = res;
+				 document.getElementById("myModal").style.display = "block";
+				var blnc = Number(document.getElementById('currentblnc'+res).value);
+				var blncType= old_hcrdr;
+				if(blncType=="Cr"){
 					blnc = blnc - Number(document.getElementById('amount'+res).value);
-					document.getElementById('currentblnc'+res).value = blnc;
+					if(Number(blnc)<0){
+						blnc = blnc * (-1);
+						document.getElementById('ccrdr'+res).innerHTML = "Dr";
+						document.getElementById('ccrdrH'+res).value = "Dr";
+						
+					}
+					else{
+						document.getElementById('ccrdr'+res).innerHTML = "Cr";
+						document.getElementById('ccrdrH'+res).value = "Cr";
+					}
 				}
 				else{
-					 document.getElementById("myModal").style.display = "none";
-
+					blnc = blnc + Number(document.getElementById('amount'+res).value);
+					document.getElementById('ccrdr'+res).innerHTML = "Dr";
+					document.getElementById('ccrdrH'+res).value = "Dr";
 				}
+				document.getElementById('currentblnc'+res).value = blnc;
+			}
+			else{
+				currentId = res;
+				 document.getElementById("myModal").style.display = "none";
+				 var blnc = Number(document.getElementById('currentblnc'+res).value);
+					var blncType= old_hcrdr;
+					if(blncType=="Cr"){
+						blnc = blnc - Number(document.getElementById('amount'+res).value);
+						if(Number(blnc)<0){
+							blnc = blnc * (-1);
+							document.getElementById('ccrdr'+res).innerHTML = "Dr";
+							document.getElementById('ccrdrH'+res).value = "Dr";
+						}
+						else{
+							document.getElementById('ccrdr'+res).innerHTML = "Cr";
+							document.getElementById('ccrdrH'+res).value = "Cr";
+						}
+					}
+					else{
+						blnc = blnc + Number(document.getElementById('amount'+res).value);
+						document.getElementById('ccrdr'+res).innerHTML = "Dr";
+						document.getElementById('ccrdrH'+res).value = "Dr";
+					}
+					document.getElementById('currentblnc'+res).value = blnc;
+
+			}
 			},
 
 			error : function(itr) {
@@ -517,6 +586,7 @@ $(document).ready(function() {
 				var arr = itr.split(",");
 				document.getElementById('currBalance').value = arr[0];
 				document.getElementById('crdr').innerHTML = arr[1];
+				document.getElementById('accountOldBal').value = arr[0]+" "+arr[1];
 				document.getElementById('hcrdr').value = arr[1];
 				CurrentBalance = arr[0];
 				old_cr_dr =  arr[1];
@@ -639,6 +709,18 @@ function getInterestAmount(rw,partyName,voucherNo){
 			}
 		});
 	}
+function validateFile(fileName, id) {
+	var file = fileName.value;
+	var ext = file.substring(file.length, file.length - 3);
+	if (file != "") {
+		if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "doc"
+				&& ext != "docx" && ext != "pdf") {
+			document.getElementById(id).value = "";
+			alert('only image,pdf or doc file is allowed!');
+		}
+	}
+
+}
 </script>
 </head>
 <body>
@@ -668,13 +750,14 @@ function getInterestAmount(rw,partyName,voucherNo){
 							</label>
 						</div>
 						<div class="InputDiv">
-								<s:textfield id="paymentNoVoucher" name="paymentNoVoucher" value="%{paymentNoVoucher}"
-								theme="myTheme" cssStyle="width:60%" />
+							<s:textfield id="paymentNoVoucher" name="paymentNoVoucher"
+								value="%{paymentNoVoucher}" theme="myTheme" cssStyle="width:60%" />
 							<s:textfield id="paymentNo" name="paymentNo" value="%{paymentNo}"
 								theme="myTheme" readonly="true" cssStyle="width:2%;display:none" />
-							<s:textfield id="activeVoucherNumber" name="activeVoucherNumber" value="%{activeVoucherNumber}"
-								theme="myTheme" readonly="true" cssStyle="width:2%;display:none" />	
-				
+							<s:textfield id="activeVoucherNumber" name="activeVoucherNumber"
+								value="%{activeVoucherNumber}" theme="myTheme" readonly="true"
+								cssStyle="width:2%;display:none" />
+
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -684,8 +767,10 @@ function getInterestAmount(rw,partyName,voucherNo){
 							<label>Date</label><em class="Req">*</em>
 						</div>
 						<div class="InputDiv">
-							<s:textfield id="paymentDate" name="paymentDate" placeholder="Date" cssClass="dateField" theme="myTheme" readonly="true" applyscript="true" cssStyle="width:50%" />
-						<div id="paymentDate_error" class="fieldError">
+							<s:textfield id="paymentDate" name="paymentDate"
+								placeholder="Date" cssClass="dateField" theme="myTheme"
+								readonly="true" applyscript="true" cssStyle="width:50%" />
+							<div id="paymentDate_error" class="fieldError">
 								<s:fielderror>
 									<s:param>paymentDate</s:param>
 								</s:fielderror>
@@ -693,16 +778,18 @@ function getInterestAmount(rw,partyName,voucherNo){
 						</div>
 					</div>
 					<div class="clearFRM"></div>
-					
+
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
 							<label> Account </label>
 						</div>
 						<div class="InputDiv">
-							<s:select name="account" headerKey="none" id="account" value="%{account}"
-								headerValue="Select Account" list="accountList"
-								cssClass="select1" theme="myTheme" onchange="getCurrentBalance(this.id)"/>
+							<s:select name="account" headerKey="none" id="account"
+								value="%{account}" headerValue="Select Account"
+								list="accountList" cssClass="select1" theme="myTheme"
+								onchange="getCurrentBalance(this.id)" />
+							<s:hidden name="accountOldBal" id="accountOldBal"></s:hidden>
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -726,8 +813,8 @@ function getInterestAmount(rw,partyName,voucherNo){
 						<div class="InputDiv">
 							<s:textfield name="currBalance" id="currBalance" value="0"
 								theme="myTheme" readonly="true" cssStyle="width:20%" />
-								<span id="crdr"></span>
-								<s:hidden name="hcrdr" id="hcrdr"></s:hidden>
+							<span id="crdr"></span>
+							<s:hidden name="hcrdr" id="hcrdr"></s:hidden>
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -738,64 +825,72 @@ function getInterestAmount(rw,partyName,voucherNo){
 						id="payTransactionTable" class="transactionTable">
 						<thead>
 							<tr>
-					<tr>
+							<tr>
 								<th style="text-align: center;" nowrap="nowrap">Particulars</th>
-								<th style="text-align: center;" nowrap="nowrap">Current Balance</th>
+								<th style="text-align: center;" nowrap="nowrap">Current
+									Balance</th>
 								<th style="text-align: center;" nowrap="nowrap">Amount</th>
 								<th style="text-align: center;" nowrap="nowrap">Transaction
 									Type</th>
-								<th style="text-align: center;" nowrap="nowrap">Txn/Cheque/DD No.</th>
+								<th style="text-align: center;" nowrap="nowrap">Txn/Cheque/DD
+									No.</th>
 								<th style="text-align: center;" nowrap="nowrap">Bank name</th>
-									
+
 								<th style="text-align: center;" nowrap="nowrap">Bank Name</th>
-									
-							</tr>					
+
+							</tr>
 							</tr>
 						</thead>
 						<tbody>
-						<s:iterator begin="1" end="5" status="data">
-							<tr id="rowId<s:property value="#data.count"/>">
-								<td style="text-align: center;" nowrap="nowrap"><s:select
-										name="particulars" headerKey="none" id="%{'particularsList' + #data.count}"
-										headerValue="End Of List" list="particularsList"
-										cssClass="select1" theme="myTheme" value="%{particulars}"
-										cssStyle="width:150px;" onchange="callForMoreRow(this.id)"/></td>
-								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="100" name="currentblnc" value="0" id="%{'currentblnc' + #data.count}"
-										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%" readOnly="true">
-									</ss:textfield><span id="ccrdr<s:property value="#data.count"/>"></span>
-									<s:hidden name="ccrdrH" id="%{'ccrdrH' + #data.count}"></s:hidden>
-									</td>
-								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="amount" value="0" id="%{'amount' + #data.count}"
-										theme="myTheme" value="%{amount}" pattern="^[0-9]*$" cssStyle="width:90%"
-										onchange="revertCurrBalance(this.id)">
-									</ss:textfield></td>
-								<td style="text-align: center;" nowrap="nowrap"><s:select
-										name="txnType" headerKey="none" id="%{'txnType' + #data.count}"
-										headerValue="Please select" value="%{txnType}"
-										list="{'Cash','Cheque/DD','e-Fund Transfer','Others'}"
-										cssClass="select1" theme="myTheme" cssStyle="width:150px;" /></td>
-								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="100" name="txn_dd_chq_no" id="%{'no' + #data.count}"
-										theme="myTheme" cssStyle="width:80%">
-									</ss:textfield>	
-								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="100" name="txn_bnkNm" id="%{'bnkNm' + #data.count}"
-										theme="myTheme" cssStyle="width:80%" >
-									</ss:textfield>	
-									
-										
-								<td style="text-align: center;" nowrap="nowrap"><s:select
-										name="bankName" headerKey="none" id="%{'bankName' + #data.count}"
-										headerValue="Select Bank" list="accountList" value="%{bankName}"
-										cssClass="select1" theme="myTheme" cssStyle="width:150px;" /></td>
-										
-								
-							</tr>
+							<s:iterator begin="1" end="5" status="data">
+								<tr id="rowId<s:property value="#data.count"/>">
+									<td style="text-align: center;" nowrap="nowrap"><s:select
+											name="particulars" headerKey="none"
+											id="%{'particularsList' + #data.count}"
+											headerValue="End Of List" list="particularsList"
+											cssClass="select1" theme="myTheme" value="%{particulars}"
+											cssStyle="width:150px;" onchange="callForMoreRow(this.id)" /></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+											maxlength="100" name="currentblnc" value="0"
+											id="%{'currentblnc' + #data.count}" theme="myTheme"
+											pattern="^[0-9]*$" cssStyle="width:50%" readOnly="true">
+										</ss:textfield><span id="ccrdr<s:property value="#data.count"/>"></span> <s:hidden
+											name="ccrdrH" id="%{'ccrdrH' + #data.count}"></s:hidden> <s:hidden
+											name="particularsOldBal"
+											id="%{'particularsOldBal' + #data.count}"></s:hidden></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+											maxlength="30" name="amount" value="0"
+											id="%{'amount' + #data.count}" theme="myTheme"
+											value="%{amount}" pattern="^[0-9]*$" cssStyle="width:90%"
+											onchange="revertCurrBalance(this.id)">
+										</ss:textfield></td>
+									<td style="text-align: center;" nowrap="nowrap"><s:select
+											name="txnType" headerKey="none"
+											id="%{'txnType' + #data.count}" headerValue="Please select"
+											value="%{txnType}"
+											list="{'Cash','Cheque/DD','e-Fund Transfer','Others'}"
+											cssClass="select1" theme="myTheme" cssStyle="width:150px;" /></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+											maxlength="100" name="txn_dd_chq_no"
+											id="%{'no' + #data.count}" theme="myTheme"
+											cssStyle="width:80%">
+										</ss:textfield>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+											maxlength="100" name="txn_bnkNm"
+											id="%{'bnkNm' + #data.count}" theme="myTheme"
+											cssStyle="width:80%">
+										</ss:textfield>
+									<td style="text-align: center;" nowrap="nowrap"><s:select
+											name="bankName" headerKey="none"
+											id="%{'bankName' + #data.count}" headerValue="Select Bank"
+											list="accountList" value="%{bankName}" cssClass="select1"
+											theme="myTheme" cssStyle="width:150px;" /></td>
 
 
-			</s:iterator>
+								</tr>
+
+
+							</s:iterator>
 						</tbody>
 					</table>
 					<div class="clearFRM"></div>
@@ -809,7 +904,7 @@ function getInterestAmount(rw,partyName,voucherNo){
 								id="totalAmt" value="%{totalAmt}" readOnly="true" theme="simple"></s:textfield>
 						</div>
 					</div>
-					
+
 					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
@@ -821,134 +916,143 @@ function getInterestAmount(rw,partyName,voucherNo){
 								id="narration" theme="simple" title="Enter Narration"></s:textfield>
 						</div>
 					</div>
+					
+				<div class="FormMainBox">
+					<div class="labelDiv">
+						<label> Upload Document </label><em class="Req">*</em>
+					</div>
+					<div class="InputDivHalf">
+					
+					<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPicture" name="docPicture" cssClass="textfield" theme="myTheme"></s:file>
+						</div>
+
+				</div>
 
 
 				</s:if>
 
 			</div>
 			<div class="box_footer" align="right">
-			<!-- 	 <s:submit value="Save" align="left" cssStyle="margin-left:0px"
+				<!-- 	 <s:submit value="Save" align="left" cssStyle="margin-left:0px"
 						cssClass="button" theme="simple"></s:submit> -->
-					 
+
 				<button type="button" align="left" cssStyle="margin-left:0px"
-						class="button" theme="simple" onclick="promptSave()">Save</button>
+					class="button" theme="simple" onclick="promptSave()">Save</button>
 			</div>
 			<div id="myModal" class="modal">
 
-  <!-- Modal content -->
-  			<div class="modal-content">
- 			    <button id="closeme" type="button" class="close" onclick="closeMe()">SAVE</button>
- 			  <div id="bill_by_bill">
+				<!-- Modal content -->
+				<div class="modal-content">
+					<button id="closeme" type="button" class="close"
+						onclick="closeMe()">SAVE</button>
+					<div id="bill_by_bill">
 						<div class="FormSectionMenu" id="bill_by_bill_div_acc">
 							<div class="greyStrip">
-								<h4>Bill Wise Details for :	<b><span id="biller_name"></span></b></h4>
+								<h4>
+									Bill Wise Details for : <b><span id="biller_name"></span></b>
+								</h4>
 							</div>
 							<table width="100%" cellspacing="0" align="center"
-						id="payTransactionTableBillWise" class="transactionTable">
-						<thead>
-							<tr>
-								<th style="text-align: center;" nowrap="nowrap">Type of Ref</th>
-								<th style="text-align: center;" nowrap="nowrap">Name</th>
-								<th style="text-align: center;" nowrap="nowrap">Due Date (limit)</th>
-								<th style="text-align: center;" nowrap="nowrap">Amount</th>
-								<th style="text-align: center;" nowrap="nowrap">Interest</th>
-								<th style="text-align: center;" nowrap="nowrap">Dr/Cr</th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
-								<th style="text-align: center;" nowrap="nowrap">Delete</th>
-								<th style="text-align: center;" nowrap="nowrap">Add</th>
-										
-									
-							</tr>
-						</thead>
-						<tbody>
-
-							<tr id="BillrowId1">
-								<td style="text-align: center;" nowrap="nowrap"><s:select
-										name="typeofRef" id="typeofRef1" list="{'Advance','Agst Ref','New Ref','On Account'}"
-										cssClass="select1" theme="myTheme"
-										onchange="callForMoreBillRow(this.id)" cssStyle="width:50%;" /></td>
-								<td style="text-align: center;" nowrap="nowrap">
-								<ss:textfield
-										maxlength="30" readOnly="true" name="pendingBill" id="pendingBillt1" theme="myTheme"
-										cssStyle="width:20%">
-									</ss:textfield>
-									<select name="pendingBill" id="pendingBills1" class="select1" style="display:none;" onchange="callHiddenBillId(this.id)">
-									
-									</select>
-								</td>
-								<td style="text-align: center;" nowrap="nowrap">
-								<ss:textfield
-										maxlength="30" readOnly="true" name="dueDate" id="dueDate1" theme="myTheme"
-										cssStyle="width:60%">
-									</ss:textfield></td>
-								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="billAmt" id="billAmt1" theme="myTheme"
-										cssStyle="width:40%" onchange="callForBillWiseRow(this.id)"/></td>
-								<td style="text-align: center;" nowrap="nowrap">
-									<ss:textfield
-										maxlength="30" readOnly="true" name="taxAmount" value="0" id="taxAmount1" theme="myTheme"
-										cssStyle="width:80%">
-									</ss:textfield></td>
-								<td style="text-align: center;" nowrap="nowrap">
-								<ss:textfield
-										maxlength="30" readOnly="true" name="ModelDrCr" id="ModelDrCr1" theme="myTheme"
-										cssStyle="width:60%">
-								</ss:textfield>
-								</td>
-								<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenTypeOfRef" id="hiddenTypeOfRef1"></s:hidden>
-								</td>
-								<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenBillWiseName" id="hiddenBillWiseName1"></s:hidden>
-								</td>
-								<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenDueDate" id="hiddenDueDate1"></s:hidden>
-								</td>
-								<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenAmnt" id="hiddenAmnt1"></s:hidden>
-								</td>
-								<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddencrdr" id="hiddencrdr1"></s:hidden>
-								</td>
-								<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenBilId" id="hiddenBilId1"></s:hidden>
-								</td>	
-								<td style="text-align: center;" nowrap="nowrap">
-									  <button id="deleteRow1" name="deleteRow" type="button" class="close1" onclick="deleteBillRow(this.id)">&#10006;</button>
-								</td>
-								<td style="text-align: center;" nowrap="nowrap">
-									  <button id="addRow1" name="addRow" type="button" class="close1" onclick="AddBillRow(this.id)">&#10010;</button>
-								</td>	
-							</tr>
+								id="payTransactionTableBillWise" class="transactionTable">
+								<thead>
+									<tr>
+										<th style="text-align: center;" nowrap="nowrap">Type of
+											Ref</th>
+										<th style="text-align: center;" nowrap="nowrap">Name</th>
+										<th style="text-align: center;" nowrap="nowrap">Due Date
+											(limit)</th>
+										<th style="text-align: center;" nowrap="nowrap">Amount</th>
+										<th style="text-align: center;" nowrap="nowrap">Interest</th>
+										<th style="text-align: center;" nowrap="nowrap">Dr/Cr</th>
+										<th style="text-align: center; display: none;" nowrap="nowrap"></th>
+										<th style="text-align: center; display: none;" nowrap="nowrap"></th>
+										<th style="text-align: center; display: none;" nowrap="nowrap"></th>
+										<th style="text-align: center; display: none;" nowrap="nowrap"></th>
+										<th style="text-align: center; display: none;" nowrap="nowrap"></th>
+										<th style="text-align: center; display: none;" nowrap="nowrap"></th>
+										<th style="text-align: center;" nowrap="nowrap">Delete</th>
+										<th style="text-align: center;" nowrap="nowrap">Add</th>
 
 
-						</tbody>
-					</table>
+									</tr>
+								</thead>
+								<tbody>
+
+									<tr id="BillrowId1">
+										<td style="text-align: center;" nowrap="nowrap"><s:select
+												name="typeofRef" id="typeofRef1"
+												list="{'Advance','Agst Ref','New Ref','On Account'}"
+												cssClass="select1" theme="myTheme"
+												onchange="callForMoreBillRow(this.id)" cssStyle="width:50%;" /></td>
+										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+												maxlength="30" readOnly="true" name="pendingBill"
+												id="pendingBillt1" theme="myTheme" cssStyle="width:20%">
+											</ss:textfield> <select name="pendingBill" id="pendingBills1"
+											class="select1" style="display: none;"
+											onchange="callHiddenBillId(this.id)">
+
+										</select></td>
+										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+												maxlength="30" readOnly="true" name="dueDate" id="dueDate1"
+												theme="myTheme" cssStyle="width:60%">
+											</ss:textfield></td>
+										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+												maxlength="30" name="billAmt" id="billAmt1" theme="myTheme"
+												cssStyle="width:40%" onchange="callForBillWiseRow(this.id)" /></td>
+										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+												maxlength="30" readOnly="true" name="taxAmount" value="0"
+												id="taxAmount1" theme="myTheme" cssStyle="width:80%">
+											</ss:textfield></td>
+										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+												maxlength="30" readOnly="true" name="ModelDrCr"
+												id="ModelDrCr1" theme="myTheme" cssStyle="width:60%">
+											</ss:textfield></td>
+										<td style="text-align: center; display: none;" nowrap="nowrap">
+											<s:hidden name="hiddenTypeOfRef" id="hiddenTypeOfRef1"></s:hidden>
+										</td>
+										<td style="text-align: center; display: none;" nowrap="nowrap">
+											<s:hidden name="hiddenBillWiseName" id="hiddenBillWiseName1"></s:hidden>
+										</td>
+										<td style="text-align: center; display: none;" nowrap="nowrap">
+											<s:hidden name="hiddenDueDate" id="hiddenDueDate1"></s:hidden>
+										</td>
+										<td style="text-align: center; display: none;" nowrap="nowrap">
+											<s:hidden name="hiddenAmnt" id="hiddenAmnt1"></s:hidden>
+										</td>
+										<td style="text-align: center; display: none;" nowrap="nowrap">
+											<s:hidden name="hiddencrdr" id="hiddencrdr1"></s:hidden>
+										</td>
+										<td style="text-align: center; display: none;" nowrap="nowrap">
+											<s:hidden name="hiddenBilId" id="hiddenBilId1"></s:hidden>
+										</td>
+										<td style="text-align: center;" nowrap="nowrap">
+											<button id="deleteRow1" name="deleteRow" type="button"
+												class="close1" onclick="deleteBillRow(this.id)">&#10006;</button>
+										</td>
+										<td style="text-align: center;" nowrap="nowrap">
+											<button id="addRow1" name="addRow" type="button"
+												class="close1" onclick="AddBillRow(this.id)">&#10010;</button>
+										</td>
+									</tr>
+
+
+								</tbody>
+							</table>
 						</div>
 					</div>
- 			 </div>
+				</div>
 
-		</div>
+			</div>
 		</s:form>
-		
-		
-		
+
+
+
 	</div>
 	<div id="searchDiv"></div>
 	<br />
 	<br />
 	<script>
-if(document.getElementById('account').value!='none'){
-	getCurrentBalance('account');
-}
-if(document.getElementById('particularsList1').value!='-1'){	
-	showCurrentParticularsBalance('particularsList1');
-}
+
 	
 </script>
 </body>

@@ -239,16 +239,16 @@
 					</div>
 				</div>
 				
-				<div class="FormMainBox">
-					<div class="labelDiv">
-						<label>Responsible Person Address </label>
+					<div class="FormMainBox">
+						<div class="labelDiv">
+							<label>Responsible Person Address </label>
+						</div>
+						<div class="InputDiv">
+							<ss:textfield maxlength="100" name="ledgerSecondStepBean.resPerAddr" id="resPerAddr" theme="myTheme"
+								></ss:textfield>
+							
+						</div>
 					</div>
-					<div class="InputDiv">
-						<ss:textfield maxlength="100" name="ledgerSecondStepBean.resPerAddr" id="resPerAddr" theme="myTheme"
-							></ss:textfield>
-						
-					</div>
-				</div>
 				<div class="FormMainBox">
 					<div class="labelDiv">
 						<label>Responsible Person Contact </label>

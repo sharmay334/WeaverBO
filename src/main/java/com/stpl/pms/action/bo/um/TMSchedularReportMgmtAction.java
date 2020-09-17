@@ -38,12 +38,27 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 	private String txnType;
 	private Map<String, ReceiptSaleBillMapping> mappingMap;
 
+	public void runOldOverDueBills() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		if(controller.runOldOverDueBills(ledgerName,voucherNo))
+		servletResponse.getWriter().write("success");
+		else
+		servletResponse.getWriter().write("failed");	
+		return;
+	}
+	public void getOldSetReminder() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		String data = controller.getOldSetReminder(partyId,voucherNo);
+		servletResponse.getWriter().write(""+data);
+		return;
+	}
 	public void runOverDueBill() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		controller.runScheduleOverDueBillsSales();
-			servletResponse.getWriter().write("success");
+		servletResponse.getWriter().write("success");
 		return;
 	}
+
 	public void changeStatusAlert() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		if (controller.changeAlertStatus(alertType, partyId, voucherNo, status, billId))
@@ -62,7 +77,7 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 
 		return;
 	}
-	
+
 	public void deleteSingleBill() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		if (controller.deleteSingleBill(txnType, voucherNo))

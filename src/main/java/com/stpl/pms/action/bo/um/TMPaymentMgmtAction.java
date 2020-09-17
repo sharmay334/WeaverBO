@@ -10,8 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
+import com.stpl.pms.commonJavabeans.ReceiptBean;
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.hibernate.factory.HibernateSessionFactory;
 import com.stpl.pms.javabeans.VoucherBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
@@ -24,7 +28,8 @@ public final class TMPaymentMgmtAction extends BaseActionSupport implements Serv
 	private int paymentNo;
 
 	// create payment fields
-
+	private String accountOldBal;
+	private String particularsOldBal;
 	private String account;
 	private String employeeUnder;
 	private String totalAmt;
@@ -50,6 +55,57 @@ public final class TMPaymentMgmtAction extends BaseActionSupport implements Serv
 	private VoucherBean voucherBean;
 	private String isSale;
 	private String pmtId;
+	private String status;
+	private List<ReceiptBean> receiptBeans;
+	private String document;
+	
+	
+	public String loadEmpPaymentOrder() {
+		GameLobbyController controller = new GameLobbyController();
+		// accountList = new ArrayList<String>();
+		// particularsList = new ArrayList<String>();
+		// accountList = controller.getaccountListForTxnPayment("accList",
+		// getUserInfoBean().getUserId());
+		// particularsList = controller.getaccountListForTxnPayment("particulars",
+		// getUserInfoBean().getUserId());
+		// employeeUnderList = controller.getEmployeeNamesList();
+		// receiptNo = controller.getReceiptNo();
+		// bankNameList = new ArrayList<String>();
+		// bankNameList = controller.getBankNameList();
+		receiptBeans = new ArrayList<ReceiptBean>();
+		ReceiptBean bean = null;
+		String str = controller.fetchEmpPaymentData(0, pmtId);
+		String[] resArr = str.split("\\|");
+		String[] particularsArr = resArr[3].split(",");
+		account = resArr[2];
+		int id = 1;
+		for (int i = 0; i < particularsArr.length; i++) {
+
+			if (resArr[3].split(",")[i].trim().equals("none")) {
+
+			} else {
+
+				bean = new ReceiptBean();
+				bean.setParticulars(resArr[3].split(",")[i].trim());
+				bean.setAmount(resArr[4].split(",")[i].trim());
+				bean.setBank_name(resArr[6].split(",")[i].trim());
+				bean.setTxnType(resArr[5].split(",")[i].trim());
+				bean.setRowId(id);
+				receiptBeans.add(bean);
+				id++;
+			}
+
+		}
+		amount = resArr[4].split(",")[0];
+		particulars = resArr[3].split(",")[0];
+		narration = resArr[7].trim();
+		totalAmt = resArr[8].trim();
+		status = resArr[9].trim();
+		paymentDate = resArr[10].toString();
+		txnType = resArr[5].split(",")[0];
+		bankName = resArr[6].split(",")[0];
+		return SUCCESS;
+	}
 
 	public String loadPaymentPage() {
 		GameLobbyController controller = new GameLobbyController();
@@ -127,44 +183,55 @@ public final class TMPaymentMgmtAction extends BaseActionSupport implements Serv
 		account = resArr[2];
 		amount = resArr[4].split(",")[0];
 		particulars = resArr[3].split(",")[0];
+		narration = resArr[7].split(",")[0];
+		document = resArr[11].split(",")[0];
 		totalAmt = resArr[4].split(",")[0];
 		txnType = resArr[5].split(",")[0];
 		bankName = resArr[6].split(",")[0];
+		paymentDate = resArr[10].split(",")[0];
 		return SUCCESS;
 	}
 
 	public void createPayment() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		if(activeVoucherNumber.equals("0")) {
-			
+		Session session = HibernateSessionFactory.getSession();
+		Transaction transaction = session.beginTransaction();
+		if (activeVoucherNumber.equals("0")) {
+
 			if (controller.createTransactionPayment(account, employeeUnder, totalAmt, particulars, amount, bankName,
 					txnType, narration, currentblnc, hiddenTypeOfRef, hiddenBillWiseName, hiddenAmnt, hiddenBilId,
-					activeVoucherNumber, paymentDate, paymentNoVoucher)) {
-				if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr))
+					activeVoucherNumber, paymentDate, paymentNoVoucher, session, transaction, accountOldBal,
+					particularsOldBal)) {
+				if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr, session,
+						transaction)) {
+					transaction.commit();
 					servletResponse.getWriter().write("success");
+				}
 			} else
 				servletResponse.getWriter().write("error");
-		}
-		else {
-			
+		} else {
+
 			voucherBean = controller.getVoucherNumbering("payment", activeVoucherNumber);
-			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(),paymentDate+" 00:00");
-			boolean voucherDate1 = compareTwoDate(paymentDate+" 00:00",voucherBean.getStartDate());
-			if(voucherDate==true || voucherDate1==true) {
+			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(), paymentDate + " 00:00");
+			boolean voucherDate1 = compareTwoDate(paymentDate + " 00:00", voucherBean.getStartDate());
+			if (voucherDate == true || voucherDate1 == true) {
 				servletResponse.getWriter().write("date");
-			}
-			else {
+			} else {
 				if (controller.createTransactionPayment(account, employeeUnder, totalAmt, particulars, amount, bankName,
 						txnType, narration, currentblnc, hiddenTypeOfRef, hiddenBillWiseName, hiddenAmnt, hiddenBilId,
-						activeVoucherNumber, paymentDate, paymentNoVoucher)) {
-					if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr))
+						activeVoucherNumber, paymentDate, paymentNoVoucher, session, transaction, accountOldBal,
+						particularsOldBal)) {
+					if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr, session,
+							transaction)) {
+						transaction.commit();
 						servletResponse.getWriter().write("success");
+					}
 				} else
 					servletResponse.getWriter().write("error");
-				
+
 			}
 		}
-		
+
 		return;
 	}
 
@@ -179,7 +246,7 @@ public final class TMPaymentMgmtAction extends BaseActionSupport implements Serv
 
 	public void getNewBillNo() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		String newBillNo = controller.getNewBillNo(partyAcc, typeOfRef,isSale);
+		String newBillNo = controller.getNewBillNo(partyAcc, typeOfRef, isSale);
 		servletResponse.getWriter().write("" + newBillNo);
 
 		return;
@@ -440,5 +507,46 @@ public final class TMPaymentMgmtAction extends BaseActionSupport implements Serv
 	public void setIsSale(String isSale) {
 		this.isSale = isSale;
 	}
+
+	public String getAccountOldBal() {
+		return accountOldBal;
+	}
+
+	public void setAccountOldBal(String accountOldBal) {
+		this.accountOldBal = accountOldBal;
+	}
+
+	public String getParticularsOldBal() {
+		return particularsOldBal;
+	}
+
+	public void setParticularsOldBal(String particularsOldBal) {
+		this.particularsOldBal = particularsOldBal;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public List<ReceiptBean> getReceiptBeans() {
+		return receiptBeans;
+	}
+
+	public void setReceiptBeans(List<ReceiptBean> receiptBeans) {
+		this.receiptBeans = receiptBeans;
+	}
+
+	public String getDocument() {
+		return document;
+	}
+
+	public void setDocument(String document) {
+		this.document = document;
+	}
+
 
 }

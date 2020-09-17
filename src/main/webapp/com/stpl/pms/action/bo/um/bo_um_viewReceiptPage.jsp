@@ -85,7 +85,12 @@ var old_hcrdr="";
 
 function promptSave(){
 	var frm = $('#searchUserFrm');
-
+	let photo = document.getElementById("docPicture").files[0];
+	let formData = new FormData();
+	formData.append("docPicture", photo);
+	var myurl = "<%=basePath%>";
+	myurl += "/com/stpl/pms/action/bo/um/upload_receipt_order_document.action?receiptNo="+document.getElementById('receiptNo').value+"&txnType=receipt";
+	
 		swal({
 		  title: "Are you sure?",
 		  text: "Once Saved, you will not be able to undo the entry!",
@@ -103,9 +108,27 @@ function promptSave(){
 			        success: function (data) {
 			        	if(data=="success"){
 			        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
-			        		setTimeout(function(){
-			        			   window.location.reload(1);
-			        			}, 1000);
+			        		$.ajax({
+						        type: 'POST',
+						        url: myurl,
+						        data: formData,
+						        cache : false,
+						        async:false,
+								contentType : false,
+								processData : false,
+						        success: function (data) {
+						        	setTimeout(function(){
+					        			   window.location.reload(1);
+					        			}, 1000);
+						            
+						        },
+						        error: function (data) {
+						        	setTimeout(function(){
+					        			   window.location.reload(1);
+					        			}, 1000);
+						        },
+						    });
+			        		
 			        	}
 			        	else if(data=="date"){
 			        		swal("Error! Receipt date is greater than voucher end date.");
@@ -473,6 +496,7 @@ $(document).ready(function() {
 				document.getElementById('currentblnc'+res).value = arr[0];
 				document.getElementById('ccrdr'+res).innerHTML = arr[1];
 				document.getElementById('ccrdrH'+res).value = arr[1];
+				document.getElementById('particularsOldBal'+res).value = arr[0]+" "+arr[1];
 				old_hcrdr = arr[1];
 			},
 
@@ -626,6 +650,7 @@ $(document).ready(function() {
 				document.getElementById('currBalance').value = arr[0];
 				document.getElementById('crdr').innerHTML = arr[1];
 				document.getElementById('hcrdr').value = arr[1];
+				document.getElementById('accountOldBal').value = arr[0]+" "+arr[1];
 				CurrentBalance = arr[0];
 				old_cr_dr = arr[1];
 				$("#payTransactionTable").css("display", "block");
@@ -652,6 +677,25 @@ $(document).ready(function() {
 		 document.getElementById('dueDate'+res).value = _dt;
 		document.getElementById('hiddenBilId'+res).value = arr[0];
 		document.getElementById('ModelDrCr'+res).value = arr[3];
+		var amount = arr[2];
+		var receiptAmt = document.getElementById('amount'+activerow).value;
+		
+			if(Number(receiptAmt)==Number(amount)){
+				document.getElementById('billAmt'+res).value = Number(receiptAmt);
+				
+			}
+			else if(Number(receiptAmt)>Number(amount)){
+				
+				document.getElementById('billAmt'+res).value = amount;
+				
+			}
+			else if(Number(receiptAmt)<Number(amount)){
+				
+				document.getElementById('billAmt'+res).value = receiptAmt;
+			
+			}
+		
+		
 		
 		getInterestAmount(res,document.getElementById('particularsList'+activerow).value,arr[0]);
 		if(arr[3]=='Cr')
@@ -681,6 +725,18 @@ $(document).ready(function() {
 			callformorebillwiserow(id);
 		}
 		
+	}
+	function validateFile(fileName, id) {
+		var file = fileName.value;
+		var ext = file.substring(file.length, file.length - 3);
+		if (file != "") {
+			if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "doc"
+					&& ext != "docx" && ext != "pdf") {
+				document.getElementById(id).value = "";
+				alert('only image,pdf or doc file is allowed!');
+			}
+		}
+
 	}
 </script>
 </head>
@@ -752,8 +808,9 @@ $(document).ready(function() {
 						</div>
 						<div class="InputDiv">
 							<s:select name="account" headerKey="none" id="account"
-								headerValue="Select Account" list="accountList" value="%{account}"
+								headerValue="Select Account" list="accountList"
 								cssClass="select1" theme="myTheme" onchange="getCurrentBalance(this.id)"/>
+							<s:hidden name="accountOldBal" id="accountOldBal"></s:hidden>	
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -813,6 +870,7 @@ $(document).ready(function() {
 										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%" readOnly="true">
 									</ss:textfield><span id="ccrdr<s:property value="#data.count"/>"></span>
 									<s:hidden name="ccrdrH" id="%{'ccrdrH' + #data.count}"></s:hidden>
+									<s:hidden name="particularsOldBal" id="%{'particularsOldBal' + #data.count}"></s:hidden>
 									</td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="amount" value="0" id="%{'amount' + #data.count}"
@@ -852,7 +910,7 @@ $(document).ready(function() {
 							<label> Total Amount </label>
 						</div>
 						<div class="InputDiv">
-							<s:textfield name="totalAmt" value="%{totalAmt}" cssClass="InpTextBoxBg"
+							<s:textfield name="totalAmt" cssClass="InpTextBoxBg"
 								id="totalAmt" readOnly="true" theme="simple"></s:textfield>
 						</div>
 					</div>
@@ -868,7 +926,17 @@ $(document).ready(function() {
 								id="narration" theme="simple" title="Enter Narration"></s:textfield>
 						</div>
 					</div>
+					
+					<div class="FormMainBox">
+					<div class="labelDiv">
+						<label> Upload Document </label>
+					</div>
+					<div class="InputDivHalf">
+					
+					<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPicture" name="docPicture" cssClass="textfield" theme="myTheme"></s:file>
+						</div>
 
+				</div>
 
 				</s:if>
 
@@ -920,7 +988,7 @@ $(document).ready(function() {
 								<td style="text-align: center;" nowrap="nowrap"><s:select
 										name="typeofRef" id="typeofRef1" headerKey="-1" headerValue="-Please Select-" list="{'Advance','Agst Ref','On Account'}"
 										cssClass="select1" theme="myTheme"
-										onchange="callForMoreBillRow(this.id)" cssStyle="width:50%;" /></td>
+										onchange="callForMoreBillRow(this.id)" cssStyle="width:80%;" /></td>
 								<td style="text-align: center;" nowrap="nowrap">
 								<ss:textfield
 										maxlength="30" readOnly="true" name="pendingBill" id="pendingBillt1" theme="myTheme"

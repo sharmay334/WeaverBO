@@ -17,11 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.hibernate.factory.HibernateSessionFactory;
 import com.stpl.pms.javabeans.ItemBean;
 import com.stpl.pms.javabeans.VoucherBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
@@ -56,8 +59,9 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 	private String totalQty;
 	private String unit;
 	private String availableQtyInGodown;
+	private String partyOldBalance;
 	// batch number variable hower effect
-
+	
 	private String hiddenBatchNumber;
 	private String hiddenMfgDate;
 	private String hiddenExpDate;
@@ -88,7 +92,6 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 	private String docPictureContentType;
 	private String docPictureFileName;
 	private String status;
-
 
 	public void getCurrentBalance() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
@@ -135,7 +138,7 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 
 			try {
 				if (paymentDate != null && !paymentDate.isEmpty())
-				c.setTime(sdf.parse(paymentDate));
+					c.setTime(sdf.parse(paymentDate));
 				else {
 					Date today = new Date();
 					DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
@@ -273,6 +276,7 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 		}
 
 	}
+
 	public String loadEmpPurchaseOrder() {
 		GameLobbyController controller = new GameLobbyController();
 		String str = controller.fetchEmpPOData(0, POId);
@@ -309,7 +313,7 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 		gstnNo = resArr[14].trim();
 		paymentDate = resArr[15].trim();
 		docPictureFileName = resArr[16].trim();
-		
+
 		particularsList = new ArrayList<String>();
 		salesStockItemList = new ArrayList<>();
 		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
@@ -320,6 +324,7 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 		salesStockItemList = controller.getSalesStockItemList();
 		return SUCCESS;
 	}
+
 	public String loadPurchasePageAlert() {
 
 		GameLobbyController controller = new GameLobbyController();
@@ -360,44 +365,65 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 		purchaseNo = controller.getPurchaseNo();
 		goDownList = new ArrayList<>();
 		goDownList = controller.getAllGoDownList();
-		voucherBean = controller.getVoucherNumbering("purchase");
-		if (voucherBean == null)
-			purchaseNoVoucher = String.valueOf(controller.getPurchaseNo());
-		else {
-			if (voucherBean.getVoucherNumbering().equals("Manual")) {
-				purchaseNoVoucher = String.valueOf(controller.getPurchaseNo());
-			} else {
-				if (voucherBean.getAdvanceNumbering().equals("Yes")) {
-					int getMaxNumber = controller.getPurchaseVoucherNumber("");
-					if (getMaxNumber == 0) {
-						purchaseNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix()
-								+ voucherBean.getStartingNumber();
-					} else {
-						getMaxNumber++;
-						purchaseNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix() + getMaxNumber;
+		String checkIsVoucherActive = controller.getActiveVoucher("purchase");
+		if (checkIsVoucherActive.equalsIgnoreCase("duplicate")) {
+			return ERROR;
+		}
 
-					}
-				} else {
+		else {
+			voucherBean = controller.getVoucherNumbering("purchase", checkIsVoucherActive);
+			if (checkIsVoucherActive.equalsIgnoreCase("not found"))
+				activeVoucherNumber = "0";
+			else
+				activeVoucherNumber = checkIsVoucherActive;
+			if (voucherBean == null)
+				purchaseNoVoucher = String.valueOf(controller.getPurchaseNo());
+			else {
+
+				if (voucherBean.getVoucherNumbering().equals("Manual")) {
 					purchaseNoVoucher = String.valueOf(controller.getPurchaseNo());
+				} else {
+					if (voucherBean.getAdvanceNumbering().equals("Yes")) {
+						int getMaxNumber = controller.getPurchaseVoucherNumber(activeVoucherNumber);
+						if (getMaxNumber == 0) {
+							purchaseNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix()
+									+ String.format("%0" + Integer.valueOf(voucherBean.getDecimalNumber()) + "d",
+											Integer.valueOf(voucherBean.getStartingNumber()));
+						} else {
+							getMaxNumber++;
+							purchaseNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix() + String
+									.format("%0" + Integer.valueOf(voucherBean.getDecimalNumber()) + "d", getMaxNumber);
+							;
+
+						}
+					} else {
+						purchaseNoVoucher = String.valueOf(controller.getPurchaseNo());
+					}
+
 				}
 
 			}
+			return SUCCESS;
 		}
-		return SUCCESS;
 	}
 
 	public void createPurchase() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
+		Transaction transaction = null;
+		Session session = HibernateSessionFactory.getSession();
+		transaction = session.beginTransaction();
 		if (activeVoucherNumber.equals("0")) {
-			if (controller.createTransactionPurchase(referenceNo, employeeUnder, partyAcc, salesAccount,
+			if (controller.createTransactionPurchase(partyOldBalance, employeeUnder, partyAcc, salesAccount,
 					salesStockItems, amount, Qty, rate, narration, purchaseNoVoucher, consignee, Dname, propName,
 					contact, address, gstnNo, ddn, tn, des, billt, vn, transportFreight, paymentDate,
-					activeVoucherNumber,totalAmt,goDown,hiddenBatchNumber)) {
-				if (controller.updateTransactionPartyBalance(partyAcc, currBalance, hcrdr)) {
+					activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber, session, transaction)) {
+				if (controller.updateTransactionPartyBalance(partyAcc, currBalance, hcrdr, session, transaction)) {
 					if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-							hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) // st_rm_item_qty_godown
-																								// update
-						if (controller.insertNewBill(paymentDate, "Agst Ref", partyAcc, totalAmt, purchaseNoVoucher)) {
+							hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, session, transaction)) // st_rm_item_qty_godown
+						// update
+						if (controller.insertNewBill(paymentDate, "Agst Ref", partyAcc, totalAmt, purchaseNoVoucher,
+								session, transaction)) {
+							transaction.commit();
 							if (orderNo != null && !orderNo.isEmpty()) {
 								if (controller.changeStatusSuccessPurchase(Integer.valueOf(orderNo),
 										userInfoBean.getUserId()))
@@ -418,20 +444,21 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 		} else {
 			voucherBean = controller.getVoucherNumbering("purchase", activeVoucherNumber);
 			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(), paymentDate + " 00:00");
-			boolean voucherDate1 = compareTwoDate( paymentDate + " 00:00",voucherBean.getStartDate());
-			if (voucherDate == true || voucherDate1==true) {
+			boolean voucherDate1 = compareTwoDate(paymentDate + " 00:00", voucherBean.getStartDate());
+			if (voucherDate == true || voucherDate1 == true) {
 				servletResponse.getWriter().write("date");
 			} else {
-				if (controller.createTransactionPurchase(referenceNo, employeeUnder, partyAcc, salesAccount,
+				if (controller.createTransactionPurchase(partyOldBalance, employeeUnder, partyAcc, salesAccount,
 						salesStockItems, amount, Qty, rate, narration, purchaseNoVoucher, consignee, Dname, propName,
 						contact, address, gstnNo, ddn, tn, des, billt, vn, transportFreight, paymentDate,
-						activeVoucherNumber,totalAmt,goDown,hiddenBatchNumber)) {
-					if (controller.updateTransactionPartyBalance(partyAcc, currBalance, hcrdr)) {
+						activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber, session, transaction)) {
+					if (controller.updateTransactionPartyBalance(partyAcc, currBalance, hcrdr, session, transaction)) {
 						if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate)) // st_rm_item_qty_godown
-																									// update
-							if (controller.insertNewBill(paymentDate, "Agst Ref", partyAcc, totalAmt,
-									purchaseNoVoucher)) {
+								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, session, transaction)) // st_rm_item_qty_godown
+							// update
+							if (controller.insertNewBill(paymentDate, "Agst Ref", partyAcc, totalAmt, purchaseNoVoucher,
+									session, transaction)) {
+								transaction.commit();
 								if (orderNo != null && !orderNo.isEmpty()) {
 									if (controller.changeStatusSuccessPurchase(Integer.valueOf(orderNo),
 											userInfoBean.getUserId()))
@@ -955,6 +982,14 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getPartyOldBalance() {
+		return partyOldBalance;
+	}
+
+	public void setPartyOldBalance(String partyOldBalance) {
+		this.partyOldBalance = partyOldBalance;
 	}
 
 }

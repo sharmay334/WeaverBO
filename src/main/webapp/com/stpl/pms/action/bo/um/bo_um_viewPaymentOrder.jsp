@@ -58,6 +58,44 @@ body {font-family: Arial, Helvetica, sans-serif;}
   text-decoration: none;
   cursor: pointer;
 }
+
+
+.modal1 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal1-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+/* The Close Button */
+.close1 {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close1:hover,
+.close1:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
 </style>
 <script src="/WeaverBO/js/sweetalert.min.js"></script>
 <script type="text/javascript"
@@ -121,6 +159,9 @@ var BillWiseActiveRow=0;
 
 
 //When the user clicks on <span> (x), close the modal
+function closeMe1(){
+	document.getElementById("myModal1").style.display = "none";
+}
 function closeMe(){
 	
 	var rowCountBillWise = countTotalRowsBillWise();
@@ -561,6 +602,36 @@ $(document).ready(function() {
 		}
 		
 	}
+	function callPictureReport(src){
+		var myurl = "<%=basePath%>";
+		myurl += "com/stpl/pms/action/bo/um/bo_um_emp_picture.action?docPath="
+				+ src;
+		$.ajax({
+			type : "GET",
+			url : myurl,
+			success : function(itr) {
+				
+				var list1 = document.getElementById("one");
+					if(typeof(list1.childNodes[0])!="undefined")
+					list1.removeChild(list1.childNodes[0]);
+						
+					
+				  var x = document.createElement("IMG");
+					  x.setAttribute("src", itr);
+					  x.setAttribute("width", "500");
+					  x.setAttribute("height", "600");
+					  x.setAttribute("alt", "Doc Img");
+					  document.getElementById('one').appendChild(x);
+				
+				
+				 
+				document.getElementById("myModal1").style.display = "block";
+			},
+			error : function(itr) {
+
+			}
+		});
+	}
 </script>
 </head>
 <body>
@@ -716,11 +787,20 @@ $(document).ready(function() {
 							<label> Narration </label>
 						</div>
 						<div class="InputDiv">
-							<s:textfield name="narration" cssClass="InpTextBoxBg"
+							<s:textfield name="narration" value="%{narration}" cssClass="InpTextBoxBg"
 								id="narration" theme="simple" title="Enter Narration"></s:textfield>
 						</div>
 					</div>
+					<div class="FormMainBox">
 
+						<div class="labelDiv">
+							<label> Order Document </label>
+						</div>
+						<div class="InputDiv">
+		<a href="javascript:;" onclick="callPictureReport('<s:property value="document" />')">VIEW DOCUMENT</a>
+						
+						</div>
+					</div>
 
 				</s:if>
 
@@ -817,6 +897,38 @@ $(document).ready(function() {
  			 </div>
 
 		</div>
+		
+		<div id="myModal1" class="modal1">
+
+  <!-- Modal content -->
+  			<div class="modal-content1">
+ 			   <button id="closeme1" type="button" class="close1" onclick="closeMe1()">&times;</button>
+ 			  <div id="bill_bybill1">
+						<div class="FormSectionMenu">
+							<div class="greyStrip">
+								<h4>Document :<b></h4>
+							</div>
+							<table width="100%" cellspacing="0" align="center">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Document </th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr>
+								<td style="text-align: center;" nowrap="nowrap"><div id="one"></div></td>
+								
+							</tr>
+
+
+						</tbody>
+					</table>
+						</div>
+					</div>
+ 			 </div>
+
+			</div>
 		</s:form>
 		
 		

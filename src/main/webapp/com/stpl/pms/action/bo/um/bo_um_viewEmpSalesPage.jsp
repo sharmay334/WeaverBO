@@ -123,6 +123,7 @@ function promptSave(){
 					  if (willDelete) {
 						  $.ajax({
 						        type: frm.attr('method'),
+						        async:false,
 						        url: frm.attr('action'),
 						        data: frm.serialize(),
 						        success: function (data) {
@@ -132,6 +133,7 @@ function promptSave(){
 									        type: 'POST',
 									        url: myurl,
 									        data: formData,
+									        async:false,
 									        cache : false,
 											contentType : false,
 											processData : false,

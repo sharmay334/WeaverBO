@@ -24,6 +24,7 @@
 <link rel="stylesheet" href="/WeaverBO/js/jQuery/1.11.3/jquery-ui.css">
 
 <script>
+var account_old_cr_dr = "";
 function promptSave(){
 	var frm = $('#searchUserFrm');
 
@@ -103,6 +104,7 @@ $(document).ready(function() {
 				document.getElementById('pcurBalance'+res).value = arr[0];
 				document.getElementById('pcrdr'+res).innerHTML = arr[1];
 				document.getElementById('phcrdr'+res).value = arr[1];
+				account_old_cr_dr = arr[1];
 				
 			},
 

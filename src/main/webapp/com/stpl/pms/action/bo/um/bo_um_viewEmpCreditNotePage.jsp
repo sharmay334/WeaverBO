@@ -68,6 +68,11 @@
 <meta http-equiv="expires" content="0">
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
+<script src="/WeaverBO/js/sweetalert.min.js"></script>
+<script type="text/javascript"
+	src="/WeaverBO/js/jQuery/1.11.3/jquery-ui.min.js">
+      </script>
+<link rel="stylesheet" href="/WeaverBO/js/jQuery/1.11.3/jquery-ui.css">
 <script>
 var CurrentBalance = 0;
 var totalTax = 0;
@@ -474,6 +479,86 @@ function closeDialogue(){
 		}
 		
 	}
+	function checkDocUpload(){
+		
+		var doc1 = document.getElementById('docPictureTB').value;
+		var doc2 = document.getElementById('docPictureDD').value;
+		if(doc1!="" && doc2!=""){
+			promptSave();
+		}
+		else{
+			
+			swal("Please upload document first!");
+		}
+		
+	}
+	function promptSave(){
+		var frm = $('#searchUserFrm');
+		let photo1 = document.getElementById("docPictureTB").files[0];
+		let photo2 = document.getElementById("docPictureDD").files[0];
+		let formData = new FormData();
+		formData.append("docPictureTB", photo1);
+		formData.append("docPictureDD", photo2);
+		var myurl = "<%=basePath%>";
+		myurl += "/com/stpl/pms/action/bo/um/upload_creditNote_order_document.action?cnNo="+document.getElementById('cnNo').value;
+		
+			swal({
+			  title: "Are you sure?",
+			  text: "Once Saved, you will not be able to undo the entry!",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+				  $.ajax({
+				        type: frm.attr('method'),
+				        url: frm.attr('action'),
+				        data: frm.serialize(),
+				        async:false,
+				        success: function (data) {
+				        	if(data=="success"){
+				        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
+				        		$.ajax({
+							        type: 'POST',
+							        url: myurl,
+							        data: formData,
+							        async:false,
+							        cache : false,
+									contentType : false,
+									processData : false,
+							        success: function (data) {
+							        	setTimeout(function(){
+						        			   window.location.reload(1);
+						        			}, 1000);
+							            
+							        },
+							        error: function (data) {
+							        	setTimeout(function(){
+						        			   window.location.reload(1);
+						        			}, 1000);
+							        },
+							    });
+				        		
+				        		
+				        	}
+				        	else{
+				        		swal("Some Error Occured!");
+				        	}
+				            
+				        },
+				        error: function (data) {
+				        	swal("Server Error Occured!");
+				        },
+				    });
+				  
+			  } else {
+			    swal("Please Refresh The Page!");
+			  }
+			});
+	    
+	    
+	}
 </script>
 </head>
 <body>
@@ -851,8 +936,8 @@ function closeDialogue(){
 				<%-- <s:submit value="Search" align="left" cssStyle="margin-left:0px"
 						cssClass="button" theme="simple"></s:submit>
 					 --%>
-				<input type="submit" value='Create' align="left"
-					style="margin-left: 0px" class="button" />
+				<button type="button" align="left" cssStyle="margin-left:0px"
+						class="button" theme="simple" onclick="checkDocUpload()">Save</button>
 			</div>
 		</s:form>
 		<div class="form-popup" id="myForm">

@@ -417,12 +417,17 @@ function callformorebillwiserow(id){
 			var g = oInput.childNodes[7].childNodes[1];
 			var h = oInput.childNodes[9].childNodes[1];
 			var i = oInput.childNodes[3].childNodes[1];
+			var j = oInput.childNodes[1].childNodes[3];
+			var k = oInput.childNodes[3].childNodes[3];
+			
 			i.id = "txnType" + rowCount;
 			f.id = "particularsList" + rowCount;
 			g.id = "debitAmt" + rowCount;
 			h.id = "creditAmt" + rowCount;
 			e.id = "currentblnc" + rowCount;
 			e1.id = "ccrdr" + rowCount;
+			j.id = "DrCrType" + rowCount;
+			k.id = "partyOldBal" + rowCount;
 			
 			var selectData = document.getElementById('particularsList'+rowCount);
 			var opt = document.createElement('option');
@@ -483,6 +488,7 @@ function callformorebillwiserow(id){
 				var arr = itr.split(",");
 				document.getElementById('currentblnc'+res).value = arr[0];
 				document.getElementById('ccrdr'+res).innerHTML = arr[1];
+				document.getElementById('partyOldBal'+res).value = arr[0]+" "+arr[1];
 				amtId = res;
 				revertCurrBalance(id);
 				checkForBillWiseMenu(id);
@@ -497,8 +503,10 @@ function callformorebillwiserow(id){
 	function changeFields(id) {
 		var element = document.getElementById(id);
 		var strUser = element.options[element.selectedIndex].value;
+		
 		var substr = id.substring(15,id.length);
 		var i, amount = 0;;
+		document.getElementById('DrCrType'+substr).value = strUser;
 		totalRows = countTotalRows();
 		for(i=1; i <= totalRows; i++) {
 			if(document.getElementById("debitAmt" + i)) {
@@ -637,21 +645,25 @@ function callformorebillwiserow(id){
 								<select id="particularsList1" theme="myTheme" name="cr_dr" cssClass="select1" cssStyle="width:50px;" onChange="changeFields(this.id)">
 										<option value="Dr">Dr</option>
 									</select>
+									<s:hidden name="DrCrType" value="Dr" id="DrCrType1"></s:hidden>
 								</td>
 								<td style="text-align: center;" nowrap="nowrap" ><s:select
 										name="particulars" id="txnType1" headerKey="none" headerValue="--Please Select--" list="particularsList"
-										cssClass="select1" theme="myTheme" cssStyle="width:150px;" onchange="showCurrentParticularsBalance(this.id)"/></td>
+										cssClass="select1" theme="myTheme" cssStyle="width:150px;" onchange="showCurrentParticularsBalance(this.id)"/>
+									<s:hidden name="partyOldBal" id="partyOldBal1"></s:hidden>	
+										</td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="100" name="currentblnc" value="0" id="currentblnc1"
-										theme="myTheme" pattern="^[0-9]*$" cssStyle="width:50%" readOnly="true">
+										theme="myTheme" pattern="^[0-9.]*$" cssStyle="width:50%" readOnly="true">
 									</ss:textfield><span id="ccrdr1"></span></td>	
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="debitAmt" value="0" id="debitAmt1"
-										theme="myTheme" onchange="callForMoreRow(this.id)" readonly="false" pattern="^[0-9]*$" cssStyle="width:50%">
-									</ss:textfield></td>
+										theme="myTheme" onchange="callForMoreRow(this.id)" readonly="false" pattern="^[0-9.]*$" cssStyle="width:50%">
+									</ss:textfield>
+									</td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="creditAmt" value="0" id="creditAmt1"
-										theme="myTheme" onchange="callForMoreRow(this.id)" readonly="true" pattern="^[0-9]*$" cssStyle="width:50%">
+										theme="myTheme" onchange="callForMoreRow(this.id)" readonly="true" pattern="^[0-9.]*$" cssStyle="width:50%">
 									</ss:textfield></td>
 							</tr>
 

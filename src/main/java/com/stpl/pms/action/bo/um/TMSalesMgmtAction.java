@@ -86,7 +86,7 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 	private String vn;
 	private String transportFreight;
 	private String activeVoucherNumber;
-
+	private String partyOldBalance;
 	// sale order doc upload
 	private File docPicture;
 	private String docPictureContentType;
@@ -435,17 +435,22 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 		GameLobbyController controller = new GameLobbyController();
 		Transaction transaction = null;
 		Session session = null;
+		session = HibernateSessionFactory.getSession();
+		transaction = session.beginTransaction();
+		
 		if (activeVoucherNumber.equals("0")) {
-			session = HibernateSessionFactory.getSession();
-			if (controller.createTransactionSales(referenceNo, employeeUnder, partyAcc, salesAccount, salesStockItems,
+			if (controller.createTransactionSales(partyOldBalance, employeeUnder, partyAcc, salesAccount, salesStockItems,
 					amount, Qty, rate, narration, salesNoVoucher, consignee, Dname, propName, contact, address, gstnNo,
 					ddn, tn, des, billt, vn, transportFreight, paymentDate, activeVoucherNumber, totalAmt, goDown,
-					hiddenBatchNumber)) {
-				if (controller.updateTransactionPartyBalanceSale(partyAcc, currBalance, hcrdr))
+					hiddenBatchNumber, session, transaction)) {
+				if (controller.updateTransactionPartyBalanceSale(partyAcc, currBalance, hcrdr, session, transaction))
 					if (controller.updateOrCreateStockSale(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-							hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, hiddenBatchApplicable)) // st_rm_item_qty_godown
+							hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, hiddenBatchApplicable,
+							session, transaction))
 						// update
-						if (controller.insertNewBillSale(paymentDate, "Agst Ref", partyAcc, totalAmt, salesNoVoucher)) {
+						if (controller.insertNewBillSale(paymentDate, "Agst Ref", partyAcc, totalAmt, salesNoVoucher,
+								session, transaction)) {
+							transaction.commit();
 							if (!orderNo.isEmpty() && orderNo != null) {
 								if (controller.changeStatusSuccess(Integer.valueOf(orderNo),
 										userInfoBean.getUserId())) {
@@ -475,17 +480,19 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 			}
 
 			else {
-				if (controller.createTransactionSales(referenceNo, employeeUnder, partyAcc, salesAccount,
+				if (controller.createTransactionSales(partyOldBalance, employeeUnder, partyAcc, salesAccount,
 						salesStockItems, amount, Qty, rate, narration, salesNoVoucher, consignee, Dname, propName,
 						contact, address, gstnNo, ddn, tn, des, billt, vn, transportFreight, paymentDate,
-						activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber)) {
-					if (controller.updateTransactionPartyBalanceSale(partyAcc, currBalance, hcrdr))
+						activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber, session, transaction)) {
+					if (controller.updateTransactionPartyBalanceSale(partyAcc, currBalance, hcrdr, session,
+							transaction))
 						if (controller.updateOrCreateStockSale(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
-								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate,
-								hiddenBatchApplicable)) // st_rm_item_qty_godown
+								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, hiddenBatchApplicable,
+								session, transaction))
 							// update
 							if (controller.insertNewBillSale(paymentDate, "Agst Ref", partyAcc, totalAmt,
-									salesNoVoucher)) {
+									salesNoVoucher, session, transaction)) {
+								transaction.commit();
 								if (!orderNo.isEmpty() && orderNo != null) {
 									if (controller.changeStatusSuccess(Integer.valueOf(orderNo),
 											userInfoBean.getUserId())) {
@@ -1072,6 +1079,14 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 
 	public void setDocPictureTBFileName(String docPictureTBFileName) {
 		this.docPictureTBFileName = docPictureTBFileName;
+	}
+
+	public String getPartyOldBalance() {
+		return partyOldBalance;
+	}
+
+	public void setPartyOldBalance(String partyOldBalance) {
+		this.partyOldBalance = partyOldBalance;
 	}
 
 }

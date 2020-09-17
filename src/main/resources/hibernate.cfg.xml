@@ -29,7 +29,7 @@
          root
       </property>
  	<!--     <property name = "hibernate.connection.password">root</property> -->
-	 <property name = "hibernate.connection.password">uUrckMoipBZTmTAZ</property>
+	 <property name = "hibernate.connection.password">rFuAa8iFx5QWR50G</property>
 
 
       <property name="hibernate.connection.autocommit">true</property>

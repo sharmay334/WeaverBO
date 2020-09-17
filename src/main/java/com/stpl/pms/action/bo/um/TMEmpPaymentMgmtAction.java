@@ -1,12 +1,19 @@
 package com.stpl.pms.action.bo.um;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
@@ -22,6 +29,9 @@ public class TMEmpPaymentMgmtAction extends BaseActionSupport implements Servlet
 	private int paymentNo;
 
 	// create payment fields
+	private File docPicture;
+	private String docPictureContentType;
+	private String docPictureFileName;
 
 	private String account;
 	private String employeeUnder;
@@ -41,14 +51,14 @@ public class TMEmpPaymentMgmtAction extends BaseActionSupport implements Servlet
 		accountList = controller.getaccountListForTxnPayment("accList", getUserInfoBean().getUserId());
 		particularsList = controller.getaccountListForTxnPayment("payment", getUserInfoBean().getUserId());
 		employeeUnderList = controller.getEmployeeNamesList();
-		paymentNo = controller.getPaymentNo();
+		paymentNo = controller.getEmpPaymentNo();
 		return SUCCESS;
 	}
 
 	public void createPayment() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-	
-		if (controller.createTransactionPaymentEmp(account, particulars, amount, bankName, txnType, narration,
+
+		if (controller.createTransactionPaymentEmp(account, particulars, amount, totalAmt, bankName, txnType, narration,
 				userInfoBean.getUserId(), userInfoBean.getParentUserId()))
 			servletResponse.getWriter().write("success");
 		else
@@ -62,6 +72,48 @@ public class TMEmpPaymentMgmtAction extends BaseActionSupport implements Servlet
 		else
 			servletResponse.getWriter().write("false");
 		return;
+	}
+
+	public void uploadDocument() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		boolean flag = false;
+		Date today = new Date();
+		String fName="";
+		if(txnType!=null && txnType.equals("payment"))
+			fName = "payment";
+		else
+			fName = "paymentOrder";
+		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+		df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+		String date = df.format(today);
+		String filePath = ServletActionContext.getServletContext().getRealPath("/");
+		filePath = filePath.substring(0, filePath.lastIndexOf("default/"));
+		File file = new File(filePath +fName+ "/" + getUserInfoBean().getUserId());
+		if (file.mkdir()) {
+			docPictureFileName = paymentNo + "_" + date + "_" + docPictureFileName;
+			filePath = filePath.concat(fName+"/" + getUserInfoBean().getUserId());
+			File fileToCreate = new File(filePath, docPictureFileName);
+			FileUtils.copyFile(docPicture, fileToCreate);// copying source file to new file
+			flag = true;
+		} else {
+			docPictureFileName = paymentNo + "_" + date + "_" + docPictureFileName;
+			filePath = filePath.concat(fName+"/" + getUserInfoBean().getUserId());
+			File fileToCreate = new File(filePath, docPictureFileName);
+			FileUtils.copyFile(docPicture, fileToCreate);// copying source file to new file
+			flag = true;
+
+		}
+		if (flag == true) {
+			String fileFullPath = filePath + "/" + docPictureFileName;
+			controller.setDocumentPathPayment(paymentNo, fileFullPath, getUserInfoBean().getUserId(),txnType);
+
+			servletResponse.getWriter().write("success");
+
+		} else
+			servletResponse.getWriter().write("failed");
+
+		return;
+
 	}
 
 	public HttpServletRequest getServletRequest() {
@@ -191,4 +243,29 @@ public class TMEmpPaymentMgmtAction extends BaseActionSupport implements Servlet
 	public void setBillByBill(String billByBill) {
 		this.billByBill = billByBill;
 	}
+
+	public File getDocPicture() {
+		return docPicture;
+	}
+
+	public void setDocPicture(File docPicture) {
+		this.docPicture = docPicture;
+	}
+
+	public String getDocPictureContentType() {
+		return docPictureContentType;
+	}
+
+	public void setDocPictureContentType(String docPictureContentType) {
+		this.docPictureContentType = docPictureContentType;
+	}
+
+	public String getDocPictureFileName() {
+		return docPictureFileName;
+	}
+
+	public void setDocPictureFileName(String docPictureFileName) {
+		this.docPictureFileName = docPictureFileName;
+	}
+
 }

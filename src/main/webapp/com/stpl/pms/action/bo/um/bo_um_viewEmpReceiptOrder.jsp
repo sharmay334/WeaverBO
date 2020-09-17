@@ -753,7 +753,7 @@ $(document).ready(function() {
 							<label> Narration </label>
 						</div>
 						<div class="InputDiv">
-							<s:textfield name="narration" readOnly="true" value="receipt" cssClass="InpTextBoxBg"
+							<s:textfield name="narration" readOnly="true" value="%{narration}" cssClass="InpTextBoxBg"
 								id="narration" theme="simple" title="Enter Narration"></s:textfield>
 						</div>
 					</div>

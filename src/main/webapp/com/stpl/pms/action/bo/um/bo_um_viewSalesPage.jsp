@@ -969,6 +969,7 @@ function getUnitByItem(id) {
 			success : function(itr) {
 				var arr = itr.split(","); 
 				document.getElementById('currBalance').value = arr[0];
+				document.getElementById('partyOldBalance').value = arr[0]+" "+arr[1];
 				document.getElementById('crdr').innerHTML = arr[1];
 				CurrentBalance = arr[0];
 				document.getElementById('hcrdr').value = arr[1];
@@ -1296,6 +1297,7 @@ function getUnitByItem(id) {
 								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
 								<span id="crdr"></span>
 								<s:hidden name="hcrdr" id="hcrdr"></s:hidden>
+								<s:hidden name="partyOldBalance" id="partyOldBalance"></s:hidden>
 								</td>
 								
 								<td style="text-align: center;" nowrap="nowrap">

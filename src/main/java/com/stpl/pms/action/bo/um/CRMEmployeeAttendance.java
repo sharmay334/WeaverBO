@@ -1,16 +1,30 @@
 package com.stpl.pms.action.bo.um;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.Iterator;
 import java.util.TimeZone;
+
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
@@ -45,6 +59,7 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 	private String resultType;
 	private VisitFormBean visitFormBean;
 	private String docPath;
+	private String visitLocation;
 	
 	
 	public HttpServletRequest getServletRequest() {
@@ -62,7 +77,64 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 	public void setServletResponse(HttpServletResponse servletResponse) {
 		this.servletResponse = servletResponse;
 	}
+	public void compressJPGFormat(String odoMeterPictureFileName,File odoMeterPicture,String filePath) {
+		try {
+		//File input = new File(odoMeterPicture);
+	      BufferedImage image = ImageIO.read(odoMeterPicture);
 
+	      File compressedImageFile = new File(filePath+"/"+odoMeterPictureFileName);
+	      OutputStream os =new FileOutputStream(compressedImageFile);
+
+	      Iterator<ImageWriter>writers =  ImageIO.getImageWritersByFormatName("jpg");
+	      ImageWriter writer = (ImageWriter) writers.next();
+
+	      ImageOutputStream ios = ImageIO.createImageOutputStream(os);
+	      writer.setOutput(ios);
+
+	      ImageWriteParam param = writer.getDefaultWriteParam();
+	      
+	      param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+	      param.setCompressionQuality(0.05f);
+	      writer.write(null, new IIOImage(image, null, null), param);
+	      
+	      os.close();
+	      ios.close();
+	      writer.dispose();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void compressPNGFormat(String odoMeterPictureFileName,File odoMeterPicture) throws IOException {
+		
+		BufferedImage image;
+		IIOMetadata metadata;
+
+		try (ImageInputStream in = ImageIO.createImageInputStream(odoMeterPicture)) {
+		    ImageReader reader = ImageIO.getImageReadersByFormatName("png").next();
+		    reader.setInput(in, true, false);
+		    image = reader.read(0);
+		    metadata = reader.getImageMetadata(0);
+		    reader.dispose();
+		}
+
+		try (ImageOutputStream out = ImageIO.createImageOutputStream(Files.newOutputStream(Paths.get(odoMeterPictureFileName)))) {
+		    ImageTypeSpecifier type = ImageTypeSpecifier.createFromRenderedImage(image);
+		    ImageWriter writer = ImageIO.getImageWriters(type, "png").next();
+
+		    ImageWriteParam param = writer.getDefaultWriteParam();
+		    if (param.canWriteCompressed()) {
+		        param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+		        param.setCompressionQuality(0.0f);
+		    }
+
+		    writer.setOutput(out);
+		    writer.write(null, new IIOImage(image, null, metadata), param);
+		    writer.dispose();
+		}
+		
+		
+		
+	}
 	public String markAttendance() throws IOException {
 		employeeUserName = getUserInfoBean().getUserId();
 		Date today = new Date();
@@ -87,11 +159,22 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 					selfiePictureFileName = "selfie_" + IST + "_" + currentTimeAMPM[1] + "_" + selfiePictureFileName;
 					File fileToCreate = null;
 					if (workType.equalsIgnoreCase("Field_work")) {
-						fileToCreate = new File(filePath, odoMeterPictureFileName);
-						FileUtils.copyFile(odoMeterPicture, fileToCreate);// copying source file to new file
+						if(odoMeterPictureFileName.contains("jpg")) {
+							compressJPGFormat(odoMeterPictureFileName,odoMeterPicture,filePath); //compress and upload
+						}
+						else {
+							fileToCreate = new File(filePath, odoMeterPictureFileName);
+							FileUtils.copyFile(odoMeterPicture, fileToCreate);// copying source file to new file
+					
+						}
 					}
-					File fileToCreateSelfie = new File(filePath, selfiePictureFileName);
-					FileUtils.copyFile(selfiePicture, fileToCreateSelfie);// copying source file to new file
+					if(selfiePictureFileName.contains("jpg")) {
+						compressJPGFormat(selfiePictureFileName,selfiePicture,filePath); //compress and upload
+					}
+					else {
+						File fileToCreateSelfie = new File(filePath, selfiePictureFileName);
+						FileUtils.copyFile(selfiePicture, fileToCreateSelfie);// copying source file to new file
+					}
 					finalPath = filePath;
 				} else if (file1.exists()) {
 					filePath = filePath.concat("attendance/" + employeeUserName + "/" + IST);
@@ -101,26 +184,74 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 					}
 					selfiePictureFileName = "selfie_" + IST + "_" + currentTimeAMPM[1] + "_" + selfiePictureFileName;
 					if (workType.equalsIgnoreCase("Field_work")) {
+						if(odoMeterPictureFileName.contains("jpg")) {
+							compressJPGFormat(odoMeterPictureFileName,odoMeterPicture,filePath); //compress and upload
+						}
+						else {
 						File fileToCreate = new File(filePath, odoMeterPictureFileName);
 						FileUtils.copyFile(odoMeterPicture, fileToCreate);// copying source file to new file
+						}
 					}
+					if(selfiePictureFileName.contains("jpg")) {
+						compressJPGFormat(selfiePictureFileName,selfiePicture,filePath); //compress and upload
+					}
+					else {
 					File fileToCreateSelfie = new File(filePath, selfiePictureFileName);
 					FileUtils.copyFile(selfiePicture, fileToCreateSelfie);// copying source file to new file
+					}
 					finalPath = filePath;
 				}
 			} else if (file.exists()) {
-				filePath = filePath.concat("attendance/" + employeeUserName + "/" + IST);
-				if (workType.equalsIgnoreCase("Field_work")) {
+				File file1 = new File(filePath + "attendance/" + employeeUserName + "/" + IST);
+				
+				if (file1.mkdir()) {
+					filePath = filePath.concat("attendance/" + employeeUserName + "/" + IST);
 					odoMeterPictureFileName = "odo_" + IST + "_" + currentTimeAMPM[1] + "_" + odoMeterPictureFileName;
+					selfiePictureFileName = "selfie_" + IST + "_" + currentTimeAMPM[1] + "_" + selfiePictureFileName;
+					File fileToCreate = null;
+					if (workType.equalsIgnoreCase("Field_work")) {
+						if(odoMeterPictureFileName.contains("jpg")) {
+							compressJPGFormat(odoMeterPictureFileName,odoMeterPicture,filePath); //compress and upload
+						}
+						else {
+							fileToCreate = new File(filePath, odoMeterPictureFileName);
+							FileUtils.copyFile(odoMeterPicture, fileToCreate);// copying source file to new file
+					
+						}
+					}
+					if(selfiePictureFileName.contains("jpg")) {
+						compressJPGFormat(selfiePictureFileName,selfiePicture,filePath); //compress and upload
+					}
+					else {
+						File fileToCreateSelfie = new File(filePath, selfiePictureFileName);
+						FileUtils.copyFile(selfiePicture, fileToCreateSelfie);// copying source file to new file
+					}
+					finalPath = filePath;
+				} else if (file1.exists()) {
+					filePath = filePath.concat("attendance/" + employeeUserName + "/" + IST);
+					if (workType.equalsIgnoreCase("Field_work")) {
+						odoMeterPictureFileName = "odo_" + IST + "_" + currentTimeAMPM[1] + "_"
+								+ odoMeterPictureFileName;
+					}
+					selfiePictureFileName = "selfie_" + IST + "_" + currentTimeAMPM[1] + "_" + selfiePictureFileName;
+					if (workType.equalsIgnoreCase("Field_work")) {
+						if(odoMeterPictureFileName.contains("jpg")) {
+							compressJPGFormat(odoMeterPictureFileName,odoMeterPicture,filePath); //compress and upload
+						}
+						else {
+						File fileToCreate = new File(filePath, odoMeterPictureFileName);
+						FileUtils.copyFile(odoMeterPicture, fileToCreate);// copying source file to new file
+						}
+					}
+					if(selfiePictureFileName.contains("jpg")) {
+						compressJPGFormat(selfiePictureFileName,selfiePicture,filePath); //compress and upload
+					}
+					else {
+					File fileToCreateSelfie = new File(filePath, selfiePictureFileName);
+					FileUtils.copyFile(selfiePicture, fileToCreateSelfie);// copying source file to new file
+					}
+					finalPath = filePath;
 				}
-				selfiePictureFileName = "selfie_" + IST + "_" + currentTimeAMPM[1] + "_" + selfiePictureFileName;
-				if (workType.equalsIgnoreCase("Field_work")) {
-					File fileToCreate = new File(filePath, odoMeterPictureFileName);
-					FileUtils.copyFile(odoMeterPicture, fileToCreate);// copying source file to new file
-				}
-				File fileToCreateSelfie = new File(filePath, selfiePictureFileName);
-				FileUtils.copyFile(selfiePicture, fileToCreateSelfie);// copying source file to new file
-				finalPath = filePath;
 			}
 
 		}
@@ -131,7 +262,7 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 		GameLobbyController controller = new GameLobbyController();
 		if (controller.markAttendance(employeeUserName, attendanceType, workType, workArea, travellingMode,
 				filePathStructureOdometer, filePathStructureSelfie, odometer_reading, leave_reason, travellingModeVia,
-				visitFormBean)) {
+				visitFormBean,visitLocation)) {
 			if (attendanceType.equals("PI")) {
 				resultType = "Your Present Marked Successfully!!!";
 				String mobile = "91"+controller.getMobileNoByEmpId(getUserInfoBean().getUserId());
@@ -350,6 +481,14 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 
 	public void setDocPath(String docPath) {
 		this.docPath = docPath;
+	}
+
+	public String getVisitLocation() {
+		return visitLocation;
+	}
+
+	public void setVisitLocation(String visitLocation) {
+		this.visitLocation = visitLocation;
 	}
 
 }

@@ -212,7 +212,14 @@ function AddBillRow(id){
 }
 function promptSave(){
 	var frm = $('#searchUserFrm');
-		
+	let photo1 = document.getElementById("docPictureTB").files[0];
+	let photo2 = document.getElementById("docPictureDD").files[0];
+	let formData = new FormData();
+	formData.append("docPictureTB", photo1);
+	formData.append("docPictureDD", photo2);
+	var myurl = "<%=basePath%>";
+	myurl += "/com/stpl/pms/action/bo/um/upload_creditNote_order_document.action?cnNo="+document.getElementById('cnNo').value+"&txnType=creditNote";
+	
 			swal({
 				  title: "Are you sure?",
 				  text: "Once Saved, you will not be able to undo the entry!",
@@ -230,9 +237,26 @@ function promptSave(){
 					        success: function (data) {
 					        	if(data=="success"){
 					        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
-					        		setTimeout(function(){
-					        			   window.location.reload(1);
-					        			}, 1000);
+					        		$.ajax({
+								        type: 'POST',
+								        url: myurl,
+								        data: formData,
+								        async:false,
+								        cache : false,
+										contentType : false,
+										processData : false,
+								        success: function (data) {
+								        	setTimeout(function(){
+							        			   window.location.reload(1);
+							        			}, 1000);
+								        },
+								        error: function (data) {
+								        	setTimeout(function(){
+							        			   window.location.reload(1);
+							        			}, 1000);
+								        },
+								    });
+					        		
 					        	}
 					        	else if(data=="date"){
 					        		swal("Error! Sale date is greater than voucher end date.");
@@ -1021,6 +1045,7 @@ function closeDialogue(){
 				var arr = itr.split(","); 
 				document.getElementById('currBalance').value = arr[0];
 				document.getElementById('crdr').innerHTML = arr[1];
+				document.getElementById('partyOldBalance').value = arr[0]+" "+arr[1];
 				CurrentBalance = arr[0];
 				old_cr_dr = arr[1];
 				document.getElementById('hcrdr').value = arr[1];
@@ -1092,6 +1117,18 @@ function closeDialogue(){
 		}
 		
 			
+	}
+	function validateFile(fileName, id) {
+		var file = fileName.value;
+		var ext = file.substring(file.length, file.length - 3);
+		if (file != "") {
+			if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "doc"
+					&& ext != "docx" && ext != "pdf") {
+				document.getElementById(id).value = "";
+				alert('only image,pdf or doc file is allowed!');
+			}
+		}
+
 	}
 </script>
 </head>
@@ -1239,6 +1276,7 @@ function closeDialogue(){
 								theme="myTheme" readonly="true" cssStyle="width:60%;text-align: center;" />
 								<span id="crdr"></span>
 								<s:hidden name="hcrdr" id="hcrdr"></s:hidden>
+								<s:hidden name="partyOldBalance" id="partyOldBalance"></s:hidden>
 								</td>
 								
 								<td style="text-align: center;" nowrap="nowrap">
@@ -1287,7 +1325,35 @@ function closeDialogue(){
 							</tr>
 						</tbody>
 					</table>
-					<div class="clearFRM"></div>
+					
+					<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Dispatch Document</th>
+								<th style="text-align: center;" nowrap="nowrap">Bill-T Document</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								
+								<td style="text-align: center;" nowrap="nowrap">
+					
+					<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPictureDD" name="docPictureDD" cssClass="textfield" theme="myTheme"></s:file>
+
+								</td>
+								<td style="text-align: center;" nowrap="nowrap">
+					
+					<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPictureTB" name="docPictureTB" cssClass="textfield" theme="myTheme"></s:file>
+
+								</td>
+
+							</tr>
+						</tbody>
+					</table>
+					
 					<table width="100%" cellspacing="0" align="center"
 					class="transactionTable">
 						<thead>

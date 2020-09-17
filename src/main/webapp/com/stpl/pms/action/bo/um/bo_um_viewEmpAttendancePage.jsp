@@ -201,6 +201,7 @@ var flag = 0;
 		$("#working_area_div").css("display", "none");
 	    $("#travelling_mode_div").css("display", "none");
 	    $("#odometer_read_div").css("display", "none");
+	    $("#visit_loc_div").css("display", "none");
 	    $("#odometer_div").css("display", "none");
 	    wTYPE = val;
 			if(val=="Office_setting")
@@ -217,7 +218,7 @@ var flag = 0;
 		    $("#odometer_div").css("display", "block");
 			$("#working_area_div").css("display", "block");
 			$("#travelling_mode_div").css("display", "block");
-			
+			 $("#visit_loc_div").css("display", "block");
 			if(flag==1)
 			$("#visit_div").css("display", "block");
 			else
@@ -420,7 +421,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 							<s:property value="%{userName}" />
 					</div>
 				</div>
-				<div class="clearFRM"></div>
+				
 
 				<div class="FormMainBox">
 					<div class="labelDiv">
@@ -436,7 +437,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 					
 				</div>
 				<div id="showPresentDiv" style="display:none;">
-				<div class="clearFRM"></div>
+				
 				<div class="FormMainBox">
 					<div class="labelDiv">
 						<label> What you will be doing today?</label><em class="Req">*</em>
@@ -448,7 +449,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 					</div>
 				</div>
 				<div id="working_area_div" style="display:none;">
-				<div class="clearFRM"></div>
+				
 				<div class="FormMainBox">
 					<div class="labelDiv">
 						<label> Working Area </label>
@@ -462,7 +463,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 				</div>
 				</div>
 				<div id="travelling_mode_div" style="display:none;">
-				<div class="clearFRM"></div>
+				
 				<div class="FormMainBox">
 					<div class="labelDiv">
 						<label> Travelling mode </label>
@@ -503,7 +504,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 				</div>
 				
 				<div class="FormMainBox" id="visit_div" style="display:none;">
-				<div class="clearFRM"></div>
+				
 					<div class="labelDiv">
 						<label> Number of visit </label>
 					</div>
@@ -528,7 +529,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 				</div>
 				<div id="odometer_div" style="display:none">
-				<div class="clearFRM"></div>
 				<div class="FormMainBox">
 					<div class="labelDiv">
 						<label> take Odometer Picture </label>
@@ -544,7 +544,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 				</div>
 				</div>
 				<div id="odometer_read_div" style="display:none;">
-				<div class="clearFRM"></div>
 				<div class="FormMainBox">
 					<div class="labelDiv">
 						<label> Write Odometer Reading </label><em class="Req">*</em>
@@ -552,6 +551,17 @@ body {font-family: Arial, Helvetica, sans-serif;}
 					<div class="InputDivHalf">
 					<s:textfield id="odometer_reading" value="0" name="odometer_reading"
 								theme="myTheme" cssStyle="width:40%" />
+					
+						</div>
+
+				</div>
+				<div class="FormMainBox" style="display:none;" id="visit_loc_div">
+					<div class="labelDiv">
+						<label>Today's Visit Location</label><em class="Req">*</em>
+					</div>
+					<div class="InputDivHalf">
+					<s:textfield id="visit_location" value="" name="visitLocation"
+								theme="myTheme" cssStyle="width:80%" />
 					
 						</div>
 
@@ -611,7 +621,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 								</div>
 
 						</div>
-						<div class="clearFRM"></div>
+						
 						<div class="FormMainBox">
 							<div class="labelDiv">
 								<label> Distributors Name</label>
@@ -630,7 +640,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 						</div>
 						
 						
-						<div class="clearFRM"></div>
+						
 						<div class="FormMainBox">
 							<div class="labelDiv">
 								<label>Retailer</label>
@@ -645,7 +655,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 						</div>
 						
 						
-						<div class="clearFRM"></div>
+						
 						<div class="FormMainBox" id="retName<s:property value="#ctr.count"/>" style="display:none;">
 							<div class="labelDiv">
 								<label> Retailer Name</label>
@@ -661,7 +671,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 						</div>
 						
 						
-						<div class="clearFRM"></div>
+						
 						<div class="FormMainBox">
 							<div class="labelDiv">
 								<label>Prop. Name</label><em class="Req">*</em>
@@ -677,7 +687,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 						</div>
 						
 						
-						<div class="clearFRM"></div>
+						
 						<div class="FormMainBox">
 							<div class="labelDiv">
 								<label>Contact Number</label><em class="Req">*</em>
@@ -690,7 +700,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 								</div>
 
 						</div>
-						<div class="clearFRM"></div>
+						
 						<div class="FormMainBox">
 							<div class="labelDiv">
 								<label>Address</label>
@@ -703,7 +713,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 								</div>
 
 						</div>
-						<div class="clearFRM"></div>
+						
 						<div class="FormMainBox">
 							<div class="labelDiv">
 								<label>District</label>
@@ -717,7 +727,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 								</div>
 
 						</div>
-						<div class="clearFRM"></div>
+						
 						<div class="FormMainBox">
 							<div class="labelDiv">
 								<label>Visit Purpose</label>
@@ -731,7 +741,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 								</div>
 
 						</div>
-						<div class="clearFRM"></div>
+						
 						<div class="FormMainBox" id="visitP" style="display:none">
 							<div class="labelDiv">
 								<label>Purpose(if visit purpose: Others)</label>
@@ -745,7 +755,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 								</div>
 
 						</div>
-						<div class="clearFRM"></div>
+						
 						<div class="FormMainBox">
 							<div class="labelDiv">
 								<label>comments</label>
@@ -759,7 +769,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 								</div>
 
 						</div>
-						<div class="clearFRM"></div>
+						
 						<div class="FormMainBox">
 							<div class="labelDiv">
 								<label>Visitor Photo</label>
@@ -774,7 +784,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 								</div>
 
 						</div>
-						<div class="clearFRM"></div>
+						
 						<div class="FormMainBox">
 							<div class="labelDiv">
 								<label>Reminder</label>
@@ -787,7 +797,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 								</div>
 
 						</div>
-						<div class="clearFRM"></div>
+						
 						<div class="greyStrip">
 								<h4>Visit Form</h4>
 							</div>

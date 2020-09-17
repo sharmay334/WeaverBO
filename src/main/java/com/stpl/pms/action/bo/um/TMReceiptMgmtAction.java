@@ -12,9 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.stpl.pms.commonJavabeans.ReceiptBean;
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.hibernate.factory.HibernateSessionFactory;
 import com.stpl.pms.javabeans.ItemBean;
 import com.stpl.pms.javabeans.VoucherBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
@@ -28,9 +31,7 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 	private List<String> employeeUnderList;
 	private int receiptNo;
 	private List<String> bankNameList;
-
 	// create payment fields
-
 	private String account;
 	private String employeeUnder;
 	private String currBalance;
@@ -55,22 +56,26 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 	private String txn_dd_chq_no;
 	private String txn_bnkNm;
 	private String ccrdrH;
-	private String status;	
+	private String status;
 	private File docPicture;
 	private String docPictureContentType;
 	private String docPictureFileName;
-
+	private String accountOldBal;
+	private String particularsOldBal;
 	private List<ReceiptBean> receiptBeans;
+
 	public String loadEmpReceiptOrder() {
 		GameLobbyController controller = new GameLobbyController();
-		//accountList = new ArrayList<String>();
-		//particularsList = new ArrayList<String>();
-		//accountList = controller.getaccountListForTxnPayment("accList", getUserInfoBean().getUserId());
-		//particularsList = controller.getaccountListForTxnPayment("particulars", getUserInfoBean().getUserId());
-		//employeeUnderList = controller.getEmployeeNamesList();
-		//receiptNo = controller.getReceiptNo();
-		//bankNameList = new ArrayList<String>();
-	//	bankNameList = controller.getBankNameList();
+		// accountList = new ArrayList<String>();
+		// particularsList = new ArrayList<String>();
+		// accountList = controller.getaccountListForTxnPayment("accList",
+		// getUserInfoBean().getUserId());
+		// particularsList = controller.getaccountListForTxnPayment("particulars",
+		// getUserInfoBean().getUserId());
+		// employeeUnderList = controller.getEmployeeNamesList();
+		// receiptNo = controller.getReceiptNo();
+		// bankNameList = new ArrayList<String>();
+		// bankNameList = controller.getBankNameList();
 		receiptBeans = new ArrayList<ReceiptBean>();
 		ReceiptBean bean = null;
 		String str = controller.fetchEmpReceiptData(0, rcptId);
@@ -93,10 +98,11 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 				receiptBeans.add(bean);
 				id++;
 			}
-			
+
 		}
 		amount = resArr[4].split(",")[0];
 		particulars = resArr[3].split(",")[0];
+		narration = resArr[7].trim(); 
 		totalAmt = resArr[8].trim();
 		status = resArr[9].trim();
 		paymentDate = resArr[10].toString();
@@ -104,6 +110,7 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 		bankName = resArr[6].split(",")[0];
 		return SUCCESS;
 	}
+
 	public String loadReceiptPage() {
 		GameLobbyController controller = new GameLobbyController();
 		accountList = new ArrayList<String>();
@@ -160,8 +167,8 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 		GameLobbyController controller = new GameLobbyController();
 		accountList = new ArrayList<String>();
 		particularsList = new ArrayList<String>();
-		accountList = controller.getaccountListForTxnPayment("accList", getUserInfoBean().getUserId());
-		particularsList = controller.getaccountListForTxnPayment("particulars", getUserInfoBean().getUserId());
+		accountList = controller.getaccountListForTxnPayment("accList", 1);
+		particularsList = controller.getaccountListForTxnPayment("particulars", 1);
 		employeeUnderList = controller.getEmployeeNamesList();
 		receiptNo = controller.getReceiptNo();
 		bankNameList = new ArrayList<String>();
@@ -188,7 +195,7 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 				receiptBeans.add(bean);
 				id++;
 			}
-			
+
 		}
 		amount = resArr[4].split(",")[0];
 		particulars = resArr[3].split(",")[0];
@@ -247,12 +254,12 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 		String mobile = controller.getPropContact(particulars.split(",")[0].trim());
 		String getUnderEmpName = controller.getUnderEmpName(particulars.split(",")[0].trim());
 		String getEmpMobile = controller.getUnderEmpMobile(particulars.split(",")[0].trim());
-		String sms = "Dear " + getPropName + ",Prop " + particulars.split(",")[0].trim() + ". Your Bill No-"
+		String sms = "Dear " + getPropName + ",Prop " + particulars.split(",")[0].trim() + ". Your Rcceipt No-"
 				+ receiptNoVoucher + " of AMT " + totalAmt + " " + " Dated " + paymentDate
 				+ " has been generated. Your closing balance is " + currentblnc.split(",")[0] + " "
 				+ hcrdr.split(",")[0] + ". Thank you for choosing us. Regards JAMIDARA SEEDS CORPORATION (Karnataka)";
 		String smsEmp = "Dear " + getUnderEmpName + ", Your party " + getPropName + ",Prop "
-				+ particulars.split(",")[0].trim() + " Bill No-" + receiptNoVoucher + " of AMT " + totalAmt + " "
+				+ particulars.split(",")[0].trim() + " Rcceipt No-" + receiptNoVoucher + " of AMT " + totalAmt + " "
 				+ " Dated " + paymentDate + " has been generated. His closing balance is " + currentblnc.split(",")[0]
 				+ " " + hcrdr.split(",")[0]
 				+ ". Thank you for choosing us. Regards JAMIDARA SEEDS CORPORATION (Karnataka)";
@@ -277,11 +284,18 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 
 	public void createReceipt() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
+		Transaction transaction = null;
+		Session session = null;
+		session = HibernateSessionFactory.getSession();
+		transaction = session.beginTransaction();
 		if (activeVoucherNumber.equals("0")) {
 			if (controller.createTransactionReceipt(account, employeeUnder, currBalance, particulars, amount, bankName,
 					txnType, narration, currentblnc, hiddenTypeOfRef, hiddenBillWiseName, hiddenAmnt, hiddenBilId,
-					receiptNoVoucher, txn_dd_chq_no, txn_bnkNm, activeVoucherNumber, paymentDate, ccrdrH)) {
-				if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr)) {
+					receiptNoVoucher, txn_dd_chq_no, txn_bnkNm, activeVoucherNumber, paymentDate, ccrdrH, session,
+					transaction, accountOldBal, particularsOldBal,totalAmt)) {
+				if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr, session,
+						transaction)) {
+					transaction.commit();
 					if (controller.allowAlert(particulars.split(",")[0].trim(), "SMS"))
 						sendSmsAlert();
 					servletResponse.getWriter().write("success");
@@ -292,15 +306,17 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 		} else {
 			voucherBean = controller.getVoucherNumbering("Receipt", activeVoucherNumber);
 			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(), paymentDate + " 00:00");
-			boolean voucherDate1 = compareTwoDate( paymentDate + " 00:00",voucherBean.getStartDate());
-			if (voucherDate == true || voucherDate1==true) {
+			boolean voucherDate1 = compareTwoDate(paymentDate + " 00:00", voucherBean.getStartDate());
+			if (voucherDate == true || voucherDate1 == true) {
 				servletResponse.getWriter().write("date");
 			} else {
 				if (controller.createTransactionReceipt(account, employeeUnder, currBalance, particulars, amount,
 						bankName, txnType, narration, currentblnc, hiddenTypeOfRef, hiddenBillWiseName, hiddenAmnt,
-						hiddenBilId, receiptNoVoucher, txn_dd_chq_no, txn_bnkNm, activeVoucherNumber, paymentDate,ccrdrH)) {
-					if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr)) {
-
+						hiddenBilId, receiptNoVoucher, txn_dd_chq_no, txn_bnkNm, activeVoucherNumber, paymentDate,
+						ccrdrH, session, transaction, accountOldBal, particularsOldBal,totalAmt)) {
+					if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr, session,
+							transaction)) {
+						transaction.commit();
 						if (controller.allowAlert(particulars.split(",")[0].trim(), "SMS"))
 							sendSmsAlert();
 						servletResponse.getWriter().write("success");
@@ -575,35 +591,61 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 	public void setCcrdrH(String ccrdrH) {
 		this.ccrdrH = ccrdrH;
 	}
+
 	public String getStatus() {
 		return status;
 	}
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
 	public List<ReceiptBean> getReceiptBeans() {
 		return receiptBeans;
 	}
+
 	public void setReceiptBeans(List<ReceiptBean> receiptBeans) {
 		this.receiptBeans = receiptBeans;
 	}
+
 	public File getDocPicture() {
 		return docPicture;
 	}
+
 	public void setDocPicture(File docPicture) {
 		this.docPicture = docPicture;
 	}
+
 	public String getDocPictureContentType() {
 		return docPictureContentType;
 	}
+
 	public void setDocPictureContentType(String docPictureContentType) {
 		this.docPictureContentType = docPictureContentType;
 	}
+
 	public String getDocPictureFileName() {
 		return docPictureFileName;
 	}
+
 	public void setDocPictureFileName(String docPictureFileName) {
 		this.docPictureFileName = docPictureFileName;
+	}
+
+	public String getAccountOldBal() {
+		return accountOldBal;
+	}
+
+	public void setAccountOldBal(String accountOldBal) {
+		this.accountOldBal = accountOldBal;
+	}
+
+	public String getParticularsOldBal() {
+		return particularsOldBal;
+	}
+
+	public void setParticularsOldBal(String particularsOldBal) {
+		this.particularsOldBal = particularsOldBal;
 	}
 
 }

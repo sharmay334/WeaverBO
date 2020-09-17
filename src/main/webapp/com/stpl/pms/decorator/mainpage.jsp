@@ -146,6 +146,21 @@
 				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_receipt_order_emp.action?rcptId="+ro_id;
 				window.location.href = myurlRedirect;
 			}
+			function showPaymentOrderEmp(po_id){
+				
+				var myurl = "<%=path%>";
+				var myurlRedirect = "<%=path%>";
+				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_payment_order_emp.action?pmtId="+po_id;
+				window.location.href = myurlRedirect;
+			}
+			
+			function showCreditNoteOrderEmp(cn_id){
+				
+				var myurl = "<%=path%>";
+				var myurlRedirect = "<%=path%>";
+				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_creditNote_order_emp.action?CNId="+cn_id;
+				window.location.href = myurlRedirect;
+			}
 			function goToCN(cn_id){
 				
 				var myurl = "<%=path%>";

@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.hibernate.factory.HibernateSessionFactory;
 import com.stpl.pms.javabeans.VoucherBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
@@ -39,6 +42,8 @@ public class TMJournalMgmtAction extends BaseActionSupport implements ServletReq
 	private String hiddenTypeOfRef;
 	private String hiddenBillWiseName;
 	private String activeVoucherNumber;
+	private String DrCrType;
+	private String partyOldBal;
 
 	public String loadJournalPage() {
 		GameLobbyController controller = new GameLobbyController();
@@ -123,38 +128,40 @@ public class TMJournalMgmtAction extends BaseActionSupport implements ServletReq
 
 	public void createJournal() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		if(activeVoucherNumber.equals("0")) {
+		Session session = HibernateSessionFactory.getSession();
+		Transaction transaction = session.beginTransaction();
+		if (activeVoucherNumber.equals("0")) {
 			if (controller.createTransactionJournal(employeeUnder, particulars, cr_dr, debitAmt, creditAmt, narration,
-					journalNoVoucher, paymentDate, activeVoucherNumber))
+					journalNoVoucher, paymentDate, activeVoucherNumber, session, transaction, partyOldBal))
 				if (controller.updateTransactionPartyBalanceJournal(particulars, debitAmt, creditAmt, cr_dr, hiddenAmnt,
-						hiddenTypeOfRef, hiddenBillWiseName, journalNoVoucher))
+						hiddenTypeOfRef, hiddenBillWiseName, journalNoVoucher, session, transaction)) {
+					transaction.commit();
 					servletResponse.getWriter().write("success");
-				else
+				} else
 					servletResponse.getWriter().write("no");
-		}
-		else {
-			
+		} else {
+
 			voucherBean = controller.getVoucherNumbering("journal", activeVoucherNumber);
-			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(),paymentDate+" 00:00");
-			boolean voucherDate1 = compareTwoDate(paymentDate+" 00:00",voucherBean.getStartDate());
-			if(voucherDate==true || voucherDate1==true) {
+			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(), paymentDate + " 00:00");
+			boolean voucherDate1 = compareTwoDate(paymentDate + " 00:00", voucherBean.getStartDate());
+			if (voucherDate == true || voucherDate1 == true) {
 				servletResponse.getWriter().write("date");
-			}
-			else {
-				
-				if (controller.createTransactionJournal(employeeUnder, particulars, cr_dr, debitAmt, creditAmt, narration,
-						journalNoVoucher, paymentDate, activeVoucherNumber))
-					if (controller.updateTransactionPartyBalanceJournal(particulars, debitAmt, creditAmt, cr_dr, hiddenAmnt,
-							hiddenTypeOfRef, hiddenBillWiseName, journalNoVoucher))
+			} else {
+				if (controller.createTransactionJournal(employeeUnder, particulars, cr_dr, debitAmt, creditAmt,
+						narration, journalNoVoucher, paymentDate, activeVoucherNumber, session, transaction,partyOldBal))
+					if (controller.updateTransactionPartyBalanceJournal(particulars, debitAmt, creditAmt, cr_dr,
+							hiddenAmnt, hiddenTypeOfRef, hiddenBillWiseName, journalNoVoucher, session, transaction)) {
+						transaction.commit();
 						servletResponse.getWriter().write("success");
-					else
+					} else
 						servletResponse.getWriter().write("no");
 			}
 		}
-		
+
 		return;
 	}
-	private boolean compareTwoDate(String endDate, String currentDate){
+
+	private boolean compareTwoDate(String endDate, String currentDate) {
 		// TODO Auto-generated method stub
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy h:m");
@@ -162,8 +169,7 @@ public class TMJournalMgmtAction extends BaseActionSupport implements ServletReq
 				return true;
 			}
 
-			
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -343,6 +349,22 @@ public class TMJournalMgmtAction extends BaseActionSupport implements ServletReq
 
 	public void setPaymentDate(String paymentDate) {
 		this.paymentDate = paymentDate;
+	}
+
+	public String getDrCrType() {
+		return DrCrType;
+	}
+
+	public void setDrCrType(String drCrType) {
+		DrCrType = drCrType;
+	}
+
+	public String getPartyOldBal() {
+		return partyOldBal;
+	}
+
+	public void setPartyOldBal(String partyOldBal) {
+		this.partyOldBal = partyOldBal;
 	}
 
 }

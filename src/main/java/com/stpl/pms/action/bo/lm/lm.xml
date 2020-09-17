@@ -134,12 +134,7 @@
 			<result name="UserSuccess">
 				/com/stpl/pms/action/bo/lm/bo_lm_pass.jsp
 			</result>
-		</action>
-		<action name="st_check_system_storage" class="com.stpl.pms.action.bo.lm.DiskStorageMgmt" method="returnDiskSpace">
-		<interceptor-ref name="customStack"></interceptor-ref>
-		
-		</action>
-		
+		</action>		
 		<action name="bo_um_get_emp_purchase_order_data" class="com.stpl.pms.action.bo.lm.EmpOrderManagement" method="fetchPOData">
 		<interceptor-ref name="customStack"></interceptor-ref>
 		</action>

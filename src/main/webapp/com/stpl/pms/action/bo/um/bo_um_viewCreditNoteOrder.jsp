@@ -535,6 +535,7 @@ function closeDialogue(){
 			success : function(itr) {
 				var arr = itr.split(","); 
 				document.getElementById('currBalance').value = arr[0];
+				document.getElementById('partyOldBalance').value = arr[0]+" "+arr[1];
 				document.getElementById('crdr').innerHTML = arr[1];
 				CurrentBalance = arr[0];
 				document.getElementById('hcrdr').value = arr[1];
@@ -691,6 +692,7 @@ function closeDialogue(){
 								theme="myTheme" readonly="true" cssStyle="width:20%" />
 								<span id="crdr"></span>
 								<s:hidden id="hcrdr" name="hcrdr"></s:hidden>
+								<s:hidden name="partyOldBalance" id="partyOldBalance"></s:hidden>
 						</div>
 					</div>
 					<div class="clearFRM"></div>

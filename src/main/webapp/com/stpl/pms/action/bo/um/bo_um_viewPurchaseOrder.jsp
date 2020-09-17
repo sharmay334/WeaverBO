@@ -129,45 +129,30 @@ var totalTax = ["0","0","0","0","0","0","0","0","0","0","0"];
 
 function checkForOrderStatus(){
 	var frm = $('#searchUserFrm');
-	swal({
-		  title: "Are you sure?",
-		  text: "Once Saved, you will not be able to undo the entry!",
-		  icon: "warning",
-		  buttons: true,
-		  dangerMode: true,
-		})
-		.then((willDelete) => {
-		  if (willDelete) {
-			  $.ajax({
-			        type: 'POST',
-			        async: false,
-			        url: '/WeaverBO/com/stpl/pms/action/bo/um/bo_um_Bopurchase_order_status.action',
-			        data: frm.serialize(),
-			        success: function (data) {
-			        	if(data=="pending"){
-			        		promptSave();
-			        	}
-			        	else if(data=="reject"){
-			        		swal("This order is rejected by your parent user!");
-			        	}
-			        	else if(data=="accept"){
-			        		swal("This order is already processed!");
-			        	}
-			        	else{
-			        		swal("Some Error Occured!");
-			        	}
-			            
-			        },
-			        error: function (data) {
-			        	swal("Server Error Occured!");
-			        },
-			    });
-			  
-		  } else {
-		    swal("Please Refresh The Page!");
-		   
-		  }
-		});
+	 $.ajax({
+	        type: 'POST',
+	        async: false,
+	        url: '/WeaverBO/com/stpl/pms/action/bo/um/bo_um_Bopurchase_order_status.action',
+	        data: frm.serialize(),
+	        success: function (data) {
+	        	if(data=="pending"){
+	        		promptSave();
+	        	}
+	        	else if(data=="reject"){
+	        		swal("This order is rejected by your parent user!");
+	        	}
+	        	else if(data=="accept"){
+	        		swal("This order is already processed!");
+	        	}
+	        	else{
+	        		swal("Some Error Occured!");
+	        	}
+	            
+	        },
+	        error: function (data) {
+	        	swal("Server Error Occured!");
+	        },
+	    });
 }
 function promptSave(){
 	var frm = $('#searchUserFrm');
@@ -847,6 +832,7 @@ function getItemRateIfStandardCheck(id) {
 			success : function(itr) {
 				var arr = itr.split(","); 
 				document.getElementById('currBalance').value = arr[0];
+				document.getElementById('partyOldBalance').value = arr[0]+" "+arr[1];
 				document.getElementById('crdr').innerHTML = arr[1];
 				CurrentBalance = arr[0];
 				old_cr_dr = arr[1];
@@ -926,6 +912,8 @@ function getItemRateIfStandardCheck(id) {
 							<s:textfield id="purchaseNo" name="purchaseNo"
 								value="%{purchaseNo}" theme="myTheme" readonly="true"
 								cssStyle="width:10%;display:none" />
+							<s:textfield id="activeVoucherNumber" name="activeVoucherNumber" value="%{activeVoucherNumber}"
+								theme="myTheme" readonly="true" cssStyle="width:10%;display:none" />		
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -1035,6 +1023,7 @@ function getItemRateIfStandardCheck(id) {
 								theme="myTheme" readonly="true" cssStyle="width:20%" />
 							<span id="crdr"></span>
 							<s:hidden id="hcrdr" name="hcrdr"></s:hidden>
+							<s:hidden name="partyOldBalance" id="partyOldBalance"></s:hidden>
 						</div>
 					</div>
 					<div class="clearFRM"></div>

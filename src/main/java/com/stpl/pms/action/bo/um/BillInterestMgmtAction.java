@@ -45,6 +45,18 @@ public class BillInterestMgmtAction extends BaseActionSupport implements Servlet
 		return;
 
 	}
+	public void showBillsOverDue() throws IOException {
+
+		GameLobbyController controller = new GameLobbyController();
+		String data = controller.getBillsOfPartyOverDue(ledgerName);
+		if (data.equals("")) {
+			servletResponse.getWriter().write("error");
+		} else {
+			servletResponse.getWriter().write("" + data);
+		}
+		return;
+
+	}
 
 	public HttpServletRequest getServletRequest() {
 		return servletRequest;
