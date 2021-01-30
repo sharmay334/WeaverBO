@@ -70,6 +70,48 @@ function closeMe(){
 		document.getElementById("myModal").style.display = "none";
 			
 }
+
+function getBatteryReport(empId,date){
+	var frm = $('#searchUserFrm2');
+	
+	
+	var newUrl = frm.attr('action').replace("AttendanceVisit","BatteryPer");
+	
+		$.ajax({
+	        type: frm.attr('method'),
+	        url: newUrl+'?empId='+empId+'&attendanceDate='+date,
+	        async:false,
+	        data: frm.serialize(),
+	        success: function (data) {
+	        	 $("#searchResult1").html(data);
+	        	 $(document).ready(function() {
+
+	        			$('#payTransactionTable1').DataTable({
+	        				 "destroy": true,
+	        				 "scrollX": true,
+	        				lengthMenu: [
+	        			        [ 10, 25, 50, -1 ],
+	        			        [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+	        			    ],
+	        				dom: 'Bfrtip',
+	        		      buttons: [
+	        		          'excel',
+	        		          'csv',
+	        		          'pdf',
+	        		          'copy',
+	        		          'pageLength'
+	        		      ]
+	        				
+	        			});
+	        		});
+	        //    document.getElementById('searchResult1').innerHTML = data;
+	        },
+	        error: function (data) {
+	        	 document.getElementById('searchResult1').innerHTML = data;
+	        },
+	    });
+			 
+}
 function getReport(empId,date){
 	var frm = $('#searchUserFrm2');
 
@@ -109,6 +151,39 @@ function getReport(empId,date){
 	    });
 	
 }
+
+function callPictureReportVisit(visitId){
+	var myurl = "<%=basePath%>";
+	myurl += "com/stpl/pms/action/bo/um/bo_um_emp_visit_picture_report.action?visitId="
+			+ visitId;
+	$.ajax({
+		type : "GET",
+		url : myurl,
+		success : function(itr) {
+			var list1 = document.getElementById("one");
+			document.getElementById('s1').innerHTML = "Visit Image";
+			document.getElementById('s2').innerHTML = "";
+			document.getElementById('s3').innerHTML = "";
+			document.getElementById('s4').innerHTML = "";
+				if(typeof(list1.childNodes[0])!="undefined")
+				list1.removeChild(list1.childNodes[0]);
+					
+				
+			  var x = document.createElement("IMG");
+				  x.setAttribute("src", itr);
+				  x.setAttribute("width", "228");
+				  x.setAttribute("height", "228");
+				  x.setAttribute("alt", "Employee Img");
+				  document.getElementById('one').appendChild(x);
+			
+			 
+			document.getElementById("myModal").style.display = "block";
+		},
+		error : function(itr) {
+
+		}
+	});
+}
 function callPictureReport(empId,attDate){
 	empIdArr = empId.split("-");
 	var myurl = "<%=basePath%>";
@@ -123,6 +198,11 @@ function callPictureReport(empId,attDate){
 			var list2 = document.getElementById("two");
 			var list3 = document.getElementById("three");
 			var list4 = document.getElementById("four");
+			document.getElementById('s1').innerHTML = "Odometer Picture In";
+			document.getElementById('s2').innerHTML = "Odometer Picture Out";
+			document.getElementById('s3').innerHTML = "Selfie In";
+			document.getElementById('s4').innerHTML = "Selfie Out";
+			
 				if(typeof(list1.childNodes[0])!="undefined")
 				list1.removeChild(list1.childNodes[0]);
 				if(typeof(list2.childNodes[0])!="undefined")
@@ -245,6 +325,8 @@ function callPictureReport(empId,attDate){
 								id="th_3">Visit Target</th> 	
 							<th width="5%" valign="middle" style="text-align: center;" is_link="false"
 								id="th_3">Visit Report</th>	
+							<th width="5%" valign="middle" style="text-align: center;" is_link="false"
+								id="th_3">Battery Percentage</th>		
 						</tr>
 					</thead>
 					<tbody>
@@ -296,7 +378,9 @@ function callPictureReport(empId,attDate){
 								<td width="5%" valign="middle" style="text-align: center;">
 								<button type="button" class="button" onclick="getReport('<s:property value="#attendanceMap.empId" />','<s:property value="#attendanceMap.attendanceDate" />')">GET</button>
 								</td>
-								
+								<td width="5%" valign="middle" style="text-align: center;">
+								<button type="button" class="button" onclick="getBatteryReport('<s:property value="#attendanceMap.empId" />','<s:property value="#attendanceMap.attendanceDate" />')">GET</button>
+								</td>
 
 							</tr>
 						</s:iterator>
@@ -318,10 +402,10 @@ function callPictureReport(empId,attDate){
 							<table width="100%" cellspacing="0" align="center">
 						<thead>
 							<tr>
-								<th style="text-align: center;" nowrap="nowrap">Odometer Picture In</th>
-								<th style="text-align: center;" nowrap="nowrap">Odometer Picture Out</th>
-								<th style="text-align: center;" nowrap="nowrap">Selfie In</th>
-								<th style="text-align: center;" nowrap="nowrap">Selfie Out</th>
+								<th style="text-align: center;" nowrap="nowrap"><span id="s1">Odometer Picture In</span></th>
+								<th style="text-align: center;" nowrap="nowrap"><span id="s2">Odometer Picture Out</span></th>
+								<th style="text-align: center;" nowrap="nowrap"><span id="s3">Selfie In</span></th>
+								<th style="text-align: center;" nowrap="nowrap"><span id="s4">Selfie Out</span></th>
 						
 							</tr>
 						</thead>

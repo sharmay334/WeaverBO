@@ -135,6 +135,30 @@
 					</div>
 
 				</div>
+				<div class="clearFRM"></div>
+				<div class="FormMainBox">
+
+					<div class="labelDiv">
+						<label>HSN Code</label>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield name="stockItemBean.itemRate" value="%{stockItemBean.hsnCode}" id="itemRate"
+							theme="myTheme"></ss:textfield>
+					</div>
+
+				</div>
+				<div class="clearFRM"></div>
+				<div class="FormMainBox">
+
+					<div class="labelDiv">
+						<label>Bulk Unit</label>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield name="stockItemBean.itemRate" value="%{stockItemBean.bulkUnit}" id="itemRate"
+							theme="myTheme" ></ss:textfield>
+					</div>
+
+				</div>
 				
 				</div>
 

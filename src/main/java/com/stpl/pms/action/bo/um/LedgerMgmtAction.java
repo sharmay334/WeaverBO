@@ -62,6 +62,24 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 	private String Cr_Dr;
 	private LedgerSecondStepBean ledgerSecondStepBean;
 	private String resultType;
+	private String employeeNames;
+
+	public String assignLedger() {
+		GameLobbyController gameLobbyController = new GameLobbyController();
+		ledgerNamesList = new ArrayList<String>();
+		ledgerNamesList = gameLobbyController.getLedgerNamesList();
+		employeeUnderList = gameLobbyController.getEmployeeNamesList();
+		return SUCCESS;
+
+	}
+
+	public String assignLedgerSave() {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.editAssignLedgerToUser(ledgerName, employeeNames))
+			return SUCCESS;
+		else
+			return ERROR;
+	}
 
 	@Override
 	public String execute() throws Exception {
@@ -463,6 +481,14 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 
 	public void setSecurity(String security) {
 		this.security = security;
+	}
+
+	public String getEmployeeNames() {
+		return employeeNames;
+	}
+
+	public void setEmployeeNames(String employeeNames) {
+		this.employeeNames = employeeNames;
 	}
 
 }

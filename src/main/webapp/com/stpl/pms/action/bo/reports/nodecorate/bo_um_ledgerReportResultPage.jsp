@@ -66,12 +66,52 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 </style>
 <script>
-	
+		function getBillDetails(voucherNo,transactionType){
+			
+			var myurl = "<%=basePath%>";
+			
+			var frm = $('#searchUserFrm');
+			if(transactionType=="SALE"){
+				
+				myurl += "/com/stpl/pms/action/bo/um/generate_txn_sales_bill_pdf_document_report.action?salesNoVoucher="+voucherNo;
+				$.ajax({
+			        type: 'GET',
+			        url: myurl,
+			        async:false,
+			        success: function (data) {
+			        
+			        		swal("Bill Generated Successfully!!!");
+			        		var link=document.createElement('a');
+			        		document.body.appendChild(link);
+			        		link.href=data ;
+			        		link.click();
+			        		  
+			        },
+			        error: function (data) {
+			        	swal("Server Error Occured!");
+			        },
+			    });
+			}
+			else{
+				
+				swal("This feature only generates sale bills!!");
+			}
+			
+			
+		}
+		
+		
+		
 	$(document).ready(function() {
 		var partyName = document.getElementById('partyName').value;
 		var fDate = document.getElementById('fromDate').value;
 		var tDate = document.getElementById('toDate').value;
-		$('#payTransactionTable').DataTable({
+		
+		
+		
+		
+		var table = $('#payTransactionTable').DataTable({
+			"orderFixed": [ 0, 'asc' ],
 			lengthMenu: [
 		        [ 10, 25, 50, -1 ],
 		        [ '10 rows', '25 rows', '50 rows', 'Show all' ]
@@ -79,14 +119,25 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			dom: 'Bfrtip',
 	        buttons: [
 	        	
-	            'excel',
+	            { extend: 'excel',footer: true},
 	            'csv',
 	            {
 	                extend: 'pdf',
+	                footer: true,	
 	                title: 'CRM-Transaction Report\nJAMINDARA SEEDS CORPORATION,\nP.B. Road Rane Bannure Distric-HAVERI,KARNATAKA\nREG.ADD. 73,GANESH NAGAR-MURLIPURA JAIPUR\n'+partyName+'\nLedger Account\n'+fDate+' to '+tDate,
 	                customize: function(doc) {
+	                    age = table.column(0).data().toArray();
+	                    for (var i = 0; i < age.length; i++) {
+	                        doc.content[1].table.body[i+1][0].fillColor = 'white';
+	                        doc.content[1].table.body[i+1][1].fillColor = 'white';
+	                        doc.content[1].table.body[i+1][2].fillColor = 'white';
+	                        doc.content[1].table.body[i+1][3].fillColor = 'white';
+	                        doc.content[1].table.body[i+1][4].fillColor = 'white';
+	                        doc.content[1].table.body[i+1][5].fillColor = 'white';
+	                        
+	                    }
 	                    doc.styles.title = {
-	                      fontSize: '16',
+	                      fontSize: '12',
 	                      alignment: 'center'
 	                    }   
 	                  }  
@@ -117,6 +168,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			<div class="innerBox">
 			<s:form id="searchUserFrm2" method="GET" action="/com/stpl/pms/action/bo/um/st_pms_bo_rep_txn_details.action"
 			 target="searchResult1" theme="simple">
+			 <s:set name="cBal" value="isNegative"/>
+			 <s:set name="oBal" value="openingBalanceType"/>
+			 
 				<table id="payTransactionTable" cellspacing="0"
 					cellpadding="4" border="0" align="center" class="payTransaction">
 					<thead>
@@ -138,6 +192,57 @@ body {font-family: Arial, Helvetica, sans-serif;}
 						</tr>
 					</thead>
 					<tbody>
+					<tr class="no-sort">
+							<td width="5%" valign="middle" style="text-align: center;"><s:property value="%{fromDate}"/></td>
+ 							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:14px;" ><b>Opening Balance</b></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;color:black;font-size:14px;"><b><s:if test="%{#oBal=='Dr'}"><s:property value="%{openingBal}" /></s:if></b></td>
+							<td width="5%" valign="middle" style="text-align: center;color:black;font-size:14px;"><b><s:if test="%{#oBal=='Cr'}"><s:property value="%{openingBal}" /></s:if></b></td>
+
+							</tr>
+							<tr class="no-sort">
+							<td width="5%" valign="middle" style="text-align: center;"><a style="display:none;">`</a></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:14px;"><b>Over Due Interest Amount</b></td>
+							<td width="5%" valign="middle" style="text-align: center;color:black;font-size:14px;"><b><s:property value="%{taxAmount}" /></b></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							</tr>
+							<tr style="display:none">
+							<td width="5%" valign="middle" style="text-align: center;">`</td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" >--------------------------</td>
+							<td width="5%" valign="middle" >--------------------------</td>
+						
+							</tr>
+							<tr class="no-sort">
+							<td width="5%" valign="middle" style="text-align: center;"><a style="display:none;">`</a></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:14px;"><b>Current Total</b></td>
+							<td width="5%" valign="middle" style="text-align: center;color:blue;font-size:14px;"><b><s:property value="%{totDebitAmt}" /></b></td>
+							<td width="5%" valign="middle" style="text-align: center;color:blue;font-size:14px;"><b><s:property value="%{totCreditAmt}" /></b></td>
+							</tr>
+							<tr style="display:none">
+							<td width="5%" valign="middle" style="text-align: center;">`</td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" >--------------------------</td>
+							<td width="5%" valign="middle" >--------------------------</td>
+						
+							</tr>
+							<tr class="no-sort">
+							<td width="5%" valign="middle" style="text-align: center;"><a style="display:none;">`</a></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:14px;"><b>Closing Balance</b></td>
+							<td width="5%" valign="middle" style="text-align: center;color:black;font-size:18px;"><b><s:if test="%{#cBal=='No'}"><s:property value="%{closingBal}" /> Dr</s:if></b></td>
+							<td width="5%" valign="middle" style="text-align: center;"><b><s:if test="%{#cBal=='Yes'}"><s:property value="%{closingBal}" /> Cr</s:if></b></td>
+							</tr>
 						<s:iterator value="beanMap" var="resultMapVar">
 							<s:set var="attendanceMap" value="#resultMapVar.value" />
 							<s:hidden id="partyName" value="%{ledgerName}"></s:hidden>
@@ -155,7 +260,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 										<b> <s:property value="#attendanceMap.txnType" /> </b> 
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-										<b> <s:property value="#attendanceMap.voucherNumber" /> </b> 
+										<a href='javascript:;' onclick="getBillDetails('<s:property value="#attendanceMap.voucherNumber" />','<s:property value="#attendanceMap.txnType" />')"><b> <s:property value="#attendanceMap.voucherNumber" /> </b> </a>
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
 										<b> <s:property value="#attendanceMap.debit" /> </b> 
@@ -165,39 +270,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
 								</td>
 							</tr>
 						</s:iterator>
-							<tr>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:18px;"><b>Opening Balance</b></td>
-							<td width="5%" valign="middle" style="text-align: center;color:black;font-size:18px;"><b><s:property value="%{openingBal}" /></b></td>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							</tr>
-							<tr>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:18px;"><b>Current Total</b></td>
-							<td width="5%" valign="middle" style="text-align: center;color:blue;font-size:18px;"><b><s:property value="%{totDebitAmt}" /></b></td>
-							<td width="5%" valign="middle" style="text-align: center;color:blue;font-size:18px;"><b><s:property value="%{totCreditAmt}" /></b></td>
-							</tr>
-							<tr>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:18px;"><b>Interest Amount</b></td>
-							<td width="5%" valign="middle" style="text-align: center;color:black;font-size:18px;"><b><s:property value="%{taxAmount}" /></b></td>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							</tr>
-							<tr>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:18px;"><b>Closing Balance</b></td>
-							<td width="5%" valign="middle" style="text-align: center;color:black;font-size:18px;"><b><s:property value="%{closingBal}" /></b></td>
-							<td width="5%" valign="middle" style="text-align: center;"></td>
-							</tr>
+						
+							
+							
 					</tbody>
+						
 				</table>
 				</s:form>
 			</div>
@@ -210,7 +287,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			
 		</s:if>
 		<s:else>
-			<div class="greyStrip">
+			<%-- <div class="greyStrip">
 				<h4>Error Message</h4>
 			</div>
 			<div class="innerBox">
@@ -218,7 +295,105 @@ body {font-family: Arial, Helvetica, sans-serif;}
 					<span class="alert_close"></span><strong>Msg: </strong>No Record
 					Found.
 				</div>
+			</div> --%>
+			
+			<div class="greyStrip">
+				<h4 style="float: left">Ledger Report Result</h4>
+				<h4 class="dateData" style="text-align: right"></h4>
 			</div>
+			<div class="dataTbl_top">
+				
+			</div>
+			<div class="innerBox">
+			<s:form id="searchUserFrm3" method="GET" action="/com/stpl/pms/action/bo/um/st_pms_bo_rep_txn_details.action"
+			 target="searchResult1" theme="simple">
+			 <s:set name="cBal" value="isNegative"/>
+			 <s:set name="oBal" value="openingBalanceType"/>
+			 
+				<table id="payTransactionTable1" cellspacing="0"
+					cellpadding="4" border="0" align="center" class="payTransaction">
+					<thead>
+						<tr>
+							
+						    <th width="5%" valign="middle" id="th_0" 
+								style="text-align: center;">Date</th>
+							<th width="5%" valign="middle" style="text-align: center;"
+								id="th_1">Particulars</th>
+							<th width="5%" valign="middle" style="text-align: center;"
+								id="th_2">Transaction Type</th>
+							<th width="5%" valign="middle" style="text-align: center;"
+								id="th_2">Voucher No</th>
+							<th width="5%" valign="middle" style="text-align: center;"
+								id="th_3">Debit</th>
+							<th width="5%" valign="middle" style="text-align: center;"
+								id="th_2">Credit</th>	
+								
+						</tr>
+					</thead>
+					<tbody>
+					<tr class="no-sort">
+							<td width="5%" valign="middle" style="text-align: center;"><s:property value="%{fromDate}"/></td>
+ 							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:14px;" ><b>Opening Balance</b></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;color:black;font-size:14px;"><b><s:if test="%{#oBal=='Dr'}"><s:property value="%{openingBal}" /></s:if></b></td>
+							<td width="5%" valign="middle" style="text-align: center;color:black;font-size:14px;"><b><s:if test="%{#oBal=='Cr'}"><s:property value="%{openingBal}" /></s:if></b></td>
+
+							</tr>
+							<tr class="no-sort">
+							<td width="5%" valign="middle" style="text-align: center;"><a style="display:none;">`</a></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:14px;"><b>Interest Amount</b></td>
+							<td width="5%" valign="middle" style="text-align: center;color:black;font-size:14px;"><b><s:property value="%{taxAmount}" /></b></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							</tr>
+							<tr style="display:none">
+							<td width="5%" valign="middle" style="text-align: center;">`</td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" >--------------------------</td>
+							<td width="5%" valign="middle" >--------------------------</td>
+						
+							</tr>
+							<tr class="no-sort">
+							<td width="5%" valign="middle" style="text-align: center;"><a style="display:none;">`</a></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:14px;"><b>Current Total</b></td>
+							<td width="5%" valign="middle" style="text-align: center;color:blue;font-size:14px;"><b><s:property value="%{totDebitAmt}" /></b></td>
+							<td width="5%" valign="middle" style="text-align: center;color:blue;font-size:14px;"><b><s:property value="%{totCreditAmt}" /></b></td>
+							</tr>
+							<tr style="display:none">
+							<td width="5%" valign="middle" style="text-align: center;">`</td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" >--------------------------</td>
+							<td width="5%" valign="middle" >--------------------------</td>
+						
+							</tr>
+							<tr class="no-sort">
+							<td width="5%" valign="middle" style="text-align: center;"><a style="display:none;">`</a></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:14px;"><b>Closing Balance</b></td>
+							<td width="5%" valign="middle" style="text-align: center;color:black;font-size:18px;"><b><s:if test="%{#cBal=='No'}"><s:property value="%{closingBal}" /> Dr</s:if></b></td>
+							<td width="5%" valign="middle" style="text-align: center;"><b><s:if test="%{#cBal=='Yes'}"><s:property value="%{closingBal}" /> Cr</s:if></b></td>
+							</tr>
+						
+						
+							
+							
+					</tbody>
+						
+				</table>
+				</s:form>
+			</div>
+			
+			
+			<div class="box_footer"></div>
 		</s:else>
 	
 	</div>

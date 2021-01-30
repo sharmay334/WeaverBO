@@ -122,6 +122,19 @@ $(document).ready(function() {
 						</div>
 					</div>
 				</div>
+				<%-- <div class="FormMainBox">
+					<div class="labelDiv">
+						<label> Select Bill Type </label>
+					</div>
+					<div class="InputDiv">
+						<div>
+							<s:select theme="myTheme" cssClass="select1"
+								list="{'Non Over Due Bills','Over Due'}" name="dueType" id="dueType" headerKey="ver Due Bills"
+								headerValue="Over Due Bills" ></s:select>
+
+						</div>
+					</div>
+				</div> --%>
 				
 				<div class="FormMainBox">
 						<div class="labelDiv">

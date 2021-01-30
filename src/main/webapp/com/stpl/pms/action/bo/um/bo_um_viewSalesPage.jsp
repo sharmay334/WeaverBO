@@ -128,7 +128,7 @@ var itemNameGlobal;
 var creditLimit = -1;
 var limitPopup = false;
 var periodResult = false;
-var totalTax = ["0","0","0","0","0","0","0"];
+var totalTax = ["0","0","0","0","0","0","0","0","0","0","0"];
 
 
 function checkForOrderStatus(){
@@ -173,6 +173,34 @@ function checkForOrderStatus(){
 		  }
 		});
 }
+
+function downloadBill(){
+	
+	var myurl = "<%=basePath%>";
+	
+	var frm = $('#searchUserFrm');
+	
+	myurl += "/com/stpl/pms/action/bo/um/generate_txn_sales_bill_pdf_document.action";
+	$.ajax({
+        type: frm.attr('method'),
+        url: myurl,
+        async:false,
+        data: frm.serialize(),
+        success: function (data) {
+        
+        		swal("Bill Generated Successfully!!!");
+        		var link=document.createElement('a');
+        		document.body.appendChild(link);
+        		link.href=data ;
+        		link.click();
+        		  
+        },
+        error: function (data) {
+        	swal("Server Error Occured!");
+        },
+    });
+	
+}
 function promptSave(){
 	var frm = $('#searchUserFrm');
 	let photo = document.getElementById("docPictureDD").files[0];
@@ -211,28 +239,36 @@ function promptSave(){
 									        type: 'POST',
 									        url: myurl,
 									        data: formData,
+									        async:false,
 									        cache : false,
 											contentType : false,
 											processData : false,
 									        success: function (data) {
 									        	
-									            
+									        	downloadBill();
 									        },
 									        error: function (data) {
-									        	
+									        	downloadBill();
 									        },
 									    });
 						        	
 						        		setTimeout(function(){
 						        			   window.location.reload(1);
-						        			}, 1000);
+						        			}, 2000);
 						        		
+						        	}
+						        	else if(data=="block"){
+						        		
+						        		swal("This party is blocked! Please contact your admin");
+						        		setTimeout(function(){
+						        			   window.location.reload(1);
+						        			}, 2000);
 						        	}
 						        	else if(data=="date"){
 						        		swal("Error! Sale date is greater or less than voucher end date.");
 						        		setTimeout(function(){
 						        			   window.location.reload(1);
-						        			}, 1000);
+						        			}, 2000);
 						        	}
 						        	else{
 						        		swal("Error! Please fill all details (date or godown).");
@@ -246,7 +282,7 @@ function promptSave(){
 						        	swal("Server Error Occured!");
 						        	setTimeout(function(){
 					        			   window.location.reload(1);
-					        			}, 1000);
+					        			}, 2000);
 						        },
 						    });
 						  
@@ -309,7 +345,26 @@ function promptReject(){
     
     
 }
-
+function showSuperCashPopUp(){
+	 document.getElementById("supercashmarque").style.display = "none";
+	swal({
+		  title: "Is SuperCash Sale?",
+		  text: "Once submit, your item rate will be supercash eligible!",
+		  icon: "success",
+		  closeOnClickOutside: false,
+		  buttons: true,
+		  dangerMode: true,
+		})
+		.then((willDelete) => {
+		  if (willDelete) {
+			  document.getElementById('superCashEligible').value ="yes";
+			  swal("Wonderful your bill is supercash eligible now!");
+			  document.getElementById("supercashmarque").style.display = "block";
+		  } 
+		});
+	
+	
+}
 function getSecurityAmt(id){
 	var myurl = "<%=basePath%>";
 	myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_security_balance.action?partyAcc="
@@ -320,7 +375,7 @@ function getSecurityAmt(id){
 		url : myurl,
 		success : function(itr) {
 			document.getElementById('secuityAmt').value = itr;
-			
+			showSuperCashPopUp();
 			
 		},
 
@@ -647,7 +702,7 @@ function showBatchesPopup(id){
 function getItemRateIfStandardCheck(id) {
 	var myurl = "<%=basePath%>";
 	myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_sales_item_rate.action?itemName="
-			+ document.getElementById(id).value;
+			+ document.getElementById(id).value+"&isSuperCash="+document.getElementById('superCashEligible').value;
 	var res = id.match(/\d/g);
 	$.ajax({
 		type : "GET",
@@ -1086,6 +1141,20 @@ function getUnitByItem(id) {
 		}
 
 	}
+	function redirectLedgerCreate(){
+		
+		var myurl = "<%=path%>";
+		var myurlRedirect = "<%=path%>";
+		myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_createLedger.action";
+		window.location.href = myurlRedirect;
+	}
+	function redirectItemCreate(){
+		
+		var myurl = "<%=path%>";
+		var myurlRedirect = "<%=path%>";
+		myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_createStockItem.action";
+		window.location.href = myurlRedirect;
+	}
 </script>
 </head>
 <body>
@@ -1135,14 +1204,25 @@ function getUnitByItem(id) {
 						</div>
 					</div>
 					<div class="FormMainBox">
-
 						<div class="labelDiv">
 							<label> <b><font color='red'>Reference No.:</font></b>
 							</label>
 						</div>
-						<div class="InputDiv">
+						
+						<div class="InputDivHalf">
+						
 							<s:textfield id="referenceNo" name="referenceNo" theme="myTheme"
 								cssStyle="width:10%" />
+						</div>
+						<div class="labelDiv">
+							<label> <b><font color='green'>Set Default OverDue Reminder</font></b>
+							</label>
+						</div>
+						<div class="InputDivHalf">
+						
+						
+							<s:checkbox name="checkOverDueRem" fieldValue="true" value="true" label="Set Default OverDue Reminder"/>
+							<s:hidden id="superCashEligible" name="superCashEligible" value="no"></s:hidden>
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -1170,7 +1250,9 @@ function getUnitByItem(id) {
 							<s:select name="partyAcc" headerKey="none" id="partyAcc" value="%{partyAccNameSO}"
 								headerValue="--Please Select--" list="partyAccName"
 								cssClass="select1" theme="myTheme" onchange="getCurrentBalance(this.id)"/>
+							<a href="javascript:;" style='font-size:30px;' onclick="redirectLedgerCreate()">&#43;</a>
 						</div>
+						
 					</div>
 					<div class="clearFRM"></div>
 					<div class="FormMainBox">
@@ -1392,8 +1474,9 @@ function getUnitByItem(id) {
 					
 					
 					<br />
-					<div class="clearFRM"></div>
-
+					<marquee width="60%" direction="right" height="30px" style="display:none;" id="supercashmarque">
+						<font color="green">Superb! You have selected SUPERCASH Sale.</font>
+				</marquee>
 					<table width="100%" cellspacing="0" align="center"
 						id="payTransactionTable" class="transactionTable" style="display:none;">
 						<thead>
@@ -1419,13 +1502,13 @@ function getUnitByItem(id) {
 							</tr>
 						</thead>
 						<tbody>
-					<s:iterator begin="1" end="6" status="data">
+					<s:iterator begin="1" end="10" status="data">
 					<tr id="rowId<s:property value="#data.count"/>">
 								<td style="text-align: center;" nowrap="nowrap"><s:select
 										headerKey="-1" headerValue="End Of List"
 										name="salesStockItems" id="%{'salesStockItems' + #data.count}" value="#data.itemName"
 										list="salesStockItemList" cssClass="select1" theme="myTheme"
-										cssStyle="width:120px;" onchange="callForMoreRow(this.id)" /></td>
+										cssStyle="width:120px;" onchange="callForMoreRow(this.id)" /><a href="javascript:;" style='font-size:20px;' onclick="redirectItemCreate()">&#43;</a></td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="totalQty" readOnly="true" value="0" id="%{'totalQty' + #data.count}"
 										theme="myTheme" readOnly="true"

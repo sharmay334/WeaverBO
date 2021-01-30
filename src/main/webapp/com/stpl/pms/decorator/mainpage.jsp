@@ -427,12 +427,13 @@
  	<div id="container">
     <!-- container div start-->
  	<a href="javascript:;" class="notification" onclick="openAlertBox()"><span>Alert</span><span id="badge_value" class="badge">0</span></a>
- 	<a href="javascript:;" class="notification" onclick="openAlertBoxPO()" style="margin-right:20px;"><span>Purchase Order</span><span id="badge_value_po" class="badge">0</span></a>
-	<a href="javascript:;" class="notification" onclick="openAlertBoxSO()" style="margin-right:20px;"><span>Sale Order</span><span id="badge_value_so" class="badge">0</span></a>
-	<a href="javascript:;" class="notification" onclick="openAlertBoxCN()" style="margin-right:20px;"><span>Credit Note</span><span id="badge_value_cn" class="badge">0</span></a>
-	<a href="javascript:;" class="notification" onclick="openAlertBoxDN()" style="margin-right:20px;"><span>Debit Note</span><span id="badge_value_dn" class="badge">0</span></a>
-	<a href="javascript:;" class="notification" onclick="openAlertBoxPMT()" style="margin-right:20px;"><span>Payment</span><span id="badge_value_pmt" class="badge">0</span></a>
-	<a href="javascript:;" class="notification" onclick="openAlertBoxRCPT()" style="margin-right:20px;"><span>Receipt</span><span id="badge_value_rcpt" class="badge">0</span></a>
+ 	<a href="javascript:;" class="notification" onclick="openAlertBoxPO()" style="margin-right:15px;"><span>Purchase Order</span><span id="badge_value_po" class="badge">0</span></a>
+	<a href="javascript:;" class="notification" onclick="openAlertBoxSO()" style="margin-right:15px;"><span>Sale Order</span><span id="badge_value_so" class="badge">0</span></a>
+	<a href="javascript:;" class="notification" onclick="openAlertBoxCN()" style="margin-right:15px;"><span>Credit Note</span><span id="badge_value_cn" class="badge">0</span></a>
+	<a href="javascript:;" class="notification" onclick="openAlertBoxDN()" style="margin-right:15px;"><span>Debit Note</span><span id="badge_value_dn" class="badge">0</span></a>
+	<a href="javascript:;" class="notification" onclick="openAlertBoxPMT()" style="margin-right:15px;"><span>Payment</span><span id="badge_value_pmt" class="badge">0</span></a>
+	<a href="javascript:;" class="notification" onclick="openAlertBoxRCPT()" style="margin-right:15px;"><span>Receipt</span><span id="badge_value_rcpt" class="badge">0</span></a>
+	<a href="http://jamidaraseeds.com/webmail" class="notification"  style="margin-right:10px;"><span>Open Mailbox</span></a>
 	
 		<s:include value="/com/stpl/pms/action/bo/common/header.jsp" />
 		<div class="clear"></div>

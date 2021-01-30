@@ -128,11 +128,11 @@ else if(txn=="JOURNAL"){
 		
 		
 	}
-	function deleteData(txn,billId){
+	function deleteData(txn,billId,ledgerName){
 		
 		var myurl = "<%=basePath%>";
-		myurl += "com/stpl/pms/action/bo/um/bo_um_bill_delete.action?txnType="+txn+"&voucherNo="+billId;
-		if(txn=="RECEIPT"){
+		myurl += "com/stpl/pms/action/bo/um/bo_um_bill_delete.action?txnType="+txn+"&voucherNo="+billId+"&ledgerName="+ledgerName;
+		if(txn=="PAYMENT"){
 			swal("Delete functionality are not for receipt and payment.");
 		}
 		else{
@@ -177,8 +177,53 @@ else if(txn=="JOURNAL"){
 		
 	}
 	$(document).ready(function() {
+		var append="";
+		var tType = document.getElementById('txnTyp').value;
+		var toDt = document.getElementById('toDate').value;
+		var frmDt = document.getElementById('fromDate').value;
+		var partyN = document.getElementById('ledgerName').value;
+		var empN = document.getElementById('employeeName').value;
+		if(empN!="-1")
+			append = append+"Employee Name - "+empN+'\n';
+		if(partyN!="-1")
+			append = append+"Party Name - "+partyN+'\n';
+		if(frmDt.length>2 && toDt.length>2)
+			append = append+"( From Date - "+frmDt+ ', To Date - '+toDt+' )\n';
+			
+			
 		
-		$('#payTransactionTable').DataTable({
+		var table = $('#payTransactionTable').DataTable({
+			"orderFixed": [ 0, 'asc' ],
+			"scrollX": true,
+			lengthMenu: [
+		        [ 10, 25, 50, -1 ],
+		        [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+		    ],
+			dom: 'Bfrtip',
+	        buttons: [
+	        	
+	            { extend: 'excel',footer: true},
+	            'csv',
+	            {
+	                extend: 'pdf',
+	                footer: true,	
+	                title: 'CRM- '+tType+' Transaction Report\nJAMINDARA SEEDS CORPORATION,\nP.B. Road Rane Bannure Distric-HAVERI,KARNATAKA\nREG.ADD. 73,GANESH NAGAR-MURLIPURA JAIPUR\n'+append,
+	                customize: function(doc) {
+	                    doc.styles.title = {
+	                      fontSize: '12',
+	                      alignment: 'center'
+	                    }   
+	                  }  
+	            },
+	            'copy',
+	            'pageLength'
+	        ]
+			
+			
+		});
+		
+		
+		/* $('#payTransactionTable').DataTable({
 			lengthMenu: [
 		        [ 10, 25, 50, -1 ],
 		        [ '10 rows', '25 rows', '50 rows', 'Show all' ]
@@ -193,7 +238,7 @@ else if(txn=="JOURNAL"){
 	        ]
 			
 			
-		});
+		}); */
 	});
 //	$('#payTransactionTable').DataTable();
 
@@ -235,14 +280,34 @@ else if(txn=="JOURNAL"){
 								id="th_2">Bill Used</th>	
 							<th width="5%" valign="middle" style="text-align: center;"
 								id="th_3">Bill Amount</th>
-								<th width="5%" valign="middle" style="text-align: center;"
+							<th width="5%" valign="middle" style="text-align: center;"
+								id="th_3">Bill Due Amount</th>
+							<th width="5%" valign="middle" style="text-align: center;"
 								id="th_3"></th>	
 								
 						</tr>
 					</thead>
 					<tbody>
+					<tr class="no-sort">
+							<td width="5%" valign="middle" style="text-align: center;"><font size="1px">z</font></td>
+ 							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+ 							<td width="5%" valign="middle" style="text-align: center;"></td>
+ 							<td width="5%" valign="middle" style="text-align: center;color:brown;font-size:14px;" ><b>Total Amount</b></td>
+							<td width="5%" valign="middle" style="text-align: center;color:black;font-size:14px;"><b><s:property value="%{totalTransactionAmount}" /></b></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+							<td width="5%" valign="middle" style="text-align: center;"></td>
+						
+					</tr>
 						<s:iterator value="reportData" var="resultMapVar">
 							<s:set var="attendanceMap" value="#resultMapVar.value" />
+							<s:hidden id="txnTyp" value="%{txnType}"></s:hidden>
+							<s:hidden id="toDate" value="%{toDate}"></s:hidden>
+							<s:hidden id="fromDate" value="%{fromDate}"></s:hidden>
+							<s:hidden id="employeeName" value="%{employeeName}"></s:hidden>
+							<s:hidden id="ledgerName" value="%{ledgerName}"></s:hidden>
 							<tr>
 
 								<td width="5%" valign="middle" style="text-align: center;">
@@ -268,10 +333,13 @@ else if(txn=="JOURNAL"){
 										<b> <s:property value="#attendanceMap.billUsed" /> </b> 
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
+									<s:property value="#attendanceMap.actualBillAmount" />
+								</td>
+								<td width="5%" valign="middle" style="text-align: center;">
 									<s:property value="#attendanceMap.billAmount" />
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
-								<button type="button" class="button" onclick="deleteData('<s:property value="#attendanceMap.txnType"/>','<s:property value="#attendanceMap.billVoucherNo"/>')">&#10006;</button>
+								<button type="button" class="button" onclick="deleteData('<s:property value="#attendanceMap.txnType"/>','<s:property value="#attendanceMap.billVoucherNo"/>','<s:property value="#attendanceMap.ledgerName" />')">&#10006;</button>
 								</td>
 							</tr>
 						</s:iterator>

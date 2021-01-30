@@ -315,7 +315,7 @@
 																		<s:elseif test="%{key=='USER_MGT'}">User Management</s:elseif>
 																		<s:elseif test="%{key=='ROLE_MGT'}">Role Management</s:elseif>
 																		<s:elseif test="%{key=='PLAYER_MGT'}">Player Management</s:elseif>
-																		<s:elseif test="%{key=='MISC'}">Miscellaneous</s:elseif>
+																		<s:elseif test="%{key=='MISC'}">Misc</s:elseif>
 																		<s:elseif test="%{key=='HURDLE_MGT'}">Hurdle Management</s:elseif>
 																		<s:elseif test="%{key=='LOYALTY'}">Loyalty Management</s:elseif>
 																		<s:elseif test="%{key=='CMS'}">Content Management System</s:elseif>

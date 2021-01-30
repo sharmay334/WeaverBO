@@ -60,6 +60,7 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 	private VisitFormBean visitFormBean;
 	private String docPath;
 	private String visitLocation;
+	private String visitId;
 	
 	
 	public HttpServletRequest getServletRequest() {
@@ -338,7 +339,25 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 		servletResponse.getWriter().write("" + finalUrl);
 		return;
 	}
-
+	
+	public void getVisitPictureReport()throws IOException{
+		GameLobbyController controller = new GameLobbyController();
+		String response = controller.getEmployeeVisitPictureReport(visitId);
+		String filePath = ServletActionContext.getServletContext().getRealPath("/");
+		String finalUrl = "";
+			String temp = "";
+			temp = "/WeaverBO" + response;
+			finalUrl = temp ;
+				Path src = Paths.get(response);
+				Path dest = Paths.get(filePath);
+				File file = new File(dest.toFile(), response);
+				FileUtils.copyFile(src.toFile(), file);
+			
+		servletResponse.getWriter().write("" + finalUrl);
+		return;
+		
+		
+	}
 	public String getAttendanceType() {
 		return attendanceType;
 	}
@@ -491,4 +510,12 @@ public class CRMEmployeeAttendance extends BaseActionSupport implements ServletR
 		this.visitLocation = visitLocation;
 	}
 
+	public String getVisitId() {
+		return visitId;
+	}
+
+	public void setVisitId(String visitId) {
+		this.visitId = visitId;
+	}
+	
 }

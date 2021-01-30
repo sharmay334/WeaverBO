@@ -92,6 +92,7 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 	private String docPictureContentType;
 	private String docPictureFileName;
 	private String status;
+	private String isSuperCash;
 
 	public void getCurrentBalance() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
@@ -102,7 +103,11 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 
 	public void getStandardRate() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		String response = controller.getStandardRate(itemName);
+		String response = "";
+		if(isSuperCash!=null && isSuperCash.equalsIgnoreCase("yes"))
+		 response = controller.getStandardRate(itemName,isSuperCash);
+		else	
+		 response = controller.getStandardRate(itemName);
 		servletResponse.getWriter().write("" + response);
 		return;
 
@@ -990,6 +995,14 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 
 	public void setPartyOldBalance(String partyOldBalance) {
 		this.partyOldBalance = partyOldBalance;
+	}
+
+	public String getIsSuperCash() {
+		return isSuperCash;
+	}
+
+	public void setIsSuperCash(String isSuperCash) {
+		this.isSuperCash = isSuperCash;
 	}
 
 }

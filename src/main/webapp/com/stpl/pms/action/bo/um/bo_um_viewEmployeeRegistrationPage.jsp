@@ -359,16 +359,50 @@
 				<div class="clearFRM"></div>
 				<div class="FormMainBox">
 					<div class="labelDiv">
+						<label>Salary(Calender Year)
+						</label> <em class="Req">*</em>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield maxlength="30" name="salary" id="salary"
+							theme="myTheme" pattern="^[0-9.]*$" value="0"
+							errorMassage="Special Character not allowed" applyscript="true"></ss:textfield>
+						<div id="salary_error" class="fieldError">
+							<s:fielderror>
+								<s:param>salary</s:param>
+							</s:fielderror>
+						</div>
+					</div>
+				</div>
+				<div class="clearFRM"></div>
+				<div class="FormMainBox">
+					<div class="labelDiv">
 						<label>Travelling Allowance(per km)
 						</label> <em class="Req">*</em>
 					</div>
 					<div class="InputDiv">
 						<ss:textfield maxlength="30" name="travellingAllowance" id="travellingAllowance"
-							theme="myTheme" pattern="^[0-9]*$" value="0"
+							theme="myTheme" pattern="^[0-9.]*$" value="0"
 							errorMassage="Special Character not allowed" applyscript="true"></ss:textfield>
 						<div id="travellingAllowance_error" class="fieldError">
 							<s:fielderror>
 								<s:param>travellingAllowance</s:param>
+							</s:fielderror>
+						</div>
+					</div>
+				</div>
+				<div class="clearFRM"></div>
+				<div class="FormMainBox">
+					<div class="labelDiv">
+						<label>Average Traveling Per Day (in km)
+						</label> <em class="Req">*</em>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield maxlength="30" name="avgTravellingPerDay" id="avgTravellingPerDay"
+							theme="myTheme" pattern="^[0-9.]*$" value="0"
+							errorMassage="Special Character not allowed" applyscript="true"></ss:textfield>
+						<div id="avgTravellingPerDay_error" class="fieldError">
+							<s:fielderror>
+								<s:param>avgTravellingPerDay</s:param>
 							</s:fielderror>
 						</div>
 					</div>
@@ -381,7 +415,7 @@
 					</div>
 					<div class="InputDiv">
 						<ss:textfield maxlength="30" name="cityAllowance" id="cityAllowance"
-							theme="myTheme" pattern="^[0-9]*$" value="0"
+							theme="myTheme" pattern="^[0-9.]*$" value="0"
 							errorMassage="Special Character not allowed" applyscript="true"></ss:textfield>
 						<div id="cityAllowance_error" class="fieldError">
 							<s:fielderror>
@@ -398,7 +432,7 @@
 					</div>
 					<div class="InputDiv">
 						<ss:textfield maxlength="30" name="exCityAllowance" id="exCityAllowance"
-							theme="myTheme" pattern="^[0-9]*$" value="0"
+							theme="myTheme" pattern="^[0-9.]*$" value="0"
 							errorMassage="Special Character not allowed" applyscript="true"></ss:textfield>
 						<div id="exCityAllowance_error" class="fieldError">
 							<s:fielderror>
@@ -415,7 +449,7 @@
 					</div>
 					<div class="InputDiv">
 						<ss:textfield maxlength="30" name="dailyAllowanceDoc" id="dailyAllowanceDoc"
-							theme="myTheme" pattern="^[0-9]*$" value="0"
+							theme="myTheme" pattern="^[0-9.]*$" value="0"
 							errorMassage="Special Character not allowed" applyscript="true"></ss:textfield>
 						<div id="dailyAllowanceDoc_error" class="fieldError">
 							<s:fielderror>
@@ -432,7 +466,7 @@
 					</div>
 					<div class="InputDiv">
 						<ss:textfield maxlength="30" name="dailyAllowance" id="dailyAllowance"
-							theme="myTheme" pattern="^[0-9]*$" value="0"
+							theme="myTheme" pattern="^[0-9.]*$" value="0"
 							errorMassage="Special Character not allowed" applyscript="true"></ss:textfield>
 						<div id="dailyAllowance_error" class="fieldError">
 							<s:fielderror>
@@ -516,7 +550,7 @@
 					</div>
 					<div class="InputDiv">
 						<ss:textfield maxlength="30" name="authAmount" id="authAmount"
-							theme="myTheme" pattern="^[0-9]*$" value="0"
+							theme="myTheme" pattern="^[0-9.]*$" value="0"
 							errorMassage="Special Character not allowed" applyscript="true"></ss:textfield>
 
 						<div id="authAmount_error" class="fieldError">

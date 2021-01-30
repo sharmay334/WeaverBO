@@ -478,7 +478,6 @@ a:focus > .sf-sub-indicator, a:hover > .sf-sub-indicator, a:active > .sf-sub-ind
 }
 #nav {
     background: none repeat scroll 0 0 #d2d2d2;
-	
 	border-radius: 4px 4px 0 0;
     border: 0px solid #bababa;
     font-size: 13px;

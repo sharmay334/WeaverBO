@@ -2,14 +2,19 @@ package com.stpl.pms.action.bo.um;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.hibernate.Session;
@@ -88,6 +93,56 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 	private File docPictureTB;
 	private String docPictureTBContentType;
 	private String docPictureTBFileName;
+
+	private String isLastApproval;
+	private String rejectReason;
+
+	private String localFrieght;
+	private String loadUnloadCharge;
+	private String loadCharge;
+	private String unloadCharge;
+	private String deliveryCharge;
+
+	
+	
+	public void uploadDocumentDispatchStage() throws IOException {
+
+		GameLobbyController controller = new GameLobbyController();
+		boolean flag = false;
+		Date today = new Date();
+		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+		df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+		String date = df.format(today);
+
+		
+			controller.setDocumentPathCreditOrder(userInfoBean.getUserId(), orderNo, ddn,tn,
+					des,billt, vn,transportFreight, localFrieght,loadCharge+","+unloadCharge ,deliveryCharge, ddn);
+		//	sendSmsAlertApprovalStage();
+			servletResponse.getWriter().write("success");
+
+	
+		return;
+
+	}
+	public void rejectCreditNote() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.rejectCreditNote(orderNo, rejectReason, userInfoBean.getUserId()))
+			servletResponse.getWriter().write("success");
+		else
+			servletResponse.getWriter().write("error");
+		return;
+	}
+
+	
+	public void approveCreditNote() throws IOException {
+		
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.approveCreditNote(orderNo, userInfoBean.getUserId()))
+			servletResponse.getWriter().write("success");
+		else
+			servletResponse.getWriter().write("error");
+		return;
+	}
 	public String loadCreditNotePage() {
 		GameLobbyController controller = new GameLobbyController();
 		particularsList = new ArrayList<String>();
@@ -150,44 +205,119 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 		String str = controller.fetchEmpCNData(0, CNId);
 		String[] resArr = str.split("\\|");
 		orderNo = resArr[0].trim();
+		String[] itemArr = resArr[3].split(",");
+		ItemBean bean = null;
+		itemBeans = new ArrayList<ItemBean>();
+		int id = 1;
+		for (int i = 0; i < itemArr.length; i++) {
+
+			if (resArr[3].split(",")[i].trim().equals("-1")) {
+
+			} else {
+
+				bean = new ItemBean();
+				bean.setRowId(String.valueOf(id));
+				bean.setItemName(resArr[3].split(",")[i].trim());
+				bean.setItemQty(resArr[4].split(",")[i].trim());
+				bean.setItemRate(resArr[5].split(",")[i].trim());
+				bean.setItemAmount(resArr[6].split(",")[i].trim());
+				itemBeans.add(bean);
+				id++;
+			}
+		}
 		partyAccNameSO = resArr[1].trim();
-		itemName = resArr[3].split(",")[0].trim();
-		Qty = resArr[4].split(",")[0].trim();
-		rate = resArr[5].split(",")[0].trim();
 		totalAmt = resArr[8].trim();
 		narration = resArr[7].trim();
+		Dname = resArr[15].trim();
+		if (Dname.isEmpty())
+			consignee = "No";
+		else
+			consignee = "Yes";
+
+		propName = resArr[16].trim();
+		contact = resArr[17].trim();
+		status = resArr[11].trim();
+		address = resArr[18].trim();
+		gstnNo = resArr[19].trim();
+		rejectReason = resArr[20].trim();
+		paymentDate = resArr[10].trim();
+		docPictureTBFileName = resArr[13].trim();
+		docPictureDDFileName = resArr[12].trim();
+		employeeUnder = controller.getEmpNameByCreditNoteOrder(orderNo);
 		particularsList = new ArrayList<String>();
 		salesStockItemList = new ArrayList<>();
-		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		particularsList = controller.getaccountListForTxnPayment("", 1);
 		partyAccName = new ArrayList<>();
-		partyAccName = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
+		partyAccName = controller.getaccountListForTxnPayment("", 1);
 		employeeUnderList = controller.getEmployeeNamesList();
-		salesAccountList = controller.getaccountListForTxnPayment("sales acc", getUserInfoBean().getUserId());
+		salesAccountList = controller.getaccountListForTxnPayment("sales acc", 1);
 		salesStockItemList = controller.getSalesStockItemList();
 		cnNo = controller.getCreditNoteNo();
 		goDownList = new ArrayList<>();
 		goDownList = controller.getAllGoDownList();
-		voucherBean = controller.getVoucherNumbering("Credit Note");
-		if (voucherBean == null)
-			cnNoVoucher = String.valueOf(controller.getCreditNoteNo());
-		else {
-			if (voucherBean.getVoucherNumbering().equals("Manual")) {
-				cnNoVoucher = String.valueOf(controller.getCreditNoteNo());
-			} else {
-				if (voucherBean.getAdvanceNumbering().equals("Yes")) {
-					int getMaxNumber = controller.getCNVoucherNumber("");
-					if (getMaxNumber == 0) {
-						cnNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix()
-								+ String.format("%0" + Integer.valueOf(voucherBean.getDecimalNumber()) + "d",
-										Integer.valueOf(voucherBean.getStartingNumber()));
-					} else {
-						getMaxNumber++;
-						cnNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix() + String
-								.format("%0" + Integer.valueOf(voucherBean.getDecimalNumber()) + "d", getMaxNumber);
+		isLastApproval = controller.getIsLastApproval(CNId, "credit note");
+		transportFreight = "0";
+		localFrieght = "0";
+		loadUnloadCharge = "0,0";
+		loadCharge = "0";
+		unloadCharge = "0";
+		deliveryCharge = "0";
+		try {
+			ddn = resArr[21].trim();
+			tn = resArr[9].trim();
+			des = resArr[22].trim();
+			billt = resArr[23].trim();
+			vn = resArr[24].trim();
+			transportFreight = resArr[25].trim();
+			localFrieght = resArr[26].trim();
+			loadUnloadCharge = resArr[27].trim();
+			deliveryCharge = resArr[28].trim();
+			if (!tn.isEmpty() && !ddn.isEmpty() && !status.equals("rejected")) {
+				if (status.equals("pending"))
+					status = "final approval";
+			}
+			String[] loadUnloadChargeArr = loadUnloadCharge.split(",");
+			loadCharge = loadUnloadChargeArr[0];
+			unloadCharge = loadUnloadChargeArr[1];
+		} catch (Exception e) {
 
-					}
-				} else {
+		}
+		String checkIsVoucherActive = controller.getActiveVoucher("credit note");
+
+		if (checkIsVoucherActive.equalsIgnoreCase("duplicate")) {
+			return ERROR;
+		}
+
+		else {
+			voucherBean = controller.getVoucherNumbering("credit note", checkIsVoucherActive);
+			if (checkIsVoucherActive.equalsIgnoreCase("not found"))
+				activeVoucherNumber = "0";
+			else
+				activeVoucherNumber = checkIsVoucherActive;
+			if (voucherBean == null)
+				cnNoVoucher = String.valueOf(controller.getCreditNoteNo());
+			else {
+
+				if (voucherBean.getVoucherNumbering().equals("Manual")) {
 					cnNoVoucher = String.valueOf(controller.getCreditNoteNo());
+				} else {
+					if (voucherBean.getAdvanceNumbering().equals("Yes")) {
+						int getMaxNumber = controller.getCNVoucherNumber(activeVoucherNumber);
+						if (getMaxNumber == 0) {
+							cnNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix()
+									+ String.format("%0" + Integer.valueOf(voucherBean.getDecimalNumber()) + "d",
+											Integer.valueOf(voucherBean.getStartingNumber()));
+						} else {
+							getMaxNumber++;
+							cnNoVoucher = voucherBean.getPrefix() + voucherBean.getSuffix() + String
+									.format("%0" + Integer.valueOf(voucherBean.getDecimalNumber()) + "d", getMaxNumber);
+							;
+
+						}
+					} else {
+						cnNoVoucher = String.valueOf(controller.getCreditNoteNo());
+					}
+
 				}
 
 			}
@@ -226,9 +356,25 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, session,
 								transaction)) {
 							transaction.commit();
-							if (controller.allowAlert(partyAcc, "SMS"))
-								sendSmsAlert();
-							servletResponse.getWriter().write("success");
+							if (!orderNo.isEmpty() && orderNo != null) {
+								if (controller.changeStatusSuccessCreditNote(Integer.valueOf(orderNo),
+										userInfoBean.getUserId(), cnNoVoucher)) {
+									
+									if (controller.allowAlert(partyAcc, "SMS"))
+										sendSmsAlert();
+									servletResponse.getWriter().write("success");
+									
+								}
+								
+							}
+							else {
+								
+								if (controller.allowAlert(partyAcc, "SMS"))
+									sendSmsAlert();
+								// generateSalePDFDocument();
+								servletResponse.getWriter().write("success");
+							}
+							
 						}
 
 				} else {
@@ -240,9 +386,23 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 									hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, session,
 									transaction)) {
 								transaction.commit();
-								if (controller.allowAlert(partyAcc, "SMS"))
-									sendSmsAlert();
-								servletResponse.getWriter().write("success");
+								if (!orderNo.isEmpty() && orderNo != null) {
+									if (controller.changeStatusSuccessCreditNote(Integer.valueOf(orderNo),
+											userInfoBean.getUserId(), cnNoVoucher)) {
+										
+										if (controller.allowAlert(partyAcc, "SMS"))
+											sendSmsAlert();
+										servletResponse.getWriter().write("success");
+										
+									}
+									
+								}
+								else {
+									if (controller.allowAlert(partyAcc, "SMS"))
+										sendSmsAlert();
+									servletResponse.getWriter().write("success");	
+								}
+								
 							}
 
 				}
@@ -285,9 +445,23 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 										hiddenBatchNumber, hiddenMfgDate, hiddenExpDate, hiddenExpAlert,
 										hiddenExpAlertDate, session, transaction)) {
 									transaction.commit();
-									if (controller.allowAlert(partyAcc, "SMS"))
-										sendSmsAlert();
-									servletResponse.getWriter().write("success");
+									if (!orderNo.isEmpty() && orderNo != null) {
+										if (controller.changeStatusSuccessCreditNote(Integer.valueOf(orderNo),
+												userInfoBean.getUserId(), cnNoVoucher)) {
+											
+											if (controller.allowAlert(partyAcc, "SMS"))
+												sendSmsAlert();
+											servletResponse.getWriter().write("success");
+											
+										}
+										
+									}
+									else {
+										if (controller.allowAlert(partyAcc, "SMS"))
+											sendSmsAlert();
+										servletResponse.getWriter().write("success");	
+									}
+									
 								}
 
 					}
@@ -367,7 +541,7 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 		narration = resArr[7].trim();
 		status = resArr[11].trim();
 		paymentDate = resArr[10].trim();
-		//docPictureFileName = resArr[16].trim();
+		// docPictureFileName = resArr[16].trim();
 		particularsList = new ArrayList<String>();
 		salesStockItemList = new ArrayList<>();
 		particularsList = controller.getaccountListForTxnPayment("", getUserInfoBean().getUserId());
@@ -875,6 +1049,62 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 
 	public void setDocPictureTBFileName(String docPictureTBFileName) {
 		this.docPictureTBFileName = docPictureTBFileName;
+	}
+
+	public String getIsLastApproval() {
+		return isLastApproval;
+	}
+
+	public void setIsLastApproval(String isLastApproval) {
+		this.isLastApproval = isLastApproval;
+	}
+
+	public String getRejectReason() {
+		return rejectReason;
+	}
+
+	public void setRejectReason(String rejectReason) {
+		this.rejectReason = rejectReason;
+	}
+
+	public String getLocalFrieght() {
+		return localFrieght;
+	}
+
+	public void setLocalFrieght(String localFrieght) {
+		this.localFrieght = localFrieght;
+	}
+
+	public String getLoadUnloadCharge() {
+		return loadUnloadCharge;
+	}
+
+	public void setLoadUnloadCharge(String loadUnloadCharge) {
+		this.loadUnloadCharge = loadUnloadCharge;
+	}
+
+	public String getLoadCharge() {
+		return loadCharge;
+	}
+
+	public void setLoadCharge(String loadCharge) {
+		this.loadCharge = loadCharge;
+	}
+
+	public String getUnloadCharge() {
+		return unloadCharge;
+	}
+
+	public void setUnloadCharge(String unloadCharge) {
+		this.unloadCharge = unloadCharge;
+	}
+
+	public String getDeliveryCharge() {
+		return deliveryCharge;
+	}
+
+	public void setDeliveryCharge(String deliveryCharge) {
+		this.deliveryCharge = deliveryCharge;
 	}
 
 }

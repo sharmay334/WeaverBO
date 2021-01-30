@@ -1,5 +1,15 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib prefix="s" uri="/struts-tags"%>
+<%@include file="/com/stpl/pms/action/bo/common/baseUrl.jsp" %>
+<%@taglib prefix="s" uri="/struts-tags" %>
+<%@taglib prefix="ss" uri="/extended-struts2-tags" %>
+
+
+<%
+String path = request.getContextPath();
+String basePath =  (String)request.getAttribute("basePathURL") ;
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
 <html>
 	<head>
 		<script type="text/javascript">
@@ -20,7 +30,7 @@
 
 
 				<% String jspName =  getServletConfig().getServletContext().getRealPath(request.getServletPath());
-	pageContext.setAttribute("jspName",jspName);
+					pageContext.setAttribute("jspName",jspName);
 	%>
 				<s:if test="%{(userList.size()>0)}">
 					<div class="FormMainBox1">

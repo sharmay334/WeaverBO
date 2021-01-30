@@ -116,7 +116,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 <link rel="stylesheet" href="/WeaverBO/js/jQuery/1.11.3/jquery-ui.css">
 <script>
 var CurrentBalance = 0;
-var totalTax = ["0","0","0","0","0","0"];
+var totalTax = ["0","0","0","0","0","0","0","0","0","0","0"];
 var current_working_table_row_id = 0;
 var item_name_val = 0;
 var goDownGlobal;
@@ -877,6 +877,7 @@ $("#reminderDate").datetimepicker({
 								headerValue="--Please Select--" list="partyAccName"
 								cssClass="select1" theme="myTheme" value="%{partyAccNamePO}"
 								onchange="getCurrentBalance(this.id)" />
+								<a href="javascript:;" style='font-size:30px;' onclick="redirectLedgerCreate()">&#43;</a>
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -1115,13 +1116,13 @@ $("#reminderDate").datetimepicker({
 							</tr>
 						</thead>
 						<tbody>
-						<s:iterator begin="1" end="5" status="data">
+						<s:iterator begin="1" end="10" status="data">
 							<tr id="rowId<s:property value="#data.count"/>">
 								<td style="text-align: center;" nowrap="nowrap"><s:select
 										headerKey="-1" headerValue="End Of List"
 										name="salesStockItems" value="%{itemName}" id="%{'salesStockItems' + #data.count}"
 										list="salesStockItemList" cssClass="select1" theme="myTheme"
-										cssStyle="width:120px;" onchange="callForMoreRow(this.id)" /></td>
+										cssStyle="width:120px;" onchange="callForMoreRow(this.id)" /><a href="javascript:;" style='font-size:20px;' onclick="redirectItemCreate()">&#43;</a></td>
 								
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="totalQty" readOnly="true" value="0"

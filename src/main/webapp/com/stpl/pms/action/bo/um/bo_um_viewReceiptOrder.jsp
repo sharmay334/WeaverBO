@@ -58,6 +58,28 @@ body {font-family: Arial, Helvetica, sans-serif;}
   text-decoration: none;
   cursor: pointer;
 }
+.modal1 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal1-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
 </style>
 <script src="/WeaverBO/js/sweetalert.min.js"></script>
 <script type="text/javascript"
@@ -84,6 +106,140 @@ var tempAmt = 0;
 
 //When the user clicks on <span> (x), close the modal
 
+function promptRejectedReason(){
+	
+	var reason = document.getElementById('rejectedReason').value;
+	swal("Your have rejected this order because - "+reason);
+}
+function callPictureReport(src){
+		var myurl = "<%=basePath%>";
+		myurl += "com/stpl/pms/action/bo/um/bo_um_emp_picture.action?docPath="
+				+ src;
+		$.ajax({
+			type : "GET",
+			url : myurl,
+			success : function(itr) {
+				
+				var list1 = document.getElementById("one");
+					if(typeof(list1.childNodes[0])!="undefined")
+					list1.removeChild(list1.childNodes[0]);
+						
+					
+				  var x = document.createElement("IMG");
+					  x.setAttribute("src", itr);
+					  x.setAttribute("width", "500");
+					  x.setAttribute("height", "600");
+					  x.setAttribute("alt", "Doc Img");
+					  document.getElementById('one').appendChild(x);
+				
+				
+				 
+				document.getElementById("myModal1").style.display = "block";
+			},
+			error : function(itr) {
+
+			}
+		});
+	}
+	
+function promptReason(){
+	swal({
+		  text: "Enter Reason of Rejection!",
+		  content: { element: "textarea" },
+		  buttons: "Ok"
+		}).then((value) => {
+		  if (!value) throw null;
+		  value = document.querySelector(".swal-content__textarea").value;
+		  var n = value.length;
+		  if(n<3){
+			  alert("Rejection Reason is Mandatory to minimun 5 characters!!");  
+		  }
+		  else{
+			  var myurl = "<%=basePath%>";
+			  myurl += "/com/stpl/pms/action/bo/um/bo_um_reject_receipt.action?rcptId="+document.getElementById('orderNo').value+"&rejectReason="+value;
+			  swal({
+				  title: "Are you sure?",
+				  text: "Once Reject, you will not be able to undo the entry!",
+				  icon: "warning",
+				  buttons: true,
+				  dangerMode: true,
+				})
+				.then((willDelete) => {
+				  if (willDelete) {
+					  $.ajax({
+					        type: 'GET',
+					        url: myurl,
+					        success: function (data) {
+					        	if(data=="success"){
+					        		swal("Order Successfully Rejected..Refreshing Page!!!");
+					        		setTimeout(function(){
+					        			   window.location.reload(1);
+					        			}, 1000);
+					        	}
+					        	else{
+					        		swal("Some Error Occured While Rejecting!");
+					        	}
+					            
+					        },
+					        error: function (data) {
+					        	swal("Server Error Occured!");
+					        },
+					    });
+					  
+				  } else {
+				    swal("Please Refresh The Page!");
+				  }
+				});
+			  
+			  
+		  }
+		  
+		});
+	
+}	
+
+function promptPartialSave(){
+	
+	var myurl = "<%=basePath%>";
+	myurl = myurl+"/com/stpl/pms/action/bo/um/bo_um_approve_receipt.action?rcptId="+document.getElementById('orderNo').value;
+	swal({
+	  title: "Are you sure?",
+	  text: "Once Saved, you will not be able to undo the entry!",
+	  icon: "warning",
+	  buttons: true,
+	  dangerMode: true,
+	})
+	.then((willDelete) => {
+	  if (willDelete) {
+		  $.ajax({
+		        type: 'POST',
+		        url: myurl,
+		        success: function (data) {
+		        	if(data=="success"){
+		        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
+		        		setTimeout(function(){
+		        			var myurlRedirect = "<%=basePath%>";
+		    				window.location.href = myurlRedirect;
+		        			}, 1000);
+		        	}
+		        	else{
+		        		swal("Some Error Occured!");
+		        	}
+		            
+		        },
+		        error: function (data) {
+		        	swal("Server Error Occured!");
+		        },
+		    });
+		  
+	  } else {
+	    swal("Please Refresh The Page!");
+	  }
+	});
+
+	
+	
+}
 function promptSave(){
 	var frm = $('#searchUserFrm');
 
@@ -104,13 +260,14 @@ function promptSave(){
 			        	if(data=="success"){
 			        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
 			        		setTimeout(function(){
-			        			var myurlRedirect = "<%=basePath%>";
-			    				myurlRedirect+="/com/stpl/pms/action/bo/um/bo_um_tm_Receipt.action";
-			    				window.location.href = myurlRedirect;
+			        			   window.location.reload(1);
 			        			}, 1000);
 			        	}
 			        	else{
 			        		swal("Some Error Occured!");
+			        		setTimeout(function(){
+			        			   window.location.reload(1);
+			        			}, 1000);
 			        	}
 			            
 			        },
@@ -126,6 +283,11 @@ function promptSave(){
     
     
 }
+
+function closeMeImage(){
+	document.getElementById("myModal1").style.display = "none";
+} 
+
 function closeMe(){
 	
 	var rowCountBillWise = countTotalRowsBillWise();
@@ -297,7 +459,7 @@ $(document).ready(function() {
 		var rowCountBillWise = countTotalRowsBillWise();
 		var amt = document.getElementById('amount'+activerow).value;
 		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_bill_ref_id.action?partyAcc="
-				+ particular+"&typeOfRef="+tor;
+				+ particular+"&typeOfRef="+tor+"&isSale='Yes'";
 		
 		$.ajax({
 			type : "GET",
@@ -576,6 +738,7 @@ $(document).ready(function() {
 
 		}
 		activerow = chk;
+		if(document.getElementById('isModalShow').value=="yes")
 		 checkForBillByBill(id);
 	}
 	function getCurrentBalance(id) {
@@ -619,20 +782,35 @@ $(document).ready(function() {
 		document.getElementById('hiddenBilId'+res).value = arr[0];
 		document.getElementById('ModelDrCr'+res).value = arr[3];
 		var amount = arr[2];
-		var receiptAmt = document.getElementById('amount'+activerow).value;
+		var receiptAmt = document.getElementById('amount'+activerow).value; 
+		var rowCountBill = countTotalRowsBillWise();
+		var tempTotalAmount = 0.0;
+		for(var i=1;i<=rowCountBill;i++){
+			if(i==res)
+			continue;
+			tempTotalAmount = Number(tempTotalAmount) + Number(document.getElementById('billAmt'+i).value);
+			
+		}
 		
-			if(Number(receiptAmt)==Number(amount)){
-				document.getElementById('billAmt'+res).value = Number(receiptAmt);
+		
+			var treceiptAmt =  Number(receiptAmt) - Number(tempTotalAmount);
+		
+			
+		
+		
+			if(Number(treceiptAmt) ==Number(amount)){
+				
+				document.getElementById('billAmt'+res).value = Number(treceiptAmt);
 				
 			}
-			else if(Number(receiptAmt)>Number(amount)){
+			else if(Number(treceiptAmt)>Number(amount)){
 				
 				document.getElementById('billAmt'+res).value = amount;
 				
 			}
-			else if(Number(receiptAmt)<Number(amount)){
+			else if(Number(treceiptAmt)<Number(amount)){
 				
-				document.getElementById('billAmt'+res).value = receiptAmt;
+				document.getElementById('billAmt'+res).value = treceiptAmt;
 			
 			}
 		
@@ -643,6 +821,19 @@ $(document).ready(function() {
 			document.getElementById('ModelDrCr'+res).value = 'Dr';
 		if(arr[3]=='Dr')
 			document.getElementById('ModelDrCr'+res).value = 'Cr';
+		
+		
+		if(Number(rowCountBill)>Number(res)){
+			var totalAdjustedAmt = 0;
+			for(var i=1;i<rowCountBill;i++){
+				totalAdjustedAmt=Number(totalAdjustedAmt)+Number(document.getElementById('billAmt'+i).value);
+			}
+			var temp = Number(totalAdjustedAmt) - Number(receiptAmt);
+			if(Number(temp)<0)
+				temp = Number(temp) * (-1);
+			document.getElementById('billAmt'+rowCountBill).value = temp;
+		}
+		else
 		callForBillWiseRow(id);
 	}
 function getInterestAmount(rw,partyName,voucherNo){
@@ -917,8 +1108,19 @@ function getInterestAmount(rw,partyName,voucherNo){
 								id="narration" theme="simple" title="Enter Narration"></s:textfield>
 						</div>
 					</div>
+					<div class="clearFRM"></div>
+					<div class="FormMainBox">
 
+						<div class="labelDiv">
+							<label> Order Document </label>
+						</div>
+						<div class="InputDiv">
+	<a href="javascript:;" onclick="callPictureReport('<s:property value="docPictureFileName" />')">VIEW DOCUMENT</a>
+						
+						</div>
+					</div>
 
+				
 				</s:if>
 
 			</div>
@@ -928,9 +1130,48 @@ function getInterestAmount(rw,partyName,voucherNo){
 					 --%>
 				<!-- <input type="submit" value='Create' align="left"
 					style="margin-left: 0px" class="button" /> -->
+					<s:set name="checkApprovalStage" value="isLastApproval"/>
+					<s:set name="statusOrder" value="status"/>
+					<s:if test="%{#checkApprovalStage=='NO'}">
+					<s:hidden id="isModalShow" value="no"></s:hidden>
+					<s:if test="%{#statusOrder=='pending'}">
 					<button type="button" align="left"
-					style="margin-left: 0px" class="button" onclick="promptSave()">Save</button>
-			</div>
+					style="margin-left: 0px" class="button" onclick="promptPartialSave()">Accept</button>
+					<button type="button" align="left"
+					style="margin-left: 0px" class="button" onclick="promptReason()">Reject</button>
+					</s:if>
+					<s:else>
+					<s:hidden id="rejectedReason" value="%{rejectReason}"/>
+					<button type="button" align="left"
+					style="margin-left: 0px;color:red !important;" class="button" onclick="promptRejectedReason()">This Order is already Rejected! Click to view Reason</button>
+					
+					</s:else>	
+					</s:if>
+					
+					<s:else>
+					
+					<s:if test="%{#statusOrder=='pending'}">
+					<s:hidden id="isModalShow" value="yes"></s:hidden>
+					<button type="button" align="left"
+					style="margin-left: 0px" class="button" onclick="promptSave()">Accept</button>
+					<button type="button" align="left"
+					style="margin-left: 0px" class="button" onclick="promptReason()">Reject</button>
+					
+					</s:if>
+					<s:elseif test="%{#statusOrder=='accepted'}">
+					
+					<button type="button" align="left"
+					style="margin-left: 0px;color:green !important;" class="button">This Order is already Accepted</button>
+					
+					</s:elseif>
+					<s:else>
+					<s:hidden id="rejectedReason" value="%{rejectReason}"/>
+					<button type="button" align="left"
+					style="margin-left: 0px;color:red !important;" class="button" onclick="promptRejectedReason()">This Order is already Rejected! Click to view Reason</button>
+					
+					</s:else>
+					</s:else>
+					</div>
 			<div id="myModal" class="modal">
 
   <!-- Modal content -->
@@ -1033,7 +1274,37 @@ function getInterestAmount(rw,partyName,voucherNo){
 
 		</div>
 		</s:form>
-		
+		<div id="myModal1" class="modal1">
+
+  <!-- Modal content -->
+  			<div class="modal-content1">
+ 			   <button id="closeme" type="button" class="close" onclick="closeMeImage()">&times;</button>
+ 			  <div id="bill_bybill">
+						<div class="FormSectionMenu">
+							<div class="greyStrip">
+								<h4>Document :<b></h4>
+							</div>
+							<table width="100%" cellspacing="0" align="center">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Document </th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr>
+								<td style="text-align: center;" nowrap="nowrap"><div id="one"></div></td>
+								
+							</tr>
+
+
+						</tbody>
+					</table>
+						</div>
+					</div>
+ 			 </div>
+
+			</div>
 		
 		
 	</div>
@@ -1047,7 +1318,7 @@ function getInterestAmount(rw,partyName,voucherNo){
 	}
 if(document.getElementById('particularsList1').value!='-1'){	
 	showCurrentParticularsBalance('particularsList1');
-	document.getElementById("myModal").style.display = "block";
+	//document.getElementById("myModal").style.display = "block";
 
 }
 	

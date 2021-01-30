@@ -210,7 +210,7 @@ function callToGetAgstRef(id,tor){
 	var particular = document.getElementById('txnType'+rowCount).value;
 	var rowCountBillWise = countTotalRowsBillWise();
 
-	var amt = Number(document.getElementById('debitAmt'+res).value)+Number(document.getElementById('creditAmt'+res).value);
+	var amt = Number(document.getElementById('debitAmt'+activerow).value)+Number(document.getElementById('creditAmt'+activerow).value);
 	myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_bill_agst_ref_id_journal.action?partyAcc="
 			+ particular+"&typeOfRef="+tor;
 	
@@ -220,8 +220,29 @@ function callToGetAgstRef(id,tor){
 		success : function(itr) {
 			var arr = itr.split(",");
 			var optionArr = arr[0].split(";");
-			document.getElementById('dueDate'+res).value = arr[1];
-			document.getElementById('billAmt'+res).value = amt;
+			var optionArrSub = optionArr[0].split(" ");
+			
+			var datearr = optionArrSub[1].split("-");
+			var conversionDate = datearr[2]+"-"+datearr[1]+"-"+datearr[0];
+			var d = new Date(conversionDate);
+			
+			d.setDate(d.getDate() + Number(arr[1]));
+			limit_days = Number(arr[1]);
+			 var dd = d.getDate();
+			    var mm = d.getMonth()+1;
+			    var y = d.getFullYear();
+			 var _dt = dd+"-"+mm+"-"+y+" ( "+arr[1]+" days)" ;
+			
+			document.getElementById('dueDate'+res).value =  _dt;
+			
+			if(Number(optionArrSub[2])>Number(amt) || Number(optionArrSub[2])==Number(amt))
+				document.getElementById('billAmt'+res).value = Number(amt);
+				else
+					document.getElementById('billAmt'+res).value = optionArrSub[2];
+
+			
+			
+			//document.getElementById('billAmt'+res).value = amt;
 			if(rowCountBillWise>1){
 				var finalAmt = 0;
 			for(var i=1;i<rowCountBillWise;i++){
@@ -287,7 +308,7 @@ function callToGetAdvance(id,tor){
 	
 	var particular = document.getElementById('txnType'+rowCount).value;
 	var rowCountBillWise = countTotalRowsBillWise();
-	var amt = Number(document.getElementById('debitAmt'+res).value)+Number(document.getElementById('creditAmt'+res).value);
+	var amt = Number(document.getElementById('debitAmt'+activerow).value)+Number(document.getElementById('creditAmt'+activerow).value);
 	myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_bill_ref_journal_id.action?partyAcc="
 			+ particular+"&typeOfRef="+tor;
 	
@@ -309,7 +330,7 @@ function callToGetAdvance(id,tor){
 			document.getElementById("pendingBills"+res).style.display = "none";
 			document.getElementById("pendingBillt"+res).style.display = "block";
 			document.getElementById("hiddenBilId"+res).value = arr[0];
-			document.getElementById("ModelDrCr"+res).value = 'Dr';
+			document.getElementById("ModelDrCr"+res).value = 'Cr';
 
 		},
 
@@ -549,14 +570,78 @@ function callformorebillwiserow(id){
 
 	}
 	function callHiddenBillId(id){
+		var res = id.match(/\d/g);
+		
 		var val = document.getElementById(id).value;
+		
 		var arr= val.split(" ");
-		document.getElementById('hiddenBilId'+activerow).value = arr[0];
-		document.getElementById('ModelDrCr'+activerow).value = arr[3];
+		var datearr = arr[1].split("-");
+		var conversionDate = datearr[2]+"-"+datearr[1]+"-"+datearr[0];
+		var d = new Date(conversionDate);
+		d.setDate(d.getDate() + Number(limit_days));
+		
+		 var dd = d.getDate();
+		    var mm = d.getMonth()+1;
+		    var y = d.getFullYear();
+		 var _dt = dd+"-"+mm+"-"+y+" ( "+limit_days+" days)" ;
+		 
+		 document.getElementById('dueDate'+res).value = _dt;
+			document.getElementById('hiddenBilId'+res).value = arr[0];
+			document.getElementById('ModelDrCr'+res).value = arr[3];
+		
+		//document.getElementById('hiddenBilId'+activerow).value = arr[0];
+		//document.getElementById('ModelDrCr'+activerow).value = arr[3];
+		var amount = arr[2];
+		
+		var receiptAmt = Number(document.getElementById('debitAmt'+activerow).value)+Number(document.getElementById('creditAmt'+activerow).value); 
+		var rowCountBill = countTotalRowsBillWise();
+		var tempTotalAmount = 0.0;
+		for(var i=1;i<=rowCountBill;i++){
+			if(i==res)
+			continue;
+			tempTotalAmount = Number(tempTotalAmount) + Number(document.getElementById('billAmt'+i).value);
+			
+		}
+		
+
+		var treceiptAmt =  Number(receiptAmt) - Number(tempTotalAmount);
+	
+		
+	
+	
+		if(Number(treceiptAmt) ==Number(amount)){
+			
+			document.getElementById('billAmt'+res).value = Number(treceiptAmt);
+			
+		}
+		else if(Number(treceiptAmt)>Number(amount)){
+			
+			document.getElementById('billAmt'+res).value = amount;
+			
+		}
+		else if(Number(treceiptAmt)<Number(amount)){
+			
+			document.getElementById('billAmt'+res).value = treceiptAmt;
+		
+		}
+	
+	
 		if(arr[3]=='Cr')
 			document.getElementById('ModelDrCr'+activerow).value = 'Dr';
 		if(arr[3]=='Dr')
 			document.getElementById('ModelDrCr'+activerow).value = 'Cr';
+		
+		if(Number(rowCountBill)>Number(res)){
+			var totalAdjustedAmt = 0;
+			for(var i=1;i<rowCountBill;i++){
+				totalAdjustedAmt=Number(totalAdjustedAmt)+Number(document.getElementById('billAmt'+i).value);
+			}
+			var temp = Number(totalAdjustedAmt) - Number(receiptAmt);
+			if(Number(temp)<0)
+				temp = Number(temp) * (-1);
+			document.getElementById('billAmt'+rowCountBill).value = temp;
+		}
+		else
 		callForBillWiseRow(id);
 	}
 </script>

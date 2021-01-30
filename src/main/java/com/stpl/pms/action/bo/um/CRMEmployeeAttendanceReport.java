@@ -12,6 +12,7 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 import org.drools.core.command.runtime.GetIdCommand;
 
 import com.stpl.pms.commonJavabeans.AttendanceBean;
+import com.stpl.pms.commonJavabeans.BatteryBean;
 import com.stpl.pms.commonJavabeans.ExpenseBean;
 import com.stpl.pms.commonJavabeans.VisitBean;
 import com.stpl.pms.controller.commonMethods.CommonMethodController;
@@ -34,6 +35,7 @@ public class CRMEmployeeAttendanceReport extends BaseActionSupport
 	private String attendanceDate;
 	private Map<String,VisitBean> visitMapResult;
 	private Map<String,ExpenseBean> expenseMapResult;
+	private Map<Integer,BatteryBean> batteryPercentageBean; 
 	
 	@Override
 	public String execute() throws Exception {
@@ -43,7 +45,11 @@ public class CRMEmployeeAttendanceReport extends BaseActionSupport
 		employeeList = controller.getEmployeeNamesList();
 		return SUCCESS;
 	}
-	
+	public String getBatteryReportVisit() {
+		GameLobbyController controller = new GameLobbyController();
+		batteryPercentageBean = controller.getBatteryReport(attendanceDate,empId);
+		return SUCCESS;
+	}
 	public String getAttendanceReportVisit() {
 		GameLobbyController controller = new GameLobbyController();
 		visitMapResult = controller.getVisitReport(attendanceDate,empId);
@@ -158,6 +164,12 @@ public class CRMEmployeeAttendanceReport extends BaseActionSupport
 
 	public void setExpenseMapResult(Map<String,ExpenseBean> expenseMapResult) {
 		this.expenseMapResult = expenseMapResult;
+	}
+	public Map<Integer,BatteryBean> getBatteryPercentageBean() {
+		return batteryPercentageBean;
+	}
+	public void setBatteryPercentageBean(Map<Integer,BatteryBean> batteryPercentageBean) {
+		this.batteryPercentageBean = batteryPercentageBean;
 	}
 
 }

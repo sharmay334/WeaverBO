@@ -101,7 +101,7 @@ $(document).ready(function() {
 					<div class="InputDiv">
 						<div>
 							<s:select theme="myTheme" cssClass="select1"
-								list="%{ledgerNames}" name="ledgerName" id="ledgerName" headerKey="-1"
+								list="%{ledgerNames}" name="ledgerName" id="ledgerName" value="%{ledgerName}" headerKey="-1"
 								headerValue="--Please Select--" ></s:select>
 
 						</div>

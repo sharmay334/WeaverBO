@@ -97,7 +97,7 @@
 							<div class="InputDiv">
 								<s:select name="relatedTo" headerKey="-1"
 									headerValue="-- Please Select --" cssClass="select1"
-									list="#{'COMM_MGMT':'Communication Managememt','USER_MGT':'User Management','ROLE_MGT':'Role Management','PLAYER_MGT':'Player Management','ACT_MGT':'Account Management','GAME_MGT':'Game Management','PLAY_MGT':'Play Management','LOGIN_MGT':'Login Management','HURDLE_MGT':'Hurdle Management','CMS':'Content Management System','RG':'Responsible Gaming','REPORTS':'Reports','MISC':'Miscellaneous','SERVICE_MGMT':'Service Management','DOMAIN_MGT':'Domain Management','RISK_MGT':'Risk Management','CASHIER':'Cashier','BONUS':'Bonus','LOYALTY':'Loyalty'}"
+									list="#{'COMM_MGMT':'Communication Managememt','USER_MGT':'User Management','ROLE_MGT':'Role Management','PLAYER_MGT':'Player Management','ACT_MGT':'Account Management','GAME_MGT':'Game Management','PLAY_MGT':'Play Management','LOGIN_MGT':'Login Management','HURDLE_MGT':'Hurdle Management','CMS':'Content Management System','RG':'Responsible Gaming','REPORTS':'Reports','MISC':'Misc','SERVICE_MGMT':'Service Management','DOMAIN_MGT':'Domain Management','RISK_MGT':'Risk Management','CASHIER':'Cashier','BONUS':'Bonus','LOYALTY':'Loyalty'}"
 									theme="myTheme" applyscript="true" />
 							</div>
 						</div>

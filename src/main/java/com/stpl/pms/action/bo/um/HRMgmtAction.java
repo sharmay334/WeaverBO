@@ -83,7 +83,8 @@ public class HRMgmtAction extends BaseActionSupport {
 	private int[] mappingId;
 	private int[] privCount;
 	private String roleName;
-
+	private String avgTravellingPerDay;
+	private String salary;
 	// registration page variables
 
 	private List<CountryBean> countryList;
@@ -432,6 +433,8 @@ public class HRMgmtAction extends BaseActionSupport {
 			usrdetBean.setLeaves(leaves);
 			usrdetBean.setAuthAmount(authAmount);
 			usrdetBean.setApprover(approver);
+			usrdetBean.setSalary(salary);
+			usrdetBean.setAvgTravellingPerDay(avgTravellingPerDay);
 			session.setAttribute("USER_DETAILS", usrdetBean);
 			session.setAttribute("HEAD_PRIV_MAP", rolePrivMap);
 
@@ -1105,6 +1108,22 @@ public class HRMgmtAction extends BaseActionSupport {
 
 	public void setEmployeeExpenseBean(EmployeeExpenseBean employeeExpenseBean) {
 		this.employeeExpenseBean = employeeExpenseBean;
+	}
+
+	public String getAvgTravellingPerDay() {
+		return avgTravellingPerDay;
+	}
+
+	public void setAvgTravellingPerDay(String avgTravellingPerDay) {
+		this.avgTravellingPerDay = avgTravellingPerDay;
+	}
+
+	public String getSalary() {
+		return salary;
+	}
+
+	public void setSalary(String salary) {
+		this.salary = salary;
 	}
 
 }

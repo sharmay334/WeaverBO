@@ -99,7 +99,7 @@ public class TMEmpReceiptMgmtAction extends BaseActionSupport implements Servlet
 
 	public void createReceipt() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-
+		
 		if (controller.createTransactionReceiptEmp(account, particulars, amount, bankName, txnType, narration,
 				userInfoBean.getUserId(), userInfoBean.getParentUserId(), totalAmt))
 			servletResponse.getWriter().write("success");

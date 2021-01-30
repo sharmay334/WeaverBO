@@ -184,7 +184,7 @@ function validateFile(fileName, id) {
 	var file = fileName.value;
 	var ext = file.substring(file.length, file.length - 3);
 	if (file != "") {
-		if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "doc"
+		if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "peg" && ext != "jpe" && ext != "doc"
 				&& ext != "docx" && ext != "pdf") {
 			document.getElementById(id).value = "";
 			alert('only image,pdf or doc file is allowed!');

@@ -4,12 +4,12 @@
 <div class="FormSection">
 	<div class="greyStrip">
 		<h4>
-			Unit Item Success
+			Data Success
 		</h4>
 	</div>
 	<div class="innerBox">
 	<div class="alert saved_msg"><span class="alert_close"></span><strong><s:text name="global.um.msg3"></s:text>: </strong>
-	Unit Item created Successfully.</div>
+	Record Successfully created.</div>
          </div>          
               </div>
 	

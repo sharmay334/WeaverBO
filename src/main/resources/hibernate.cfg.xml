@@ -28,7 +28,7 @@
       <property name = "hibernate.connection.username">
          root
       </property>
- 	<!--     <property name = "hibernate.connection.password">root</property> -->
+ 	<!-- <property name = "hibernate.connection.password">root</property> -->
 	 <property name = "hibernate.connection.password">rFuAa8iFx5QWR50G</property>
 
 

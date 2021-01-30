@@ -726,7 +726,7 @@ function closeDialogue(){
 				var arr = itr.split(",");
 				var optionArr = arr[0].split(";");
 				
-				document.getElementById('dueDate'+res).value = arr[1];
+				//document.getElementById('dueDate'+res).value = arr[1];
 				var optionArrSub = optionArr[0].split(" ");
 				var datearr = optionArrSub[1].split("-");
 				var conversionDate = datearr[2]+"-"+datearr[1]+"-"+datearr[0];
@@ -786,7 +786,7 @@ function closeDialogue(){
 		var conversionDate = datearr[2]+"-"+datearr[1]+"-"+datearr[0];
 		var d = new Date(conversionDate);
 		d.setDate(d.getDate() + Number(limit_days));
-
+		var amount = arr[2]; 
 		 var dd = d.getDate();
 		    var mm = d.getMonth()+1;
 		    var y = d.getFullYear();
@@ -794,10 +794,54 @@ function closeDialogue(){
 		 document.getElementById('dueDate'+res).value = _dt;
 		document.getElementById('hiddenBilId'+res).value = arr[0];
 		document.getElementById('ModelDrCr'+res).value = arr[3];
+		var creditAmt = document.getElementById('totalAmt').value;
+		var rowCountBill = countTotalRowsBillWise();
+		var tempTotalAmount = 0.0;
+		
+		for(var i=1;i<=rowCountBill;i++){
+			if(i==res)
+			continue;
+			tempTotalAmount = Number(tempTotalAmount) + Number(document.getElementById('billAmt'+i).value);
+			
+		}
+		
+		
+			var tcreditAmt =  Number(creditAmt) - Number(tempTotalAmount);
+			
+			if(Number(tcreditAmt) ==Number(amount)){
+				
+				document.getElementById('billAmt'+res).value = Number(tcreditAmt);
+				
+			}
+			else if(Number(tcreditAmt)>Number(amount)){
+				
+				document.getElementById('billAmt'+res).value = amount;
+				
+			}
+			else if(Number(tcreditAmt)<Number(amount)){
+				
+				document.getElementById('billAmt'+res).value = tcreditAmt;
+			
+			}
+		
+			
+		
+		
 		if(arr[3]=='Cr')
 			document.getElementById('ModelDrCr'+res).value = 'Dr';
 		if(arr[3]=='Dr')
 			document.getElementById('ModelDrCr'+res).value = 'Cr';
+		if(Number(rowCountBill)>Number(res)){
+			var totalAdjustedAmt = 0;
+			for(var i=1;i<rowCountBill;i++){
+				totalAdjustedAmt=Number(totalAdjustedAmt)+Number(document.getElementById('billAmt'+i).value);
+			}
+			var temp = Number(totalAdjustedAmt) - Number(creditAmt);
+			if(Number(temp)<0)
+				temp = Number(temp) * (-1);
+			document.getElementById('billAmt'+rowCountBill).value = temp;
+		}
+		else
 		callForBillWiseRow(id);
 	}
 	function callForBillWiseRow(id){
@@ -907,7 +951,7 @@ function closeDialogue(){
 		var rowCountBillWise = countTotalRowsBillWise();
 		var amt = document.getElementById('totalAmt').value;
 		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_bill_ref_id.action?partyAcc="
-				+ particular+"&typeOfRef="+tor;
+				+ particular+"&typeOfRef="+tor+"&isSale=Yes";
 		
 		$.ajax({
 			type : "GET",
@@ -1561,7 +1605,7 @@ function closeDialogue(){
 				<!-- <input type="submit" value='Create' align="left"
 					style="margin-left: 0px" class="button" /> -->
 					<button type="button" align="left"
-					style="margin-left: 0px" class="button" onclick="saveCreditNoteBill()">Return</button>
+					style="margin-left: 0px" class="button" onclick="saveCreditNoteBill()">SAVE</button>
 			</div>
 			
 			

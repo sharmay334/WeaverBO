@@ -150,6 +150,19 @@
 
 				</div>
 				<div class="clearFRM"></div>
+				<div class="FormMainBox">
+
+					<div class="labelDiv">
+						<label>GSTN Number</label>
+					</div>
+					<div class="InputDiv">
+						<ss:textfield name="ledgerCustomBean.gstnNo" value="%{ledgerCustomBean.gstnNo}" id="gstn"
+							theme="myTheme"></ss:textfield>
+					
+					</div>
+
+				</div>
+				<div class="clearFRM"></div>
 
 				<div class="FormMainBox">
 

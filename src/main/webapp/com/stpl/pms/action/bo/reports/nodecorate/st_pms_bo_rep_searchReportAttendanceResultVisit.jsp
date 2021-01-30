@@ -103,6 +103,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
 					cellpadding="4" border="0" align="center" class="payTransaction">
 					<thead>
 						<tr>
+						<th width="5%" valign="middle" style="text-align: center;"
+								id="th_1">Visit Id</th>
 							<th width="5%" valign="middle" style="text-align: center;"
 								id="th_1">customer type</th>
 							<th width="5%" valign="middle" style="text-align: center;"
@@ -134,7 +136,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
 							<s:set var="attendanceMap" value="#resultMapVar.value" />
 							<tr>
 
-								
+								<td width="5%" valign="middle" style="text-align: center;">
+									
+									<a href="javascript:;" onclick="callPictureReportVisit('<s:property value="#attendanceMap.visitUniqueId" />')">
+									<s:property value="#attendanceMap.visitUniqueId" />
+									</a>
+									
+								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
 									<s:property value="#attendanceMap.customerType" />
 								</td>

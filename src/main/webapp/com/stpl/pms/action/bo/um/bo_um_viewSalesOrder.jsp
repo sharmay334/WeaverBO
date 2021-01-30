@@ -152,6 +152,64 @@ var limitPopup = false;
 var periodResult = false;
 var totalTax = ["0","0","0","0","0","0","0","0","0","0","0"];
 
+
+function downloadBill(){
+	
+	var myurl = "<%=basePath%>";
+	
+	var frm = $('#searchUserFrm');
+	
+	myurl += "/com/stpl/pms/action/bo/um/generate_sales_bill_pdf_document.action";
+	$.ajax({
+        type: frm.attr('method'),
+        url: myurl,
+        async:false,
+        data: frm.serialize(),
+        success: function (data) {
+        
+        		swal("Bill Generated Successfully!!!");
+        		var link=document.createElement('a');
+        		document.body.appendChild(link);
+        		link.href=data ;
+        		link.click();
+        		  
+        },
+        error: function (data) {
+        	swal("Server Error Occured!");
+        },
+    });
+	
+}
+
+function downloadBillInvoice(){
+	
+	var myurl = "<%=basePath%>";
+	
+	var frm = $('#searchUserFrm');
+	
+	myurl += "/com/stpl/pms/action/bo/um/generate_txn_sales_bill_pdf_document_report.action?salesNoVoucher="+document.getElementById('salesNoVoucher').value
+	$.ajax({
+        type: frm.attr('method'),
+        url: myurl,
+        async:false,
+        data: frm.serialize(),
+        success: function (data) {
+        
+        		swal("Invoice Generated Successfully!!!");
+        		var link=document.createElement('a');
+        		document.body.appendChild(link);
+        		link.href=data ;
+        		link.click();
+        		  
+        },
+        error: function (data) {
+        	swal("Server Error Occured!");
+        },
+    });
+	
+}
+
+
 function checkGodownSelect(){
 	var rowCnt = countTotalRows();
 	var tcount = 0 ;
@@ -165,7 +223,8 @@ function checkGodownSelect(){
 		swal("Error! Please Select Godown for items first!");
 	}
 	else{
-		checkForOrderStatus();
+		//checkForOrderStatus();
+		promptSave();
 	}
 	
 }
@@ -200,13 +259,13 @@ function checkForOrderStatus(){
 }
 function promptSave(){
 	var frm = $('#searchUserFrm');
-	let photo = document.getElementById("docPictureDD").files[0];
-	let photo1 = document.getElementById("docPictureTB").files[0];
+	//let photo = document.getElementById("docPictureDD").files[0];
+//	let photo1 = document.getElementById("docPictureTB").files[0];
 	let formData = new FormData();
-	if(photo!=undefined)
-	formData.append("docPictureDD", photo);
-	if(photo1!=undefined)
-	formData.append("docPictureTB", photo1);
+//	if(photo!=undefined)
+//	formData.append("docPictureDD", photo);
+//	if(photo1!=undefined)
+//	formData.append("docPictureTB", photo1);
 	var myurl = "<%=basePath%>";
 	myurl += "/com/stpl/pms/action/bo/um/upload_sales_txn_document.action?salesNoVoucher="+document.getElementById('salesNoVoucher').value+"&activeVoucherNumber="+document.getElementById('activeVoucherNumber').value;
 	
@@ -231,7 +290,7 @@ function promptSave(){
 						        	if(data=="success"){
 						        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
 						        		
-						        		$.ajax({
+						        	/* 	$.ajax({
 									        type: 'POST',
 									        url: myurl,
 									        data: formData,
@@ -245,7 +304,7 @@ function promptSave(){
 									        error: function (data) {
 									        	
 									        },
-									    });
+									    }); */
 						        		setTimeout(function(){
 						        			   window.location.reload(1);
 						        			}, 1000);
@@ -277,6 +336,94 @@ function promptSave(){
     
     
 }
+
+
+function promptPartialSaveDispatcher(){
+	var frm = $('#searchUserFrm');
+	let photo = document.getElementById("docPictureDD").files[0];
+	let photo1 = document.getElementById("docPictureTB").files[0];
+	let formData = new FormData();
+	if(photo!=undefined)
+	formData.append("docPictureDD", photo);
+	if(photo1!=undefined)
+	formData.append("docPictureTB", photo1);
+	var myurl = "<%=basePath%>";
+	
+	var ddn= document.getElementById('ddn').value;
+	var tn=document.getElementById('tn').value;
+	var des=document.getElementById('des').value;
+	var vn =document.getElementById('vn').value;
+	var billt = document.getElementById('billt').value;
+	myurl += "/com/stpl/pms/action/bo/um/upload_sales_txn_approve_stage_document.action?orderNo="+document.getElementById('orderNo').value+"&tn="+document.getElementById('tn').value+"&des="+document.getElementById('des').value+"&vn="+document.getElementById('vn').value+"&transportFreight="+document.getElementById('transportFreight').value+"&localFrieght="+document.getElementById('localFrieght').value+"&loadUnloadCharge="+document.getElementById('loadUnloadCharge').value+"&ddn="+document.getElementById('ddn').value+"&billt="+document.getElementById('billt').value+"&partyAcc="+document.getElementById('partyAcc').value+"&loadUnloadCharge1="+document.getElementById('loadUnloadCharge1').value;
+	
+	if(ddn.length>1 && tn.length>1 && des.length>1 && billt.length>1)
+	{
+		if(limitPopup==false){
+			checkForLimitPeriod();
+			if(periodResult==false){
+				swal({
+					  title: "Are you sure?",
+					  text: "Once Saved, you will not be able to undo the entry!",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+					})
+					.then((willDelete) => {
+					  if (willDelete) {
+						  $.ajax({
+							  type: 'POST',
+						        url: myurl,
+						        data: formData,
+						        cache : false,
+								contentType : false,
+								processData : false,
+								async:false,
+						        success: function (data) {
+						        	if(data=="success"){
+						        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
+						        		
+						        		
+						        		setTimeout(function(){
+						        			var myurlRedirect = "<%=basePath%>";
+						    				window.location.href = myurlRedirect;
+						        			}, 1000);
+						        		
+						        	}
+						        	else{
+						        		swal("Some Error Occured!");
+						        	}
+						            
+						        },
+						        error: function (data) {
+						        	swal("Server Error Occured!");
+						        },
+						    });
+						  
+					  } else {
+					    swal("Please Refresh The Page!");
+					   
+					  }
+					});
+			}
+			
+			
+		}
+		else{
+			swal("Credit Limit Amount "+creditLimit+" Exceeded...Please Pay below amount!");
+		}
+		
+		
+	}
+	else{
+		swal("Please fill all following entry first\n\n1.) BillT\n2.) Transport Name\n3.) Destination\n4.) Dispatch Doc No\n");
+			
+	}
+	
+	
+}
+
+
+
 
 function promptReject(){
 	var frm = $('#searchUserFrm');
@@ -1021,7 +1168,7 @@ function getUnitByItem(id) {
 		var file = fileName.value;
 		var ext = file.substring(file.length, file.length - 3);
 		if (file != "") {
-			if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "doc"
+			if (ext != "png" && ext != "jpg" && ext != "peg" && ext != "doc"
 					&& ext != "docx" && ext != "pdf") {
 				document.getElementById(id).value = "";
 				alert('only image,pdf or doc file is allowed!');
@@ -1059,8 +1206,170 @@ function getUnitByItem(id) {
 			}
 		});
 	}
+	
+	function promptReasonReturn(){
+		swal({
+			  text: "Enter Reason of Return!",
+			  content: { element: "textarea" },
+			  buttons: "Ok"
+			}).then((value) => {
+			  if (!value) throw null;
+			  value = document.querySelector(".swal-content__textarea").value;
+			  var n = value.length;
+			  if(n<3){
+				  alert("Return Reason is Mandatory to minimun 5 characters!!");  
+			  }
+			  else{
+				  var myurl = "<%=basePath%>";
+				  myurl += "/com/stpl/pms/action/bo/um/bo_um_return_sale.action?orderNo="+document.getElementById('orderNo').value+"&rejectReason="+value;
+				  swal({
+					  title: "Are you sure?",
+					  text: "Once Reject, you will not be able to undo the entry!",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+					})
+					.then((willDelete) => {
+					  if (willDelete) {
+						  $.ajax({
+						        type: 'GET',
+						        url: myurl,
+						        success: function (data) {
+						        	if(data=="success"){
+						        		swal("Order Successfully Returned to dispatcher..Refreshing Page!!!");
+						        		setTimeout(function(){
+						        			   window.location.reload(1);
+						        			}, 1000);
+						        	}
+						        	else{
+						        		swal("Some Error Occured While Rejecting!");
+						        	}
+						            
+						        },
+						        error: function (data) {
+						        	swal("Server Error Occured!");
+						        },
+						    });
+						  
+					  } else {
+					    swal("Please Refresh The Page!");
+					  }
+					});
+				  
+				  
+			  }
+			  
+			});
+		
+	}	
+	
+	
+	function promptReason(){
+		swal({
+			  text: "Enter Reason of Rejection!",
+			  content: { element: "textarea" },
+			  buttons: "Ok"
+			}).then((value) => {
+			  if (!value) throw null;
+			  value = document.querySelector(".swal-content__textarea").value;
+			  var n = value.length;
+			  if(n<3){
+				  alert("Rejection Reason is Mandatory to minimun 5 characters!!");  
+			  }
+			  else{
+				  var myurl = "<%=basePath%>";
+				  myurl += "/com/stpl/pms/action/bo/um/bo_um_reject_sale.action?orderNo="+document.getElementById('orderNo').value+"&rejectReason="+value;
+				  swal({
+					  title: "Are you sure?",
+					  text: "Once Reject, you will not be able to undo the entry!",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+					})
+					.then((willDelete) => {
+					  if (willDelete) {
+						  $.ajax({
+						        type: 'GET',
+						        url: myurl,
+						        success: function (data) {
+						        	if(data=="success"){
+						        		swal("Order Successfully Rejected..Refreshing Page!!!");
+						        		setTimeout(function(){
+						        			   window.location.reload(1);
+						        			}, 1000);
+						        	}
+						        	else{
+						        		swal("Some Error Occured While Rejecting!");
+						        	}
+						            
+						        },
+						        error: function (data) {
+						        	swal("Server Error Occured!");
+						        },
+						    });
+						  
+					  } else {
+					    swal("Please Refresh The Page!");
+					  }
+					});
+				  
+				  
+			  }
+			  
+			});
+		
+	}	
+	
 	function closeMe(){
 		document.getElementById("myModal").style.display = "none";
+	}
+	function promptRejectedReason(){
+		
+		var reason = document.getElementById('rejectedReason').value;
+		swal("Your have rejected this order because - "+reason);
+	}
+
+	function promptPartialSave(){
+		
+		var myurl = "<%=basePath%>";
+		myurl = myurl+"/com/stpl/pms/action/bo/um/bo_um_approve_sale.action?orderNo="+document.getElementById('orderNo').value;
+		swal({
+		  title: "Are you sure?",
+		  text: "Once Saved, you will not be able to undo the entry!",
+		  icon: "warning",
+		  buttons: true,
+		  dangerMode: true,
+		})
+		.then((willDelete) => {
+		  if (willDelete) {
+			  $.ajax({
+			        type: 'POST',
+			        url: myurl,
+			        success: function (data) {
+			        	if(data=="success"){
+			        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
+			        		setTimeout(function(){
+			        			var myurlRedirect = "<%=basePath%>";
+			    				window.location.href = myurlRedirect;
+			        			}, 1000);
+			        	}
+			        	else{
+			        		swal("Some Error Occured!");
+			        	}
+			            
+			        },
+			        error: function (data) {
+			        	swal("Server Error Occured!");
+			        },
+			    });
+			  
+		  } else {
+		    swal("Please Refresh The Page!");
+		  }
+		});
+
+		
+		
 	}
 </script>
 </head>
@@ -1111,14 +1420,24 @@ function getUnitByItem(id) {
 						</div>
 					</div>
 					<div class="FormMainBox">
-
 						<div class="labelDiv">
 							<label> <b><font color='red'>Reference No.:</font></b>
 							</label>
 						</div>
-						<div class="InputDiv">
+						
+						<div class="InputDivHalf">
+						
 							<s:textfield id="referenceNo" name="referenceNo" theme="myTheme"
 								cssStyle="width:10%" />
+						</div>
+						<div class="labelDiv">
+							<label> <b><font color='green'>Set Default OverDue Reminder</font></b>
+							</label>
+						</div>
+						<div class="InputDivHalf">
+						
+						
+							<s:checkbox name="checkOverDueRem" fieldValue="true" value="true" label="Set Default OverDue Reminder"/>
 						</div>
 					</div>
 					
@@ -1251,6 +1570,8 @@ function getUnitByItem(id) {
 					
 						</tbody>
 					</table>
+					<s:set name="checkApprovalStage" value="isLastApproval"/>
+					<s:if test="%{#checkApprovalStage=='YES'}">
 					<table width="100%" cellspacing="0" align="center"
 					class="transactionTable">
 						<thead>
@@ -1265,19 +1586,19 @@ function getUnitByItem(id) {
 					<tr>
 								
 								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="ddn" id="ddn"
+								<s:textfield name="ddn" id="ddn" value="%{ddn}"
 								theme="myTheme" cssStyle="width:40%" />
-					<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPictureTB" name="docPictureTB" cssClass="textfield" theme="myTheme"></s:file>
+					<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPictureDD" name="docPictureDD" cssClass="textfield" theme="myTheme"></s:file>
 								
 								</td>
 								
 								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="tn" id="tn"
+								<s:textfield name="tn" id="tn" value="%{tn}"
 								theme="myTheme" cssStyle="width:50%" />
 								</td>
 								
 								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="des" id="des" 
+								<s:textfield name="des" id="des" value="%{des}"
 								theme="myTheme" cssStyle="width:50%" />
 								</td>
 									
@@ -1285,9 +1606,6 @@ function getUnitByItem(id) {
 					
 						</tbody>
 					</table>
-					
-					
-					
 					
 					<table width="100%" cellspacing="0" align="center"
 					class="transactionTable">
@@ -1304,26 +1622,69 @@ function getUnitByItem(id) {
 								
 								<td style="text-align: center;" nowrap="nowrap">
 								<s:textfield name="billt" id="billt" 
-								theme="myTheme"  cssStyle="width:40%" />
-			<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPictureDD" name="docPictureDD" cssClass="textfield" theme="myTheme"></s:file>
+								theme="myTheme"  cssStyle="width:40%" value="%{billt}"/>
+			<s:file label="upload" applyscript="true" onmouseout="validateFile(this,'docPicture')" id="docPictureTB" name="docPictureTB" cssClass="textfield" theme="myTheme"></s:file>
 								
 								</td>
 								
 								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="vn" id="vn"
+								<s:textfield name="vn" id="vn" value="%{vn}"
 								theme="myTheme" cssStyle="width:50%" />
 								</td>
 								
 								<td style="text-align: center;" nowrap="nowrap">
-								<s:textfield name="transportFreight" id="transportFreight"
-								theme="myTheme" pattern="^[0-9.]*$" value="0" cssStyle="width:50%" />
+								<s:textfield name="transportFreight" id="transportFreight" value="%{transportFreight}"
+								theme="myTheme" pattern="^[0-9.]*$" cssStyle="width:50%" />
 								</td>
 									
 							</tr>
 
 						</tbody>
 					</table>
-					<div class="FormMainBox">
+					
+					<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Local Freight</th>
+								<th style="text-align: center;" nowrap="nowrap">Load Freight</th>
+								<th style="text-align: center;" nowrap="nowrap">Unload Freight</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="localFrieght" id="localFrieght" value="%{localFrieght}"
+								theme="myTheme"  pattern="^[0-9.]*$"  cssStyle="width:50%" />
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="loadUnloadCharge" id="loadUnloadCharge" value="%{loadCharge}"
+								theme="myTheme" pattern="^[0-9.]*$" cssStyle="width:50%" />
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="loadUnloadCharge1" id="loadUnloadCharge1" value="%{unloadCharge}"
+								theme="myTheme" pattern="^[0-9.]*$" cssStyle="width:50%" />
+								</td>
+									
+							</tr>
+
+						</tbody>
+					</table>
+					
+					
+					</s:if>
+					
+					
+					
+					
+					
+					
+					<div class="FormMainBox" style="display:none;">
 
 						<div class="labelDiv">
 							<label> Assign Employee </label>
@@ -1332,7 +1693,7 @@ function getUnitByItem(id) {
 							<s:select name="isEmployee" headerKey="-1" id="isEmployee"
 								headerValue="--Please Select--"
 								list="{'Applicable','Not Applicable'}"
-								onchange="showhideEmployee(this.value)" cssClass="select1"
+								onchange="showhideEmployee(this.value)" value="Applicable" cssClass="select1"
 								theme="myTheme" />
 						</div>
 					</div>
@@ -1345,9 +1706,12 @@ function getUnitByItem(id) {
 								<label> Employee Under </label>
 							</div>
 							<div class="InputDiv">
-								<s:select name="employeeUnder" headerKey="none"
-									id="employeeUnder" headerValue="--Please Select--"
-									list="employeeUnderList" cssClass="select1" theme="myTheme" />
+							
+							<ss:textfield
+										maxlength="100" name="employeeUnder" id="employeeUnder" value="%{employeeUnder}"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:40%"/>	
+								
 							</div>
 						</div>
 					</div>
@@ -1514,6 +1878,8 @@ function getUnitByItem(id) {
 						</div>
 					</div>
 					
+					<s:set name="statusOrder" value="status"/>
+					
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -1524,6 +1890,33 @@ function getUnitByItem(id) {
 								id="narration" theme="simple" title="Enter Narration"></s:textfield>
 						</div>
 					</div>
+					<s:set name="rejectReasonCase" value="rejectReason"/>
+				<s:if test="%{#rejectReasonCase=='undefined'}">
+					<div class="FormMainBox" style="display:none">
+
+						<div class="labelDiv">
+							<label> Senior Accountant Return Reason </label>
+						</div>
+						<div class="InputDiv">
+							<s:textfield  value="%{rejectReason}" cssClass="InpTextBoxBg"
+								id="narration"  theme="simple" readOnly="true"></s:textfield>
+						</div>
+					</div>
+				</s:if>
+				<s:else>
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Senior Accountant Return Reason </label>
+						</div>
+						<div class="InputDiv">
+							<s:textfield  value="%{rejectReason}" cssClass="InpTextBoxBg"
+								id="narration" theme="simple" readOnly="true"></s:textfield>
+						</div>
+					</div>
+					
+				</s:else>
+					
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -1534,7 +1927,58 @@ function getUnitByItem(id) {
 						
 						</div>
 					</div>
+					<s:if test="%{#statusOrder=='final approval'}">
+					<div class="FormMainBox">
 
+						<div class="labelDiv">
+							<label> Dispatch Document </label>
+						</div>
+						<div class="InputDiv">
+						<s:hidden name="docPictureDDFileName" value="%{docPictureDDFileName}"></s:hidden>
+	<a href="javascript:;" onclick="callPictureReport('<s:property value="docPictureDDFileName" />')">VIEW DOCUMENT</a>
+						
+						</div>
+					</div>
+					
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Bill T Document </label>
+						</div>
+						<div class="InputDiv">
+						<s:hidden name="docPictureTBFileName" value="%{docPictureTBFileName}"></s:hidden>
+	<a href="javascript:;" onclick="callPictureReport('<s:property value="docPictureTBFileName" />')">VIEW DOCUMENT</a>
+						
+						</div>
+					</div>
+						</s:if>
+						<s:elseif test="%{#statusOrder=='accepted'}">
+						
+						<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Dispatch Document </label>
+						</div>
+						<div class="InputDiv">
+						<s:hidden name="docPictureDDFileName" value="%{docPictureDDFileName}"></s:hidden>
+	<a href="javascript:;" onclick="callPictureReport('<s:property value="docPictureDDFileName" />')">VIEW DOCUMENT</a>
+						
+						</div>
+					</div>
+					
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Bill T Document </label>
+						</div>
+						<div class="InputDiv">
+						<s:hidden name="docPictureTBFileName" value="%{docPictureTBFileName}"></s:hidden>
+	<a href="javascript:;" onclick="callPictureReport('<s:property value="docPictureTBFileName" />')">VIEW DOCUMENT</a>
+						
+						</div>
+					</div>
+						
+						</s:elseif>
 
 				</s:if>
 
@@ -1545,8 +1989,57 @@ function getUnitByItem(id) {
 					 --%>
 			<!-- 	<input type="submit" id="saleBtn" value='Create' align="left"
 					style="margin-left: 0px" class="button" /> -->
-				<button type="button" id="saleBtn" align="left" style="margin-left: 0px" class="button" onclick="checkGodownSelect()">Accept</button>
-				<button type="button" id="saleBtn" align="left" style="margin-left: 0px" class="button" onclick="promptReject()">Reject</button>
+					<button type="button"  style="margin-left: 0px" class="button" onclick="downloadBill()">Download Bill</button>
+				
+					<s:if test="%{#checkApprovalStage=='NO'}">
+					
+					
+					<s:if test="%{#statusOrder=='pending'}">
+					<button type="button" align="left"
+					style="margin-left: 0px" class="button" onclick="promptPartialSave()">Accept</button>
+					<button type="button" align="left"
+					style="margin-left: 0px" class="button" onclick="promptReason()">Reject</button>
+					</s:if>
+					<s:else>
+					<s:hidden id="rejectedReason" value="%{rejectReason}"/>
+					<button type="button" align="left"
+					style="margin-left: 0px;color:red !important;" class="button" onclick="promptRejectedReason()">This Order is already Rejected! Click to view Reason</button>
+					</s:else>
+					
+					
+				<!-- <button type="button" id="saleBtn" align="left" style="margin-left: 0px" class="button" onclick="checkGodownSelect()">Accept</button>
+				<button type="button" id="saleBtn" align="left" style="margin-left: 0px" class="button" onclick="promptReason()">Reject</button> -->
+					
+					</s:if>
+					<s:else>
+					<s:if test="%{#statusOrder=='pending'}">
+					<button type="button" 
+					style="margin-left: 0px" class="button" onclick="promptPartialSaveDispatcher()">Accept</button>
+					<button type="button" 
+					style="margin-left: 0px" class="button" onclick="promptReason()">Reject</button>
+					</s:if>
+					<s:elseif test="%{#statusOrder=='rejected'}">
+					<s:hidden id="rejectedReason" value="%{rejectReason}"/>
+					<button type="button" 
+					style="margin-left: 0px;color:red !important;" class="button" onclick="promptRejectedReason()">This Order is already Rejected! Click to view Reason</button>
+					</s:elseif>
+					<s:else>
+					<s:if test="%{#statusOrder=='accepted'}">
+					<button type="button" 
+					style="margin-left: 0px;color:green !important;" class="button">This Order is already Accepted!</button>
+					<button type="button"  style="margin-left: 0px" class="button" onclick="downloadBillInvoice()">Download Invoice</button>
+					
+					</s:if>
+					<s:else>
+				<button type="button" id="saleBtn"  style="margin-left: 0px" class="button" onclick="checkGodownSelect()">Accept</button>
+				<button type="button" id="saleBtn"  style="margin-left: 0px" class="button" onclick="promptReason()">Reject</button>
+				<button type="button" id="saleBtn"  style="margin-left: 0px" class="button" onclick="promptReasonReturn()">Return</button>
+					
+					</s:else>
+					
+					</s:else>
+					
+					</s:else>
 				
 			</div>
 		</s:form>
@@ -1713,7 +2206,8 @@ function getUnitByItem(id) {
 	<script>
 if(document.getElementById('partyAcc').value!='none'){
 	getCurrentBalance('partyAcc');
-	checkConsignee(document.getElementById('consignee').value)
+	checkConsignee(document.getElementById('consignee').value);
+	showhideEmployee('Applicable');
 }
 
 	

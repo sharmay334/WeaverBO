@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
+import com.stpl.pms.commonJavabeans.ManufacturingBean;
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.javabeans.StockCatBean;
 import com.stpl.pms.javabeans.StockGroupBean;
@@ -46,6 +47,7 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 	private String formalName;
 	private String UQC;
 	private String decimalPlace;
+	private String hsn_sac;
 	private List<String> viewunitMeasureList;
 	private List<UnitBean> UnitBeanList;
 	// compound unit
@@ -78,15 +80,16 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 	private String stockItemSelected;
 	private List<StockItemBean> itemBean;
 	private StockItemBean stockItemBean;
+	private List<String> ledgerNamesList;
 	// gst variables
 
 	private String Itax;
 	private String Ctax;
 	private String Stax;
 	private String cess;
-	
-	//stock opening balance
-	
+
+	// stock opening balance
+
 	private String itemGodown;
 	private String itemBatch;
 	private String mfg;
@@ -94,17 +97,54 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 	private String itemQty;
 	private String rate;
 	private String openingBalance;
+
+	private String stockItemWholesaleUnit;
+	private String fwunit;
+	private String swunit;
+
+	private ManufacturingBean manufacturingBean;
+
 	@Override
 	public String execute() throws Exception {
 		// TODO Auto-generated method stub
 
 		return SUCCESS;
 	}
+
 	public String editUnitMeasure() {
+		return SUCCESS;
+	}
+
+	public String createMaterialManufacturing() {
 		GameLobbyController controller = new GameLobbyController();
+		stockItemsList = controller.getAllStockItemsList();
+		goDownList = controller.getAllGoDownList();
+		setLedgerNamesList(controller.getLedgerNamesList());
+		return SUCCESS;
+	}
+
+	public String createMaterialManufacturingResult() {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.createManufacturingRecord(manufacturingBean))
+			return SUCCESS;
+		else
+			return ERROR;
+	}
+
+	public String tansferStockResult() {
 
 		return SUCCESS;
 	}
+
+	public String createStockTransfer() {
+		GameLobbyController controller = new GameLobbyController();
+		stockItemsList = controller.getAllStockItemsList();
+		goDownList = controller.getAllGoDownList();
+		setLedgerNamesList(controller.getLedgerNamesList());
+
+		return SUCCESS;
+	}
+
 	public String editStockCatagory() {
 		GameLobbyController controller = new GameLobbyController();
 		stockCatagoryBean = controller.getStockCategoryBean(st_ct_id);
@@ -296,10 +336,11 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		GameLobbyController controller = new GameLobbyController();
 		if (controller.itemCreationFirstStep(stockItemName, stockUnderItem, stockItemCat, stockItemUnit, isGst,
 				alterGst, supplyType, dutyRate, stockItemAlterUnit, funit, sunit, isbatches, dom, expDate, standRate,
-				costTrack,Itax, Ctax, Stax, cess)) {
-		if(controller.insert_st_rm_stock_item_godown_opening_blc(stockItemName,itemGodown,itemBatch,mfg,exp,itemQty,rate,openingBalance,stockItemUnit))
-			return SUCCESS;
-	
+				costTrack, Itax, Ctax, Stax, cess, stockItemWholesaleUnit, fwunit, swunit, hsn_sac)) {
+			if (controller.insert_st_rm_stock_item_godown_opening_blc(stockItemName, itemGodown, itemBatch, mfg, exp,
+					itemQty, rate, openingBalance, stockItemUnit))
+				return SUCCESS;
+
 		} else
 			return ERROR;
 		return ERROR;
@@ -326,6 +367,7 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		itemBean = controller.getStockItemBeanByName(stockItemSelected);
 		return SUCCESS;
 	}
+
 	public String editStockItem() {
 		GameLobbyController controller = new GameLobbyController();
 		stockItemCatList = controller.getAllStockCatagory();
@@ -335,13 +377,15 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		stockItemBean = controller.getStockItemBeanById(unit_id);
 		return SUCCESS;
 	}
+
 	public String editStockItemSave() {
 		GameLobbyController controller = new GameLobbyController();
-		if(controller.updateStockItemDetails(stockItemBean))
-		return SUCCESS;
+		if (controller.updateStockItemDetails(stockItemBean))
+			return SUCCESS;
 		else
 			return ERROR;
 	}
+
 	public HttpServletRequest getServletRequest() {
 		return servletRequest;
 	}
@@ -852,6 +896,54 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 
 	public void setStockItemBean(StockItemBean stockItemBean) {
 		this.stockItemBean = stockItemBean;
+	}
+
+	public String getStockItemWholesaleUnit() {
+		return stockItemWholesaleUnit;
+	}
+
+	public void setStockItemWholesaleUnit(String stockItemWholesaleUnit) {
+		this.stockItemWholesaleUnit = stockItemWholesaleUnit;
+	}
+
+	public String getFwunit() {
+		return fwunit;
+	}
+
+	public void setFwunit(String fwunit) {
+		this.fwunit = fwunit;
+	}
+
+	public String getSwunit() {
+		return swunit;
+	}
+
+	public void setSwunit(String swunit) {
+		this.swunit = swunit;
+	}
+
+	public String getHsn_sac() {
+		return hsn_sac;
+	}
+
+	public void setHsn_sac(String hsn_sac) {
+		this.hsn_sac = hsn_sac;
+	}
+
+	public List<String> getLedgerNamesList() {
+		return ledgerNamesList;
+	}
+
+	public void setLedgerNamesList(List<String> ledgerNamesList) {
+		this.ledgerNamesList = ledgerNamesList;
+	}
+
+	public ManufacturingBean getManufacturingBean() {
+		return manufacturingBean;
+	}
+
+	public void setManufacturingBean(ManufacturingBean manufacturingBean) {
+		this.manufacturingBean = manufacturingBean;
 	}
 
 }

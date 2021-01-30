@@ -30,6 +30,12 @@ public class TMAttendanceAction extends BaseActionSupport implements ServletRequ
 	private StRmBoUserInfo userDetailsBean;
 	private int user_id;
 	private List<String> underledgersList;
+	private List<String> branchList;
+	private List<String> regionList;
+	private List<String> roleList;
+	private List<String> departmentList;
+
+
 
 	public String getAttendancePage() {
 		GameLobbyController controller = new GameLobbyController();
@@ -51,7 +57,7 @@ public class TMAttendanceAction extends BaseActionSupport implements ServletRequ
 		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
 		// .getAttribute("ALLOWED_PRIV");
 		try {
-			userList = service.searchBoUsers(companyName, employeeName, "ACTIVE");
+			userList = service.searchBoUsers("yash", employeeName, "ACTIVE");
 			return SUCCESS;
 		} catch (Exception be) {
 			addActionError("Some internal error.");
@@ -61,8 +67,14 @@ public class TMAttendanceAction extends BaseActionSupport implements ServletRequ
 	}
 	
 	public String showUserDetails() {
-		
+		GameLobbyController controller = new GameLobbyController();
 		UserMgmtController service = new UserMgmtController();
+		
+		branchList = controller.getDynamicFieldList("branch");
+		regionList = controller.getDynamicFieldList("region");
+		roleList = controller.getDynamicFieldList("role");
+		departmentList = controller.getDynamicFieldList("department");
+		
 		// PrivFunctionBean privFunctionBean = (PrivFunctionBean) request
 		// .getAttribute("ALLOWED_PRIV");
 		try {
@@ -158,6 +170,46 @@ public class TMAttendanceAction extends BaseActionSupport implements ServletRequ
 
 	public void setUnderledgersList(List<String> underledgersList) {
 		this.underledgersList = underledgersList;
+	}
+
+	public UserInfoBean getUserInfoBean() {
+		return userInfoBean;
+	}
+
+	public void setUserInfoBean(UserInfoBean userInfoBean) {
+		this.userInfoBean = userInfoBean;
+	}
+
+	public List<String> getBranchList() {
+		return branchList;
+	}
+
+	public void setBranchList(List<String> branchList) {
+		this.branchList = branchList;
+	}
+
+	public List<String> getRegionList() {
+		return regionList;
+	}
+
+	public void setRegionList(List<String> regionList) {
+		this.regionList = regionList;
+	}
+
+	public List<String> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<String> roleList) {
+		this.roleList = roleList;
+	}
+
+	public List<String> getDepartmentList() {
+		return departmentList;
+	}
+
+	public void setDepartmentList(List<String> departmentList) {
+		this.departmentList = departmentList;
 	}
 
 }

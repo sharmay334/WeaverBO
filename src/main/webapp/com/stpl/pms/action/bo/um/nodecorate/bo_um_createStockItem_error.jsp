@@ -10,7 +10,7 @@
 <head>
 <base href="<%=basePath%>">
 
-<title>Error creating Unit Item</title>
+<title></title>
 
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
@@ -25,12 +25,12 @@
 	<!-- error messsge  start -->
 	<div class="FormSection">
 		<div class="greyStrip">
-			<h4>Error Creating Unit Item!</h4>
+			<h4>Error Creating data!</h4>
 		</div>
 		<div class="innerBox">
 			<div class="alert error_msg">
 				<span class="alert_close"></span><strong>Error Creating
-					Unit Item: </strong>
+					Data: </strong>
 				<s:actionerror theme="simple" />
 			</div>
 		</div>

@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.LoggerFactory;
 
 import com.stpl.pms.commonJavabeans.ReceiptBean;
 import com.stpl.pms.controller.gl.GameLobbyController;
@@ -63,6 +65,10 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 	private String accountOldBal;
 	private String particularsOldBal;
 	private List<ReceiptBean> receiptBeans;
+	private String isLastApproval;
+	private String rejectReason;
+	private String orderNo;
+	private final static Logger logger = Logger.getLogger(TMReceiptMgmtAction.class.getName());
 
 	public String loadEmpReceiptOrder() {
 		GameLobbyController controller = new GameLobbyController();
@@ -205,6 +211,8 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 		txnType = resArr[5].split(",")[0];
 		bankName = resArr[6].split(",")[0];
 		docPictureFileName = resArr[11].toString();
+		rejectReason = resArr[12].toString();
+		isLastApproval = controller.getIsLastApproval(rcptId,"receipt");
 		String checkIsVoucherActive = controller.getActiveVoucher("receipt");
 		if (checkIsVoucherActive.equalsIgnoreCase("duplicate")) {
 			return ERROR;
@@ -250,6 +258,7 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 
 	private void sendSmsAlert() {
 		GameLobbyController controller = new GameLobbyController();
+		try {
 		String getPropName = controller.getPropName(particulars.split(",")[0].trim());
 		String mobile = controller.getPropContact(particulars.split(",")[0].trim());
 		String getUnderEmpName = controller.getUnderEmpName(particulars.split(",")[0].trim());
@@ -280,6 +289,9 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 			thread1.setDaemon(true);
 			thread1.start();
 		}
+		}catch(Exception e) {
+			logger.info(":::::::::::::::Receipt ---- Error while sending sms:::::::::::::::::");
+		}
 	}
 
 	public void createReceipt() throws IOException {
@@ -295,7 +307,11 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 					transaction, accountOldBal, particularsOldBal,totalAmt)) {
 				if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr, session,
 						transaction)) {
+					
 					transaction.commit();
+					if(orderNo!=null && !orderNo.isEmpty()) {
+						controller.changeStatusReceipt(orderNo,userInfoBean.getUserId());
+					}
 					if (controller.allowAlert(particulars.split(",")[0].trim(), "SMS"))
 						sendSmsAlert();
 					servletResponse.getWriter().write("success");
@@ -317,6 +333,9 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 					if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr, session,
 							transaction)) {
 						transaction.commit();
+						if(orderNo!=null && !orderNo.isEmpty()) {
+							controller.changeStatusReceipt(orderNo,userInfoBean.getUserId());
+						}
 						if (controller.allowAlert(particulars.split(",")[0].trim(), "SMS"))
 							sendSmsAlert();
 						servletResponse.getWriter().write("success");
@@ -344,6 +363,25 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 		return false;
 	}
 
+	public void rejectReceipt() throws IOException{
+		GameLobbyController controller = new GameLobbyController();
+		if(controller.rejectReceipt(rcptId,rejectReason,userInfoBean.getUserId()))
+			servletResponse.getWriter().write("success");
+		else
+			servletResponse.getWriter().write("error");
+		return;
+		
+	}
+	
+	public void approveReceipt() throws IOException{
+		GameLobbyController controller = new GameLobbyController();
+		if(controller.approveReceipt(rcptId,userInfoBean.getUserId()))
+			servletResponse.getWriter().write("success");
+		else
+			servletResponse.getWriter().write("error");
+		return;
+		
+	}
 	public HttpServletRequest getServletRequest() {
 		return servletRequest;
 	}
@@ -646,6 +684,30 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 
 	public void setParticularsOldBal(String particularsOldBal) {
 		this.particularsOldBal = particularsOldBal;
+	}
+
+	public String getIsLastApproval() {
+		return isLastApproval;
+	}
+
+	public void setIsLastApproval(String isLastApproval) {
+		this.isLastApproval = isLastApproval;
+	}
+
+	public String getRejectReason() {
+		return rejectReason;
+	}
+
+	public void setRejectReason(String rejectReason) {
+		this.rejectReason = rejectReason;
+	}
+
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
 
 }

@@ -320,13 +320,11 @@ $(document).ready(function() {
 	function callToGetAdvance(id,tor){
 		var myurl = "<%=basePath%>";
 		var res = id.match(/\d/g);
-		var rowCount = countTotalRows();
-		var idd = Number(rowCount)-1;
-		var particular = document.getElementById('particularsList'+idd).value;
+		var particular = document.getElementById('particularsList'+activerow).value;
 		var rowCountBillWise = countTotalRowsBillWise();
-		var amt = document.getElementById('amount'+idd).value;
+		var amt = document.getElementById('amount'+activerow).value;
 		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_bill_ref_id.action?partyAcc="
-				+ particular+"&typeOfRef="+tor;
+				+ particular+"&typeOfRef="+tor+"&isSale=No";
 		
 		$.ajax({
 			type : "GET",
@@ -362,7 +360,6 @@ $(document).ready(function() {
 		var rowCount = countTotalRows();
 		activerow = res;
 		
-
 	}
 	
 	function callformorebillwiserow(id){
@@ -861,7 +858,7 @@ function validateFile(fileName, id) {
 									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 											maxlength="30" name="amount" value="0"
 											id="%{'amount' + #data.count}" theme="myTheme"
-											value="%{amount}" pattern="^[0-9]*$" cssStyle="width:90%"
+											value="%{amount}" pattern="^[0-9.]*$" cssStyle="width:90%"
 											onchange="revertCurrBalance(this.id)">
 										</ss:textfield></td>
 									<td style="text-align: center;" nowrap="nowrap"><s:select

@@ -188,6 +188,51 @@
 			</result>
 		</action>
 			
+		<action name="bo_um_block_unblock_party" class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="loadPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_bo_uploadBanner.jsp
+			</result>
+		</action>	
+		<action name="bo_um_validatePartyStatus"
+			class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="validatePartyStatus">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_um_validatePartyblockUnblock"
+			class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="PartyStatusChange">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_pms_cms_bo_uploadBanner.jsp
+			</result>
+		</action>
+		
+		
+		<!-- transaction  aproval stages system start here-->
+		<action name="bo_um_transactionApproval" class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="loadPageTransactionApproval">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/cms/st_jamidara_load_approval_page.jsp
+			</result>
+		</action>	
+		
+		<action name="st_jamidara_append_approvals"
+			class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="getTransactionApprovals">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_jamidara_approvals.jsp
+			</result>
+		</action>
+		<!-- transaction approval stage ends here -->
+		<action name="st_jamidara_approval_set_update"
+			class="com.stpl.pms.action.bo.misc.MiscAction"
+			method="setUpdateApproval">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
 	</package>
 </struts>
 

@@ -401,9 +401,9 @@ $(document).ready(function() {
 				if(rowCountBillWise>1){
 					var finalAmt = 0;
 				for(var i=1;i<rowCountBillWise;i++){
-					finalAmt = finalAmt+ Number(document.getElementById('billAmt'+i).value);
+					finalAmt = Number(finalAmt)+ Number(document.getElementById('billAmt'+i).value);
 				}
-					document.getElementById('billAmt'+res).value = Number(amt)-finalAmt;
+					document.getElementById('billAmt'+res).value = Number(amt)-Number(finalAmt);
 				}
 				document.getElementById("pendingBills"+res).style.display = "none";
 				document.getElementById("pendingBillt"+res).style.display = "block";
@@ -678,20 +678,35 @@ $(document).ready(function() {
 		document.getElementById('hiddenBilId'+res).value = arr[0];
 		document.getElementById('ModelDrCr'+res).value = arr[3];
 		var amount = arr[2];
-		var receiptAmt = document.getElementById('amount'+activerow).value;
+		var receiptAmt = document.getElementById('amount'+activerow).value; 
+		var rowCountBill = countTotalRowsBillWise();
+		var tempTotalAmount = 0.0;
+		for(var i=1;i<=rowCountBill;i++){
+			if(i==res)
+			continue;
+			tempTotalAmount = Number(tempTotalAmount) + Number(document.getElementById('billAmt'+i).value);
+			
+		}
 		
-			if(Number(receiptAmt)==Number(amount)){
-				document.getElementById('billAmt'+res).value = Number(receiptAmt);
+		
+			var treceiptAmt =  Number(receiptAmt) - Number(tempTotalAmount);
+		
+			
+		
+		
+			if(Number(treceiptAmt) ==Number(amount)){
+				
+				document.getElementById('billAmt'+res).value = Number(treceiptAmt);
 				
 			}
-			else if(Number(receiptAmt)>Number(amount)){
+			else if(Number(treceiptAmt)>Number(amount)){
 				
 				document.getElementById('billAmt'+res).value = amount;
 				
 			}
-			else if(Number(receiptAmt)<Number(amount)){
+			else if(Number(treceiptAmt)<Number(amount)){
 				
-				document.getElementById('billAmt'+res).value = receiptAmt;
+				document.getElementById('billAmt'+res).value = treceiptAmt;
 			
 			}
 		
@@ -702,6 +717,37 @@ $(document).ready(function() {
 			document.getElementById('ModelDrCr'+res).value = 'Dr';
 		if(arr[3]=='Dr')
 			document.getElementById('ModelDrCr'+res).value = 'Cr';
+		
+		
+		if(Number(rowCountBill)>Number(res)){
+			var totalAdjustedAmt = 0;
+			for(var i=1;i<rowCountBill;i++){
+				totalAdjustedAmt=Number(totalAdjustedAmt)+Number(document.getElementById('billAmt'+i).value);
+			}
+			var temp = Number(totalAdjustedAmt) - Number(receiptAmt);
+			if(Number(temp)<0)
+				temp = Number(temp) * (-1);
+			document.getElementById('billAmt'+rowCountBill).value = temp;
+		}
+		else
+		callForBillWiseRow(id);
+	}
+	
+	function callForBillWiseRowAmtText(id){
+		var row = id.match(/\d/g);
+		var rowCountBillWise = countTotalRowsBillWise();
+		var receiptAmt = document.getElementById('amount'+activerow).value;
+		if(Number(rowCountBillWise)>Number(row)){
+			var totalAdjustedAmt = 0;
+			for(var i=1;i<rowCountBillWise;i++){
+				totalAdjustedAmt=Number(totalAdjustedAmt)+Number(document.getElementById('billAmt'+i).value);
+			}
+			var temp = Number(totalAdjustedAmt) - Number(receiptAmt);
+			if(Number(temp)<0)
+				temp = Number(temp) * (-1);
+			document.getElementById('billAmt'+rowCountBillWise).value = temp;
+		}
+		else
 		callForBillWiseRow(id);
 	}
 	function callForBillWiseRow(id){
@@ -777,7 +823,7 @@ $(document).ready(function() {
 						</div>
 					</div>
 					
-					<div class="FormMainBox">
+					<%-- <div class="FormMainBox">
 
 						<div class="labelDiv">
 							<label> <b><font color='red'>Order No.</font></b>
@@ -787,7 +833,7 @@ $(document).ready(function() {
 							<s:textfield id="orderNo" name="orderNo" value="%{orderNo}"
 								theme="myTheme" readonly="true" cssStyle="width:10%" />
 						</div>
-					</div>
+					</div> --%>
 					<div class="clearFRM"></div>
 					<div class="FormMainBox">
 
@@ -1005,7 +1051,7 @@ $(document).ready(function() {
 									</ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
 										maxlength="30" name="billAmt" id="billAmt1" theme="myTheme"
-										cssStyle="width:40%" onchange="callForBillWiseRow(this.id)"/></td>
+										cssStyle="width:40%" onchange="callForBillWiseRowAmtText(this.id)"/></td>
 										
 								<td style="text-align: center;" nowrap="nowrap">
 									<ss:textfield

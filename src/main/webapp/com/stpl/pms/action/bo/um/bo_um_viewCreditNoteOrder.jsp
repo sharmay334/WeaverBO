@@ -50,6 +50,50 @@ body {font-family: Arial, Helvetica, sans-serif;}
   text-decoration: none;
   cursor: pointer;
 }
+.modal1 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content1 {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+.modal2 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content2 {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
 .form-popup {
 	display: none;
 	position: fixed;
@@ -162,7 +206,11 @@ var totalTax = 0;
 var current_working_table_row_id = 0;
 var item_name_val = 0;
 var goDownGlobal;
+var old_cr_dr = "";
+var BillWiseActiveRow;
 var itemNameGlobal;
+var totalTax = ["0","0","0","0","0","0","0","0","0","0","0"];
+
 function showtdfornewNo(){
 	$("#batchTh").css("display", "none");
 	$("#batchTd").css("display", "none");
@@ -293,7 +341,316 @@ function callForSweetAlertPopUp(id){
 	
 	 document.getElementById("myForm").style.display = "block";
 }
+function closeMe(){
+	document.getElementById("myModal1").style.display = "none";
+	
+}
+
+function closeMeCNAdjust(){
+	
+	var rowCountBillWise = countTotalRowsBillWise();
+
+	var tamt = 0;
+	for(var i=1;i<=rowCountBillWise;i++){
+		if(document.getElementById('ModelDrCr'+i).value=='Cr')
+		tamt=tamt+Number(document.getElementById('billAmt'+i).value);
+		else
+			tamt=tamt-Number(document.getElementById('billAmt'+i).value);	
+	}
+	if(tamt<0)
+	tamt  = tamt * (-1);
+	if(tamt==document.getElementById('totalAmt').value){
+		for(var i=1;i<=rowCountBillWise;i++){
+			document.getElementById('hiddenTypeOfRef'+i).value = document.getElementById('typeofRef'+i).value;
+			if(document.getElementById('hiddenTypeOfRef'+i).value=='Agst Ref')
+				document.getElementById('hiddenBillWiseName'+i).value = document.getElementById('pendingBills'+i).value;
+			else
+				document.getElementById('hiddenBillWiseName'+i).value = document.getElementById('pendingBillt'+i).value;
+			document.getElementById('hiddenDueDate'+i).value =document.getElementById('dueDate'+i).value;
+			document.getElementById('hiddenAmnt'+i).value = document.getElementById('billAmt'+i).value;
+			document.getElementById('hiddencrdr'+i).value =document.getElementById('ModelDrCr'+i).value;
+				
+		}
+		document.getElementById("myModal2").style.display = "none";
+		promptSave();
+			
+	}
+	else{
+		alert('Please Adjust proper Amount First...');
+	}
+	
+		
+}
+function callToGetAgstRef(id,tor){
+	var myurl = "<%=basePath%>";
+	var res = id.match(/\d/g);
+	var particular = document.getElementById('partyAcc').value;
+	var rowCountBillWise = countTotalRowsBillWise();
+
+	var amt = document.getElementById('totalAmt').value;
+	myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_bill_agst_ref_id.action?partyAcc="
+			+ particular+"&typeOfRef="+tor+"&suffix=_sale";
+	
+	$.ajax({
+		type : "GET",
+		url : myurl,
+		async:false,
+		success : function(itr) {
+			var arr = itr.split(",");
+			var optionArr = arr[0].split(";");
+			
+			document.getElementById('dueDate'+res).value = arr[1];
+			var optionArrSub = optionArr[0].split(" ");
+			var datearr = optionArrSub[1].split("-");
+			var conversionDate = datearr[2]+"-"+datearr[1]+"-"+datearr[0];
+			var d = new Date(conversionDate);
+		
+			d.setDate(d.getDate() + Number(arr[1]));
+			limit_days = Number(arr[1]);
+			 var dd = d.getDate();
+			    var mm = d.getMonth()+1;
+			    var y = d.getFullYear();
+			 var _dt = dd+"-"+mm+"-"+y+" ( "+arr[1]+" days)" ;
+			 document.getElementById('dueDate'+res).value = _dt;
+			if(Number(optionArrSub[2])>Number(amt) || Number(optionArrSub[2])==Number(amt))
+			document.getElementById('billAmt'+res).value = Number(amt);
+			else
+				document.getElementById('billAmt'+res).value = optionArrSub[2];
+
+			if(rowCountBillWise>1){
+				var finalAmt = 0;
+			for(var i=1;i<rowCountBillWise;i++){
+				finalAmt = finalAmt+ Number(document.getElementById('billAmt'+i).value);
+			}
+				document.getElementById('billAmt'+res).value = Number(amt)-finalAmt;
+			}
+			document.getElementById("pendingBillt"+res).style.display = "none";
+			var myoption;
+			for(var i=0;i<optionArr.length-1;i++){
+				myoption+="<option>" +optionArr[i] + "</option>";
+			}
+			document.getElementById("pendingBills"+res).innerHTML = myoption;
+			document.getElementById("pendingBills"+res).style.display = "block";
+			var tearr = document.getElementById("pendingBills"+res).value;
+			var tarr = tearr.split(" ");
+			document.getElementById("hiddenBilId"+res).value =tarr[0];
+			if(tarr[3]=='Dr'){
+				document.getElementById("ModelDrCr"+res).value  = 'Cr'
+			}
+			if(tarr[3]=='Cr'){
+				document.getElementById("ModelDrCr"+res).value  = 'Dr'
+			}
+			if(document.getElementById("ModelDrCr"+res).value=='Cr'){
+				callForBillWiseRow(id);
+			}
+		},
+
+		error : function(itr) {
+
+		}
+	});
+	
+}
+function countTotalRowsBillWise() {
+
+	var rowCount = 0;
+	var table = document.getElementById("payTransactionTableBillWise1");
+	var rows = table.getElementsByTagName("tr");
+	for (var i = 0; i < rows.length; i++) {
+		if (rows[i].getElementsByTagName("td").length > 0) {
+			rowCount++;
+		}
+	}
+	return rowCount;
+}
+function callformorebillwiserow(id){
+	var rowCount = countTotalRowsBillWise();
+	var row = document.getElementById("BillrowId" + rowCount); // find row to copy
+	var table = document.getElementById("payTransactionTableBillWise1"); // find table to append to
+	var clone = row.cloneNode(true); // copy children too
+	rowCount += 1;
+	clone.id = "BillrowId" + rowCount; // change id or other attributes/contents
+	table.appendChild(clone); // add new row to end of table
+	var oInput = document.getElementById("BillrowId" + rowCount);
+	var a = oInput.childNodes[1].childNodes[1];
+	var b = oInput.childNodes[3].childNodes[1];
+	var c = oInput.childNodes[3].childNodes[3];
+	var d = oInput.childNodes[5].childNodes[1];
+	var e = oInput.childNodes[7].childNodes[1];
+	var f = oInput.childNodes[9].childNodes[1];
+	var k = oInput.childNodes[10].childNodes[1];
+	var l = oInput.childNodes[12].childNodes[1];
+	var m = oInput.childNodes[14].childNodes[1];
+	var n = oInput.childNodes[16].childNodes[1];
+	var o = oInput.childNodes[18].childNodes[1];
+	var p = oInput.childNodes[20].childNodes[1];
+	var q = oInput.childNodes[22].childNodes[1];
+	var r = oInput.childNodes[24].childNodes[1];
+	
+
+	a.id = "typeofRef"+rowCount;
+	b.id = "pendingBillt"+rowCount;
+	c.id = "pendingBills"+rowCount;
+	d.id = "dueDate"+rowCount;
+	e.id = "billAmt"+rowCount;
+	f.id = "ModelDrCr"+rowCount;
+	k.id = "hiddenTypeOfRef"+rowCount;
+	l.id = "hiddenBillWiseName"+rowCount;
+	m.id = "hiddenDueDate"+rowCount;
+	n.id = "hiddenAmnt"+rowCount;
+	o.id = "hiddencrdr"+rowCount;
+	p.id = "hiddenBilId"+rowCount;
+	q.id = "deleteRow"+rowCount;
+	r.id = "addRow"+rowCount;
+
+	document.getElementById('typeofRef'+rowCount).value = 'On Account';
+	callToGetAdvance('typeofRef'+rowCount,'On Account');
+	
+}
+function deleteBillRow(id){
+	var idNum = id.match(/\d/g);
+	$('table#payTransactionTableBillWise1 tr#BillrowId'+idNum).remove();
+
+}
+function AddBillRow(id){
+	var idNum = id.match(/\d/g);
+	var rowCount = countTotalRowsBillWise();
+	var row = document.getElementById("BillrowId" + rowCount); 
+	var table = document.getElementById("payTransactionTableBillWise1");
+	var clone = row.cloneNode(true);
+	rowCount += 1;
+	clone.id = "BillrowId" + rowCount; // change id or other attributes/contents
+	table.appendChild(clone); // add new row to end of table
+	var oInput = document.getElementById("BillrowId" + rowCount);
+	var a = oInput.childNodes[1].childNodes[1];
+	var b = oInput.childNodes[3].childNodes[1];
+	var c = oInput.childNodes[3].childNodes[3];
+	var d = oInput.childNodes[5].childNodes[1];
+	var e = oInput.childNodes[7].childNodes[1];
+	var f = oInput.childNodes[9].childNodes[1];
+	var k = oInput.childNodes[10].childNodes[1];
+	var l = oInput.childNodes[12].childNodes[1];
+	var m = oInput.childNodes[14].childNodes[1];
+	var n = oInput.childNodes[16].childNodes[1];
+	var o = oInput.childNodes[18].childNodes[1];
+	var p = oInput.childNodes[20].childNodes[1];
+	var q = oInput.childNodes[22].childNodes[1];
+	var r = oInput.childNodes[24].childNodes[1];
+	
+
+	a.id = "typeofRef"+rowCount;
+	b.id = "pendingBillt"+rowCount;
+	c.id = "pendingBills"+rowCount;
+	d.id = "dueDate"+rowCount;
+	e.id = "billAmt"+rowCount;
+	f.id = "ModelDrCr"+rowCount;
+	k.id = "hiddenTypeOfRef"+rowCount;
+	l.id = "hiddenBillWiseName"+rowCount;
+	m.id = "hiddenDueDate"+rowCount;
+	n.id = "hiddenAmnt"+rowCount;
+	o.id = "hiddencrdr"+rowCount;
+	p.id = "hiddenBilId"+rowCount;
+	q.id = "deleteRow"+rowCount;
+	r.id = "addRow"+rowCount;
+
+	document.getElementById('typeofRef'+rowCount).value = 'On Account';
+	callToGetAdvance('typeofRef'+rowCount,'On Account');
+}
+function saveCreditNoteBill(){
+	
+	checkForBillByBill(document.getElementById('partyAcc'));
+	
+}
+function checkForBillByBill(particulars){
+	var particular = particulars.value;
+	var myurl = "<%=basePath%>";
+	myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_check_bill_by_bill.action?billByBill="+particular;
+	$.ajax({
+		type : "GET",
+		url : myurl,
+		async:false,
+		success : function(itr) {
+			if(itr=="true"){
+				
+				document.getElementById('biller_name').innerHTML = particular;
+				currentId = 1;
+				 document.getElementById("myModal2").style.display = "block";				
+				
+			}
+			else{
+				currentId = 1;
+				 document.getElementById("myModal2").style.display = "none";
+				 promptSave();
+				}
+		},
+
+		error : function(itr) {
+
+		}
+	});
+}
+function callForBillWiseRow(id){
+	var row = id.match(/\d/g);
+	var rowCountBillWise = countTotalRowsBillWise();
+
+	var tamt = 0;
+	for(var i=1;i<=rowCountBillWise;i++){
+		if(document.getElementById('ModelDrCr'+i).value=='Dr'){
+			tamt=tamt+Number(document.getElementById('billAmt'+i).value);
+		}
+		else{
+			tamt=tamt-Number(document.getElementById('billAmt'+i).value);
+		}
+		
+	}
+	if(tamt<0){
+		tamt = tamt * (-1);
+	}
+	if(tamt!=document.getElementById('amount'+row).value){
+		callformorebillwiserow(id);
+	}
+	
+}
+function callToGetAdvance(id,tor){
+	var myurl = "<%=basePath%>";
+	var res = id.match(/\d/g);
+	var particular = document.getElementById('partyAcc').value;
+	var rowCountBillWise = countTotalRowsBillWise();
+	var amt = document.getElementById('totalAmt').value;
+	myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_bill_ref_id.action?partyAcc="
+			+ particular+"&typeOfRef="+tor+"&isSale=Yes";
+	
+	$.ajax({
+		type : "GET",
+		url : myurl,
+		success : function(itr) {
+			var arr = itr.split(",");
+			document.getElementById('pendingBillt'+res).value = arr[0];
+			document.getElementById('dueDate'+res).value = arr[1];
+			document.getElementById('billAmt'+res).value = amt;
+			if(rowCountBillWise>1){
+				var finalAmt = 0;
+			for(var i=1;i<rowCountBillWise;i++){
+				finalAmt = finalAmt+ Number(document.getElementById('billAmt'+i).value);
+			}
+				document.getElementById('billAmt'+res).value = Number(amt)-finalAmt;
+			}
+			document.getElementById("pendingBills"+res).style.display = "none";
+			document.getElementById("pendingBillt"+res).style.display = "block";
+			document.getElementById("hiddenBilId"+res).value = arr[0];
+			document.getElementById("ModelDrCr"+res).value = 'Cr';
+
+		},
+
+		error : function(itr) {
+
+		}
+	});
+	
+}
+	
 function closeDialogue(){
+	
 	var batch = document.getElementById('batchNewNo').value;
 	var mfg = document.getElementById('mfg').value;
 	var exp = document.getElementById('exp').value;
@@ -348,6 +705,14 @@ function closeDialogue(){
 		});
 		
 	}
+	
+
+	function showhideEmployee(data) {
+		$("#showEmployeeDiv").css("display", "none");
+		if (data == "Applicable") {
+			$("#showEmployeeDiv").css("display", "block");
+		}
+	}
 	function showBatchesPopup(id){
 		var myurl = "<%=basePath%>";
 		var res = id.match(/\d/g);
@@ -377,6 +742,7 @@ function closeDialogue(){
 	function showGodownQty(id){
 		var myurl = "<%=basePath%>";
 		var res = id.match(/\d/g);
+		current_working_table_row_id = res;
 		var itemName = document.getElementById('salesStockItems'+res).value;
 		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_availableQtyPuchase.action?goDown="
 				+ document.getElementById(id).value+"&itemName="+itemName;
@@ -468,7 +834,31 @@ function closeDialogue(){
 		}
 		return rowCount;
 	}
-	
+function getUnitByItem1(id,val) {
+		
+		var totalRow = countTotalRows();
+		var myurl1="<%=basePath%>";
+		for(var i=1;i<=totalRow;){
+			myurl = myurl1+"/com/stpl/pms/action/bo/um/bo_um_tm_get_sales.action?var="
+				+ document.getElementById('salesStockItems'+i).value;
+		var res = id.match(/\d/g);
+		$.ajax({
+			type : "GET",
+			async: false,
+			url : myurl,
+			success : function(itr) {
+				document.getElementById('unit' + i).value = ''+itr;
+				
+			},
+
+			error : function(itr) {
+
+			}
+		});
+		i++;
+		}
+			
+	}
 	function getUnitByItem(id) {
 		var myurl = "<%=basePath%>";
 		myurl += "/com/stpl/pms/action/bo/um/bo_um_tm_get_sales.action?var="
@@ -487,7 +877,44 @@ function closeDialogue(){
 			}
 		});
 	}
+	function checkConsignee(val){
+		$("#consigneeDiv").css("display", "none");
+		if(val=="Yes"){
+			$("#consigneeDiv").css("display", "block");
+		}
+		
+	}
+	
+	function callPictureReport(src){
+		var myurl = "<%=basePath%>";
+		myurl += "com/stpl/pms/action/bo/um/bo_um_emp_picture.action?docPath="
+				+ src;
+		$.ajax({
+			type : "GET",
+			url : myurl,
+			success : function(itr) {
+				
+				var list1 = document.getElementById("one");
+					if(typeof(list1.childNodes[0])!="undefined")
+					list1.removeChild(list1.childNodes[0]);
+						
+					
+				  var x = document.createElement("IMG");
+					  x.setAttribute("src", itr);
+					  x.setAttribute("width", "500");
+					  x.setAttribute("height", "600");
+					  x.setAttribute("alt", "Doc Img");
+					  document.getElementById('one').appendChild(x);
+				
+				
+				 
+				document.getElementById("myModal1").style.display = "block";
+			},
+			error : function(itr) {
 
+			}
+		});
+	}
 	function adjustTotalAmount(id) {
 		var finalAmount = 0;
 		var rowCnt = countTotalRows();
@@ -496,10 +923,17 @@ function closeDialogue(){
 				finalAmount = Number(finalAmount)
 						+ Number(document.getElementById('amount' + i).value);
 		}
-		document.getElementById('totalAmt').value = finalAmount+Number(totalTax);
+		var taxAmt =0;
+		for(var j=0;j<totalTax.length;j++){
+			taxAmt = Number(taxAmt)+Number(totalTax[j]);
+			
+		}
+		document.getElementById('totalAmt').value = finalAmount+Number(taxAmt);
+		var blnc_type = old_cr_dr;
+		
 		var tAmt = finalAmount+Number(totalTax);
-		if(document.getElementById('hcrdr').value=='Dr'){
-			var fAmt = Number(CurrentBalance)- tAmt;
+		if(blnc_type=='Dr'){
+			var fAmt = Number(document.getElementById('totalAmt').value) - Number(CurrentBalance);
 			if(fAmt<0){
 				fAmt = fAmt * (-1);
 				document.getElementById('crdr').innerHTML = 'Cr';
@@ -509,20 +943,112 @@ function closeDialogue(){
 			
 		}
 		else{
-			var fAmt = Number(CurrentBalance)+ tAmt;
+			var fAmt = Number(document.getElementById('totalAmt').value)+ Number(CurrentBalance);
 			document.getElementById('currBalance').value = fAmt;
 		}
 		
 	}
+function getTotalQty1(id,val){
+		
+		var myurl1 = "<%=basePath%>";
+		var totalRow = countTotalRows();
+		for(var i=1;i<=totalRow;i++){
+			myurl =myurl1+"/com/stpl/pms/action/bo/um/bo_um_tm_get_totalQtyPuchase.action?itemName="
+				+ document.getElementById('salesStockItems'+i).value;
+		var res = id.match(/\d/g);
+		$.ajax({
+			type : "GET",
+			async: false,
+			url : myurl,
+			success : function(itr) {
+				
+				document.getElementById('totalQty' + i).value = itr;
+			},
+
+			error : function(itr) {
+
+			}
+		});
+			
+		}
+		
+		
+	}
+function reflectCurrentBalance(){
+	
+	var currBal = Number(document.getElementById('currBalance').value);
+	var blncType= old_cr_dr;
+	var totAmt = Number(document.getElementById('totalAmt').value);
+	
+	if(blncType=="Dr"){
+		var bal = currBal+totAmt;
+		document.getElementById('currBalance').value = bal;
+	}
+	else{
+		var bal = currBal-totAmt;
+		if(Number(bal)<0){
+			bal = bal*(-1);
+			document.getElementById('hcrdr').value = 'Dr';
+			document.getElementById('crdr').innerHTML  = 'Dr';
+			document.getElementById('currBalance').value = bal;
+		}
+		else{
+			document.getElementById('hcrdr').value = 'Cr';
+			document.getElementById('crdr').innerHTML  = 'Cr';
+			document.getElementById('currBalance').value = bal;
+	
+		}
+
+	}
+	
+	
+	getTaxes1('id','val');
+}
+function getTaxes1(id,val){
+	var idNum = id.match(/\d/g);
+	var totalRow = countTotalRows();
+	var myurl1 = "<%=basePath%>";
+	for(var i=1;i<=totalRow;i++){
+		var itemName = document.getElementById('salesStockItems'+i).value;
+		
+		 myurl = myurl1+"/com/stpl/pms/action/bo/um/bo_um_tm_get_tax.action?itemName="
+				+ itemName;
+		$.ajax({
+			type : "GET",
+			async: false,
+			url : myurl,
+			success : function(itr) {
+				if(itr!="none"){
+					var res = itr.split(";");
+					document.getElementById('igstItem'+i).value = res[0]+"%";
+					document.getElementById('igstItemAmt'+i).value = (Number(document.getElementById('amount'+i).value)*Number(res[0]))/100;
+				}
+				else{
+					document.getElementById('igstItem'+i).value = "0%";
+					document.getElementById('igstItemAmt'+i).value = "0";
+					
+				}
+			},
+
+			error : function(itr) {
+
+			}
+		});
+		
+	}
+	
+	
+}
 	function calAmount(id) {
 		
 		var res = id.match(/\d/g);
 		var qty = document.getElementById('Qty' + res).value;
 		var rate = document.getElementById('rate' + res).value;
 		document.getElementById('amount' + res).value = qty * rate;
-		getUnitByItem(id);
-		getTotalQty(id);
-		getTaxes(id);
+		getUnitByItem1(id);
+		getTotalQty1(id);
+		reflectCurrentBalance();
+		getTaxesOnChange(id);
 	}
 	function getCurrentBalance(id) {
 		var myurl = "<%=basePath%>";
@@ -538,6 +1064,7 @@ function closeDialogue(){
 				document.getElementById('partyOldBalance').value = arr[0]+" "+arr[1];
 				document.getElementById('crdr').innerHTML = arr[1];
 				CurrentBalance = arr[0];
+				old_cr_dr = arr[1];
 				document.getElementById('hcrdr').value = arr[1];
 				if(document.getElementById('salesStockItems1').value!='-1'){
 					
@@ -555,6 +1082,262 @@ function closeDialogue(){
 		if(data=="Applicable"){
 			$("#showEmployeeDiv").css("display", "block");
 		}
+	}
+	
+	function getTaxesOnChange(id){
+		var idNum = id.match(/\d/g);
+		var myurl1 = "<%=basePath%>";
+		var rowCnt = countTotalRows();
+		for(var i=1;i<=rowCnt;i++){
+			var itemName = document.getElementById('salesStockItems'+i).value;
+			
+			var myurl =myurl1+"/com/stpl/pms/action/bo/um/bo_um_tm_get_tax.action?itemName="
+					+ itemName;
+			$.ajax({
+				type : "GET",
+				async:false,
+				url : myurl,
+				success : function(itr) {
+					if(itr!="none"){
+						var res = itr.split(";");
+						var original = document.getElementById('amount'+i).value;
+						var tx = (Number(document.getElementById('amount'+i).value)*Number(res[0]))/100;
+						totalTax[i] = tx;
+						document.getElementById('igstItemAmt'+i).value = tx;
+					}
+					else{
+						totalTax[i] = "0";
+						document.getElementById('igstItemAmt'+i).value = "0";
+						
+					}
+					
+				},
+
+				error : function(itr) {
+
+				}
+			});
+			
+		}
+		
+		adjustTotalAmount('none');
+	}
+	function callForMoreBillRow(id){
+		var res = id.match(/\d/g);
+		var type = document.getElementById(id).value;
+		BillWiseActiveRow = res;
+		if(type=="Advance"){
+			callToGetAdvance(id,'Advance');
+		}
+		if(type=="Agst Ref"){
+			callToGetAgstRef(id,'Agst Ref');
+		}
+		if(type=="On Account"){
+			callToGetAdvance(id,'On Account');
+		}
+		
+	}
+function promptRejectedReason(){
+		
+		var reason = document.getElementById('rejectedReason').value;
+		swal("Your have rejected this order because - "+reason);
+	}
+	function promptReason(){
+		swal({
+			  text: "Enter Reason of Rejection!",
+			  content: { element: "textarea" },
+			  buttons: "Ok"
+			}).then((value) => {
+			  if (!value) throw null;
+			  value = document.querySelector(".swal-content__textarea").value;
+			  var n = value.length;
+			  if(n<3){
+				  alert("Rejection Reason is Mandatory to minimun 5 characters!!");  
+			  }
+			  else{
+				  var myurl = "<%=basePath%>";
+				  myurl += "/com/stpl/pms/action/bo/um/bo_um_reject_creditNote.action?orderNo="+document.getElementById('orderNo').value+"&rejectReason="+value;
+				  swal({
+					  title: "Are you sure?",
+					  text: "Once Reject, you will not be able to undo the entry!",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+					})
+					.then((willDelete) => {
+					  if (willDelete) {
+						  $.ajax({
+						        type: 'GET',
+						        url: myurl,
+						        success: function (data) {
+						        	if(data=="success"){
+						        		swal("Order Successfully Rejected..Refreshing Page!!!");
+						        		setTimeout(function(){
+						        			   window.location.reload(1);
+						        			}, 1000);
+						        	}
+						        	else{
+						        		swal("Some Error Occured While Rejecting!");
+						        	}
+						            
+						        },
+						        error: function (data) {
+						        	swal("Server Error Occured!");
+						        },
+						    });
+						  
+					  } else {
+					    swal("Please Refresh The Page!");
+					  }
+					});
+				  
+				  
+			  }
+			  
+			});
+		
+	}		
+	
+	
+	function promptPartialSaveDispatcher(){
+		var frm = $('#searchUserFrm');
+		let formData = new FormData();
+		var myurl = "<%=basePath%>";
+		
+		var ddn= document.getElementById('ddn').value;
+		var tn=document.getElementById('tn').value;
+		var des=document.getElementById('des').value;
+		var vn =document.getElementById('vn').value;
+		var billt = document.getElementById('billt').value;
+		var tf = document.getElementById('transportFreight').value;
+		var localf = document.getElementById('localFrieght').value;
+		var loadf = document.getElementById('loadUnloadCharge').value;
+		var unloadf = document.getElementById('loadUnloadCharge').value;
+		var deliverycharge = document.getElementById('deliveryCharge').value;
+		
+		
+		var luf = loadf+","+unloadf;
+		myurl += "/com/stpl/pms/action/bo/um/upload_creditNote_txn_approve_stage_document.action?orderNo="+document.getElementById('orderNo').value+"&tn="+tn+"&des="+des+"&vn="+vn+"&transportFreight="+tf+"&localFrieght="+localf+"&ddn="+ddn+"&billt="+billt+"&partyAcc="+document.getElementById('partyAcc').value+"&deliveryCharge="+deliverycharge+"&loadCharge="+loadf+"&unloadCharge="+unloadf;
+		
+		if(localf.length>1 && loadf.length>1 && unloadf.length>1 && deliverycharge.length>1 && tn.length>1 && billt.length>1)
+		{
+				
+					swal({
+						  title: "Are you sure?",
+						  text: "Once Saved, you will not be able to undo the entry!",
+						  icon: "warning",
+						  buttons: true,
+						  dangerMode: true,
+						})
+						.then((willDelete) => {
+						  if (willDelete) {
+							  $.ajax({
+								  type: 'POST',
+							        url: myurl,
+							        data: formData,
+							        cache : false,
+									contentType : false,
+									processData : false,
+									async:false,
+							        success: function (data) {
+							        	if(data=="success"){
+							        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
+							        		
+							        		
+							        		setTimeout(function(){
+							        			var myurlRedirect = "<%=basePath%>";
+							    				window.location.href = myurlRedirect;
+							        			}, 1000);
+							        		
+							        	}
+							        	else{
+							        		swal("Some Error Occured!");
+							        	}
+							            
+							        },
+							        error: function (data) {
+							        	swal("Server Error Occured!");
+							        },
+							    });
+							  
+						  } else {
+						    swal("Please Refresh The Page!");
+						   
+						  }
+						});
+			
+				
+				
+			
+			
+		}
+		else{
+			swal("Please fill all following entry first\n\n1.) BillT\n2.) Transport Name\n3.) Local Freight\n4.) Load/Unload Freight\n5.) Delivery Charge\n");
+				
+		}
+		
+		
+	}
+
+	function checkGodownSelect(){
+		var rowCnt = countTotalRows();
+		var tcount = 0 ;
+		for(var i=1;i<=rowCnt;i++){
+			var godownValue = document.getElementById('goDown'+i).value;
+			if(godownValue!="-1"){
+				tcount++;
+			}
+		}
+		if(tcount!=rowCnt){
+			swal("Error! Please Select Godown for items first!");
+		}
+		else{
+			//checkForOrderStatus();
+			saveCreditNoteBill();
+		}
+		
+	}
+function promptPartialSave(){
+		
+		var myurl = "<%=basePath%>";
+		myurl = myurl+"/com/stpl/pms/action/bo/um/bo_um_approve_creditNote.action?orderNo="+document.getElementById('orderNo').value;
+		swal({
+		  title: "Are you sure?",
+		  text: "Once Saved, you will not be able to undo the entry!",
+		  icon: "warning",
+		  buttons: true,
+		  dangerMode: true,
+		})
+		.then((willDelete) => {
+		  if (willDelete) {
+			  $.ajax({
+			        type: 'POST',
+			        url: myurl,
+			        success: function (data) {
+			        	if(data=="success"){
+			        		swal("Entry Successfully Saved..Refreshing for new entry!!!");
+			        		setTimeout(function(){
+			        			var myurlRedirect = "<%=basePath%>";
+			    				window.location.href = myurlRedirect;
+			        			}, 1000);
+			        	}
+			        	else{
+			        		swal("Some Error Occured!");
+			        	}
+			            
+			        },
+			        error: function (data) {
+			        	swal("Server Error Occured!");
+			        },
+			    });
+			  
+		  } else {
+		    swal("Please Refresh The Page!");
+		  }
+		});
+
+		
+		
 	}
 </script>
 </head>
@@ -589,6 +1372,8 @@ function closeDialogue(){
 								theme="myTheme" readonly="true" cssStyle="width:30%" />
 							<s:textfield id="cnNo" name="cnNo" value="%{cnNo}"
 								theme="myTheme" readonly="true" cssStyle="width:10%;display:none" />
+								<s:textfield id="activeVoucherNumber" name="activeVoucherNumber" value="%{activeVoucherNumber}"
+								theme="myTheme" readonly="true" cssStyle="width:10%;display:none" />	
 						</div>
 					</div>
 					<div class="clearFRM"></div>
@@ -641,9 +1426,8 @@ function closeDialogue(){
 								list="partyAccName" onchange="getCurrentBalance(this.id)" cssClass="select1" theme="myTheme" />
 						</div>
 					</div>
-					<div class="clearFRM"></div>
 
-					<div class="FormMainBox">
+					<div class="FormMainBox" style="display:none;">
 
 						<div class="labelDiv">
 							<label> Assign Employee </label>
@@ -682,6 +1466,64 @@ function closeDialogue(){
 						</div>
 					</div>
 					<div class="clearFRM"></div>
+					
+					
+					<div id="consigneeDiv" style="display:none;">
+					
+					<table width="100%" cellspacing="0" align="center"
+						id="payTransactionTable1" class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Dealer Name</th>
+								<th style="text-align: center;" nowrap="nowrap">Prop Name</th>
+								<th style="text-align: center;" nowrap="nowrap">Contact</th>
+								<th style="text-align: center;" nowrap="nowrap">Address</th>
+								<th style="text-align: center;" nowrap="nowrap">GSTN No</th>	
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="50" name="Dname" value="%{Dname}"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:90%">
+									</ss:textfield></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="50" name="propName" value="%{propName}"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:90%">
+									</ss:textfield></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="contact" value="%{contact}"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:80%">
+									</ss:textfield></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="100" name="address" value="%{address}"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:100%">
+									</ss:textfield></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="50" name="gstnNo" readOnly="true" value="%{gstnNo}"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:90%">
+									</ss:textfield></td>
+									
+
+							</tr>
+					
+							
+
+
+						</tbody>
+					</table>
+					</div>
+					
+					
+					
+					
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -697,60 +1539,118 @@ function closeDialogue(){
 					</div>
 					<div class="clearFRM"></div>
 					
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Dispatch Doc No. </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="ddn" id="ddn"
+					
+					<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Dispatch Doc No</th>
+								<th style="text-align: center;" nowrap="nowrap">Transport Name</th>
+								<th style="text-align: center;" nowrap="nowrap">Destination</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="ddn" id="ddn" value="%{ddn}"
+								theme="myTheme" cssStyle="width:40%" />
+								
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="tn" id="tn" value="%{tn}"
 								theme="myTheme" cssStyle="width:50%" />
-						</div>
-					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Transport Name </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="tn" id="tn"
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="des" id="des" value="%{des}"
 								theme="myTheme" cssStyle="width:50%" />
-						</div>
-					</div>
+								</td>
+									
+							</tr>
+					
+						</tbody>
+					</table>
+					
 					<div class="clearFRM"></div>
-					<div class="FormMainBox">
-
-						<div class="labelDiv">
-							<label> Destination </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="des" id="des" 
+					
+					<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Bill-T No.</th>
+								<th style="text-align: center;" nowrap="nowrap">Vehical No.</th>
+								<th style="text-align: center;" nowrap="nowrap">Transport Freight</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="billt" id="billt" 
+								theme="myTheme"  cssStyle="width:40%" value="%{billt}"/>
+								
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="vn" id="vn" value="%{vn}"
 								theme="myTheme" cssStyle="width:50%" />
-						</div>
-					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="transportFreight" id="transportFreight" value="%{transportFreight}"
+								theme="myTheme" pattern="^[0-9.]*$" cssStyle="width:50%" />
+								</td>
+									
+							</tr>
 
-						<div class="labelDiv">
-							<label> Bill-T No.</label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="billt" id="billt" 
-								theme="myTheme"  cssStyle="width:50%" />
-						</div>
-					</div>
-					<div class="clearFRM"></div>
-					<div class="FormMainBox">
+						</tbody>
+					</table>
+					
+					
+					<table width="100%" cellspacing="0" align="center"
+					class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Local Freight</th>
+								<th style="text-align: center;" nowrap="nowrap">Load Freight</th>
+								<th style="text-align: center;" nowrap="nowrap">Unload Freight</th>
+								<th style="text-align: center;" nowrap="nowrap">Delivery Charge</th>
+							</tr>
+						</thead>
+						<tbody>
+					
+					<tr>
+								
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="localFrieght" id="localFrieght" value="%{localFrieght}"
+								theme="myTheme"  pattern="^[0-9.]*$"  cssStyle="width:50%" />
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="loadUnloadCharge" id="loadUnloadCharge" value="%{loadCharge}"
+								theme="myTheme" pattern="^[0-9.]*$" cssStyle="width:50%" />
+								</td>
+								
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="loadUnloadCharge1" id="loadUnloadCharge1" value="%{unloadCharge}"
+								theme="myTheme" pattern="^[0-9.]*$" cssStyle="width:50%" />
+								</td>
+								<td style="text-align: center;" nowrap="nowrap">
+								<s:textfield name="deliveryCharge" id="deliveryCharge" value="%{deliveryCharge}"
+								theme="myTheme" pattern="^[0-9.]*$" cssStyle="width:50%" />
+								</td>	
+							</tr>
 
-						<div class="labelDiv">
-							<label> Vehical No. </label>
-						</div>
-						<div class="InputDiv">
-							<s:textfield name="vn" id="vn"
-								theme="myTheme" cssStyle="width:50%" />
-						</div>
-					</div>
+						</tbody>
+					</table>
+					
+					
+					
 					<div class="clearFRM"></div>
 					<br />
 					<div class="clearFRM"></div>
@@ -768,6 +1668,9 @@ function closeDialogue(){
 								<th style="text-align: center;" nowrap="nowrap">Rate</th>
 								<th style="text-align: center;" nowrap="nowrap">unit</th>
 								<th style="text-align: center;" nowrap="nowrap">Amount</th>
+								<th style="text-align: center;" nowrap="nowrap">IGST</th>
+								<th style="text-align: center;" nowrap="nowrap">Tax Amount</th>
+							
 								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
 								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
 								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
@@ -777,60 +1680,76 @@ function closeDialogue(){
 						</thead>
 						<tbody>
 
-							<tr id="rowId1">
-								<td style="text-align: center;" nowrap="nowrap"><s:select
-										headerKey="-1" headerValue="End Of List" value="%{itemName}"
-										name="salesStockItems" id="salesStockItems1"
-										list="salesStockItemList" cssClass="select1" theme="myTheme"
-										cssStyle="width:120px;" onchange="callForMoreRow(this.id)" /></td>
+							<s:iterator value="itemBeans" var="data">
+					<tr id="rowId<s:property value="#data.rowId"/>">
+								<td style="text-align: center;" nowrap="nowrap">
+										<ss:textfield
+										maxlength="30" name="salesStockItems" readOnly="true" value="%{#data.itemName}" id="%{'salesStockItems' + #data.rowId}"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:120px">
+									</ss:textfield>
+										
+										</td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="totalQty" readOnly="true" value="0" id="totalQty1"
+										maxlength="30" name="totalQty" readOnly="true" value="0" id="%{'totalQty' + #data.rowId}"
 										theme="myTheme" readOnly="true"
 										cssStyle="width:50%">
 									</ss:textfield></td>
 									<td style="text-align: center;" nowrap="nowrap"><s:select
 										headerKey="-1" headerValue="Please Select"
-										name="goDown" id="goDown1" onchange="showGodownQty(this.id)"
+										name="goDown" id="%{'goDown' + #data.rowId}" onchange="showGodownQty(this.id)"
 										list="goDownList" cssClass="select1" theme="myTheme"
 										cssStyle="width:100px;" /></td>
 									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="godownQty" readOnly="true" value="0" id="godownQty1" theme="myTheme"
+										maxlength="30" name="godownQty" readOnly="true" value="0" id="%{'godownQty' + #data.rowId}" theme="myTheme"
 										 cssStyle="width:50%">
 									</ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="Qty" value="%{Qty}" id="Qty1" theme="myTheme"
-										pattern="^[0-9]*$" onchange="adjustTotalAmount(this.id)"
-										oninput="calAmount(this.id)" cssStyle="width:50%">
+										maxlength="30" name="Qty" value="%{#data.itemQty}" id="%{'Qty' + #data.rowId}" theme="myTheme"
+										pattern="^[0-9.]*$" readOnly="true"
+										onfocusout="calAmount(this.id)" cssStyle="width:50%">
 									</ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="rate" value="%{rate}" id="rate1"
-										theme="myTheme" pattern="^[0-9]*$"
-										onchange="adjustTotalAmount(this.id)"
-										oninput="calAmount(this.id)" cssStyle="width:50%">
+										maxlength="30" name="rate" value="%{#data.itemRate}" id="%{'rate' + #data.rowId}"
+										theme="myTheme" pattern="^[0-9.]*$" readOnly="true"
+										onfocusout="calAmount(this.id)" cssStyle="width:50%">
 									</ss:textfield></td>
 								<td style="text-align: center;" nowrap="nowrap">
 									<ss:textfield
-										maxlength="30" name="unit" value="" id="unit1"
+										maxlength="30" name="unit" value="" id="%{'unit' + #data.rowId}"
 										theme="myTheme" readOnly="true" cssStyle="width:40%">
 									</ss:textfield>
 									</td>
 								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="amount" value="0" id="amount1"
-										theme="myTheme" readOnly="true" pattern="^[0-9]*$"
+										maxlength="30" name="amount" value="%{#data.itemAmount}" id="%{'amount' + #data.rowId}"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="igstItem" value="0" id="%{'igstItem' + #data.rowId}"
+										theme="myTheme" readOnly="true"
+										cssStyle="width:50%">
+									</ss:textfield></td>
+									<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="igstItemAmt" value="0" id="%{'igstItemAmt' + #data.rowId}"
+										theme="myTheme" readOnly="true"
 										cssStyle="width:50%">
 									</ss:textfield></td>
 									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenBatchNumber" id="hiddenBatchNumber1"></s:hidden>
+									<s:hidden name="hiddenBatchNumber" id="%{'hiddenBatchNumber' + #data.rowId}"></s:hidden>
 									</td>
 									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenMfgDate" id="hiddenMfgDate1"></s:hidden></td>
+									<s:hidden name="hiddenMfgDate" id="%{'hiddenMfgDate' + #data.rowId}"></s:hidden></td>
 									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenExpDate" id="hiddenExpDate1"></s:hidden></td>
+									<s:hidden name="hiddenExpDate" id="%{'hiddenExpDate' + #data.rowId}"></s:hidden></td>
 									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenExpAlert" id="hiddenExpAlert1"></s:hidden></td>
+									<s:hidden name="hiddenExpAlert" id="%{'hiddenExpAlert' + #data.rowId}"></s:hidden></td>
 									<td style="text-align: center;display:none;" nowrap="nowrap">
-									<s:hidden name="hiddenExpAlertDate" id="hiddenExpAlertDate1"></s:hidden></td>
+									<s:hidden name="hiddenExpAlertDate" id="%{'hiddenExpAlertDate' + #data.rowId}"></s:hidden></td>
+									<td style="text-align: center;display:none;" nowrap="nowrap">
+									<s:hidden name="hiddenBatchApplicable" id="%{'hiddenBatchApplicable' + #data.rowId}"></s:hidden></td>
 							</tr>
+					</s:iterator>
 
 
 						</tbody>
@@ -884,6 +1803,11 @@ function closeDialogue(){
 						</div>
 					</div>
 					<div class="clearFRM"></div>
+					
+					<s:set name="statusOrder" value="status"/>
+					<s:set name="rejectReasonCase" value="rejectReason"/>
+					<s:set name="checkApprovalStage" value="isLastApproval"/>
+					
 					<div class="FormMainBox">
 
 						<div class="labelDiv">
@@ -894,20 +1818,205 @@ function closeDialogue(){
 								id="narration" theme="simple" title="Enter Narration"></s:textfield>
 						</div>
 					</div>
+					
+					<s:if test="%{#rejectReasonCase=='undefined'}">
+					<div class="FormMainBox" style="display:none">
 
+						<div class="labelDiv">
+							<label> Senior Accountant Return Reason </label>
+						</div>
+						<div class="InputDiv">
+							<s:textfield  value="%{rejectReason}" cssClass="InpTextBoxBg"
+								id="narration"  theme="simple" readOnly="true"></s:textfield>
+						</div>
+					</div>
+				</s:if>
+				<s:else>
+					<div class="FormMainBox">
 
+						<div class="labelDiv">
+							<label> Senior Accountant Return Reason </label>
+						</div>
+						<div class="InputDiv">
+							<s:textfield  value="%{rejectReason}" cssClass="InpTextBoxBg"
+								id="narration" theme="simple" readOnly="true"></s:textfield>
+						</div>
+					</div>
+					
+				</s:else>
+				<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Dispatch Document </label>
+						</div>
+						<div class="InputDiv">
+			<a href="javascript:;" onclick="callPictureReport('<s:property value="docPictureDDFileName" />')">VIEW DOCUMENT</a>
+						
+						</div>
+					</div>
+					
+					<div class="FormMainBox">
+
+						<div class="labelDiv">
+							<label> Bill-T Document </label>
+						</div>
+						<div class="InputDiv">
+			<a href="javascript:;" onclick="callPictureReport('<s:property value="docPictureTBFileName" />')">VIEW DOCUMENT</a>
+						
+						</div>
+					</div>
+					
+					
+					
 				</s:if>
 
 			</div>
 			<div class="box_footer" align="right">
-				<%-- <s:submit value="Search" align="left" cssStyle="margin-left:0px"
-						cssClass="button" theme="simple"></s:submit>
-					 --%>
-				<!-- <input type="submit" value='Create' align="left"
-					style="margin-left: 0px" class="button" /> -->
+				
+				<button type="button"  style="margin-left: 0px" class="button" onclick="downloadBill()">Download Bill</button>
+				<s:if test="%{#checkApprovalStage=='NO'}">
+					
+					
+					<s:if test="%{#statusOrder=='pending'}">
 					<button type="button" align="left"
-					style="margin-left: 0px" class="button" onclick="promptSave()">Return</button>
+					style="margin-left: 0px" class="button" onclick="promptPartialSave()">Accept</button>
+					<button type="button" align="left"
+					style="margin-left: 0px" class="button" onclick="promptReason()">Reject</button>
+					</s:if>
+					<s:else>
+					<s:hidden id="rejectedReason" value="%{rejectReason}"/>
+					<button type="button" align="left"
+					style="margin-left: 0px;color:red !important;" class="button" onclick="promptRejectedReason()">This Order is already Rejected! Click to view Reason</button>
+					</s:else>
+					</s:if>
+			
+			<s:else>
+					<s:if test="%{#statusOrder=='pending'}">
+					<button type="button" 
+					style="margin-left: 0px" class="button" onclick="promptPartialSaveDispatcher()">Accept</button>
+					<button type="button" 
+					style="margin-left: 0px" class="button" onclick="promptReason()">Reject</button>
+					</s:if>
+					<s:elseif test="%{#statusOrder=='rejected'}">
+					<s:hidden id="rejectedReason" value="%{rejectReason}"/>
+					<button type="button" 
+					style="margin-left: 0px;color:red !important;" class="button" onclick="promptRejectedReason()">This Order is already Rejected! Click to view Reason</button>
+					</s:elseif>
+					<s:else>
+					<s:if test="%{#statusOrder=='accepted'}">
+					<button type="button" 
+					style="margin-left: 0px;color:green !important;" class="button">This Order is already Accepted!</button>
+					<button type="button"  style="margin-left: 0px" class="button" onclick="downloadBillInvoice()">Download Invoice</button>
+					
+					</s:if>
+					<s:else>
+				<button type="button" id="saleBtn"  style="margin-left: 0px" class="button" onclick="checkGodownSelect()">Accept</button>
+				<button type="button" id="saleBtn"  style="margin-left: 0px" class="button" onclick="promptReason()">Reject</button>
+				<button type="button" id="saleBtn"  style="margin-left: 0px" class="button" onclick="promptReasonReturn()">Return</button>
+					
+					</s:else>
+					
+					</s:else>
+					
+					</s:else>
+					<!-- <button type="button" align="left"
+					style="margin-left: 0px" class="button" onclick="promptSave()">Return</button> -->
 			</div>
+			
+			<div id="myModal2" class="modal2">
+
+  <!-- Modal content -->
+  			<div class="modal-content2">
+ 			   <button id="closeme1" type="button" class="close1" onclick="closeMeCNAdjust()">SAVE</button>
+ 			  <div id="bill_by_bill">
+						<div class="FormSectionMenu" id="bill_by_bill_div_acc">
+							<div class="greyStrip">
+								<h4>Bill Wise Details for :	<b><span id="biller_name"></span></b></h4>
+							</div>
+							<table width="100%" cellspacing="0" align="center"
+						id="payTransactionTableBillWise1" class="transactionTable">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Type of Ref</th>
+								<th style="text-align: center;" nowrap="nowrap">Name</th>
+								<th style="text-align: center;" nowrap="nowrap">Due Date (limit)</th>
+								<th style="text-align: center;" nowrap="nowrap">Amount</th>
+								<th style="text-align: center;" nowrap="nowrap">Dr/Cr</th>
+								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
+								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
+								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
+								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
+								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
+								<th style="text-align: center;display:none;" nowrap="nowrap"></th>
+								<th style="text-align: center;" nowrap="nowrap">Delete</th>
+								<th style="text-align: center;" nowrap="nowrap">Add</th>
+						
+							</tr>
+						</thead>
+						<tbody>
+								
+							<tr id="BillrowId1">
+								<td style="text-align: center;" nowrap="nowrap"><s:select
+										name="typeofRef" id="typeofRef1" headerKey="-1" headerValue="-Please Select-" list="{'Advance','Agst Ref','On Account'}"
+										cssClass="select1" theme="myTheme"
+										onchange="callForMoreBillRow(this.id)" cssStyle="width:50%;" /></td>
+								<td style="text-align: center;" nowrap="nowrap">
+								<ss:textfield
+										maxlength="30" readOnly="true" name="pendingBill" id="pendingBillt1" theme="myTheme"
+										cssStyle="width:20%">
+									</ss:textfield>
+									<select name="pendingBill" id="pendingBills1" class="select1" style="display:none;" onchange="callHiddenBillId(this.id)">
+									
+									</select>
+								</td>
+								<td style="text-align: center;" nowrap="nowrap">
+								<ss:textfield
+										maxlength="30" readOnly="true" name="dueDate" id="dueDate1" theme="myTheme"
+										cssStyle="width:80%">
+									</ss:textfield></td>
+								<td style="text-align: center;" nowrap="nowrap"><ss:textfield
+										maxlength="30" name="billAmt" id="billAmt1" theme="myTheme"
+										cssStyle="width:40%" onchange="callForBillWiseRow(this.id)"/></td>
+								<td style="text-align: center;" nowrap="nowrap">
+								<ss:textfield
+										maxlength="30" readOnly="true" name="ModelDrCr" id="ModelDrCr1" theme="myTheme"
+										cssStyle="width:60%">
+								</ss:textfield>
+								<td style="text-align: center;display:none;" nowrap="nowrap">
+									<s:hidden name="hiddenTypeOfRef" id="hiddenTypeOfRef1"></s:hidden>
+								</td>
+								<td style="text-align: center;display:none;" nowrap="nowrap">
+									<s:hidden name="hiddenBillWiseName" id="hiddenBillWiseName1"></s:hidden>
+								</td>
+								<td style="text-align: center;display:none;" nowrap="nowrap">
+									<s:hidden name="hiddenDueDate" id="hiddenDueDate1"></s:hidden>
+								</td>
+								<td style="text-align: center;display:none;" nowrap="nowrap">
+									<s:hidden name="hiddenAmnt" id="hiddenAmnt1"></s:hidden>
+								</td>
+								<td style="text-align: center;display:none;" nowrap="nowrap">
+									<s:hidden name="hiddencrdr" id="hiddencrdr1"></s:hidden>
+								</td>
+								<td style="text-align: center;display:none;" nowrap="nowrap">
+									<s:hidden name="hiddenBilId" id="hiddenBilId1"></s:hidden>
+								</td>	
+								<td style="text-align: center;" nowrap="nowrap">
+									  <button id="deleteRow1" name="deleteRow" type="button" class="close1" onclick="deleteBillRow(this.id)">&#10006;</button>
+								</td>
+								<td style="text-align: center;" nowrap="nowrap">
+									  <button id="addRow1" name="addRow" type="button" class="close1" onclick="AddBillRow(this.id)">&#10010;</button>
+								</td>	
+								
+							</tr>
+
+
+						</tbody>
+					</table>
+						</div>
+					</div>
+ 			 </div>
+
+		</div>
 		</s:form>
 		<div id="myForm" class="modal">
 
@@ -977,61 +2086,50 @@ function closeDialogue(){
  			 </div>
 
 		</div>
-		<%-- <div class="form-popup" id="myForm">
-						<div class="form-container">
-							<table width="100%" cellspacing="0" align="center"
-								id="payTransactionTable" class="transactionTable">
-								<thead>
-									<tr>
-										<th style="text-align: center;" nowrap="nowrap">Batch No.</th>
-										<th id="batchTh" style="text-align:center;display:none;" nowrap="nowrap">Number</th>
-										<th id="QtyTh" style="text-align:center;display:none;" nowrap="nowrap">Qty</th>			
-										<th style="text-align: center;" nowrap="nowrap">Mfg Dt.</th>
-										<th style="text-align: center;" nowrap="nowrap">Expiry
-											Dt.</th>
-										<th style="text-align: center;" nowrap="nowrap">Remind Expiry</th>
-											<th></th>
-											<th style="text-align: center;" nowrap="nowrap">Remind Date</th>
+		
+		
+		<div id="myModal1" class="modal1">
 
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td style="text-align: center;" nowrap="nowrap">
-										
-										<select	name="batchList" id="batchList" onchange="showtdfornewNo()">
-										
-										</select>		
-												</td>
-										<td  id="batchTd" style="text-align: center;display:none;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="batchNewNo" value="0" id="batchNewNo"
-										theme="myTheme" cssStyle="width:50%">
-									</ss:textfield></td>
-									
-									<td id="QtyTd" style="text-align: center;display:none;" nowrap="nowrap"><ss:textfield
-										maxlength="30" name="BatchQty" value="0" id="BatchQty"
-										theme="myTheme" cssStyle="width:50%">
-									</ss:textfield></td>
-										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-												name="mfg" cssStyle="width:40%" placeholder="Date" cssClass="dateField"
-												id="mfg" readonly="true" theme="myTheme"></ss:textfield></td>
-										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-												name="exp" cssStyle="width:40%" placeholder="Date" cssClass="dateField"
-												id="exp" readonly="true" theme="myTheme"></ss:textfield></td>
-										<td style="text-align: center;" nowrap="nowrap"><s:select
-												name="expAlert" id="expAlert"
-												list="{'No','Yes'}" cssClass="select1" theme="myTheme"
-												cssStyle="width:120px;"/></td>
-										<td style="text-align: center;" nowrap="nowrap"><ss:textfield
-												name="reminderDate" cssStyle="width:40%" placeholder="Date" cssClass="dateField"
-												id="reminderDate" readonly="true" theme="myTheme"></ss:textfield></td>
-										<td><input type="button" value='close' align="left"
-											style="margin-left: 0px" class="button" onclick="closeDialogue()"/></td>
-									</tr>
-								</tbody>
-							</table>
+  <!-- Modal content -->
+  			<div class="modal-content1">
+ 			   <button id="closeme" type="button" class="close" onclick="closeMe()">&times;</button>
+ 			  <div id="bill_bybill">
+						<div class="FormSectionMenu">
+							<div class="greyStrip">
+								<h4>Document :<b></h4>
+							</div>
+							<table width="100%" cellspacing="0" align="center">
+						<thead>
+							<tr>
+								<th style="text-align: center;" nowrap="nowrap">Document </th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr>
+								<td style="text-align: center;" nowrap="nowrap"><div id="one"></div></td>
+								
+							</tr>
+
+
+						</tbody>
+					</table>
 						</div>
-					</div>		 --%>
+					</div>
+ 			 </div>
+
+			</div>
+			
+			
+			
+			
+			<!-- agst ref bill adjust credit note -->
+			
+			
+			
+			<!-- end of this section -->
+			
+	
 	</div>
 	<div id="searchDiv"></div>
 	<br />
@@ -1040,6 +2138,8 @@ function closeDialogue(){
 	<script>
 if(document.getElementById('partyAcc').value!='none'){
 	getCurrentBalance('partyAcc');
+	showhideEmployee('Applicable');
+	//checkConsignee(document.getElementById('consignee').value);
 }
 
 	

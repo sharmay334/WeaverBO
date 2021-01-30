@@ -44,6 +44,29 @@ function showInterestStatus(val){
 			$("#stopBut").css("display", "block");
 			else
 			$("#startBut").css("display", "block");
+			showSMSStatus(val);
+		},
+		error : function(itr) {
+
+		}
+	});
+	
+	
+}
+function showSMSStatus(val){
+	$("#stopButSMS").css("display", "none");
+	$("#startButSMS").css("display", "none");
+	var myurl = "<%=basePath%>";
+	myurl += "com/stpl/pms/action/bo/um/bo_um_ledger_sms_status.action?ledgerName="+val;
+	$.ajax({
+		type : "GET",
+		async:false,
+		url : myurl,
+		success : function(itr) {
+			if(itr=="yes")
+			$("#stopButSMS").css("display", "block");
+			else
+			$("#startButSMS").css("display", "block");
 
 		},
 		error : function(itr) {
@@ -64,6 +87,27 @@ function changeInterest(val){
 		url : myurl,
 		success : function(itr) {
 			swal("Your Interest Status Changed Successfully!");
+			showInterestStatus(party);
+
+			
+
+		},
+		error : function(itr) {
+
+		}
+	});
+}
+function changeSMS(val){
+	
+	var party = document.getElementById('ledgerName').value;
+	var myurl = "<%=basePath%>";
+	myurl += "com/stpl/pms/action/bo/um/bo_um_ledger_sms_change_status.action?ledgerName="+party+"&status="+val;
+	$.ajax({
+		type : "GET",
+		async:false,
+		url : myurl,
+		success : function(itr) {
+			swal("Your SMS Status Changed Successfully!");
 			showInterestStatus(party);
 
 			
@@ -111,7 +155,8 @@ function changeInterest(val){
 				</div> 
 				<s:submit name="Search" value="Search" id="searchButton"
 					cssClass="button"></s:submit>
-					
+	<button type="button" id="startButSMS" class="button" onclick="changeSMS('start')" style="display:none;">START SMS</button>
+	<button type="button" id="stopButSMS" class="button" onclick="changeSMS('stop')" style="display:none;">STOP SMS</button>				
 	<button type="button" id="startBut" class="button" onclick="changeInterest('start')" style="display:none;">START INTEREST</button>
 	<button type="button" id="stopBut" class="button" onclick="changeInterest('stop')"style="display:none;">STOP INTEREST</button>				
 			</div>

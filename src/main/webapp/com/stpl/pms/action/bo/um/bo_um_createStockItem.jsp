@@ -123,6 +123,21 @@
 		}
 
 	}
+	
+	function checkForAlternateUnitWhole() {
+		if (document.getElementById('stockItemUnit').value != "-1"
+				&& document.getElementById('stockItemUnit').value != "Not Applicable") {
+			if (document.getElementById('stockItemWholesaleUnit').value != "-1"
+					&& document.getElementById('stockItemWholesaleUnit').value != "Not Applicable") {
+				document.getElementById('unitwVal1').innerText = document
+						.getElementById('stockItemWholesaleUnit').value;
+				document.getElementById('unitwVal2').innerText = document
+						.getElementById('stockItemUnit').value;
+				
+			}
+		} 
+
+	}
 </script>
 </head>
 <body>
@@ -231,6 +246,30 @@
 							<b><label id="unitVal1"></label>&nbsp; = &nbsp;<ss:textfield
 									maxlength="100" name="sunit" id="sunit" theme="myTheme"
 									cssStyle="width:20%"></ss:textfield><label id="unitVal2"></label></b>
+						</span>
+						<div id="stockItemAlterUnit_error" class="fieldError">
+							<s:fielderror>
+								<s:param>stockItemAlterUnit</s:param>
+							</s:fielderror>
+						</div>
+
+					</div>
+					<div class="clearFRM"></div>
+					<div class="FormMainBox">
+						<div class="labelDiv">
+							<label> Bulk unit</label><em class="Req">*</em>
+						</div>
+
+						<s:select name="stockItemWholesaleUnit" id="stockItemWholesaleUnit"
+							headerKey="-1" headerValue="Select Unit" list="stockItemUnitList"
+							cssClass="select1" theme="myTheme" cssStyle="width:15%"
+							onChange="checkForAlternateUnitWhole()"></s:select>
+						<span id="applicableIfalternative">
+							<label><b>Where:</b></label> <ss:textfield maxlength="100"
+								name="fwunit" id="fwunit" theme="myTheme" cssStyle="width:20%"></ss:textfield>
+							<b><label id="unitwVal1"></label>&nbsp; = &nbsp;<ss:textfield
+									maxlength="100" name="swunit" id="swunit" theme="myTheme"
+									cssStyle="width:20%"></ss:textfield><label id="unitwVal2"></label></b>
 						</span>
 						<div id="stockItemAlterUnit_error" class="fieldError">
 							<s:fielderror>

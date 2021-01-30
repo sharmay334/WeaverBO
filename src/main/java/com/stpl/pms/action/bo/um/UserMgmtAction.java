@@ -114,12 +114,18 @@ public class UserMgmtAction extends BaseActionSupport {
 	private String fieldName;
 	private String dynamicList;
 
+	private List<String> branchList;
+	private List<String> regionList;
+	private List<String> roleList;
+	private List<String> departmentList;
+
 	public String addDynamicValues() {
 		GameLobbyController controller = new GameLobbyController();
-		if(controller.addDynamicValues(fieldName,dynamicList))
-		return SUCCESS;
+		if (controller.addDynamicValues(fieldName, dynamicList))
+			return SUCCESS;
 		return ERROR;
 	}
+
 	public String getFatherName() {
 		return fatherName;
 	}
@@ -1302,7 +1308,7 @@ public class UserMgmtAction extends BaseActionSupport {
 		// .getAttribute("ALLOWED_PRIV");
 
 		try {
-			service.editBOUserDetails(user_id, email, phoneNbr, lastnameedit, status, type, 1.1);
+			service.editBOUserDetails(user_id, email, phoneNbr, lastnameedit, status, type, userDetailsBean);
 			UserDetailsBean userDetailsBean = new UserDetailsBean();
 			userDetailsBean.setUserName(userName);
 			userDetailsBean.setLastName(lastnameedit);
@@ -1312,12 +1318,12 @@ public class UserMgmtAction extends BaseActionSupport {
 			// editBOUserServiceDetails(userDetailsBean);
 		} catch (PMSException be) {
 			be.printStackTrace();
-			addActionError(be.getErrorMessage());
-			return "exception";
+			//addActionError(be.getErrorMessage());
+	//		return "exception";
 		} catch (Exception be) {
-			addActionError("Some internal error.");
+		//	addActionError("Some internal error.");
 			be.printStackTrace();
-			return "exception";
+		//	return "exception";
 		}
 		lastName = userDetailsBean.getLastName();
 		session.setAttribute("BO_USER_NAME", firstName.toUpperCase() + " " + lastName.toUpperCase());
@@ -1821,6 +1827,38 @@ public class UserMgmtAction extends BaseActionSupport {
 
 	public void setDynamicList(String dynamicList) {
 		this.dynamicList = dynamicList;
+	}
+
+	public List<String> getBranchList() {
+		return branchList;
+	}
+
+	public void setBranchList(List<String> branchList) {
+		this.branchList = branchList;
+	}
+
+	public List<String> getRegionList() {
+		return regionList;
+	}
+
+	public void setRegionList(List<String> regionList) {
+		this.regionList = regionList;
+	}
+
+	public List<String> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<String> roleList) {
+		this.roleList = roleList;
+	}
+
+	public List<String> getDepartmentList() {
+		return departmentList;
+	}
+
+	public void setDepartmentList(List<String> departmentList) {
+		this.departmentList = departmentList;
 	}
 
 }

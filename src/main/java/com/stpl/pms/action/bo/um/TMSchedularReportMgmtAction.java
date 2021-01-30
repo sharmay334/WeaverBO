@@ -14,6 +14,7 @@ import com.stpl.pms.commonJavabeans.BillsBean;
 import com.stpl.pms.commonJavabeans.ReceiptSaleBillMapping;
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.struts.common.BaseActionSupport;
+import com.stpl.pms.struts.common.QuartzScheduling;
 
 public class TMSchedularReportMgmtAction extends BaseActionSupport
 		implements ServletRequestAware, ServletResponseAware {
@@ -37,7 +38,8 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 	private String toDate;
 	private String txnType;
 	private Map<String, ReceiptSaleBillMapping> mappingMap;
-
+	private String totalTransactionAmount;
+	
 	public void runOldOverDueBills() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		if(controller.runOldOverDueBills(ledgerName,voucherNo))
@@ -58,6 +60,11 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 		servletResponse.getWriter().write("success");
 		return;
 	}
+	public void runBalanceSchedular()throws IOException{
+		
+		QuartzScheduling quartzScheduling = new QuartzScheduling();
+		quartzScheduling.calculateTax();
+	}
 
 	public void changeStatusAlert() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
@@ -70,7 +77,7 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 
 	public void deleteWholeBill() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		if (controller.deleteBill(txnType, voucherNo))
+		if (controller.deleteBill(txnType, voucherNo,ledgerName))
 			servletResponse.getWriter().write("yes");
 		else
 			servletResponse.getWriter().write("no");
@@ -97,10 +104,28 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 
 		return;
 	}
+	public void ChangeSMSSchedular() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.changeStatusSMS(ledgerName, status))
+			servletResponse.getWriter().write("yes");
+		else
+			servletResponse.getWriter().write("no");
+
+		return;
+	}
+	
+	
 
 	public String getPartyTxnReport() {
 		GameLobbyController controller = new GameLobbyController();
 		reportData = controller.getPartyTransactionReport(txnType, toDate, fromDate, employeeName, ledgerName, billId);
+		Double amt = 0.0;
+		for(Map.Entry<String, BillsBean> map:reportData.entrySet()) {
+			amt = amt+Double.valueOf(map.getValue().getActualBillAmount().trim());
+			
+		}
+		totalTransactionAmount = String.format("%.2f",amt);
+		
 		return SUCCESS;
 	}
 
@@ -119,6 +144,16 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 
 		return;
 	}
+	public void checkForSMSSchedular() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.getActiveInterestSMS(ledgerName))
+			servletResponse.getWriter().write("yes");
+		else
+			servletResponse.getWriter().write("no");
+
+		return;
+	}
+	
 
 	public void deductInterest() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
@@ -316,6 +351,12 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 
 	public void setMappingMap(Map<String, ReceiptSaleBillMapping> mappingMap) {
 		this.mappingMap = mappingMap;
+	}
+	public String getTotalTransactionAmount() {
+		return totalTransactionAmount;
+	}
+	public void setTotalTransactionAmount(String totalTransactionAmount) {
+		this.totalTransactionAmount = totalTransactionAmount;
 	}
 
 }
