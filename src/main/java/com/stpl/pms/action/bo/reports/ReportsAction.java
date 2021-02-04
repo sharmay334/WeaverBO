@@ -25,9 +25,7 @@ import com.stpl.pms.commonJavabeans.SalaryReportBean;
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.controller.gm.GameMgmtController;
 import com.stpl.pms.controller.um.UserMgmtController;
-import com.stpl.pms.exception.PMSException;
 import com.stpl.pms.hibernate.mapping.StRmBoUserInfo;
-import com.stpl.pms.javabeans.UserDetailsBean;
 import com.stpl.pms.javabeans.UserInfoBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
@@ -78,6 +76,55 @@ public class ReportsAction extends BaseActionSupport implements ServletRequestAw
 	private int user_id;
 	private StRmBoUserInfo userDetailsBean;
 	private UserInfoBean userInfoBean;
+	private String empSalary;
+	private String empTA;
+	private String empDA;
+	private String hotelExpense;
+	private String type;
+	private String otherExpense;
+
+	
+	public void setOnUnHold() throws IOException{
+		
+		GameLobbyController controller = new GameLobbyController();
+
+		if (controller.setAmountOnUnHold(empName, fromDate, type)) {
+			servletResponse.getWriter().write("success");
+		} else
+			servletResponse.getWriter().write("failed");
+		
+	}
+	public void setOnHold() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+
+		if (controller.setAmountOnHold(empName, fromDate, type)) {
+			servletResponse.getWriter().write("success");
+		} else
+			servletResponse.getWriter().write("failed");
+	}
+
+	public String getPaymentHoldInfo() {
+
+		GameLobbyController controller = new GameLobbyController();
+		String[] ar = fromDate.split("-");
+		String date = ar[2] + "-" + ar[1] + "-" + ar[0];
+
+		salaryBeanMap = controller.generateSalaryReportBean(empName, date, date,false);
+		for (Map.Entry<String, SalaryReportBean> map : salaryBeanMap.entrySet()) {
+			empSalary = map.getValue().getSalary();
+			empTA = map.getValue().getTA();
+			empDA = map.getValue().getdA();
+			hotelExpense = map.getValue().getHotelExp();
+			otherExpense = map.getValue().getOtherExp();
+		}
+		return SUCCESS;
+	}
+
+	public String paymentHoldPage() {
+		GameLobbyController controller = new GameLobbyController();
+		setEmployeeNames(controller.getEmployeeNamesList());
+		return SUCCESS;
+	}
 
 	public String editEmployeeSave() {
 		GameLobbyController controller = new GameLobbyController();
@@ -143,7 +190,7 @@ public class ReportsAction extends BaseActionSupport implements ServletRequestAw
 		String[] ar = monthYear.split("-");
 		String fromDate = ar[1] + "-" + mm.get(ar[0]) + "-01";
 		String toDate = ar[1] + "-" + mm.get(ar[0]) + "-31";
-		salaryBeanMap = controller.generateSalaryReportBean(empName, fromDate, toDate);
+		salaryBeanMap = controller.generateSalaryReportBean(empName, fromDate, toDate,true);
 		Double totalOReading = 0.0;
 		Double totalTaAmt = 0.0;
 		Double totaldaAmt = 0.0;
@@ -822,6 +869,54 @@ public class ReportsAction extends BaseActionSupport implements ServletRequestAw
 
 	public void setUserInfoBean(UserInfoBean userInfoBean) {
 		this.userInfoBean = userInfoBean;
+	}
+
+	public String getEmpSalary() {
+		return empSalary;
+	}
+
+	public void setEmpSalary(String empSalary) {
+		this.empSalary = empSalary;
+	}
+
+	public String getEmpTA() {
+		return empTA;
+	}
+
+	public void setEmpTA(String empTA) {
+		this.empTA = empTA;
+	}
+
+	public String getEmpDA() {
+		return empDA;
+	}
+
+	public void setEmpDA(String empDA) {
+		this.empDA = empDA;
+	}
+
+	public String getHotelExpense() {
+		return hotelExpense;
+	}
+
+	public void setHotelExpense(String hotelExpense) {
+		this.hotelExpense = hotelExpense;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getOtherExpense() {
+		return otherExpense;
+	}
+
+	public void setOtherExpense(String otherExpense) {
+		this.otherExpense = otherExpense;
 	}
 
 }

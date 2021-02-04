@@ -2389,7 +2389,7 @@
 			</result>
 
 		</action>
-		
+
 		<action name="bo_um_edit_employee_page"
 			class="com.stpl.pms.action.bo.reports.ReportsAction"
 			method="editEmployeePage">
@@ -2398,7 +2398,7 @@
 			<result name="success">/com/stpl/pms/action/bo/reports/st_employee_edit_emp_page.jsp
 			</result>
 		</action>
-	
+
 		<action name="bo_um_employee_Save"
 			class="com.stpl.pms.action.bo.reports.ReportsAction"
 			method="editEmployeeSave">
@@ -2409,6 +2409,36 @@
 			<result name="error">/com/stpl/pms/action/bo/um/bo_um_editStockGroup_error.jsp
 			</result>
 		</action>
-				
+
+		<action name="bo_um_amountHold"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="paymentHoldPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/st_employee_payment_hold_page.jsp
+			</result>
+
+		</action>
+
+		<action name="bo_um_getPaymentReport"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getPaymentHoldInfo">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/nodecorate/st_employee_payment_hold_pageResult.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_emp_hold_data"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="setOnHold">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_um_emp_unhold_data"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="setOnUnHold">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
 	</package>
 </struts>
