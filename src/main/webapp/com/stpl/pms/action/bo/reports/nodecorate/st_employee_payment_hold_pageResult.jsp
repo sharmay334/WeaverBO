@@ -100,9 +100,12 @@ function unHoldAmount(empName,date,type){
 								<th width="5%" valign="middle" style="text-align: center;"
 									id="th_1">Amount</th>
 								<th width="5%" valign="middle" style="text-align: center;"
+									id="th_2">Current Status</th>
+								<th width="5%" valign="middle" style="text-align: center;"
 									id="th_2"></th>
 								<th width="5%" valign="middle" style="text-align: center;"
 									id="th_2"></th>
+								
 								
 
 							</tr>
@@ -117,6 +120,9 @@ function unHoldAmount(empName,date,type){
 									<b>Salary</b></td>
 								<td width="5%" valign="middle" style="text-align: center;">
 									<s:property value="%{empSalary}" /> 
+								</td>
+								<td width="5%" valign="middle" style="text-align: center;">
+									<s:property value="%{currStatusSal}" /> 
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
 								<button type="button" class="button" onclick="holdAmount('<s:property value="%{empName}" />','<s:property value="%{fromDate}" />','Salary')">Hold</button>
@@ -135,6 +141,9 @@ function unHoldAmount(empName,date,type){
 									<s:property value="%{empTA}" /> 
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
+									<s:property value="%{currStatusTA}" /> 
+								</td>
+								<td width="5%" valign="middle" style="text-align: center;">
 								<button type="button" class="button" onclick="holdAmount('<s:property value="%{empName}" />','<s:property value="%{fromDate}" />','TA')">Hold</button>
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
@@ -149,6 +158,9 @@ function unHoldAmount(empName,date,type){
 									<b>DA</b></td>
 								<td width="5%" valign="middle" style="text-align: center;">
 									 <s:property value="%{empDA}" />
+								</td>
+								<td width="5%" valign="middle" style="text-align: center;">
+									<s:property value="%{currStatusDA}" /> 
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
 								<button type="button" class="button" onclick="holdAmount('<s:property value="%{empName}" />','<s:property value="%{fromDate}" />','DA')">Hold</button>
@@ -168,6 +180,9 @@ function unHoldAmount(empName,date,type){
 									 <s:property value="%{hotelExpense}" /> 
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
+									<s:property value="%{currStatusHE}" /> 
+								</td>
+								<td width="5%" valign="middle" style="text-align: center;">
 									<button type="button" class="button" onclick="holdAmount('<s:property value="%{empName}" />','<s:property value="%{fromDate}" />','Hotel Expense')">Hold</button>
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
@@ -182,6 +197,9 @@ function unHoldAmount(empName,date,type){
 									<b>Other Expense</b></td>
 								<td width="5%" valign="middle" style="text-align: center;">
 									 <s:property value="%{otherExpense}" /> 
+								</td>
+								<td width="5%" valign="middle" style="text-align: center;">
+									<s:property value="%{currStatusOE}" /> 
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
 									<button type="button" class="button" onclick="holdAmount('<s:property value="%{empName}" />','<s:property value="%{fromDate}" />','Others Expense')">Hold</button>

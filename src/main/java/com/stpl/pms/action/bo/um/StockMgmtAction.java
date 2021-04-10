@@ -8,9 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.stpl.pms.commonJavabeans.ManufacturingBean;
 import com.stpl.pms.controller.gl.GameLobbyController;
+import com.stpl.pms.hibernate.factory.HibernateSessionFactory;
 import com.stpl.pms.javabeans.StockCatBean;
 import com.stpl.pms.javabeans.StockGroupBean;
 import com.stpl.pms.javabeans.StockItemBean;
@@ -106,7 +109,6 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 
 	@Override
 	public String execute() throws Exception {
-		// TODO Auto-generated method stub
 
 		return SUCCESS;
 	}
@@ -331,19 +333,32 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		else
 			return ERROR;
 	}
+	
 
 	public String createStockItemFirstStep() {
 		GameLobbyController controller = new GameLobbyController();
+		Session session = HibernateSessionFactory.getSession();
+		Transaction transaction = session.beginTransaction();
 		if (controller.itemCreationFirstStep(stockItemName, stockUnderItem, stockItemCat, stockItemUnit, isGst,
 				alterGst, supplyType, dutyRate, stockItemAlterUnit, funit, sunit, isbatches, dom, expDate, standRate,
-				costTrack, Itax, Ctax, Stax, cess, stockItemWholesaleUnit, fwunit, swunit, hsn_sac)) {
+				costTrack, Itax, Ctax, Stax, cess, stockItemWholesaleUnit, fwunit, swunit, hsn_sac,session,transaction)) {
 			if (controller.insert_st_rm_stock_item_godown_opening_blc(stockItemName, itemGodown, itemBatch, mfg, exp,
-					itemQty, rate, openingBalance, stockItemUnit))
+					itemQty, rate, openingBalance, stockItemUnit,session,transaction)) {
+				transaction.commit();
 				return SUCCESS;
+			}
+			else {
+				transaction.rollback();
+				return ERROR;
+				
+			}
 
-		} else
+		}
+		else 
+		{
+			transaction.rollback();
 			return ERROR;
-		return ERROR;
+		}
 	}
 
 	public String deleteStockItem() {
@@ -375,6 +390,7 @@ public class StockMgmtAction extends BaseActionSupport implements ServletRequest
 		viewStockGroupList = new ArrayList<String>();
 		viewStockGroupList = controller.getAllStockGroup();
 		stockItemBean = controller.getStockItemBeanById(unit_id);
+		
 		return SUCCESS;
 	}
 

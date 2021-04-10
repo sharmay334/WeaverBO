@@ -11,12 +11,11 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.controller.um.UserMgmtController;
-import com.stpl.pms.exception.PMSException;
 import com.stpl.pms.hibernate.mapping.StRmBoUserInfo;
-import com.stpl.pms.javabeans.UserDetailsBean;
 import com.stpl.pms.javabeans.UserInfoBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
+@SuppressWarnings("serial")
 public class TMAttendanceAction extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
 	private HttpServletRequest servletRequest;
 	private HttpServletResponse servletResponse;

@@ -142,7 +142,7 @@
 						<label>HSN Code</label>
 					</div>
 					<div class="InputDiv">
-						<ss:textfield name="stockItemBean.itemRate" value="%{stockItemBean.hsnCode}" id="itemRate"
+						<ss:textfield name="stockItemBean.hsnCode" value="%{stockItemBean.hsnCode}" id="hsnCode"
 							theme="myTheme"></ss:textfield>
 					</div>
 
@@ -154,8 +154,12 @@
 						<label>Bulk Unit</label>
 					</div>
 					<div class="InputDiv">
-						<ss:textfield name="stockItemBean.itemRate" value="%{stockItemBean.bulkUnit}" id="itemRate"
-							theme="myTheme" ></ss:textfield>
+						
+					<s:select name="stockItemBean.bulkUnit" id="bulkUnit"
+							headerKey="-1" headerValue="Select Unit" value="%{%{stockItemBean.bulkUnit}}" list="stockItemUnitList"
+							cssClass="select1" theme="myTheme" cssStyle="width:15%"
+							onChange="checkForAlternateUnitWhole()"></s:select>
+					
 					</div>
 
 				</div>

@@ -1,6 +1,5 @@
 package com.stpl.pms.action.bo.um;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,16 +8,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
-import org.drools.core.command.runtime.GetIdCommand;
 
 import com.stpl.pms.commonJavabeans.AttendanceBean;
 import com.stpl.pms.commonJavabeans.BatteryBean;
 import com.stpl.pms.commonJavabeans.ExpenseBean;
 import com.stpl.pms.commonJavabeans.VisitBean;
-import com.stpl.pms.controller.commonMethods.CommonMethodController;
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
+@SuppressWarnings("serial")
 public class CRMEmployeeAttendanceReport extends BaseActionSupport
 		implements ServletRequestAware, ServletResponseAware {
 
@@ -39,7 +37,6 @@ public class CRMEmployeeAttendanceReport extends BaseActionSupport
 	
 	@Override
 	public String execute() throws Exception {
-		// TODO Auto-generated method stub
 		GameLobbyController controller = new GameLobbyController();
 		companyList = controller.getCompanyNameList();
 		employeeList = controller.getEmployeeNamesList();

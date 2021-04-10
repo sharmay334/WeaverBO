@@ -14,14 +14,20 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
+import org.json.JSONObject;
 
 import com.stpl.pms.commonJavabeans.BillsBean;
+import com.stpl.pms.commonJavabeans.EmpDistributorBean;
+import com.stpl.pms.commonJavabeans.FrightReportBean;
 import com.stpl.pms.commonJavabeans.InterestBean;
 import com.stpl.pms.commonJavabeans.LedgerReportBean;
+import com.stpl.pms.commonJavabeans.ProfitLossBean;
 import com.stpl.pms.commonJavabeans.SalaryReportBean;
+import com.stpl.pms.commonJavabeans.VisitBean;
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.controller.gm.GameMgmtController;
 import com.stpl.pms.controller.um.UserMgmtController;
@@ -82,18 +88,134 @@ public class ReportsAction extends BaseActionSupport implements ServletRequestAw
 	private String hotelExpense;
 	private String type;
 	private String otherExpense;
-
+	private String currStatusSal;
+	private String currStatusTA;
+	private String currStatusDA;
+	private String currStatusHE;
+	private String currStatusOE;
+	private Map<Integer,EmpDistributorBean> empDistributorBeanMap;
+	private Map<String,VisitBean> visitMapResult;
+	private String distributorName;
+	private String visitId;
+	private List<String> districtList;
+	private String districtName;
+	private List<String> stateNameList;
+	private String stateName;
+	private Map<String,ProfitLossBean> profitLossMap;
+	private String filterType;
+	private List<String> godownList;
+	private String godownName;
+	private Map<String,FrightReportBean> frightReportMap; 
+	private String totalTransportFright;
+	private String totalLocalFright;
+	private String totalLoadFright;
+	private String totalUnloadFright;
 	
-	public void setOnUnHold() throws IOException{
+	public String loadFrightReportPageResult() {
+		GameLobbyController controller = new GameLobbyController();
+		frightReportMap = controller.getFrightReport(fromDate,toDate,godownName);
+		Double ttf=0.0;
+		Double tlf=0.0;
+		Double tlof=0.0;
+		Double tunlof=0.0;
+		for(Entry<String, FrightReportBean> map:frightReportMap.entrySet()) {
+			ttf = ttf+Double.valueOf(map.getValue().getTransportFright());
+			tlf = tlf + Double.valueOf(map.getValue().getLocalFright());
+			tlof = tlof + Double.valueOf(map.getValue().getLoadFright());
+			tunlof = tunlof+ Double.valueOf(map.getValue().getUnloadFright());
+			
+		}
+		totalTransportFright  = String.format("%.2f", ttf);
+		totalLocalFright  = String.format("%.2f", tlf);
+		totalLoadFright  = String.format("%.2f",tlof );
+		totalUnloadFright  = String.format("%.2f",tunlof );
+		return SUCCESS;
+	}
+	
+	public String loadFrightReportPage() {
+		GameLobbyController controller = new GameLobbyController();
+		godownList = controller.getAllGoDownList();
 		
+		return SUCCESS;
+	}
+	
+	
+	public void getDistrictFromState()throws IOException{
+		GameLobbyController controller = new GameLobbyController();
+		districtName = controller.getDistrictFromState(stateName);
+		servletResponse.getWriter().write(""+districtName);
+	}
+	
+	
+	public String loadProfitLossReportPage() {
+		GameLobbyController controller = new GameLobbyController();
+		employeeNames = controller.getEmployeeNamesList();
+		itemNameList = controller.getAllStockItemsList();
+		ledgerNames = controller.getLedgerNamesList();
+		stateNameList = controller.getStateList();
+		return SUCCESS;
+		
+	}
+	
+	public String loadProfitLossReportPageResult() {
+		GameLobbyController controller = new GameLobbyController();
+		setProfitLossMap(controller.getProfitLossReportResult(ledgerName,empName,itemName,stateName,districtName,fromDate,toDate,filterType));
+		return SUCCESS;
+	}
+	public void scheduleCheckForMismatchBalance() throws IOException {
+		GameLobbyController controller = new GameLobbyController();
+		JSONObject jsonObject  = controller.scheduleCheckForMismatchBalance();
+		if(jsonObject!=null)
+			servletResponse.getWriter().write(""+jsonObject);
+		else
+			servletResponse.getWriter().write("{}");
+	}
+	
+	public String loadSuperCashBillReport() {
+		GameLobbyController controller = new GameLobbyController();
+		setEmployeeNames(controller.getEmployeeNamesList());
+		districtList = controller.getAllLedgerDistrict();
+		return SUCCESS;
+	}
+	
+	public String loadSuperCashBillReportResult() {
+		GameLobbyController controller = new GameLobbyController();
+		billBeanMap = controller.getSuperCashReportResult(employeeName,districtName,fromDate,toDate);
+		return SUCCESS;
+	}
+	
+	public String getVisitReportDetails() {
+		GameLobbyController controller = new GameLobbyController();
+		visitMapResult = controller.getVisitReportByDistributor(distributorName,visitId);
+		return SUCCESS;
+	}
+	public String empWiseVisitSubmit() {
+		GameLobbyController controller = new GameLobbyController();
+		visitMapResult = controller.getVisitReport(employeeName,fromDate,toDate);
+		return SUCCESS;
+	}
+	public String empWiseDistributorSubmit() {
+		GameLobbyController controller = new GameLobbyController();
+		empDistributorBeanMap = controller.getEmpWiseDistributorReport(employeeName);
+		return SUCCESS;
+	}
+	public void setOnUnHold() throws IOException {
+
 		GameLobbyController controller = new GameLobbyController();
 
 		if (controller.setAmountOnUnHold(empName, fromDate, type)) {
 			servletResponse.getWriter().write("success");
 		} else
 			servletResponse.getWriter().write("failed");
-		
+
 	}
+	public String loadEmpDistributorReport() {
+		GameLobbyController controller = new GameLobbyController();
+
+		setEmployeeNames(controller.getEmployeeNamesList());
+		return SUCCESS;
+	}
+
 	public void setOnHold() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 
@@ -109,7 +231,7 @@ public class ReportsAction extends BaseActionSupport implements ServletRequestAw
 		String[] ar = fromDate.split("-");
 		String date = ar[2] + "-" + ar[1] + "-" + ar[0];
 
-		salaryBeanMap = controller.generateSalaryReportBean(empName, date, date,false);
+		salaryBeanMap = controller.generateSalaryReportBean(empName, date, date, false);
 		for (Map.Entry<String, SalaryReportBean> map : salaryBeanMap.entrySet()) {
 			empSalary = map.getValue().getSalary();
 			empTA = map.getValue().getTA();
@@ -117,6 +239,11 @@ public class ReportsAction extends BaseActionSupport implements ServletRequestAw
 			hotelExpense = map.getValue().getHotelExp();
 			otherExpense = map.getValue().getOtherExp();
 		}
+		currStatusSal = controller.getCurrStatusSalaryHoldUnhold(empName,fromDate,"Salary");
+		currStatusTA = controller.getCurrStatusSalaryHoldUnhold(empName,fromDate,"TA");
+		currStatusDA = controller.getCurrStatusSalaryHoldUnhold(empName,fromDate,"DA");
+		currStatusHE = controller.getCurrStatusSalaryHoldUnhold(empName,fromDate,"Hotel Expense");
+		currStatusOE = controller.getCurrStatusSalaryHoldUnhold(empName,fromDate,"Others Expense");
 		return SUCCESS;
 	}
 
@@ -190,7 +317,7 @@ public class ReportsAction extends BaseActionSupport implements ServletRequestAw
 		String[] ar = monthYear.split("-");
 		String fromDate = ar[1] + "-" + mm.get(ar[0]) + "-01";
 		String toDate = ar[1] + "-" + mm.get(ar[0]) + "-31";
-		salaryBeanMap = controller.generateSalaryReportBean(empName, fromDate, toDate,true);
+		salaryBeanMap = controller.generateSalaryReportBean(empName, fromDate, toDate, true);
 		Double totalOReading = 0.0;
 		Double totalTaAmt = 0.0;
 		Double totaldaAmt = 0.0;
@@ -371,7 +498,7 @@ public class ReportsAction extends BaseActionSupport implements ServletRequestAw
 
 		openingBal = controller.getOpeningBal(ledgerName, fromDate);
 		String temp[] = openingBal.split(" ");
-		String openBal = String.format("%.2f", Double.valueOf(temp[0]));
+		// String openBal = String.format("%.2f", Double.valueOf(temp[0]));
 		openingBalanceType = temp[1];
 		if (openingBalanceType.equals("Cr")) {
 
@@ -382,7 +509,7 @@ public class ReportsAction extends BaseActionSupport implements ServletRequestAw
 		}
 
 		taxAmount = controller.getPartyTaxAmount(ledgerName, fromDate, toDate);
-		String taxAmt = String.format("%.2f", Double.valueOf(taxAmount));
+		// String taxAmt = String.format("%.2f", Double.valueOf(taxAmount));
 		totCreditAmt = String.format("%.2f", credAmt);
 		totDebitAmt = String.format("%.2f", Double.valueOf(debAmt) + Double.valueOf(taxAmount));
 
@@ -917,6 +1044,181 @@ public class ReportsAction extends BaseActionSupport implements ServletRequestAw
 
 	public void setOtherExpense(String otherExpense) {
 		this.otherExpense = otherExpense;
+	}
+
+	public String getCurrStatusSal() {
+		return currStatusSal;
+	}
+
+	public void setCurrStatusSal(String currStatusSal) {
+		this.currStatusSal = currStatusSal;
+	}
+
+	public String getCurrStatusTA() {
+		return currStatusTA;
+	}
+
+	public void setCurrStatusTA(String currStatusTA) {
+		this.currStatusTA = currStatusTA;
+	}
+
+	public String getCurrStatusDA() {
+		return currStatusDA;
+	}
+
+	public void setCurrStatusDA(String currStatusDA) {
+		this.currStatusDA = currStatusDA;
+	}
+
+	public String getCurrStatusHE() {
+		return currStatusHE;
+	}
+
+	public void setCurrStatusHE(String currStatusHE) {
+		this.currStatusHE = currStatusHE;
+	}
+
+	public String getCurrStatusOE() {
+		return currStatusOE;
+	}
+
+	public void setCurrStatusOE(String currStatusOE) {
+		this.currStatusOE = currStatusOE;
+	}
+	public Map<Integer,EmpDistributorBean> getEmpDistributorBeanMap() {
+		return empDistributorBeanMap;
+	}
+	public void setEmpDistributorBeanMap(Map<Integer,EmpDistributorBean> empDistributorBeanMap) {
+		this.empDistributorBeanMap = empDistributorBeanMap;
+	}
+	public Map<String,VisitBean> getVisitMapResult() {
+		return visitMapResult;
+	}
+	public void setVisitMapResult(Map<String,VisitBean> visitMapResult) {
+		this.visitMapResult = visitMapResult;
+	}
+	public String getDistributorName() {
+		return distributorName;
+	}
+	public void setDistributorName(String distributorName) {
+		this.distributorName = distributorName;
+	}
+	public String getVisitId() {
+		return visitId;
+	}
+	public void setVisitId(String visitId) {
+		this.visitId = visitId;
+	}
+
+	public List<String> getDistrictList() {
+		return districtList;
+	}
+
+	public void setDistrictList(List<String> districtList) {
+		this.districtList = districtList;
+	}
+
+	public String getDistrictName() {
+		return districtName;
+	}
+
+	public void setDistrictName(String districtName) {
+		this.districtName = districtName;
+	}
+	public List<String> getStateNameList() {
+		return stateNameList;
+	}
+
+	public void setStateNameList(List<String> stateNameList) {
+		this.stateNameList = stateNameList;
+	}
+
+	public String getStateName() {
+		return stateName;
+	}
+
+	public void setStateName(String stateName) {
+		this.stateName = stateName;
+	}
+
+
+	public Map<String,ProfitLossBean> getProfitLossMap() {
+		return profitLossMap;
+	}
+
+
+	public void setProfitLossMap(Map<String,ProfitLossBean> profitLossMap) {
+		this.profitLossMap = profitLossMap;
+	}
+
+
+	public String getFilterType() {
+		return filterType;
+	}
+
+
+	public void setFilterType(String filterType) {
+		this.filterType = filterType;
+	}
+
+
+	public List<String> getGodownList() {
+		return godownList;
+	}
+
+
+	public void setGodownList(List<String> godownList) {
+		this.godownList = godownList;
+	}
+
+
+	public String getGodownName() {
+		return godownName;
+	}
+
+
+	public void setGodownName(String godownName) {
+		this.godownName = godownName;
+	}
+
+	public Map<String,FrightReportBean> getFrightReportMap() {
+		return frightReportMap;
+	}
+
+	public void setFrightReportMap(Map<String,FrightReportBean> frightReportMap) {
+		this.frightReportMap = frightReportMap;
+	}
+
+	public String getTotalTransportFright() {
+		return totalTransportFright;
+	}
+
+	public void setTotalTransportFright(String totalTransportFright) {
+		this.totalTransportFright = totalTransportFright;
+	}
+
+	public String getTotalLocalFright() {
+		return totalLocalFright;
+	}
+
+	public void setTotalLocalFright(String totalLocalFright) {
+		this.totalLocalFright = totalLocalFright;
+	}
+
+	public String getTotalLoadFright() {
+		return totalLoadFright;
+	}
+
+	public void setTotalLoadFright(String totalLoadFright) {
+		this.totalLoadFright = totalLoadFright;
+	}
+
+	public String getTotalUnloadFright() {
+		return totalUnloadFright;
+	}
+
+	public void setTotalUnloadFright(String totalUnloadFright) {
+		this.totalUnloadFright = totalUnloadFright;
 	}
 
 }

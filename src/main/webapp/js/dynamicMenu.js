@@ -7,7 +7,7 @@ function relatedToData() {
 	if(Language=="vi")
 	var relatedToArr = "RG|RG,BONUS|Bonus,CASHIER|Cashier,RISK_MGT|Risk Mgmt,ROLE_MGT|Role MGMT,MISC|Misc,PLAYER_MGT|Player Mgmt,ACT_MGT|Account Mgmt,USER_MGT|Quản lý người dùng,HURDLE_MGT|Hurdle Mgmt,GAME_MGT|Quản lý trò chơi,CMS|CMS,REPORTS|Reports,SERVICE_MGMT|Service Mgmt,DOMAIN_MGT|Domain Mgmt,LOYALTY|Loyalty,COMM_MGMT|Communication Mgmt,TICKET_MGMT|Ticket Mgmt,MASTER_MGMT|MASTER MGMT".split(",");
 	else
-	var relatedToArr = "CASHIER|Cashier,RISK_MGT|Risk Mgmt,ROLE_MGT|Role MGMT,MISC|Misc,PLAYER_MGT|Player Mgmt,ACT_MGT|Account Mgmt,USER_MGT|User Master,CMS|CMS,REPORTS|Reports,SERVICE_MGMT|Service Mgmt,DOMAIN_MGT|Domain Mgmt,COMM_MGMT|Communication Mgmt,COMPANY_MGMT|Company Master,ACCOUNTING_MGMT|Accounting Master,INVENTORY_MGMT|Inventory Master,TRANSACTION_MGMT|Transaction Master,HR_MGMT|HR Master,ORDER_VCHR|Order Voucher".split(",");
+	var relatedToArr = "CASHIER|Cashier,RISK_MGT|Risk Mgmt,ROLE_MGT|Role MGMT,MISC|Misc,PLAYER_MGT|Player Mgmt,ACT_MGT|Account Mgmt,USER_MGT|User Master,CMS|CMS,REPORTS|Reports,SERVICE_MGMT|Service Mgmt,DOMAIN_MGT|Domain Mgmt,COMM_MGMT|Communication Mgmt,COMPANY_MGMT|Company Master,ACCOUNTING_MGMT|Accounting Master,INVENTORY_MGMT|Inventory Master,TRANSACTION_MGMT|Transaction Master,HR_MGMT|HR Master,ORDER_VCHR|Order Voucher,BUSINESS_DEV|Business Development".split(",");
 
 		for ( var i = 0; i < relatedToArr.length; i += 1) {
 		var relatedToStr = relatedToArr[i].split("|");
@@ -38,7 +38,7 @@ function _buidActionPath(relatedTo,service) {
 					if (relatedTo == "ACT_MGT") {
 						return projectName +"/com/stpl/pms/action/bo/am/";// +service+"/action/accMgmt/";
 					}else {
-						if (relatedTo == "USER_MGT" || relatedTo=="COMPANY_MGMT" || relatedTo=="ACCOUNTING_MGMT" || relatedTo=="INVENTORY_MGMT" || relatedTo=="TRANSACTION_MGMT" || relatedTo=="HR_MGMT" || relatedTo=="ORDER_VCHR" || relatedTo=="MISC") {
+						if (relatedTo == "USER_MGT" || relatedTo=="COMPANY_MGMT" || relatedTo=="ACCOUNTING_MGMT" || relatedTo=="INVENTORY_MGMT" || relatedTo=="TRANSACTION_MGMT" || relatedTo=="HR_MGMT" || relatedTo=="ORDER_VCHR" || relatedTo=="MISC" || relatedTo=="BUSINESS_DEV") {
 							return projectName +"/com/stpl/pms/action/bo/um/";// +service+"/action/userMgmt/";
 						}
 						else {

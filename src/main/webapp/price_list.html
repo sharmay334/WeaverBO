@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<style>
+#pdf_heading{
+text-align: center;
+font-size: 20px;
+font-weight: 900;
+color: brown;
+}
+#company_name_pdf{
+    text-align: left;
+    color: black;
+    font-size: 11px;
+    font-weight: 900;
+    font-family: sans-serif;
+}
+#company_name_pdf_light{
+    text-align: left;
+    color: black;
+    font-size: 10px;
+    font-family: sans-serif;
+}
+#company_billTo_pdf{
+    text-align: left;
+    color: black;
+    font-size: 10px;
+    font-weight: 900;
+    font-family: sans-serif;
+}
+#company_billTo_name_pdf{
+    text-align: center;
+    color: black;
+    font-size: 10px;
+    font-family: sans-serif;
+    font-weight: 900;
+}
+#company_billTo_contact_pdf{
+    text-align: center;
+    color: black;
+    font-family: sans-serif;
+    font-size: 12px;
+}
+#mytable th {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  text-align: left;
+}
+#mytable td, #mytable th {
+  border: 1px solid #ddd;
+  
+}
+</style>
+</head>
+<body>
+<div style="text-align: left;"><img src="http://209.126.5.174/jamidaraSeeds/contents/jamidaralogo.png" width="180" height="60"><br>
+</div>
+
+<h1 id="pdf_heading"><u>PRICE LIST  </u></h1>
+<span id="company_name_pdf">JAMINDARA SEEDS CORPORATION</span><br>
+<span id="company_name_pdf_light">P.B. Road Rane Bannure Distric-HAVERI,KARNATAKA<br/>REG.ADD. 73,GANESH NAGAR-MURLIPURA JAIPUR<br/>Phone no: +919414429966<br/>Email: jamidaraseedscorporation@gmail.com</span>
+<br><br>
+<table style="width: 100%;">
+<thead>
+</thead>
+<tbody>
+<tr>
+
+<td>
+
+    <span id="company_billTo_contact_pdf" style="font-weight: 900;">Date: {BillDate,fallback=} </span><br>
+</td>
+</tr>
+
+</tbody>
+</table>
+<hr>
+<table style="width: 100%;" id="mytable">
+
+<thead>
+    <tr>
+        <th id="company_billTo_pdf">
+           S.N.
+          </th>
+        <th id="company_billTo_pdf">
+          Item name <br>
+        </th>
+        <th id="company_billTo_pdf">
+           Item Unit
+         </th> 
+	<th id="company_billTo_pdf">
+           Item Bulk Unit
+         </th>
+        <th id="company_billTo_pdf">
+           Regular Price
+        </th>
+        <th id="company_billTo_pdf">
+            SuperCash Price
+         </th>
+         
+     </tr>
+    </thead>
+        <tbody>
+
+{itemTableData,fallback=}
+
+
+        </tbody>
+        </thead>
+
+</table>
+<hr>
+
+
+<hr>
+<footer>
+    
+    <div style="border-style: solid;font-size: 9px;">
+    <u>Rules & Regulations</u>
+    <br>
+❖ Cash discount 5% payment will pay in 7 days.<br>
+❖ Cash discount 3% payment will pay in 15 days (After 15 days no C.D. will pay by company).<br>
+❖ Cash discount benefit is applicable on Regular price only.<br>
+❖ The company shall have the rights to change the price of all goods, without any information.<br>
+
+</div>
+<div style="text-align: left;padding-left: 20px;padding-top: 20px;"><img src="http://209.126.5.174:8080/WeaverBO/authorized.jpeg" width="150" height="70"><br>
+    Authorizer Signature
+</div>
+  </footer>
+</body>
+</html>

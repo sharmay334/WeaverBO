@@ -16,6 +16,7 @@ import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.struts.common.BaseActionSupport;
 import com.stpl.pms.struts.common.QuartzScheduling;
 
+@SuppressWarnings("serial")
 public class TMSchedularReportMgmtAction extends BaseActionSupport
 		implements ServletRequestAware, ServletResponseAware {
 	private HttpServletRequest servletRequest;
@@ -33,35 +34,52 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 	private String remindInterval;
 	private String deductPercent;
 	private List<String> employeeNames;
+	private List<String> productNames;
 	private String employeeName;
 	private String fromDate;
 	private String toDate;
 	private String txnType;
 	private Map<String, ReceiptSaleBillMapping> mappingMap;
 	private String totalTransactionAmount;
+	private String itemName;
+	private String batchNo;
+	
+	private List<String> itemGroupNameList;
+	private List<String> itemCatagoryNameList;
+	private String itemGroupName;
+	private String itemCategory;
 	
 	public void runOldOverDueBills() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		if(controller.runOldOverDueBills(ledgerName,voucherNo))
-		servletResponse.getWriter().write("success");
+		if (controller.runOldOverDueBills(ledgerName, voucherNo))
+			servletResponse.getWriter().write("success");
 		else
-		servletResponse.getWriter().write("failed");	
+			servletResponse.getWriter().write("failed");
 		return;
 	}
+	
+	public String getNetStockReport() {
+		GameLobbyController controller = new GameLobbyController();
+		reportData = controller.fetchAllItemNetStockReport(itemGroupName,itemCategory,fromDate,toDate);
+		return SUCCESS;
+	}
+
 	public void getOldSetReminder() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		String data = controller.getOldSetReminder(partyId,voucherNo);
-		servletResponse.getWriter().write(""+data);
+		String data = controller.getOldSetReminder(partyId, voucherNo);
+		servletResponse.getWriter().write("" + data);
 		return;
 	}
+
 	public void runOverDueBill() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		controller.runScheduleOverDueBillsSales();
 		servletResponse.getWriter().write("success");
 		return;
 	}
-	public void runBalanceSchedular()throws IOException{
-		
+
+	public void runBalanceSchedular() throws IOException {
+
 		QuartzScheduling quartzScheduling = new QuartzScheduling();
 		quartzScheduling.calculateTax();
 	}
@@ -77,7 +95,7 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 
 	public void deleteWholeBill() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
-		if (controller.deleteBill(txnType, voucherNo,ledgerName))
+		if (controller.deleteBill(txnType, voucherNo, ledgerName))
 			servletResponse.getWriter().write("yes");
 		else
 			servletResponse.getWriter().write("no");
@@ -104,6 +122,7 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 
 		return;
 	}
+
 	public void ChangeSMSSchedular() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		if (controller.changeStatusSMS(ledgerName, status))
@@ -113,19 +132,32 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 
 		return;
 	}
-	
-	
 
 	public String getPartyTxnReport() {
 		GameLobbyController controller = new GameLobbyController();
 		reportData = controller.getPartyTransactionReport(txnType, toDate, fromDate, employeeName, ledgerName, billId);
 		Double amt = 0.0;
-		for(Map.Entry<String, BillsBean> map:reportData.entrySet()) {
-			amt = amt+Double.valueOf(map.getValue().getActualBillAmount().trim());
-			
+		for (Map.Entry<String, BillsBean> map : reportData.entrySet()) {
+			amt = amt + Double.valueOf(map.getValue().getActualBillAmount().trim());
+
 		}
-		totalTransactionAmount = String.format("%.2f",amt);
-		
+		totalTransactionAmount = String.format("%.2f", amt);
+
+		return SUCCESS;
+	}
+
+	public String getProductTxnReport() {
+
+		GameLobbyController controller = new GameLobbyController();
+		reportData = controller.getProductTransactionReport(txnType, toDate, fromDate, employeeName, ledgerName, itemName,batchNo);
+		/*
+		for (Map.Entry<String, BillsBean> map : reportData.entrySet()) {
+			qty = qty + Double.valueOf(map.getValue().getItemQty().trim());
+			totalPrice = totalPrice + Double.valueOf(map.getValue().getItemTotalValue().trim());
+
+		}
+		totalTransactionAmount = String.format("%.2f", amt);*/
+
 		return SUCCESS;
 	}
 
@@ -144,6 +176,7 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 
 		return;
 	}
+
 	public void checkForSMSSchedular() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		if (controller.getActiveInterestSMS(ledgerName))
@@ -153,7 +186,6 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 
 		return;
 	}
-	
 
 	public void deductInterest() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
@@ -179,6 +211,23 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 		ledgerNames = controller.getLedgerNamesList();
 		employeeNames = controller.getEmployeeNamesList();
 		return SUCCESS;
+	}
+
+	public String loadPageProductReport() {
+		GameLobbyController controller = new GameLobbyController();
+		ledgerNames = controller.getLedgerNamesList();
+		employeeNames = controller.getEmployeeNamesList();
+		productNames = controller.getAllStockItemsList();
+		return SUCCESS;
+
+	}
+	
+	public String loadPageNetProductReport() {
+		GameLobbyController controller = new GameLobbyController();
+		itemGroupNameList = controller.getAllStockGroup();
+		itemCatagoryNameList = controller.getAllStockCatagory();
+		return SUCCESS;	
+		
 	}
 
 	public String showReport() {
@@ -352,11 +401,71 @@ public class TMSchedularReportMgmtAction extends BaseActionSupport
 	public void setMappingMap(Map<String, ReceiptSaleBillMapping> mappingMap) {
 		this.mappingMap = mappingMap;
 	}
+
 	public String getTotalTransactionAmount() {
 		return totalTransactionAmount;
 	}
+
 	public void setTotalTransactionAmount(String totalTransactionAmount) {
 		this.totalTransactionAmount = totalTransactionAmount;
 	}
+
+	public List<String> getProductNames() {
+		return productNames;
+	}
+
+	public void setProductNames(List<String> productNames) {
+		this.productNames = productNames;
+	}
+
+	public String getItemName() {
+		return itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+	public String getBatchNo() {
+		return batchNo;
+	}
+
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
+	}
+
+	public List<String> getItemGroupNameList() {
+		return itemGroupNameList;
+	}
+
+	public void setItemGroupNameList(List<String> itemGroupNameList) {
+		this.itemGroupNameList = itemGroupNameList;
+	}
+
+	public List<String> getItemCatagoryNameList() {
+		return itemCatagoryNameList;
+	}
+
+	public void setItemCatagoryNameList(List<String> itemCatagoryNameList) {
+		this.itemCatagoryNameList = itemCatagoryNameList;
+	}
+
+	public String getItemGroupName() {
+		return itemGroupName;
+	}
+
+	public void setItemGroupName(String itemGroupName) {
+		this.itemGroupName = itemGroupName;
+	}
+
+	public String getItemCategory() {
+		return itemCategory;
+	}
+
+	public void setItemCategory(String itemCategory) {
+		this.itemCategory = itemCategory;
+	}
+
+	
 
 }

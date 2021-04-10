@@ -201,8 +201,8 @@ public final class TMPaymentMgmtAction extends BaseActionSupport implements Serv
 			if (controller.createTransactionPayment(account, employeeUnder, totalAmt, particulars, amount, bankName,
 					txnType, narration, currentblnc, hiddenTypeOfRef, hiddenBillWiseName, hiddenAmnt, hiddenBilId,
 					activeVoucherNumber, paymentDate, paymentNoVoucher, session, transaction, accountOldBal,
-					particularsOldBal)) {
-				if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr, session,
+					particularsOldBal,totalAmt)) {
+				if (controller.updateTransactionPartyBalancePymt(account, totalAmt, hcrdr, session,
 						transaction)) {
 					transaction.commit();
 					servletResponse.getWriter().write("success");
@@ -220,8 +220,8 @@ public final class TMPaymentMgmtAction extends BaseActionSupport implements Serv
 				if (controller.createTransactionPayment(account, employeeUnder, totalAmt, particulars, amount, bankName,
 						txnType, narration, currentblnc, hiddenTypeOfRef, hiddenBillWiseName, hiddenAmnt, hiddenBilId,
 						activeVoucherNumber, paymentDate, paymentNoVoucher, session, transaction, accountOldBal,
-						particularsOldBal)) {
-					if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr, session,
+						particularsOldBal,totalAmt)) {
+					if (controller.updateTransactionPartyBalancePymt(account, totalAmt, hcrdr, session,
 							transaction)) {
 						transaction.commit();
 						servletResponse.getWriter().write("success");

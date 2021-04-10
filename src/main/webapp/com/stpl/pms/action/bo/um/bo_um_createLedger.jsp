@@ -842,12 +842,14 @@
 								<div class="FormMainBox">
 
 									<div class="labelDiv">
-										<label>Address </label>
+										<label>Location </label>
 									</div>
 									<div class="InputDiv">
-										<ss:textfield maxlength="150" name="address" id="address"
-											theme="myTheme"></ss:textfield>
-
+										
+										
+										<s:select name="address" id="address" headerKey="-1"
+											headerValue="Please Select" list="%{locationNames}"
+											cssClass="select1" theme="myTheme"></s:select>
 										<div id="address_error" class="fieldError">
 											<s:fielderror>
 												<s:param>address</s:param>

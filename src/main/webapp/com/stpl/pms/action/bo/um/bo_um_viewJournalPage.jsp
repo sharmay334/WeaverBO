@@ -98,13 +98,13 @@ function promptSave(){
 			        		swal("Error! Receipt date is greater than voucher end date.");
 			        		setTimeout(function(){
 			        			   window.location.reload(1);
-			        			}, 1000);
+			        			}, 2000);
 			        	}
 			        	else{
-			        		swal("Error! Wrong data entry.");
+			        		swal(""+data);
 			        		setTimeout(function(){
 			        			   window.location.reload(1);
-			        			}, 1000);
+			        			}, 2000);
 			        	}
 			            
 			        },

@@ -159,7 +159,7 @@
 				url : myurl,
 				success : function(itr) {
 					document.getElementById('componentItemUnit' + res).value = ''+itr;
-					
+					getRateByItemComponent(id);
 				},
 
 				error : function(itr) {
@@ -168,6 +168,28 @@
 			});
 				
 		}
+	 function getRateByItemComponent(id) {
+			
+			var myurl1="<%=basePath%>";
+			
+				myurl = myurl1+"/com/stpl/pms/action/bo/um/bo_um_tm_get_avg_rate.action?itemName="
+					+ document.getElementById(id).value;
+			var res = id.match(/\d/g);
+			$.ajax({
+				type : "GET",
+				async: false,
+				url : myurl,
+				success : function(itr) {
+					document.getElementById('componentItemRate' + res).value = ''+itr;
+					
+				},
+
+				error : function(itr) {
+
+				}
+			});
+				
+	}
 	 function getUnitItem(id) {
 			
 			var myurl1="<%=basePath%>";

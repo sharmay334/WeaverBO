@@ -301,12 +301,15 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 		session = HibernateSessionFactory.getSession();
 		transaction = session.beginTransaction();
 		if (activeVoucherNumber.equals("0")) {
-			if (controller.createTransactionReceipt(account, employeeUnder, currBalance, particulars, amount, bankName,
+			
+			String responseMessage =controller.createTransactionReceipt(account, employeeUnder, currBalance, particulars, amount, bankName,
 					txnType, narration, currentblnc, hiddenTypeOfRef, hiddenBillWiseName, hiddenAmnt, hiddenBilId,
 					receiptNoVoucher, txn_dd_chq_no, txn_bnkNm, activeVoucherNumber, paymentDate, ccrdrH, session,
-					transaction, accountOldBal, particularsOldBal,totalAmt)) {
-				if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr, session,
-						transaction)) {
+					transaction, accountOldBal, particularsOldBal,totalAmt);
+			if (responseMessage.equals("success")) {
+				String responseMessageL2 = controller.updateTransactionPartyBalancePayment(account, totalAmt, hcrdr, session,
+						transaction);
+				if (responseMessageL2.equals("success")) {
 					
 					transaction.commit();
 					if(orderNo!=null && !orderNo.isEmpty()) {
@@ -316,9 +319,16 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 						sendSmsAlert();
 					servletResponse.getWriter().write("success");
 				}
+				else {
+					transaction.rollback();
+					servletResponse.getWriter().write("Error: "+responseMessageL2);
+				}
 
 			} else
-				servletResponse.getWriter().write("error");
+			{
+				transaction.rollback();
+				servletResponse.getWriter().write("Error: "+responseMessage);
+			}
 		} else {
 			voucherBean = controller.getVoucherNumbering("Receipt", activeVoucherNumber);
 			boolean voucherDate = compareTwoDate(voucherBean.getEndDate(), paymentDate + " 00:00");
@@ -326,12 +336,15 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 			if (voucherDate == true || voucherDate1 == true) {
 				servletResponse.getWriter().write("date");
 			} else {
-				if (controller.createTransactionReceipt(account, employeeUnder, currBalance, particulars, amount,
+				
+				String responseMessage =controller.createTransactionReceipt(account, employeeUnder, currBalance, particulars, amount,
 						bankName, txnType, narration, currentblnc, hiddenTypeOfRef, hiddenBillWiseName, hiddenAmnt,
 						hiddenBilId, receiptNoVoucher, txn_dd_chq_no, txn_bnkNm, activeVoucherNumber, paymentDate,
-						ccrdrH, session, transaction, accountOldBal, particularsOldBal,totalAmt)) {
-					if (controller.updateTransactionPartyBalancePayment(account, currBalance, hcrdr, session,
-							transaction)) {
+						ccrdrH, session, transaction, accountOldBal, particularsOldBal,totalAmt); 
+				if (responseMessage.equals("success")) {
+					String responseMessageL2 = controller.updateTransactionPartyBalancePayment(account, totalAmt, hcrdr, session,
+							transaction);
+					if (responseMessageL2.equals("success")) {
 						transaction.commit();
 						if(orderNo!=null && !orderNo.isEmpty()) {
 							controller.changeStatusReceipt(orderNo,userInfoBean.getUserId());
@@ -340,17 +353,22 @@ public class TMReceiptMgmtAction extends BaseActionSupport implements ServletReq
 							sendSmsAlert();
 						servletResponse.getWriter().write("success");
 					}
+					else {
+						transaction.rollback();
+						servletResponse.getWriter().write("Error: "+responseMessageL2);
+					}
 
-				} else
-					servletResponse.getWriter().write("error");
+				} else {
+					transaction.rollback();
+					servletResponse.getWriter().write("Error: "+responseMessage);
+						
+				}
 			}
 		}
 
-		return;
 	}
 
 	private boolean compareTwoDate(String endDate, String currentDate) {
-		// TODO Auto-generated method stub
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy h:m");
 			if (sdf.parse(currentDate).after(sdf.parse(endDate))) {

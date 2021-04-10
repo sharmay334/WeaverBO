@@ -62,7 +62,12 @@ body {font-family: Arial, Helvetica, sans-serif;}
 <script>
 
 	$(document).ready(function() {
-
+		var append1="Employee Name - "+document.getElementById('empName').value+"\n";
+		if(document.getElementById('fromDate').value.length>2){
+			
+			append1 = append1 + "Date - From : ( "+document.getElementById('fromDate').value+" ) - To : ( "+document.getElementById('toDate').value+" )\n"
+		}
+		
 		$('#payTransactionTable1').DataTable({
 			 "scrollX": true,
 			lengthMenu: [
@@ -74,7 +79,18 @@ body {font-family: Arial, Helvetica, sans-serif;}
 	          'excel',
 	          'csv',
 	          'copy',
-	          'pageLength'
+	          'pageLength',
+	          {
+	                extend: 'pdf',
+	                footer: true,	
+	                title: 'CRM- Report\nJAMINDARA SEEDS CORPORATION,\nP.B. Road Rane Bannure Distric-HAVERI,KARNATAKA\nREG.ADD. 73,GANESH NAGAR-MURLIPURA JAIPUR\n'+append1,
+	                customize: function(doc) {
+	                    doc.styles.title = {
+	                      fontSize: '12',
+	                      alignment: 'center'
+	                    }   
+	                  }  
+	            }
 	      ]
 			
 			
@@ -99,6 +115,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			<div class="innerBox">
 			<s:form id="searchUserFrm" action="/com/stpl/pms/action/bo/um/st_pms_bo_rep_searchReportAttendanceVisit.action"
 			 target="searchResult" theme="simple">
+				 <s:hidden id="empName" name="empName" value="%{employeeName}"></s:hidden>
+			 <s:hidden id="fromDate" name="fromDate" value="%{fromDate}"></s:hidden>
+			 <s:hidden id="toDate" name="toDate" value="%{toDate}"></s:hidden>
+			
 				<table id="payTransactionTable1" cellspacing="0"
 					cellpadding="4" border="0" align="center" class="payTransaction">
 					<thead>
@@ -129,6 +149,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
 								id="th_3">comment</th> 
 							<th width="5%" valign="middle" style="text-align: center;" is_link="false"
 								id="th_3">reminder</th>	
+								<th width="5%" valign="middle" style="text-align: center;" is_link="false"
+								id="th_3">visit On</th>	
 						</tr>
 					</thead>
 					<tbody>
@@ -178,6 +200,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
 								</td>
 								<td width="5%" valign="middle" style="text-align: center;">
 									<s:property value="#attendanceMap.reminder" />
+								</td>
+								<td width="5%" valign="middle" style="text-align: center;">
+									<s:property value="#attendanceMap.visitDate" />
 								</td>
 								
 

@@ -63,11 +63,21 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 	private LedgerSecondStepBean ledgerSecondStepBean;
 	private String resultType;
 	private String employeeNames;
+	private String updateOpeningBalance;
+	private List<String> locationNames;
 
 	public String assignLedger() {
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		ledgerNamesList = new ArrayList<String>();
 		ledgerNamesList = gameLobbyController.getLedgerNamesList();
+		employeeUnderList = gameLobbyController.getEmployeeNamesList();
+		return SUCCESS;
+
+	}
+	public String assignRetailer() {
+		GameLobbyController gameLobbyController = new GameLobbyController();
+		ledgerNamesList = new ArrayList<String>();
+		ledgerNamesList = gameLobbyController.getRetailerNamesList();
 		employeeUnderList = gameLobbyController.getEmployeeNamesList();
 		return SUCCESS;
 
@@ -80,14 +90,21 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 		else
 			return ERROR;
 	}
+	public String assignRetailerSave() {
+		GameLobbyController controller = new GameLobbyController();
+		if (controller.editAssignRetailerToUser(ledgerName, employeeNames))
+			return SUCCESS;
+		else
+			return ERROR;
+	}
 
 	@Override
 	public String execute() throws Exception {
-		// TODO Auto-generated method stub
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		groupNamesList = gameLobbyController.getGroupNamesList();
 		groupNamesList.remove(0);
 		employeeUnderList = gameLobbyController.getEmployeeNamesList();
+		locationNames = gameLobbyController.getAllLocations();
 		return SUCCESS;
 	}
 
@@ -119,6 +136,7 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 		GameLobbyController gameLobbyController = new GameLobbyController();
 		ledgerCustomBean = gameLobbyController.getLedgerDetails(ledger_id);
 		employeeUnderList = gameLobbyController.getEmployeeNamesList();
+		locationNames = gameLobbyController.getAllLocations();
 		return SUCCESS;
 	}
 
@@ -489,6 +507,22 @@ public class LedgerMgmtAction extends BaseActionSupport implements ServletReques
 
 	public void setEmployeeNames(String employeeNames) {
 		this.employeeNames = employeeNames;
+	}
+
+	public String getUpdateOpeningBalance() {
+		return updateOpeningBalance;
+	}
+
+	public void setUpdateOpeningBalance(String updateOpeningBalance) {
+		this.updateOpeningBalance = updateOpeningBalance;
+	}
+
+	public List<String> getLocationNames() {
+		return locationNames;
+	}
+
+	public void setLocationNames(List<String> locationNames) {
+		this.locationNames = locationNames;
 	}
 
 }

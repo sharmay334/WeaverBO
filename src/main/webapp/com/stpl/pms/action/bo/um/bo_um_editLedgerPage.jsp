@@ -23,7 +23,7 @@
 	<script>
 	$(document).ready(
 			function() {
-				$("#openingDate").datetimepicker(
+				/* $("#openingDate").datetimepicker(
 						{
 							dateFormat : 'dd-mm-yy',
 							showSecond : false,
@@ -46,7 +46,7 @@
 									});
 								}
 							}
-						});
+						}); */
 			
 			$("#intersetStartDate").datetimepicker(
 					{
@@ -232,7 +232,7 @@
 					</div>
 					<div class="InputDiv">
 					<ss:textfield name="ledgerCustomBean.openingDate" value="%{ledgerCustomBean.openingDate}" placeholder="Date" cssClass="dateField"
-										id="openingDate" readonly="true" theme="myTheme"></ss:textfield>
+							id="openingDate" readonly="true" theme="myTheme"></ss:textfield>
 					</div>
 
 				</div>
@@ -240,7 +240,7 @@
 				<div class="FormMainBox">
 
 					<div class="labelDiv">
-						<label>Current Balance</label>
+						<label>Opening Balance</label>
 					</div>
 					<div class="InputDiv">
 						<ss:textfield name="ledgerCustomBean.openingBalance" value="%{ledgerCustomBean.openingBalance}" id="openingBalance"
@@ -252,7 +252,7 @@
 				<div class="FormMainBox">
 
 					<div class="labelDiv">
-						<label>Current Balance Type</label>
+						<label>Opening Balance Type</label>
 					</div>
 					<div class="InputDiv">
 						<s:select name="ledgerCustomBean.balanceType" value="%{ledgerCustomBean.balanceType}"
@@ -262,10 +262,24 @@
 
 				</div>
 				
-				
-				
-				
+				<%-- 
 				<div class="FormMainBox">
+
+					<div class="labelDiv">
+						<label>Update Opening Balance</label>
+					</div>
+					<div class="InputDiv">
+						<s:select name="updateOpeningBalance" headerKey="No" id="updateOpeningBalance"
+								headerValue="--Please Select--" list="{'No','Yes'}"
+								cssClass="select1" theme="myTheme" />
+					</div>
+
+				</div>
+				<div class="clearFRM"></div>
+				 --%>
+				
+				
+				<%-- <div class="FormMainBox">
 
 					<div class="labelDiv">
 						<label>Opening Balance</label>
@@ -288,7 +302,9 @@
 					
 					</div>
 
-				</div>
+				</div> --%>
+				
+				
 				<div class="clearFRM"></div>
 				<div class="FormMainBox">
 
@@ -325,6 +341,22 @@
 						
 					</div>
 				 </div>
+				 
+				 <div class="FormMainBox">
+
+									<div class="labelDiv">
+										<label>Location </label>
+									</div>
+									<div class="InputDiv">
+										
+										
+										<s:select name="ledgerCustomBean.location" id="address" headerKey="-1"
+											headerValue="Please Select" value="%{ledgerCustomBean.location}" list="%{locationNames}"
+											cssClass="select1" theme="myTheme"></s:select>
+									</div>
+					</div>
+				 
+				 
 					<div class="FormMainBox">
 					<div class="labelDiv">
 						<label>Firm Address </label>

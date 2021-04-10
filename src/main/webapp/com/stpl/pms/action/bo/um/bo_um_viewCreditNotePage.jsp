@@ -259,13 +259,13 @@ function promptSave(){
 					        		
 					        	}
 					        	else if(data=="date"){
-					        		swal("Error! Sale date is greater than voucher end date.");
+					        		swal("Error! credit note date is greater than voucher end date.");
 					        		setTimeout(function(){
 					        			   window.location.reload(1);
 					        			}, 1000);
 					        	}
 					        	else{
-					        		swal("Error! Please fill all details (date or godown).");
+					        		swal("Error! Credit Note voucher already exists or date, godown error.");
 					        		setTimeout(function(){
 					        			   window.location.reload(1);
 					        			}, 2000);
@@ -1204,7 +1204,7 @@ function closeDialogue(){
 						</div>
 						<div class="InputDiv">
 						<s:textfield id="salesNoVoucher" name="cnNoVoucher" value="%{cnNoVoucher}"
-								theme="myTheme" readonly="true" cssStyle="width:30%" />
+								theme="myTheme" cssStyle="width:30%" />
 							<s:textfield id="cnNo" name="cnNo" value="%{cnNo}"
 								theme="myTheme" readonly="true" cssStyle="width:10%;display:none" />
 							<s:textfield id="activeVoucherNumber" name="activeVoucherNumber" value="%{activeVoucherNumber}"

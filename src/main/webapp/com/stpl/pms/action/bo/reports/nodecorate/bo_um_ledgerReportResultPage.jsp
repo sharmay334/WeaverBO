@@ -92,6 +92,50 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			        },
 			    });
 			}
+			
+			else if(transactionType=="Credit Note"){
+				
+				myurl += "/com/stpl/pms/action/bo/um/generate_txn_credit_note_bill_pdf_document_report.action?salesNoVoucher="+voucherNo;
+				$.ajax({
+			        type: 'GET',
+			        url: myurl,
+			        async:false,
+			        success: function (data) {
+			        
+			        		swal("Bill Generated Successfully!!!");
+			        		var link=document.createElement('a');
+			        		document.body.appendChild(link);
+			        		link.href=data ;
+			        		link.click();
+			        		  
+			        },
+			        error: function (data) {
+			        	swal("Server Error Occured!");
+			        },
+			    });
+			}
+			
+			else if(transactionType=="PURCHASE"){
+				
+				myurl += "/com/stpl/pms/action/bo/um/generate_txn_purchase_bill_pdf_document_report.action?salesNoVoucher="+voucherNo;
+				$.ajax({
+			        type: 'GET',
+			        url: myurl,
+			        async:false,
+			        success: function (data) {
+			        
+			        		swal("Bill Generated Successfully!!!");
+			        		var link=document.createElement('a');
+			        		document.body.appendChild(link);
+			        		link.href=data ;
+			        		link.click();
+			        		  
+			        },
+			        error: function (data) {
+			        	swal("Server Error Occured!");
+			        },
+			    });
+			}
 			else{
 				
 				swal("This feature only generates sale bills!!");
@@ -310,7 +354,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			 <s:set name="cBal" value="isNegative"/>
 			 <s:set name="oBal" value="openingBalanceType"/>
 			 
-				<table id="payTransactionTable1" cellspacing="0"
+				<table id="payTransactionTable" cellspacing="0"
 					cellpadding="4" border="0" align="center" class="payTransaction">
 					<thead>
 						<tr>

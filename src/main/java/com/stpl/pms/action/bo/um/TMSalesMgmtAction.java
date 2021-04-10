@@ -41,6 +41,7 @@ import com.stpl.pms.javabeans.VoucherBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 import com.stpl.pms.utility.SendSMS;
 
+@SuppressWarnings("serial")
 public class TMSalesMgmtAction extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
 	private HttpServletRequest servletRequest;
 	private HttpServletResponse servletResponse;
@@ -186,7 +187,13 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 		return "Rupees " + Rupees + paise + " Only";
 	}
 
-	public void generatePDFDocument() {
+	public void getAvgRateItem() throws IOException{
+		GameLobbyController controller = new GameLobbyController();
+		String avgRate = controller.getAvgItemRateByName(itemName);
+		servletResponse.getWriter().write(""+avgRate);
+		
+	}
+	public void generatePDFDocument() throws IOException{
 		GameLobbyController controller = new GameLobbyController();
 		StDmDomainAliasNameMaster aliasMaster = null;
 		String itemString = "";
@@ -194,6 +201,11 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 		Map<String, String> emailContentMap = new HashMap<String, String>();
 		String firmGSTN = controller.getFirmGSTN(partyAcc);
 		String underEmp = controller.getUnderEmpNameOrderBySale(orderNo);
+		String superCash="";
+		boolean isSuperCash = controller.getIsSuperCashSaleOrder(orderNo);
+		if(isSuperCash) {
+			superCash = "(SuperCash)";
+		}
 		emailContentMap.put("BillToName", partyAcc);
 		emailContentMap.put("BillToContact", controller.getPropContact(partyAcc));
 		emailContentMap.put("TransportName", tn);
@@ -206,14 +218,15 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 		emailContentMap.put("totalAmount", totalAmt);
 		emailContentMap.put("BillToGSTN", firmGSTN != null ? firmGSTN : "");
 		emailContentMap.put("totalAmountWords", convertToIndianCurrency(totalAmt));
-
+		emailContentMap.put("supercash", superCash);
+		BufferedReader br = null;
 		try {
 			String filePath = ServletActionContext.getServletContext().getRealPath("/");
 
 			aliasMaster = controller.getAliasMaster();
 			final String FONTS = aliasMaster.getPublicUrl() + "/KrutiDev.ttf";
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(
+			br = new BufferedReader(new InputStreamReader(
 					new URL(aliasMaster.getPublicUrl() + "/approval_sale_bill_ofsuppy.html").openStream()));
 			String line;
 			StringBuffer template = new StringBuffer("");
@@ -276,10 +289,284 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		finally {
+			br.close();
+		}
 
 	}
+	
+	
+	public void generateCreditNotePDFDocumentReport() throws IOException{
+		GameLobbyController controller = new GameLobbyController();
+		StDmDomainAliasNameMaster aliasMaster = null;
+		String itemString = "";
+		String templaterStr = null;
+		Map<String, String> emailContentMap = new HashMap<String, String>();
+		partyAcc = controller.getPartyAccountByVoucherCreditNote(salesNoVoucher);
+		tn = controller.getTransportNameByVoucherCreditNote(salesNoVoucher);
+		vn = controller.getVehicalNumberByVoucherCreditNote(salesNoVoucher);
+		des = controller.getDestinationByVoucherCreditNote(salesNoVoucher);
+		paymentDate = controller.getPaymentDateByVoucherCreditNote(salesNoVoucher);
+		totalAmt = controller.getTotalAmountByVoucherCreditNote(salesNoVoucher);
+		salesStockItems = controller.getSaleStockItemsByVoucherCreditNote(salesNoVoucher);
+		Qty = controller.getSaleStockQtyByVoucherCreditNote(salesNoVoucher);
+		rate = controller.getSaleStockQtyRateByVoucherCreditNote(salesNoVoucher);
+		amount = controller.getSaleStockQtyAmtByVoucherCreditNote(salesNoVoucher);
+		String underEmp = controller.getUnderEmpNameByCreditNote(salesNoVoucher);
+		unit = "";
+		igstItem = "";
+		igstItemAmt = "";
+		String orderNumber = controller.getOrderNumber(salesNoVoucher);
+		String orderDate = controller.getOrderDate(orderNumber);
+		String firmGSTN = controller.getFirmGSTN(partyAcc);
+		emailContentMap.put("BillToName", partyAcc);
+		emailContentMap.put("BillToContact", controller.getPropContact(partyAcc));
+		emailContentMap.put("TransportName", tn);
+		emailContentMap.put("VehicleNumber", vn);
+		emailContentMap.put("DeliveryDate", controller.getCreditNoteDeliveryDate(salesNoVoucher));
+		emailContentMap.put("DeliveryLocation", des);
+		emailContentMap.put("UnderEmp", underEmp);
+		emailContentMap.put("BillNumber", salesNoVoucher);
+		emailContentMap.put("BillDate", paymentDate);
+		emailContentMap.put("orderNumber", orderNumber);
+		emailContentMap.put("orderDate", orderDate);
+		emailContentMap.put("totalAmount", totalAmt);
+		emailContentMap.put("BillToGSTN", firmGSTN);
+		emailContentMap.put("totalAmountWords", convertToIndianCurrency(totalAmt));
+		BufferedReader br =null;
+		try {
+			String filePath = ServletActionContext.getServletContext().getRealPath("/");
 
-	public void generateSalePDFDocumentReport() {
+			aliasMaster = controller.getAliasMaster();
+			final String FONTS = aliasMaster.getPublicUrl() + "/KrutiDev.ttf";
+
+			br = new BufferedReader(new InputStreamReader(
+					new URL(aliasMaster.getPublicUrl() + "/approval_cn_bill_generate_ledger_report.html")
+							.openStream()));
+			String line;
+			StringBuffer template = new StringBuffer("");
+			while ((line = br.readLine()) != null)
+				template.append(line);
+			templaterStr = template.toString();
+
+			String[] breakItem = salesStockItems.split(",");
+			String[] qtyItem = Qty.split(",");
+			String[] priceItem = rate.split(",");
+			//String[] unitItem = unit.split(",");
+			String[] amountItem = amount.split(",");
+			//String[] igstItemBreak = igstItem.split(",");
+			//String[] igstItemAmtBreak = igstItemAmt.split(",");
+
+			String batchNo = controller.getBatchNumberByCreditNoteNo(salesNoVoucher);
+			String[] itemBatchBreak = batchNo.split(",");
+			Double amountAfterGST = 0.0;
+			
+			int sno = 1;
+			for (int i = 0; i < breakItem.length; i++) {
+				if (breakItem[i] == null || breakItem[i].equals("-1") || breakItem[i].equals(" -1")
+						|| breakItem[i].isEmpty())
+					continue;
+				String hsnCode = controller.getHSNCodeByItemName(breakItem[i].trim()) != null
+						? controller.getHSNCodeByItemName(breakItem[i].trim())
+						: "";
+				List<String> mfgExp = controller.getMfgExpDateByItemName(breakItem[i].trim());
+				String mfg = "";
+				String exp = "";
+				if (mfgExp != null && mfgExp.size() > 0 && !mfgExp.isEmpty()) {
+					mfg = mfgExp.get(0) != null ? mfgExp.get(0) : "";
+					exp = mfgExp.get(1) != null ? mfgExp.get(1) : "";
+					mfg = mfg.replaceAll("00:00", "");
+					exp = exp.replaceAll("00:00", "");
+
+				}
+				List<String> bulkUnitNumber = controller.getBulkUnitNumberByItem(breakItem[i].trim());
+				String name = "", bulkBag = "1";
+				if (bulkUnitNumber != null && !bulkUnitNumber.isEmpty() && bulkUnitNumber.size() > 0)
+					name = bulkUnitNumber.get(0) != null ? bulkUnitNumber.get(0) : "";
+				if (bulkUnitNumber != null && !bulkUnitNumber.isEmpty() && bulkUnitNumber.size() > 0)
+					bulkBag = bulkUnitNumber.get(1) != null ? bulkUnitNumber.get(1) : "1";
+				Double tempSoln = Double.valueOf(qtyItem[i]) / Double.valueOf(bulkBag.isEmpty() ? "1" : bulkBag);
+				String itemUnit = controller.getItemUnitByName(breakItem[i].trim());
+				Double gst = controller.getGSTByItemName(breakItem[i].trim());
+				 amountAfterGST = amountAfterGST + (Double.valueOf(amountItem[i]) * gst) / 100;
+				 Double tempAmountAfterGST = (Double.valueOf(amountItem[i]) * gst) / 100;
+				itemString += "<tr><td id='company_billTo_contact_pdf'>" + sno
+						+ "</td><td id='company_billTo_contact_pdf'>" + breakItem[i] + "<br>(" + itemBatchBreak[i]
+						+ ")<br>(MFG-" + mfg + ",EXP-" + exp + ")</td><td id='company_billTo_contact_pdf'>" + hsnCode
+						+ "</td><td id='company_billTo_contact_pdf'>" + qtyItem[i]
+						+ "</td><td id='company_billTo_contact_pdf'>₹ " + priceItem[i]
+						+ "</td><td id='company_billTo_contact_pdf'>" + itemUnit
+						+ "</td><td id='company_billTo_contact_pdf'>" + tempSoln + " " + name
+						+ "</td><td id='company_billTo_contact_pdf'>₹ " + amountItem[i]
+						+ "</td><td id='company_billTo_contact_pdf'>" + gst+" %"
+						+ "</td><td id='company_billTo_contact_pdf'>₹ " + tempAmountAfterGST + "</td></tr>";
+				sno++;
+			}
+			emailContentMap.put("cgsttotalAmount", String.valueOf(amountAfterGST / 2));
+			emailContentMap.put("sgsttotalAmount", String.valueOf(amountAfterGST / 2));
+		
+
+			for (Map.Entry<String, String> entry : emailContentMap.entrySet())
+				templaterStr = templaterStr.replaceAll("\\{\\s*" + entry.getKey() + "\\s*,\\s*fallback\\s*=\\}",
+						entry.getValue() != null ? entry.getValue() : "");
+
+			templaterStr = templaterStr.replaceAll("\\{\\s*" + "itemTableData" + "\\s*,\\s*fallback\\s*=\\}",
+					itemString);
+			ConverterProperties properties = new ConverterProperties();
+			FontProvider fontProvider = new DefaultFontProvider();
+			fontProvider.addDirectory(FONTS);
+			properties.setFontProvider(fontProvider);
+			String temp = salesNoVoucher.replaceAll("/", "_");
+			HtmlConverter.convertToPdf(templaterStr,
+					new FileOutputStream(filePath + "credit_note_order_" + temp + "_bill.pdf"));
+			servletResponse.getWriter().write(aliasMaster.getPublicUrl() + "" + "credit_note_order_" + temp + "_bill.pdf");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			br.close();
+		}
+	}
+
+	public void generatePurchasePDFDocumentReport() throws IOException{
+		
+
+		GameLobbyController controller = new GameLobbyController();
+		StDmDomainAliasNameMaster aliasMaster = null;
+		String itemString = "";
+		String templaterStr = null;
+		Map<String, String> emailContentMap = new HashMap<String, String>();
+		partyAcc = controller.getPartyAccountByVoucherPurchase(salesNoVoucher);
+		tn = controller.getTransportNameByVoucherPurchase(salesNoVoucher);
+		vn = controller.getVehicalNumberByVoucherPurchase(salesNoVoucher);
+		des = controller.getDestinationByVoucherPurchase(salesNoVoucher);
+		paymentDate = controller.getPaymentDateByVoucherPurchase(salesNoVoucher);
+		totalAmt = controller.getTotalAmountByVoucherPurchase(salesNoVoucher);
+		salesStockItems = controller.getSaleStockItemsByVoucherPurchase(salesNoVoucher);
+		Qty = controller.getSaleStockQtyByVoucherPurchase(salesNoVoucher);
+		rate = controller.getSaleStockQtyRateByVoucherPurchase(salesNoVoucher);
+		amount = controller.getSaleStockQtyAmtByVoucherPurchase(salesNoVoucher);
+		String underEmp = controller.getUnderEmpNameByPurchase(salesNoVoucher);
+		unit = "";
+		igstItem = "";
+		igstItemAmt = "";
+		String orderNumber = controller.getOrderNumberSuppInvoice(salesNoVoucher);
+		String orderDate = paymentDate;//controller.getOrderDate(orderNumber);
+		String firmGSTN = controller.getFirmGSTN(partyAcc);
+		emailContentMap.put("BillToName", partyAcc);
+		emailContentMap.put("BillToContact", controller.getPropContact(partyAcc));
+		emailContentMap.put("TransportName", tn);
+		emailContentMap.put("VehicleNumber", vn);
+		emailContentMap.put("DeliveryDate", paymentDate);
+		emailContentMap.put("DeliveryLocation", des);
+		emailContentMap.put("UnderEmp", underEmp);
+		emailContentMap.put("BillNumber", salesNoVoucher);
+		emailContentMap.put("BillDate", paymentDate);
+		emailContentMap.put("orderNumber", orderNumber);
+		emailContentMap.put("orderDate", orderDate);
+		emailContentMap.put("totalAmount", totalAmt);
+		emailContentMap.put("BillToGSTN", firmGSTN);
+		emailContentMap.put("totalAmountWords", convertToIndianCurrency(totalAmt));
+		BufferedReader br = null;
+		try {
+			String filePath = ServletActionContext.getServletContext().getRealPath("/");
+
+			aliasMaster = controller.getAliasMaster();
+			final String FONTS = aliasMaster.getPublicUrl() + "/KrutiDev.ttf";
+
+			br = new BufferedReader(new InputStreamReader(
+					new URL(aliasMaster.getPublicUrl() + "/approval_purchase_bill_generate.html")
+							.openStream()));
+			String line;
+			StringBuffer template = new StringBuffer("");
+			while ((line = br.readLine()) != null)
+				template.append(line);
+			templaterStr = template.toString();
+
+			String[] breakItem = salesStockItems.split(",");
+			String[] qtyItem = Qty.split(",");
+			String[] priceItem = rate.split(",");
+			//String[] unitItem = unit.split(",");
+			String[] amountItem = amount.split(",");
+		//	String[] igstItemBreak = igstItem.split(",");
+		//	String[] igstItemAmtBreak = igstItemAmt.split(",");
+
+			String batchNo = controller.getBatchNumberByPurchase(salesNoVoucher);
+			String[] itemBatchBreak = batchNo.split(",");
+			Double amountAfterGST = 0.0;
+			
+			int sno = 1;
+			for (int i = 0; i < breakItem.length; i++) {
+				if (breakItem[i] == null || breakItem[i].equals("-1") || breakItem[i].equals(" -1")
+						|| breakItem[i].isEmpty())
+					continue;
+				String hsnCode = controller.getHSNCodeByItemName(breakItem[i].trim()) != null
+						? controller.getHSNCodeByItemName(breakItem[i].trim())
+						: "";
+				List<String> mfgExp = controller.getMfgExpDateByItemName(breakItem[i].trim());
+				String mfg = "";
+				String exp = "";
+				if (mfgExp != null && mfgExp.size() > 0 && !mfgExp.isEmpty()) {
+					mfg = mfgExp.get(0) != null ? mfgExp.get(0) : "";
+					exp = mfgExp.get(1) != null ? mfgExp.get(1) : "";
+					mfg = mfg.replaceAll("00:00", "");
+					exp = exp.replaceAll("00:00", "");
+
+				}
+				List<String> bulkUnitNumber = controller.getBulkUnitNumberByItem(breakItem[i].trim());
+				String name = "", bulkBag = "1";
+				if (bulkUnitNumber != null && !bulkUnitNumber.isEmpty() && bulkUnitNumber.size() > 0)
+					name = bulkUnitNumber.get(0) != null ? bulkUnitNumber.get(0) : "";
+				if (bulkUnitNumber != null && !bulkUnitNumber.isEmpty() && bulkUnitNumber.size() > 0)
+					bulkBag = bulkUnitNumber.get(1) != null ? bulkUnitNumber.get(1) : "1";
+				Double tempSoln = Double.valueOf(qtyItem[i]) / Double.valueOf(bulkBag.isEmpty() ? "1" : bulkBag);
+				String itemUnit = controller.getItemUnitByName(breakItem[i].trim());
+				Double gst = controller.getGSTByItemName(breakItem[i].trim());
+				 amountAfterGST = amountAfterGST + (Double.valueOf(amountItem[i]) * gst) / 100;
+				 Double tempAmountAfterGST = (Double.valueOf(amountItem[i]) * gst) / 100;
+				itemString += "<tr><td id='company_billTo_contact_pdf'>" + sno
+						+ "</td><td id='company_billTo_contact_pdf'>" + breakItem[i] + "<br>(" + itemBatchBreak[i]
+						+ ")<br>(MFG-" + mfg + ",EXP-" + exp + ")</td><td id='company_billTo_contact_pdf'>" + hsnCode
+						+ "</td><td id='company_billTo_contact_pdf'>" + qtyItem[i]
+						+ "</td><td id='company_billTo_contact_pdf'>₹ " + priceItem[i]
+						+ "</td><td id='company_billTo_contact_pdf'>" + itemUnit
+						+ "</td><td id='company_billTo_contact_pdf'>" + tempSoln + " " + name
+						+ "</td><td id='company_billTo_contact_pdf'>₹ " + amountItem[i]
+						+ "</td><td id='company_billTo_contact_pdf'>" + gst+" %"
+						+ "</td><td id='company_billTo_contact_pdf'>₹ " + tempAmountAfterGST + "</td></tr>";
+				sno++;
+			}
+			emailContentMap.put("cgsttotalAmount", String.valueOf(amountAfterGST / 2));
+			emailContentMap.put("sgsttotalAmount", String.valueOf(amountAfterGST / 2));
+		
+
+			for (Map.Entry<String, String> entry : emailContentMap.entrySet())
+				templaterStr = templaterStr.replaceAll("\\{\\s*" + entry.getKey() + "\\s*,\\s*fallback\\s*=\\}",
+						entry.getValue() != null ? entry.getValue() : "");
+
+			templaterStr = templaterStr.replaceAll("\\{\\s*" + "itemTableData" + "\\s*,\\s*fallback\\s*=\\}",
+					itemString);
+			ConverterProperties properties = new ConverterProperties();
+			FontProvider fontProvider = new DefaultFontProvider();
+			fontProvider.addDirectory(FONTS);
+			properties.setFontProvider(fontProvider);
+			String temp = salesNoVoucher.replaceAll("/", "_");
+			HtmlConverter.convertToPdf(templaterStr,
+					new FileOutputStream(filePath + "purchase_" + temp + "_bill.pdf"));
+			servletResponse.getWriter().write(aliasMaster.getPublicUrl() + "" + "purchase_" + temp + "_bill.pdf");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			br.close();
+		}
+		
+		
+	}
+	
+	public void generateSalePDFDocumentReport() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		StDmDomainAliasNameMaster aliasMaster = null;
 		String itemString = "";
@@ -296,12 +583,17 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 		rate = controller.getSaleStockQtyRateByVoucher(salesNoVoucher);
 		amount = controller.getSaleStockQtyAmtByVoucher(salesNoVoucher);
 		String underEmp = controller.getUnderEmpNameBySale(salesNoVoucher);
+		boolean isSuperCash = controller.isSuperCashBill(salesNoVoucher);
 		unit = "";
 		igstItem = "";
 		igstItemAmt = "";
 		String orderNumber = controller.getOrderNumber(salesNoVoucher);
 		String orderDate = controller.getOrderDate(orderNumber);
 		String firmGSTN = controller.getFirmGSTN(partyAcc);
+		String superCash="";
+		if(isSuperCash) {
+			superCash = "(SuperCash)";
+		}
 		emailContentMap.put("BillToName", partyAcc);
 		emailContentMap.put("BillToContact", controller.getPropContact(partyAcc));
 		emailContentMap.put("TransportName", tn);
@@ -316,14 +608,15 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 		emailContentMap.put("totalAmount", totalAmt);
 		emailContentMap.put("BillToGSTN", firmGSTN);
 		emailContentMap.put("totalAmountWords", convertToIndianCurrency(totalAmt));
-
+		emailContentMap.put("supercash", superCash);
+		BufferedReader br = null;
 		try {
 			String filePath = ServletActionContext.getServletContext().getRealPath("/");
 
 			aliasMaster = controller.getAliasMaster();
 			final String FONTS = aliasMaster.getPublicUrl() + "/KrutiDev.ttf";
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(
+			br = new BufferedReader(new InputStreamReader(
 					new URL(aliasMaster.getPublicUrl() + "/approval_sale_bill_generate_ledger_report.html")
 							.openStream()));
 			String line;
@@ -335,10 +628,10 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 			String[] breakItem = salesStockItems.split(",");
 			String[] qtyItem = Qty.split(",");
 			String[] priceItem = rate.split(",");
-			String[] unitItem = unit.split(",");
+			//String[] unitItem = unit.split(",");
 			String[] amountItem = amount.split(",");
-			String[] igstItemBreak = igstItem.split(",");
-			String[] igstItemAmtBreak = igstItemAmt.split(",");
+			//String[] igstItemBreak = igstItem.split(",");
+			//String[] igstItemAmtBreak = igstItemAmt.split(",");
 
 			String batchNo = controller.getBatchNumberBySaleNo(salesNoVoucher);
 			String[] itemBatchBreak = batchNo.split(",");
@@ -372,6 +665,7 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 				String itemUnit = controller.getItemUnitByName(breakItem[i].trim());
 				Double gst = controller.getGSTByItemName(breakItem[i].trim());
 				 amountAfterGST = amountAfterGST + (Double.valueOf(amountItem[i]) * gst) / 100;
+				 Double tempAmountAfterGST = (Double.valueOf(amountItem[i]) * gst) / 100;
 				itemString += "<tr><td id='company_billTo_contact_pdf'>" + sno
 						+ "</td><td id='company_billTo_contact_pdf'>" + breakItem[i] + "<br>(" + itemBatchBreak[i]
 						+ ")<br>(MFG-" + mfg + ",EXP-" + exp + ")</td><td id='company_billTo_contact_pdf'>" + hsnCode
@@ -381,7 +675,7 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 						+ "</td><td id='company_billTo_contact_pdf'>" + tempSoln + " " + name
 						+ "</td><td id='company_billTo_contact_pdf'>₹ " + amountItem[i]
 						+ "</td><td id='company_billTo_contact_pdf'>" + gst+" %"
-						+ "</td><td id='company_billTo_contact_pdf'>₹ " + amountAfterGST + "</td></tr>";
+						+ "</td><td id='company_billTo_contact_pdf'>₹ " + tempAmountAfterGST + "</td></tr>";
 				sno++;
 			}
 			emailContentMap.put("cgsttotalAmount", String.valueOf(amountAfterGST / 2));
@@ -406,17 +700,24 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		finally {
+			br.close();
+		}
 
 	}
 
-	public void generateSalePDFDocument() {
+	public void generateSalePDFDocument() throws IOException {
 		GameLobbyController controller = new GameLobbyController();
 		StDmDomainAliasNameMaster aliasMaster = null;
 		String itemString = "";
 		String templaterStr = null;
 		Map<String, String> emailContentMap = new HashMap<String, String>();
 		String firmGSTN = controller.getFirmGSTN(partyAcc);
-
+		boolean isSuperCash = controller.isSuperCashBill(salesNoVoucher);
+		String superCash="";
+		if(isSuperCash) {
+			superCash = "(SuperCash)";
+		}
 		emailContentMap.put("BillToName", partyAcc);
 		emailContentMap.put("BillToContact",
 				controller.getPropContact(partyAcc) != null ? controller.getPropContact(partyAcc) : "");
@@ -430,14 +731,15 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 		emailContentMap.put("totalAmount", totalAmt);
 		emailContentMap.put("BillToGSTN", firmGSTN != null ? firmGSTN : "");
 		emailContentMap.put("totalAmountWords", convertToIndianCurrency(totalAmt));
-
+		emailContentMap.put("supercash", superCash);
+		BufferedReader br = null;
 		try {
 			String filePath = ServletActionContext.getServletContext().getRealPath("/");
 
 			aliasMaster = controller.getAliasMaster();
 			final String FONTS = aliasMaster.getPublicUrl() + "/KrutiDev.ttf";
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(
+			br = new BufferedReader(new InputStreamReader(
 					new URL(aliasMaster.getPublicUrl() + "/approval_sale_bill_generate.html").openStream()));
 			String line;
 			StringBuffer template = new StringBuffer("");
@@ -450,8 +752,8 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 			String[] priceItem = rate.split(",");
 			String[] unitItem = unit.split(",");
 			String[] amountItem = amount.split(",");
-			String[] igstItemBreak = igstItem.split(",");
-			String[] igstItemAmtBreak = igstItemAmt.split(",");
+			//String[] igstItemBreak = igstItem.split(",");
+			//String[] igstItemAmtBreak = igstItemAmt.split(",");
 			String batchNo = controller.getBatchNumberBySaleNo(salesNoVoucher);
 			String[] itemBatchBreak = batchNo.split(",");
 			int sno = 1;
@@ -512,6 +814,9 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally {
+			br.close();
 		}
 
 	}
@@ -744,23 +1049,30 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 		salesNo = controller.getSalesNo();
 		isLastApproval = controller.getIsLastApproval(SOId, "sales");
 		rejectReason = resArr[17].trim();
+		superCashEligible = resArr[18].trim();
+		if(superCashEligible.equalsIgnoreCase("Yes")) {
+			superCashEligible = "YES";
+		}
+		else {
+			superCashEligible = "NO";
+		}
 		transportFreight = "0";
 		localFrieght = "0";
 		loadUnloadCharge = "0,0";
 		loadCharge = "0";
 		unloadCharge = "0";
 		try {
-			ddn = resArr[18].trim();
-			tn = resArr[19].trim();
-			des = resArr[20].trim();
-			billt = resArr[21].trim();
-			vn = resArr[22].trim();
-			transportFreight = resArr[23].trim();
-			localFrieght = resArr[24].trim();
-			loadUnloadCharge = resArr[25].trim();
+			ddn = resArr[19].trim();
+			tn = resArr[20].trim();
+			des = resArr[21].trim();
+			billt = resArr[22].trim();
+			vn = resArr[23].trim();
+			transportFreight = resArr[24].trim();
+			localFrieght = resArr[25].trim();
+			loadUnloadCharge = resArr[26].trim();
 
-			docPictureDDFileName = resArr[26].trim();
-			docPictureTBFileName = resArr[27].trim();
+			docPictureDDFileName = resArr[27].trim();
+			docPictureTBFileName = resArr[28].trim();
 			if (!tn.isEmpty() && !ddn.isEmpty() && !status.equals("rejected")) {
 				if (status.equals("pending"))
 					status = "final approval";
@@ -967,7 +1279,7 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 						salesStockItems, amount, Qty, rate, narration, salesNoVoucher, consignee, Dname, propName,
 						contact, address, gstnNo, ddn, tn, des, billt, vn, transportFreight, paymentDate,
 						activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber, session, transaction)) {
-					if (controller.updateTransactionPartyBalanceSale(partyAcc, currBalance, hcrdr, session,
+					if (controller.updateTransactionPartyBalanceSale(partyAcc, totalAmt, hcrdr, session,
 							transaction))
 						if (controller.updateOrCreateStockSale(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
 								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, hiddenBatchApplicable,
@@ -1002,8 +1314,11 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 
 							}
 
-				} else
+				} else {
+					transaction.rollback();
 					servletResponse.getWriter().write("error");
+				}
+					
 			} else {
 				voucherBean = controller.getVoucherNumbering("Sales", activeVoucherNumber);
 				boolean voucherDate = compareTwoDate(voucherBean.getEndDate(), paymentDate + " 00:00");
@@ -1018,7 +1333,7 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 							salesStockItems, amount, Qty, rate, narration, salesNoVoucher, consignee, Dname, propName,
 							contact, address, gstnNo, ddn, tn, des, billt, vn, transportFreight, paymentDate,
 							activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber, session, transaction)) {
-						if (controller.updateTransactionPartyBalanceSale(partyAcc, currBalance, hcrdr, session,
+						if (controller.updateTransactionPartyBalanceSale(partyAcc, totalAmt, hcrdr, session,
 								transaction))
 							if (controller.updateOrCreateStockSale(salesStockItems, goDown, Qty, unit,
 									hiddenBatchNumber, hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate,
@@ -1051,8 +1366,11 @@ public class TMSalesMgmtAction extends BaseActionSupport implements ServletReque
 
 								}
 
-					} else
+					} else {
+						transaction.rollback();
 						servletResponse.getWriter().write("error");
+					}
+						
 				}
 			}
 		}

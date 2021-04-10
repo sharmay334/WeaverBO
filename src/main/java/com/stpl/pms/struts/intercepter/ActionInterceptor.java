@@ -27,11 +27,14 @@ public class ActionInterceptor extends AbstractInterceptor {
 	public String intercept(ActionInvocation invocation) throws Exception {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		setActionName((String) ActionContext.getContext().getContextMap().get(ActionContext.ACTION_NAME));
+		String result = null;
+		
+		if(actionName.equals("scheduleMismatchBalance"))
+			result = invocation.invoke();
 		if (!WithoutLoginAction.contains(actionName) && !isSessionValid(request.getSession(),invocation)) {
 			if(!"bo_lm_newLogin".equals(actionName))
 				return "SESSION_TIME_OUT";
 		}
-		String result = null;
 		if (!isAllowed(request)) {
 			return "unauthorize";
 		} else {

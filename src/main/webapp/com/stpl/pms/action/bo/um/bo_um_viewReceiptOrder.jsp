@@ -263,11 +263,17 @@ function promptSave(){
 			        			   window.location.reload(1);
 			        			}, 1000);
 			        	}
-			        	else{
-			        		swal("Some Error Occured!");
+			        	else if(data=="date"){
+			        		swal("Voucher Date is expired. Please create new voucher!!!");
 			        		setTimeout(function(){
 			        			   window.location.reload(1);
-			        			}, 1000);
+			        			}, 2000);
+			        	}
+			        	else{
+			        		swal(""+data);
+			        		setTimeout(function(){
+			        			   window.location.reload(1);
+			        			}, 2000);
 			        	}
 			            
 			        },

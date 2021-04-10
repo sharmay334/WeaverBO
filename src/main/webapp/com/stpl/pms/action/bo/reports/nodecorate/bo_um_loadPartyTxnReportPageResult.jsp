@@ -85,26 +85,197 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			        },
 			    });
 		}
-		
-		else if(txn=="CREDIT NOTE"){
+		 if(txn=="SALES"){
 			
-			var frm = $('#searchUserFrm2');
-
-			 $.ajax({
-			        type: frm.attr('method'),
-			        url: frm.attr('action')+'?txnType='+txn+'&voucherNo='+billId,
+			var myurl = "<%=basePath%>";
+			
+			var frm = $('#searchUserFrm');
+		
+				
+				myurl += "/com/stpl/pms/action/bo/um/generate_txn_sales_bill_pdf_document_report.action?salesNoVoucher="+billId;
+				$.ajax({
+			        type: 'GET',
+			        url: myurl,
 			        async:false,
-			        data: frm.serialize(),
 			        success: function (data) {
-			            document.getElementById('searchResult1').innerHTML = data;
+			        
+			        		swal("Bill Generated Successfully!!!");
+			        		var link=document.createElement('a');
+			        		document.body.appendChild(link);
+			        		link.href=data ;
+			        		link.click();
+			        		  
 			        },
 			        error: function (data) {
-			        	 document.getElementById('searchResult1').innerHTML = data;
+			        	swal("Server Error Occured!");
 			        },
 			    });
 			
 		}
-else if(txn=="JOURNAL"){
+	 if(txn=="PURCHASE"){
+			
+			var myurl = "<%=basePath%>";
+			
+			var frm = $('#searchUserFrm');
+		
+				
+				myurl += "/com/stpl/pms/action/bo/um/generate_txn_purchase_bill_pdf_document_report.action?salesNoVoucher="+billId;
+				$.ajax({
+			        type: 'GET',
+			        url: myurl,
+			        async:false,
+			        success: function (data) {
+			        
+			        		swal("Bill Generated Successfully!!!");
+			        		var link=document.createElement('a');
+			        		document.body.appendChild(link);
+			        		link.href=data ;
+			        		link.click();
+			        		  
+			        },
+			        error: function (data) {
+			        	swal("Server Error Occured!");
+			        },
+			    });
+			
+		}
+		
+		 if(txn=="CREDIT NOTE"){
+			
+			swal("Please select your choice", {
+				  buttons: {
+				    cancel: "Generate Bill",
+				    catch: {
+				      text: "Show Agst Ref Data!",
+				      value: "catch",
+				    },
+				   
+				  },
+				})
+				.then((value) => {
+				  switch (value) {
+				 
+				    
+				    case "catch":
+				    	var frm = $('#searchUserFrm2');
+
+						 $.ajax({
+						        type: frm.attr('method'),
+						        url: frm.attr('action')+'?txnType='+txn+'&voucherNo='+billId,
+						        async:false,
+						        data: frm.serialize(),
+						        success: function (data) {
+						            document.getElementById('searchResult1').innerHTML = data;
+						        },
+						        error: function (data) {
+						        	 document.getElementById('searchResult1').innerHTML = data;
+						        },
+						    });
+				      break;
+				 
+				    default:
+				    	var myurl = "<%=basePath%>";
+					var frm = $('#searchUserFrm');
+						
+						myurl += "/com/stpl/pms/action/bo/um/generate_txn_credit_note_bill_pdf_document_report.action?salesNoVoucher="+billId;
+						$.ajax({
+					        type: 'GET',
+					        url: myurl,
+					        async:false,
+					        success: function (data) {
+					        
+					        		swal("Bill Generated Successfully!!!");
+					        		var link=document.createElement('a');
+					        		document.body.appendChild(link);
+					        		link.href=data ;
+					        		link.click();
+					        		  
+					        },
+					        error: function (data) {
+					        	swal("Server Error Occured!");
+					        },
+					    });
+				    	
+				    	
+				  }
+				});
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			<%-- swal({
+		        title: "Please select?",
+		        text: "Please select your choice",
+		        type: "warning",
+		        showCancelButton: true,
+		        confirmButtonColor: "#DD6B55",
+		        confirmButtonText: "Generate Bill",
+		        cancelButtonText: "Show Adjustment",
+		        closeOnConfirm: false,
+		        closeOnCancel: false 
+		    },
+		    function(isConfirm) {
+		        if (isConfirm) {
+		        	var myurl = "<%=basePath%>";
+					var frm = $('#searchUserFrm');
+						
+						myurl += "/com/stpl/pms/action/bo/um/generate_txn_credit_note_bill_pdf_document_report.action?salesNoVoucher="+billId;
+						$.ajax({
+					        type: 'GET',
+					        url: myurl,
+					        async:false,
+					        success: function (data) {
+					        
+					        		swal("Bill Generated Successfully!!!");
+					        		var link=document.createElement('a');
+					        		document.body.appendChild(link);
+					        		link.href=data ;
+					        		link.click();
+					        		  
+					        },
+					        error: function (data) {
+					        	swal("Server Error Occured!");
+					        },
+					    });
+		        } else {
+		        	var frm = $('#searchUserFrm2');
+
+					 $.ajax({
+					        type: frm.attr('method'),
+					        url: frm.attr('action')+'?txnType='+txn+'&voucherNo='+billId,
+					        async:false,
+					        data: frm.serialize(),
+					        success: function (data) {
+					            document.getElementById('searchResult1').innerHTML = data;
+					        },
+					        error: function (data) {
+					        	 document.getElementById('searchResult1').innerHTML = data;
+					        },
+					    });
+		        }
+		    }
+		); --%>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		}
+	 if(txn=="JOURNAL"){
 			
 			var frm = $('#searchUserFrm2');
 
@@ -133,7 +304,7 @@ else if(txn=="JOURNAL"){
 		var myurl = "<%=basePath%>";
 		myurl += "com/stpl/pms/action/bo/um/bo_um_bill_delete.action?txnType="+txn+"&voucherNo="+billId+"&ledgerName="+ledgerName;
 		if(txn=="PAYMENT"){
-			swal("Delete functionality are not for receipt and payment.");
+			swal("Delete functionality are not for payment.");
 		}
 		else{
 			

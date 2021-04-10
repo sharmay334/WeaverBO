@@ -19,9 +19,6 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.stpl.pms.controller.gl.GameLobbyController;
 import com.stpl.pms.hibernate.factory.HibernateSessionFactory;
@@ -29,6 +26,7 @@ import com.stpl.pms.javabeans.ItemBean;
 import com.stpl.pms.javabeans.VoucherBean;
 import com.stpl.pms.struts.common.BaseActionSupport;
 
+@SuppressWarnings("serial")
 public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRequestAware, ServletResponseAware {
 	private HttpServletRequest servletRequest;
 	private HttpServletResponse servletResponse;
@@ -427,7 +425,7 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 							hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, session, transaction)) // st_rm_item_qty_godown
 						// update
 						if (controller.insertNewBill(paymentDate, "Agst Ref", partyAcc, totalAmt, purchaseNoVoucher,
-								session, transaction)) {
+								session, transaction,referenceNo)) {
 							transaction.commit();
 							if (orderNo != null && !orderNo.isEmpty()) {
 								if (controller.changeStatusSuccessPurchase(Integer.valueOf(orderNo),
@@ -462,7 +460,7 @@ public class TMPurchaseMgmtAction extends BaseActionSupport implements ServletRe
 								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, session, transaction)) // st_rm_item_qty_godown
 							// update
 							if (controller.insertNewBill(paymentDate, "Agst Ref", partyAcc, totalAmt, purchaseNoVoucher,
-									session, transaction)) {
+									session, transaction,referenceNo)) {
 								transaction.commit();
 								if (orderNo != null && !orderNo.isEmpty()) {
 									if (controller.changeStatusSuccessPurchase(Integer.valueOf(orderNo),

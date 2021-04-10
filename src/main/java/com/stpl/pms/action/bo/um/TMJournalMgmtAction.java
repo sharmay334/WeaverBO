@@ -131,14 +131,25 @@ public class TMJournalMgmtAction extends BaseActionSupport implements ServletReq
 		Session session = HibernateSessionFactory.getSession();
 		Transaction transaction = session.beginTransaction();
 		if (activeVoucherNumber.equals("0")) {
-			if (controller.createTransactionJournal(employeeUnder, particulars, cr_dr, debitAmt, creditAmt, narration,
-					journalNoVoucher, paymentDate, activeVoucherNumber, session, transaction, partyOldBal))
+			
+			String response = controller.createTransactionJournal(employeeUnder, particulars, cr_dr, debitAmt, creditAmt, narration,
+					journalNoVoucher, paymentDate, activeVoucherNumber, session, transaction, partyOldBal);
+			if (response.equals("success")) {
+				
 				if (controller.updateTransactionPartyBalanceJournal(particulars, debitAmt, creditAmt, cr_dr, hiddenAmnt,
 						hiddenTypeOfRef, hiddenBillWiseName, journalNoVoucher, session, transaction)) {
 					transaction.commit();
 					servletResponse.getWriter().write("success");
-				} else
-					servletResponse.getWriter().write("no");
+				} else {
+					transaction.rollback();
+					servletResponse.getWriter().write("Voucher Already Exists!");
+				}
+			}
+			else {
+				transaction.rollback();
+				servletResponse.getWriter().write("Error "+response);
+			}
+					
 		} else {
 
 			voucherBean = controller.getVoucherNumbering("journal", activeVoucherNumber);
@@ -147,18 +158,24 @@ public class TMJournalMgmtAction extends BaseActionSupport implements ServletReq
 			if (voucherDate == true || voucherDate1 == true) {
 				servletResponse.getWriter().write("date");
 			} else {
-				if (controller.createTransactionJournal(employeeUnder, particulars, cr_dr, debitAmt, creditAmt,
-						narration, journalNoVoucher, paymentDate, activeVoucherNumber, session, transaction,partyOldBal))
+				String response = controller.createTransactionJournal(employeeUnder, particulars, cr_dr, debitAmt, creditAmt,
+						narration, journalNoVoucher, paymentDate, activeVoucherNumber, session, transaction,partyOldBal);
+				if (response.equals("success")) {
 					if (controller.updateTransactionPartyBalanceJournal(particulars, debitAmt, creditAmt, cr_dr,
 							hiddenAmnt, hiddenTypeOfRef, hiddenBillWiseName, journalNoVoucher, session, transaction)) {
 						transaction.commit();
 						servletResponse.getWriter().write("success");
-					} else
-						servletResponse.getWriter().write("no");
+					} else {
+						transaction.rollback();
+						servletResponse.getWriter().write("Voucher Already Exists!");
+					}
+				}else {
+					transaction.rollback();
+					servletResponse.getWriter().write(""+response);
+				}
 			}
 		}
 
-		return;
 	}
 
 	private boolean compareTwoDate(String endDate, String currentDate) {

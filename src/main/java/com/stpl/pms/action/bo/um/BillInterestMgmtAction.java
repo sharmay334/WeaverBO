@@ -20,6 +20,7 @@ public class BillInterestMgmtAction extends BaseActionSupport implements Servlet
 	private String ledgerName;
 	private String billList;
 	private SaleBillsBean resultreport;
+	private String itemName;
 
 	public String loadPage() {
 		GameLobbyController controller = new GameLobbyController();
@@ -37,6 +38,19 @@ public class BillInterestMgmtAction extends BaseActionSupport implements Servlet
 
 		GameLobbyController controller = new GameLobbyController();
 		String data = controller.getBillsOfParty(ledgerName);
+		if (data.equals("")) {
+			servletResponse.getWriter().write("error");
+		} else {
+			servletResponse.getWriter().write("" + data);
+		}
+		return;
+
+	}
+	
+	public void showBatches() throws IOException {
+
+		GameLobbyController controller = new GameLobbyController();
+		String data = controller.showBatches(itemName);
 		if (data.equals("")) {
 			servletResponse.getWriter().write("error");
 		} else {
@@ -104,6 +118,14 @@ public class BillInterestMgmtAction extends BaseActionSupport implements Servlet
 
 	public void setResultreport(SaleBillsBean resultreport) {
 		this.resultreport = resultreport;
+	}
+
+	public String getItemName() {
+		return itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
 	}
 
 }

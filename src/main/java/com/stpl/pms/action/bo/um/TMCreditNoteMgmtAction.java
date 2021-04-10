@@ -350,7 +350,7 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 					transportFreight, vn, activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber, session,
 					transaction)) {
 				if (hiddenAmnt == null && hiddenAmnt.isEmpty()) {
-					if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr, session,
+					if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, totalAmt, hcrdr, session,
 							transaction))
 						if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
 								hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, session,
@@ -380,7 +380,7 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 				} else {
 					if (controller.adjustSaleBill(hiddenAmnt, hiddenBilId, hiddenTypeOfRef, partyAcc, cnNoVoucher,
 							session, transaction))
-						if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr,
+						if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, totalAmt, hcrdr,
 								session, transaction))
 							if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
 									hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, session,
@@ -409,8 +409,11 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 
 			}
 
-			else
+			else {
+				transaction.rollback();
 				servletResponse.getWriter().write("error");
+			}
+				
 
 		} else {
 
@@ -425,7 +428,7 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 						transportFreight, vn, activeVoucherNumber, totalAmt, goDown, hiddenBatchNumber, session,
 						transaction)) {
 					if (hiddenAmnt == null && hiddenAmnt.isEmpty()) {
-						if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr,
+						if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, totalAmt, hcrdr,
 								session, transaction))
 							if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit, hiddenBatchNumber,
 									hiddenMfgDate, hiddenExpDate, hiddenExpAlert, hiddenExpAlertDate, session,
@@ -439,7 +442,7 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 					} else {
 						if (controller.adjustSaleBill(hiddenAmnt, hiddenBilId, hiddenTypeOfRef, partyAcc, cnNoVoucher,
 								session, transaction))
-							if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, currBalance, hcrdr,
+							if (controller.updateTransactionPartyBalanceSaleCreditNote(partyAcc, totalAmt, hcrdr,
 									session, transaction))
 								if (controller.updateOrCreateStock(salesStockItems, goDown, Qty, unit,
 										hiddenBatchNumber, hiddenMfgDate, hiddenExpDate, hiddenExpAlert,
@@ -468,8 +471,11 @@ public class TMCreditNoteMgmtAction extends BaseActionSupport implements Servlet
 
 				}
 
-				else
+				else {
+					transaction.rollback();
 					servletResponse.getWriter().write("error");
+				}
+					
 
 			}
 		}

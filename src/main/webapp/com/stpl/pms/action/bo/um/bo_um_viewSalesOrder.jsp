@@ -224,7 +224,10 @@ function checkGodownSelect(){
 	}
 	else{
 		//checkForOrderStatus();
+		if(!document.getElementById('salesAccount').value=="none")
 		promptSave();
+		else
+			swal("Error! Please Sales Ledger first!");
 	}
 	
 }
@@ -309,6 +312,9 @@ function promptSave(){
 						        			   window.location.reload(1);
 						        			}, 1000);
 						        		
+						        	}
+						        	else if(data=="block"){
+						        		swal("This party is blocked!");
 						        	}
 						        	else{
 						        		swal("Some Error Occured!");
@@ -1728,8 +1734,16 @@ function getUnitByItem(id) {
 						</div>
 					</div>
 					<br />
-					
-
+					<s:set name="superCashEligible1" value="superCashEligible"/>
+				<s:if test="%{#superCashEligible1=='YES'}">
+				<marquee width="60%" direction="right" height="30px" id="supercashmarque">
+						<font color="green">Superb! You have selected SUPERCASH Sale.</font>
+				<s:hidden id="superCashEligible" name="superCashEligible" value="Yes"></s:hidden>		
+				</marquee>
+				</s:if>
+				<s:else>
+				<s:hidden id="superCashEligible" name="superCashEligible" value="No"></s:hidden>	
+				</s:else>
 					<table width="100%" cellspacing="0" align="center"
 						id="payTransactionTable" class="transactionTable">
 						<thead>

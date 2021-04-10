@@ -1110,7 +1110,7 @@
 			</result>
 		</action>
 
-		<action name="bo_um_create_stockItem"
+		<!-- <action name="bo_um_create_stockItem"
 			class="com.stpl.pms.action.bo.um.StockMgmtAction"
 			method="tansferStockResult">
 			<interceptor-ref name="actions"></interceptor-ref>
@@ -1119,7 +1119,7 @@
 			</result>
 			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/bo_um_createStockItem_error.jsp
 			</result>
-		</action>
+		</action> -->
 
 		<action name="bo_um_stockTransfer"
 			class="com.stpl.pms.action.bo.um.StockMgmtAction"
@@ -1468,6 +1468,21 @@
 			method="generateSalePDFDocumentReport">
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
+
+		<action
+			name="generate_txn_credit_note_bill_pdf_document_report"
+			class="com.stpl.pms.action.bo.um.TMSalesMgmtAction"
+			method="generateCreditNotePDFDocumentReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action
+			name="generate_txn_purchase_bill_pdf_document_report"
+			class="com.stpl.pms.action.bo.um.TMSalesMgmtAction"
+			method="generatePurchasePDFDocumentReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
 		<action name="bo_um_receiptt"
 			class="com.stpl.pms.action.bo.um.TMEmpReceiptMgmtAction"
 			method="loadReceiptPage">
@@ -1769,6 +1784,13 @@
 			class="com.stpl.pms.action.bo.um.TMSalesMgmtAction" method="getUnits">
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
+		
+		<action name="bo_um_tm_get_avg_rate"
+			class="com.stpl.pms.action.bo.um.TMSalesMgmtAction"
+			method="getAvgRateItem">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
 		<action name="bo_um_tm_get_alter_unit"
 			class="com.stpl.pms.action.bo.um.TMSalesMgmtAction"
 			method="getAlternateUnits">
@@ -2341,7 +2363,6 @@
 			<interceptor-ref name="customStack"></interceptor-ref>
 		</action>
 
-
 		<action name="bo_um_salaryReport"
 			class="com.stpl.pms.action.bo.reports.ReportsAction"
 			method="loadEmployeeSalaryPage">
@@ -2438,6 +2459,445 @@
 			class="com.stpl.pms.action.bo.reports.ReportsAction"
 			method="setOnUnHold">
 			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
+		<action name="bo_um_productReport"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="loadPageProductReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadProductTxnReportPage.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_tm_get_ListBatches"
+			class="com.stpl.pms.action.bo.um.BillInterestMgmtAction"
+			method="showBatches">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+
+		<action name="bo_um_productTxnReportResult"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="getProductTxnReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/nodecorate/bo_um_loadProductTxnReportPageResult.jsp
+			</result>
+		</action>
+		
+		
+		<action name="bo_um_itemStockReport"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="loadPageNetProductReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadNetProductReportPage.jsp
+			</result>
+		</action>
+		<action name="bo_um_netproductReportResult"
+			class="com.stpl.pms.action.bo.um.TMSchedularReportMgmtAction"
+			method="getNetStockReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/reports/nodecorate/bo_um_loadNetStockReportPageResult.jsp
+			</result>
+		</action>
+		
+		
+		<!-- business dev process start -->
+		
+		<action name="bo_um_createTeam"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="loadCreateTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadCreateTeamPage.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_createTeam_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="createTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="bo_um_createSubTeam"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="loadCreateSubTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadCreateSubTeamPage.jsp
+			</result>
+		</action>
+		
+		<action name="getTeamTargetAmount"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="getTeamTargetAmount">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="getSubTeamTargetAmount"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="getSubTeamTargetAmount">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="bo_um_createSubTeam_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="createSubTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		
+		<action name="bo_um_subTeamRSMAssign"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="loadRSMAssignSubTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadAssignRSMSubTeamPage.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_assignRSMSubTeam_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="assignRSMSubTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="getRSMTeamTargetAmount"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="getRSMTeamTargetAmount">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="getTSMTeamTargetAmount"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="getTSMTeamTargetAmount">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="getSMTeamTargetAmount"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="getSMTeamTargetAmount">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		
+		<action name="bo_um_subTeamTSMAssign"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="loadTSMAssignSubTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadAssignTSMSubTeamPage.jsp
+			</result>
+		</action>
+		
+		
+		<action name="bo_um_assignTSMSubTeam_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="assignTSMSubTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="bo_um_assignTSMSubTeam_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="assignTSMSubTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		
+		<action name="bo_um_assignSMSubTeam_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="assignSMSubTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		<action name="bo_um_assignTargetYearly_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="assignYearlyTarget">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="bo_um_assignFASubTeam_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="assignFASubTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="bo_um_subTeamSMAssign"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="loadSMAssignSubTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadAssignSMSubTeamPage.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_subTeamFAAssign"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="loadFAAssignSubTeam">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadAssignFASubTeamPage.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_employeeYearTarget"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="loadEmpYearTarget">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadAssignYearTargetBDP.jsp
+			</result>
+		</action>
+		
+		
+		<action name="bo_um_visitLocation"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="loadDefineLocationForm">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadDefineLocationPage.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_defineVisitLocationsRoute_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="DefineLocationFormSubmit">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="bo_um_defineRetailer"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="loadDefineRetailerForm">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadDefineRetailerPage.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_defineRetailer_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="DefineRetailerFormSubmit">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="bo_um_uploadEmpSalary"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="loadEmpSalUploadForm">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadUploadEmpSalPage.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_uploadSalary_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="uploadSalaryFile">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="removeLocation"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="removeLocation">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		
+		<action name="bo_um_viewVisitLocation"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="loadLocShowPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadViewEditDefineLocationPage.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_viewEditLocation_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="viewEditLocationSubmit">
+			<interceptor-ref name="actions"></interceptor-ref>
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_loadViewEditDefineLocationResult.jsp
+			</result>
+			<result name="error">
+				/com/stpl/pms/action/bo/um/nodecorate/bo_um_boUserAddDynamicsResultError.jsp
+			</result>
+		</action>
+		
+		
+		
+		
+		
+		<action name="bo_um_empDistributorReport"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="loadEmpDistributorReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadViewEmpDistributorPage.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_viewEmpWiseDistributor_submit"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="empWiseDistributorSubmit">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_loadViewEmpDistributorPageResult.jsp
+			</result>
+		</action>
+		
+		
+		<action name="bo_um_empVisitReport"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="loadEmpDistributorReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadViewEmpVisitPage.jsp
+			</result>
+		</action>
+		
+		
+		<action name="bo_um_viewEmpWiseVisit_submit"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="empWiseVisitSubmit">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_loadViewEmpVisitPageResult.jsp
+			</result>
+		</action>
+		
+		
+		<action name="bo_um_viewEmpWiseVisitDetails_submit"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getVisitReportDetails">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/reports/nodecorate/st_pms_bo_rep_searchReportAttendanceResultVisit.jsp
+			</result>
+		</action>
+		
+		
+		<action name="bo_um_retailerAssignment"
+			class="com.stpl.pms.action.bo.um.LedgerMgmtAction"
+			method="assignRetailer">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/bo_um_assignRetailer.jsp
+			</result>
+		</action>
+
+		<action name="bo_um_assign_retailer"
+			class="com.stpl.pms.action.bo.um.LedgerMgmtAction"
+			method="assignRetailerSave">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/record_edit_success.jsp
+			</result>
+			<result name="error">/com/stpl/pms/action/bo/um/nodecorate/record_edit_failure.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_itemBrochure"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="loadItemBrochure">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadUploadBrochure.jsp
+			</result>
+		</action>
+		<action name="bo_um_uploadBrochure_submit"
+			class="com.stpl.pms.action.bo.um.TMBusinessDevelopment"
+			method="uploadBrochureFile">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		
+		<action name="bo_um_supercashBillReport"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="loadSuperCashBillReport">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadViewSupercashBill.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_viewSuperCashbill_submit"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="loadSuperCashBillReportResult">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_loadViewSuperCashPageResult.jsp
+			</result>
+		</action>
+		
+		
+		<action name="scheduleMismatchBalance"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="scheduleCheckForMismatchBalance">
+		</action>
+		<!-- business dev process end -->
+		
+		
+		<action name="bo_um_profitLossReport"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="loadProfitLossReportPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadViewProfitLossPage.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_getDistrict"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="getDistrictFromState">
+			<interceptor-ref name="customStack"></interceptor-ref>
+		</action>
+		
+		<action name="bo_um_viewProfitLossReport_submit"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="loadProfitLossReportPageResult">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_loadViewProfitLossPageResult.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_frightsRepot"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="loadFrightReportPage">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">
+				/com/stpl/pms/action/bo/um/bo_um_loadViewFrightReportPage.jsp
+			</result>
+		</action>
+		
+		<action name="bo_um_frightsRepot_submit"
+			class="com.stpl.pms.action.bo.reports.ReportsAction"
+			method="loadFrightReportPageResult">
+			<interceptor-ref name="customStack"></interceptor-ref>
+			<interceptor-ref name="actions"></interceptor-ref>
+			<result name="success">/com/stpl/pms/action/bo/um/nodecorate/bo_um_loadViewFrightReportPageResult.jsp
+			</result>
 		</action>
 		
 	</package>
